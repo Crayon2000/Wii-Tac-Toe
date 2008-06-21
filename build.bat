@@ -9,7 +9,7 @@ if errorlevel 1 goto error
 
 echo Zipping source...
 if errorlevel 1 goto error
-zip -q wii-tac-toe-src.zip fonts\*.h gfx\*.h source\* Makefile
+zip -q -r wii-tac-toe-src.zip fonts\*.h gfx\*.h source\* Makefile
 if errorlevel 1 goto error
 
 echo Zipping program...
