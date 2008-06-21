@@ -1,0 +1,26 @@
+@echo off
+set path=%path%;D:\Programmes
+
+echo Compiling code...
+del *.zip
+make clean
+make
+if errorlevel 1 goto error
+
+echo Zipping source...
+if errorlevel 1 goto error
+zip -q wii-tac-toe-src.zip fonts\*.h gfx\*.h source\* Makefile
+if errorlevel 1 goto error
+
+echo Zipping program...
+copy Wii-Tac-Toe.elf Wii-Tac-Toe\boot.elf
+if errorlevel 1 goto error
+zip -q wii-tac-toe.zip Wii-Tac-Toe\*
+if errorlevel 1 goto error
+
+echo Build successful.
+goto end
+:error
+echo Build incomplete!
+:end
+pause
