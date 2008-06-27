@@ -1,5 +1,5 @@
 /*===========================================
-        GRRLIB (GX version) 3.0 alpha
+        GRRLIB (GX version) 3.0.1 alpha
         Code     : NoNameNo
         GX hints : RedShade
 ===========================================*/
@@ -218,20 +218,20 @@ f32 t2=1;
 }
 
 void GRRLIB_Printf(f32 xpos, f32 ypos, u8 data[], u32 color, f32 zoom, const char *text,...){
-int i ;
-char tmp[1024];
-int size=0;
+	int i ;
+	char tmp[1024];
+	int size=0;
+	u16 charHeight = 16, charWidth = 8;
 
-va_list argp;
-va_start(argp, text);
-vsprintf(tmp, text, argp);
-va_end(argp);
+	va_list argp;
+	va_start(argp, text);
+	size = vsprintf(tmp, text, argp);
+	va_end(argp);
 
-size = strlen(tmp);
-GXColor col = GRRLIB_Splitu32(color);
-	for(i=0;i<strlen(tmp);i++){
+	GXColor col = GRRLIB_Splitu32(color);
+	for(i=0; i<size; i++){
 		u8 c = tmp[i];
-		GRRLIB_DrawChar(xpos+i*8*zoom, ypos, 8, 8, data, 0, zoom, zoom, c,128, col );
+		GRRLIB_DrawChar(xpos+i*charWidth*zoom, ypos, charWidth, charHeight, data, 0, zoom, zoom, c, 128, col );
 	}
 }
 
@@ -264,10 +264,9 @@ GXColor GRRLIB_Splitu32(u32 color){
 void GRRLIB_InitVideo () {
 
 	rmode = VIDEO_GetPreferredMode(NULL);
-	xfb[0] = MEM_K0_TO_K1(SYS_AllocateFramebuffer(rmode));
-	xfb[1] = MEM_K0_TO_K1(SYS_AllocateFramebuffer(rmode));
-
-        VIDEO_Configure (rmode);
+	VIDEO_Configure (rmode);
+	xfb[0] = (u32 *)MEM_K0_TO_K1(SYS_AllocateFramebuffer(rmode));
+	xfb[1] = (u32 *)MEM_K0_TO_K1(SYS_AllocateFramebuffer(rmode));
 
 	VIDEO_SetNextFramebuffer(xfb[fb]);
 	VIDEO_SetBlack(FALSE);
@@ -276,9 +275,7 @@ void GRRLIB_InitVideo () {
 	if(rmode->viTVMode&VI_NON_INTERLACE) VIDEO_WaitVSync();
 
 
-	gp_fifo = memalign(32,DEFAULT_FIFO_SIZE);
-	memset(gp_fifo,0,DEFAULT_FIFO_SIZE);
-
+	gp_fifo = (u8 *) memalign(32,DEFAULT_FIFO_SIZE);
 }
 
 void GRRLIB_Start(){

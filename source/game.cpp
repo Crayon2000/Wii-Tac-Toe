@@ -19,15 +19,18 @@ extern "C"
 // Fonts
 #include "../fonts/button_text.h"
 #include "../fonts/font1.h"
+#include "../fonts/GRRLIB_font1.h"
 
 // Graphics
-//#include "../gfx/entry.h"
-#include "../gfx/game.h"
+#include "../gfx/splash.h"
+#include "../gfx/backg.h"
 
 #define START_SCREEN 	0
 #define GAME_SCREEN 	1
 #define HOME_SCREEN 	2
 #define MENU_SCREEN 	3
+
+#define IDS_PRESS_A  	"Press The A Button"
 
 #define IDS_PLAYERTURN1 "%s, it's your turn."
 #define IDS_PLAYERTURN2 "We are waiting for %s."
@@ -88,7 +91,10 @@ Game::Game()
 	WTTPlayer[1].SetSign('X');
 	WTTPlayer[1].SetName("Player 2");
 
-	ScreenCopy = NULL;
+	GameImg = GRRLIB_LoadTexture(backg);
+	SplashImg = GRRLIB_LoadTexture(splash);
+
+	TextFont = GRRLIB_LoadTexture(GRRLIB_font1);
 
 	NewGame();
 }
@@ -98,12 +104,14 @@ Game::Game()
  */
 Game::~Game()
 {
+	free(GameImg);
+	free(SplashImg);
+	free(TextFont);
+
 	delete GameGrid;
 	delete Hand;
 	delete[] ExitButton;
 	delete[] WTTPlayer;
-	if(ScreenCopy)
-		delete[] ScreenCopy;
 }
 
 /**
@@ -122,7 +130,7 @@ void Game::Paint()
 		case HOME_SCREEN:
 			ExitScreen();
 			break;
-		default:
+		case GAME_SCREEN:
 			GameScreen();
 			// AI
 			if(!RoundFinished && WTTPlayer[CurrentPlayer].GetType() == PLAYER_CPU)
@@ -131,15 +139,17 @@ void Game::Paint()
 				//HandX = GameGrid->;
 				//HandY = ;
 				TurnIsOver();
-				GRRLIB_Render();
-				VIDEO_WaitVSync();
-				usleep(900000); // Wait 0.9 sec
+				//GRRLIB_Render();
+				//usleep(900000); // Wait 0.9 sec
 			}
+			break;
+		default:
+			GRRLIB_FillScreen(0XFF000000);
 	}
 	if(CurrentScreen != START_SCREEN && 
 		WPAD_Probe(WPAD_CHAN_0, NULL) == WPAD_ERR_NO_CONTROLLER)
 	{	// Controller is disconnected
-		GRRLIB_DrawRectangle(0, 0, 640, 480, 0x0000, true, 70);
+		GRRLIB_Rectangle(0, 0, 640, 480, 0xB2000000, 1);
 	}
 }
 
@@ -148,23 +158,15 @@ void Game::Paint()
  */
 void Game::StartSreen()
 {
-	GRRLIB_FillScreen(BLACK);
-/*
-	GRRLIB_DrawImg(0, 0, entry_width, entry_high, entry_img, 0, 1, 100);
-*/	
+	GRRLIB_DrawImg(0, 0, 640, 480, SplashImg, 0, 1, 1, 255);
 
 	// Message for synchronization
-//int font1_height = font1_high / 256;
-
-	GRRLIB_Print(0, 50,
-		button_text_width, button_text_height, "Wii-Tac-Toe 0.1",
-		button_text_img, WHITE, TRANSPARENT);
-	GRRLIB_Print(0, 50 + button_text_height,
-		button_text_width, button_text_height, "Programmed by Crayon and designed by Mr_Nick666",
-		button_text_img, WHITE, TRANSPARENT);
-	GRRLIB_Print(0, 50 + button_text_height * 2,
-		button_text_width, button_text_height, "Press The A Button",
-		button_text_img, WHITE, TRANSPARENT);
+	//GRRLIB_Printf(395, 40, TextFont, 0xFFFFFFFF, 1, "Version 0.1");
+	GRRLIB_Printf(50, 310, TextFont, 0xFFFFFFFF, 1, "Programmer: Crayon");
+	GRRLIB_Printf(50, 330, TextFont, 0xFFFFFFFF, 1, "Graphics: Mr_Nick666");
+	
+	int TextLeft = 320 - (strlen(IDS_PRESS_A) * 8);
+	GRRLIB_Printf(TextLeft, 400, TextFont, 0xFF000000, 2, IDS_PRESS_A);
 }
 
 /**
@@ -174,55 +176,56 @@ void Game::GameScreen()
 {
 	int TextLeft;
 	//int TextTop;
-	
+
 	// Background image
-	GRRLIB_DrawImg(0, 0, game_width, game_high, game_img, 0, 1, 100);
+	GRRLIB_DrawImg(0, 0, 640, 480, GameImg, 0, 1, 1, 255);
 
 	// Draw text
-	PrintText(130, 420, button_text_width, button_text_height, text,
-		button_text_img, 0x8C51, BLACK, 1, 1);
+	PrintText(130, 420, text,
+		TextFont, 0xFF8C8A8C, 0xCC000000, 1, 1, 1.5);
 
 	// Draw score
 	char ScoreText[5];
 	sprintf(ScoreText, "%d", WTTPlayer[0].GetScore());
-	TextLeft = 106 - (strlen(ScoreText) * scrore_width) / 2;
-	PrintText(TextLeft, 75, scrore_width, scrore_height, ScoreText,
-		font1_img, WHITE, 0xE187, -2, 2);
+	TextLeft = 106 - (strlen(ScoreText) * 8) / 2;
+	PrintText(TextLeft, 75, ScoreText,
+		TextFont, 0xFFFFFFFF, 0xCCE6313A, -2, 2, 3);
 	sprintf(ScoreText, "%d", WTTPlayer[1].GetScore());
-	TextLeft = 106 - (strlen(ScoreText) * scrore_width) / 2;
-	PrintText(TextLeft, 178, scrore_width, scrore_height, ScoreText,
-		font1_img, WHITE, 0x6DBB, -2, 2);
+	TextLeft = 106 - (strlen(ScoreText) * 8) / 2;
+	PrintText(TextLeft, 178, ScoreText,
+		TextFont, 0xFFFFFFFF, 0xCC6BB6DE, -2, 2, 3);
 	sprintf(ScoreText, "%d", TieGame);
-	TextLeft = 106 - (strlen(ScoreText) * scrore_width) / 2;
-	PrintText(TextLeft, 281, scrore_width, scrore_height, ScoreText,
-		font1_img, WHITE, 0x14A8, -2, 2);
+	TextLeft = 106 - (strlen(ScoreText) * 8) / 2;
+	PrintText(TextLeft, 281, ScoreText,
+		TextFont, 0xFFFFFFFF, 0xCC109642, -2, 2, 3);
 
 	// Player name
 /*
 	TextLeft = 40;
 	TextTop = 17;
-	PrintText(TextLeft, TextTop, button_text_width, button_text_height,
-		WTTPlayer[0].GetName(), button_text_img, WHITE, 0xE187, -2, 2);
+	PrintText(TextLeft, TextTop,
+		WTTPlayer[0].GetName(), button_text_img, WHITE, 0xE187, -2, 2, 1);
 	TextTop = 143;
-	PrintText(TextLeft, TextTop, button_text_width, button_text_height,
-		WTTPlayer[1].GetName(), button_text_img, WHITE, 0x6DBB, -2, 2);
+	PrintText(TextLeft, TextTop,
+		WTTPlayer[1].GetName(), button_text_img, WHITE, 0x6DBB, -2, 2, 1);
 	TextTop = 270;
-	PrintText(TextLeft, TextTop, button_text_width, button_text_height,
-		"Tie", button_text_img, WHITE, 0x14A8, -2, 2);
+	PrintText(TextLeft, TextTop,
+		"Tie Game", button_text_img, WHITE, 0x14A8, -2, 2, 1);
 
 */
 	// Draw grid content
-	Symbol Sign;
+	Symbol *Sign = new Symbol;
 	for(int x = 0; x < 3; x++)
 	{
 		for(int y = 0; y < 3; y++)
 		{
-			Sign.SetPlayer(GameGrid->GetPlayerAtPos(x, y));
-			Sign.SetLeft(180 + x * 142);
-			Sign.SetTop(29 + y * 103);
-			Sign.Paint();
+			Sign->SetPlayer(GameGrid->GetPlayerAtPos(x, y));
+			Sign->SetLeft(180 + x * 142);
+			Sign->SetTop(29 + y * 103);
+			Sign->Paint();
 		}
 	}
+	delete Sign;
 
 	// Draw Cursor
 	Hand->SetPlayer(WTTPlayer[CurrentPlayer].GetSign());
@@ -236,29 +239,18 @@ void Game::GameScreen()
  */
 void Game::ExitScreen()
 {
-	if(ScreenCopy == NULL)
-	{	// Part to design once
-		GameScreen();
+	GameScreen();
 
-		GRRLIB_DrawRectangle(0, 0, 640, 62, BLACK, true, 100);
-		GRRLIB_DrawRectangle(0, 63, 640, 2, 0x8410, true, 100);
+	GRRLIB_Rectangle(0, 0, 640, 63, 0xFF000000, 1);
+	GRRLIB_Rectangle(0, 63, 640, 2, 0xFF848284, 1);
 
-		GRRLIB_DrawRectangle(0, 65, 640, 317, BLACK, true, 80);
+	GRRLIB_Rectangle(0, 65, 640, 318, 0xCC000000, 1);
 
-		GRRLIB_DrawRectangle(0, 383, 640, 2, 0x8410, true, 100);
-		GRRLIB_DrawRectangle(0, 385, 640, 480, BLACK, true, 100);
+	GRRLIB_Rectangle(0, 383, 640, 2, 0xFF848284, 1);
+	GRRLIB_Rectangle(0, 385, 640, 480, 0xFF000000, 1);
 
-		GRRLIB_Print(32, 17,
-			button_text_width, button_text_height, "HOME Menu",
-			button_text_img, WHITE, TRANSPARENT);
-
-		ScreenCopy = new u16[640 * 480 * 2];
-		memcpy(ScreenCopy, GRRLIB_buffer, 640*480*2);
-	}
-	else
-	{
-		memcpy(GRRLIB_buffer, ScreenCopy, 640*480*2);
-	}
+	GRRLIB_Printf(32, 17,
+		TextFont, 0xFFFFFFFF, 2, "HOME Menu");
 
 	ExitButton[0].SetSelected((SelectedButton == 0) ? true : false);
 	ExitButton[0].Paint();
@@ -275,7 +267,20 @@ void Game::ExitScreen()
  */
 void Game::MenuScreen()
 {
-	GRRLIB_FillScreen(BLACK);	// Clear screen
+	GRRLIB_FillScreen(0XFF000000);	// Clear screen
+	for(int y = 0; y <=480; y+=8)
+	{
+		GRRLIB_Rectangle(0, y, 640, 2, 0x30B0B0B0, 1);
+	}
+
+	GRRLIB_Rectangle(0, 0, 640, 63, 0xFF000000, 1);
+	GRRLIB_Rectangle(0, 63, 640, 2, 0xFFFFFFFF, 1);
+
+
+	GRRLIB_Rectangle(0, 383, 640, 2, 0xFFFFFFFF, 1);
+	GRRLIB_Rectangle(0, 385, 640, 480, 0xFF000000, 1);
+
+	GRRLIB_Printf(500, 40, TextFont, 0xFFFFFFFF, 1, "Ver. 0.1");
 
 	MenuButton[0].SetSelected((SelectedButton == 0) ? true : false);
 	MenuButton[0].Paint();
@@ -402,10 +407,12 @@ bool Game::ControllerManager(unsigned int Buttons)
 				{
 					//GRRLIB_ScrShot("Screenshot.pnm", 0);
 					//GRRLIB_ScrShot("Screenshot.grr", 1);
+					/*
 					if(GRRLIB_ScrShot("Screenshot.bmp", 2))
 						strcpy(text, "A screenshot was taken!!!");
 					else
 						strcpy(text, "Screenshot did not work!!!");
+					*/
 				}
 				else if((Buttons & WPAD_BUTTON_PLUS) == WPAD_BUTTON_PLUS)
 				{
@@ -484,14 +491,12 @@ void Game::NewGame()
 /**
  * Print text on the screen with a shadow.
  */
-void Game::PrintText(u16 x, u16 y, u16 Width, u16 Height,
-	const char *Text, const u16 Font[], u16 TextColor, u16 ShadowColor,
-	int ShadowOffsetX, int ShadowOffsetY)
+void Game::PrintText(u16 x, u16 y,
+	const char *Text, u8 Font[], u32 TextColor, u32 ShadowColor,
+	int ShadowOffsetX, int ShadowOffsetY, f32 zoom)
 {
-	GRRLIB_Print(x + ShadowOffsetX, y + ShadowOffsetY, Width, Height, Text,
-		Font, ShadowColor, TRANSPARENT);
-	GRRLIB_Print(x, y, Width, Height, Text,
-		Font, TextColor, TRANSPARENT);
+	GRRLIB_Printf(x + ShadowOffsetX, y + ShadowOffsetY, Font, ShadowColor, zoom, Text);
+	GRRLIB_Printf(x, y, Font, TextColor, zoom, Text);
 }
 
 /**
@@ -501,10 +506,4 @@ void Game::PrintText(u16 x, u16 y, u16 Width, u16 Height,
 void Game::ChangeScreen(u8 NewScreen)
 {
 	CurrentScreen = NewScreen;
-
-	if(ScreenCopy)
-	{
-		delete[] ScreenCopy;
-		ScreenCopy = NULL;
-	}
 }

@@ -18,6 +18,8 @@ public:
 	void SetPlayer(u8);
 private:
 	u8 Player;
+	u8 *CursorImgX;
+	u8 *CursorImgO;
 };
 //---------------------------------------------------------------------------
 #endif

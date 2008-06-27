@@ -1,5 +1,5 @@
 /*===========================================
-        GRRLIB (GX version) 3.0 alpha
+        GRRLIB (GX version) 3.0.1 alpha
         Code     : NoNameNo
         GX hints : RedShade
 ===========================================*/

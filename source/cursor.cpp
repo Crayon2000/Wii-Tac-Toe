@@ -11,8 +11,11 @@ Cursor::Cursor() : Object()
 {
 	Left = 0;
 	Top = 0;
-	Width = hand_x_width;
-	Height = hand_x_high;
+	Width = 44;
+	Height = 60;
+	
+	CursorImgO = GRRLIB_LoadTexture(hand_o);
+	CursorImgX = GRRLIB_LoadTexture(hand_x);
 }
 
 /**
@@ -20,6 +23,8 @@ Cursor::Cursor() : Object()
  */
 Cursor::~Cursor()
 {
+	free(CursorImgX);
+	free(CursorImgO);
 }
 
 /**
@@ -28,9 +33,13 @@ Cursor::~Cursor()
 void Cursor::Paint()
 {
 	if(Player == 'O')
-		GRRLIB_DrawImg(Left, Top, Width, Height, hand_o_img, 0, 1, 100);
+	{
+		GRRLIB_DrawImg(Left, Top, Width, Height, CursorImgO, 0, 1, 1, 255);
+	}
 	else
-		GRRLIB_DrawImg(Left, Top, Width, Height, hand_x_img, 0, 1, 100);
+	{
+		GRRLIB_DrawImg(Left, Top, Width, Height, CursorImgX, 0, 1, 1, 255);
+	}
 }
 
 /**

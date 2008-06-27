@@ -11,6 +11,12 @@
 Symbol::Symbol() : Object()
 {
     this->Player = 'X';
+
+	ImgO = GRRLIB_LoadTexture(o);
+	ImgX = GRRLIB_LoadTexture(x);
+
+	Width = 136;
+	Height = 100;
 }
 
 /**
@@ -18,6 +24,8 @@ Symbol::Symbol() : Object()
  */
 Symbol::~Symbol()
 {
+	free(ImgO);
+	free(ImgX);
 }
 
 /**
@@ -26,9 +34,13 @@ Symbol::~Symbol()
 void Symbol::Paint()
 {
 	if(Player == 'X' || Player == 'x')
-		GRRLIB_DrawImg(Left, Top, x_width, x_high, x_img, 0, 1, 100);
+	{
+		GRRLIB_DrawImg(Left, Top, Width, Height, ImgX, 0, 1, 1, 255);
+	}
 	else if(Player == 'O' || Player == 'o')
-		GRRLIB_DrawImg(Left, Top, o_width, o_high, o_img, 0, 1, 100);
+	{
+		GRRLIB_DrawImg(Left, Top, Width, Height, ImgO, 0, 1, 1, 255);
+	}
 }
 
 /**

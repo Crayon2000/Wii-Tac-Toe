@@ -17,7 +17,7 @@ public:
 	void Paint();
 	void SetCaption(const char *);
 	void SetSelected(bool);
-	void SetTextColor(u16, u16);
+	void SetTextColor(u32);
 private:
 	bool Selected;
 	char Caption[50 + 1];
@@ -25,8 +25,10 @@ private:
 	unsigned int TextHeight;
 	unsigned int TextTop;
 	unsigned int TextLeft;
-	u16 TextColorOn;
-	u16 TextColorOff;
+	u32 TextColor;
+	u8 *button_font;
+	u8 *ButtonImgOn;
+	u8 *ButtonImgOff;
 };
 //---------------------------------------------------------------------------
 #endif

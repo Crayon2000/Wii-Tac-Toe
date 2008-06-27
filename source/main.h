@@ -6,4 +6,4 @@
 /**
  * A global buffer to GRRLIB data.
  */
-extern u16 *GRRLIB_buffer;
+//extern u16 *GRRLIB_buffer;

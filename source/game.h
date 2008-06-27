@@ -27,7 +27,7 @@ private:
 	void Clear();
 	void TurnIsOver();
 	void NewGame();
-	void PrintText(u16, u16, u16, u16, const char*, const u16 [], u16, u16, int, int);
+	void PrintText(u16, u16, const char*, u8 [], u32, u32, int, int, f32);
 	void ChangeScreen(u8 NewScreen);
 
 	Cursor *Hand;
@@ -50,7 +50,10 @@ private:
 	Button *ExitButton;
 	Button *MenuButton;
 	Grid *GameGrid;
-	u16 *ScreenCopy;
+	
+	u8 *GameImg; // PNG Array
+	u8 *SplashImg;
+	u8 *TextFont;
 };
 //---------------------------------------------------------------------------
 #endif

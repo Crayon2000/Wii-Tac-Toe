@@ -16,11 +16,10 @@ extern "C"
 }
 #include "game.h"
 #include "main.h"
-
 //------------------------------------------------------------------------------
 // Externals
 //------------------------------------------------------------------------------
-u16 *GRRLIB_buffer;
+Mtx GXmodelView2D;
 
 /**
  * Entry point.
@@ -31,7 +30,6 @@ u16 *GRRLIB_buffer;
 int main(int argc, char **argv)
 {
 	bool Quit = false;
-	GRRLIB_buffer = (u16 *)malloc(640 * 480 * 2);
 
 	// Video initialization
 	VIDEO_Init();
@@ -41,7 +39,7 @@ int main(int argc, char **argv)
 	// Wiimote initialization
 	WPAD_Init();
 	WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS);
-	
+
 	// Game initialization
 	Game *MyGame = new Game();
 
@@ -52,9 +50,8 @@ int main(int argc, char **argv)
 
 		MyGame->Paint();
 		GRRLIB_Render();
-		VIDEO_WaitVSync();
 	}
-	
+
 	delete MyGame;
 	return 0;
 }
