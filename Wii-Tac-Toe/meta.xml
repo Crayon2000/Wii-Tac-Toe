@@ -3,6 +3,10 @@
     <name>Wii-Tac-Toe</name>
     <coder>Crayon</coder>
     <version>0.1</version>
+    <release_date>200807100000</release_date>
     <short_description>Tic-Tac-Toe game</short_description> 
-    <long_description>Wii-Tac-Toe is a Tic-Tac-Toe game for the Nintendo Wii. It was programmed in C++ using libogc along with GRRLIB.</long_description> 
+    <long_description>Wii-Tac-Toe is a Tic-Tac-Toe game for the Nintendo Wii. It was programmed in C++ using devkitPro along with GRRLIB.
+
+Programmer: Crayon
+Graphics: Mr_Nick666</long_description>
 </app>

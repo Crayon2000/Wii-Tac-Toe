@@ -16,6 +16,8 @@ public:
 	~Cursor();
 	void Paint();
 	void SetPlayer(u8);
+	unsigned int GetLeftCorrected();
+	unsigned int GetTopCorrected();
 private:
 	u8 Player;
 	u8 *CursorImgX;

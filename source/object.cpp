@@ -12,6 +12,7 @@ Object::Object()
 {
 	Left = 0;
 	Top = 0;
+	Angle = 0.0;
 }
 
 /**
@@ -139,4 +140,34 @@ void Object::SetVisible(bool Visible)
  */
 void Object::Paint()
 {
+}
+
+/**
+ * Check if a position is inside the object.
+ * @param[in] x X position in pixel.
+ * @param[in] y Y position in pixel.
+ */
+bool Object::IsInside(unsigned int x, unsigned int y)
+{
+	if (x > Left && x < (Left + Width) && y > Top && y < (Top + Height))
+		return true;
+	return false;
+}
+
+/**
+ * Get the angle of the object.
+ * @return Angle in user unit.
+ */
+float Object::GetAngle()
+{
+	return Angle;
+}
+
+/**
+ * Set the angle of the object.
+ * @param[in] Angle Angle in user unit.
+ */
+void Object::SetAngle(float Angle)
+{
+	this->Angle = Angle;
 }

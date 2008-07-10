@@ -18,7 +18,7 @@ public:
 	Game();
 	~Game();
 	void Paint();
-	bool ControllerManager(unsigned int);
+	bool ControllerManager();
 private:
 	void StartSreen();
 	void MenuScreen();
@@ -29,6 +29,8 @@ private:
 	void NewGame();
 	void PrintText(u16, u16, const char*, u8 [], u32, u32, int, int, f32);
 	void ChangeScreen(u8 NewScreen);
+	void ButtonOn(signed char);
+	void SelectZone();
 
 	Cursor *Hand;
 	signed char HandX, HandY;
@@ -53,7 +55,34 @@ private:
 	
 	u8 *GameImg; // PNG Array
 	u8 *SplashImg;
+	u8 *HoverImg;
+	u8 *CopiedImg;
 	u8 *TextFont;
+};
+
+class Point
+{
+private:
+    u16 x, y;
+public:
+	Point(u16 x, u16 y)
+	{
+		this->x = x;
+		this->y = y;
+	}
+	u16 GetX()
+	{
+		return x;
+	}
+	u16 GetY()
+	{
+		return y;
+	}
+	void setLocation(u16 x, u16 y)
+	{
+		this->x = x;
+		this->y = y;
+	}
 };
 //---------------------------------------------------------------------------
 #endif

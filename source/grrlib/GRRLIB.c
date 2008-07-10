@@ -4,6 +4,7 @@
         GX hints : RedShade
 ===========================================*/
 
+#include <fat.h>
 #include "GRRLIB.h"
 #define DEFAULT_FIFO_SIZE (256 * 1024)
 
@@ -356,3 +357,50 @@ void GRRLIB_Render () {
 
 }
 
+/**
+ * Make a PNG screenshot on the SD card.
+ * @param File Name of the file to write.
+ * @return True if every thing worked, false otherwise.
+ */
+bool GRRLIB_ScrShot(const char* File) {
+    IMGCTX ctx;
+	int ErrorCode = -1;
+
+    if(fatInitDefault() && (ctx = PNGU_SelectImageFromDevice(File)))
+    {
+		ErrorCode = PNGU_EncodeFromYCbYCr(ctx, 640, 480, xfb[fb], 0);
+        PNGU_ReleaseImageContext(ctx);
+
+		if(!fatUnmount(PI_INTERNAL_SD))
+		{	// I can only hope it's better than nothing
+			fatUnsafeUnmount(PI_INTERNAL_SD);
+		}
+    }
+	return !ErrorCode;
+}
+
+/**
+ * Make a snapshot of the sreen in a texture.
+ * @return A texture representing the screen.
+ */
+u8 *GRRLIB_Screen2Texture() {
+/*
+	IMGCTX ctx;
+	void *my_texture;
+
+	PNGU_EncodeFromYCbYCr(ctx, 640, 480, xfb[fb], 0);
+
+	my_texture = memalign(32, 640 * 480 * 4);
+	PNGU_DecodeTo4x4RGBA8(ctx, 640, 480, my_texture, 255);
+	PNGU_ReleaseImageContext(ctx);
+	DCFlushRange (my_texture, 640 * 480 * 4);
+	return my_texture;
+*/
+	void *my_texture;
+
+	GX_SetTexCopySrc(0, 0, 640, 480);
+	GX_SetTexCopyDst(640, 480, GX_TF_RGBA8, GX_FALSE);
+	my_texture = memalign(32, 640 * 480 * 4); // GX_GetTexBufferSize(640, 480, GX_TF_RGBA8, GX_FALSE, 1)
+	GX_CopyTex(my_texture, GX_FALSE);
+	return my_texture;
+}

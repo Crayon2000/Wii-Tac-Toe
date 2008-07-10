@@ -4,10 +4,11 @@
 
 /** \mainpage Wii-Tac-Toe Documentation
  */
-
 //------------------------------------------------------------------------------
 // Headers
 //------------------------------------------------------------------------------
+#include <unistd.h> // usleep
+#include <ogc/lwp.h>
 #include <stdlib.h>
 #include <wiiuse/wpad.h>
 extern "C"
@@ -16,10 +17,29 @@ extern "C"
 }
 #include "game.h"
 #include "main.h"
+
+#include <iostream>
+
 //------------------------------------------------------------------------------
 // Externals
 //------------------------------------------------------------------------------
 Mtx GXmodelView2D;
+
+void *RumbleThread(void *RumbleTime)
+{
+	int *Time = (int *)RumbleTime;
+	WPAD_Rumble(WPAD_CHAN_0, 1); // Rumble on
+	usleep(*Time);
+	WPAD_Rumble(WPAD_CHAN_0, 0); // Rumble off
+	return 0;
+}
+
+void WiimoteRumble(int RumbleTime)
+{
+	lwp_t thread;
+	LWP_CreateThread(&thread, RumbleThread, &RumbleTime, NULL, 0, 80);
+	LWP_ResumeThread(thread);
+}
 
 /**
  * Entry point.
@@ -38,7 +58,8 @@ int main(int argc, char **argv)
 
 	// Wiimote initialization
 	WPAD_Init();
-	WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS);
+	WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
+	WPAD_SetVRes(WPAD_CHAN_0, 640, 480);
 
 	// Game initialization
 	Game *MyGame = new Game();
@@ -46,7 +67,7 @@ int main(int argc, char **argv)
 	while(!Quit)
 	{
 		WPAD_ScanPads();
-		Quit = MyGame->ControllerManager(WPAD_ButtonsDown(WPAD_CHAN_0));
+		Quit = MyGame->ControllerManager();
 
 		MyGame->Paint();
 		GRRLIB_Render();
