@@ -125,8 +125,7 @@ Game::~Game()
 	free(SplashImg);
 	free(HoverImg);
 	free(TextFont);
-	if(CopiedImg)
-		free(CopiedImg);
+	free(CopiedImg);
 
 	delete GameGrid;
 	delete Hand;
@@ -186,7 +185,7 @@ void Game::StartSreen()
 	GRRLIB_DrawImg(0, 0, 640, 480, SplashImg, 0, 1, 1, 255);
 
 	// Message for synchronization
-	//GRRLIB_Printf(395, 40, TextFont, 0xFFFFFFFF, 1, "Version 0.1");
+	//GRRLIB_Printf(395, 40, TextFont, 0xFFFFFFFF, 1, "Version 0.2");
 	GRRLIB_Printf(50, 310, TextFont, 0xFFFFFFFF, 1, "Programmer: Crayon");
 	GRRLIB_Printf(50, 330, TextFont, 0xFFFFFFFF, 1, "Graphics: Mr_Nick666");
 	
@@ -334,7 +333,7 @@ void Game::MenuScreen()
 	GRRLIB_Rectangle(0, 383, 640, 2, 0xFFFFFFFF, 1);
 	GRRLIB_Rectangle(0, 385, 640, 95, 0xFF000000, 1);
 
-	GRRLIB_Printf(500, 40, TextFont, 0xFFFFFFFF, 1, "Ver. 0.1");
+	GRRLIB_Printf(500, 40, TextFont, 0xFFFFFFFF, 1, "Ver. 0.2");
 
 	MenuButton[0].SetSelected(false);
 	MenuButton[1].SetSelected(false);
@@ -424,6 +423,10 @@ bool Game::ControllerManager()
 							NewGame();
 							break;
 						case 2:
+							ExitScreen();
+							Hand->Paint();
+							CopiedImg = GRRLIB_Screen2Texture();
+							GRRLIB_DrawImg_FadeOut(640, 480, CopiedImg, 1, 1, 5);
 							return true; // Exit to loader
 					}
 				}

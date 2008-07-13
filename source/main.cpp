@@ -49,8 +49,6 @@ void WiimoteRumble(int RumbleTime)
  */
 int main(int argc, char **argv)
 {
-	bool Quit = false;
-
 	// Video initialization
 	VIDEO_Init();
 	GRRLIB_InitVideo();
@@ -64,10 +62,11 @@ int main(int argc, char **argv)
 	// Game initialization
 	Game *MyGame = new Game();
 
-	while(!Quit)
+	while(1)
 	{
 		WPAD_ScanPads();
-		Quit = MyGame->ControllerManager();
+		if(MyGame->ControllerManager())
+			break;
 
 		MyGame->Paint();
 		GRRLIB_Render();

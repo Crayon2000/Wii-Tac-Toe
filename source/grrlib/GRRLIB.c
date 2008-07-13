@@ -384,18 +384,6 @@ bool GRRLIB_ScrShot(const char* File) {
  * @return A texture representing the screen.
  */
 u8 *GRRLIB_Screen2Texture() {
-/*
-	IMGCTX ctx;
-	void *my_texture;
-
-	PNGU_EncodeFromYCbYCr(ctx, 640, 480, xfb[fb], 0);
-
-	my_texture = memalign(32, 640 * 480 * 4);
-	PNGU_DecodeTo4x4RGBA8(ctx, 640, 480, my_texture, 255);
-	PNGU_ReleaseImageContext(ctx);
-	DCFlushRange (my_texture, 640 * 480 * 4);
-	return my_texture;
-*/
 	void *my_texture;
 
 	GX_SetTexCopySrc(0, 0, 640, 480);
@@ -403,4 +391,67 @@ u8 *GRRLIB_Screen2Texture() {
 	my_texture = memalign(32, 640 * 480 * 4); // GX_GetTexBufferSize(640, 480, GX_TF_RGBA8, GX_FALSE, 1)
 	GX_CopyTex(my_texture, GX_FALSE);
 	return my_texture;
+}
+
+/**
+ * Fade in, than fade out
+ * @param width	 Texture width.
+ * @param height Texture height.
+ * @param data   Texture.
+ * @param scaleX Texture X scale.
+ * @param scaleY Texture Y scale.
+ * @param speed  Fade speed (1 is the normal speed, 2 is two time the normal speed, etc).
+ */
+void GRRLIB_DrawImg_FadeInOut(u16 width, u16 height, u8 data[], float scaleX, f32 scaleY, u16 speed)
+{
+	GRRLIB_DrawImg_FadeIn(width, height, data, scaleX, scaleY, speed);
+	GRRLIB_DrawImg_FadeOut(width, height, data, scaleX, scaleY, speed);
+}
+
+/**
+ * Fade in
+ * @param width	 Texture width.
+ * @param height Texture height.
+ * @param data   Texture.
+ * @param scaleX Texture X scale.
+ * @param scaleY Texture Y scale.
+ * @param speed  Fade speed (1 is the normal speed, 2 is two time the normal speed, etc).
+ */
+void GRRLIB_DrawImg_FadeIn(u16 width, u16 height, u8 data[], float scaleX, f32 scaleY, u16 speed)
+{
+	int alpha;
+	f32 xpos = (640 - width) / 2;
+	f32 ypos = (480 - height) / 2;
+
+	for(alpha = 0; alpha < 255; alpha += speed)
+	{
+		GRRLIB_DrawImg(xpos, ypos, width, height, data, 0, scaleX, scaleY, alpha);
+		GRRLIB_Render();
+	}
+	GRRLIB_DrawImg(xpos, ypos, width, height, data, 0, scaleX, scaleY, 255);
+	GRRLIB_Render();
+}
+
+/**
+ * Fade out
+ * @param width	 Texture width.
+ * @param height Texture height.
+ * @param data   Texture.
+ * @param scaleX Texture X scale.
+ * @param scaleY Texture Y scale.
+ * @param speed  Fade speed (1 is the normal speed, 2 is two time the normal speed, etc).
+ */
+void GRRLIB_DrawImg_FadeOut(u16 width, u16 height, u8 data[], float scaleX, f32 scaleY, u16 speed)
+{
+	int alpha;
+	f32 xpos = (640 - width) / 2;
+	f32 ypos = (480 - height) / 2;
+
+	for(alpha = 255; alpha > 0; alpha -= speed)
+	{
+		GRRLIB_DrawImg(xpos, ypos, width, height, data, 0, scaleX, scaleY, alpha);
+		GRRLIB_Render();
+	}
+	GRRLIB_DrawImg(xpos, ypos, width, height, data, 0, scaleX, scaleY, 0);
+	GRRLIB_Render();
 }

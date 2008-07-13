@@ -48,4 +48,8 @@ void GRRLIB_Render ();
 bool GRRLIB_ScrShot(const char*);
 u8 *GRRLIB_Screen2Texture();
 
+void GRRLIB_DrawImg_FadeInOut(u16 width, u16 height, u8 data[], float scaleX, f32 scaleY, u16 speed);
+void GRRLIB_DrawImg_FadeIn(u16 width, u16 height, u8 data[], float scaleX, f32 scaleY, u16 speed);
+void GRRLIB_DrawImg_FadeOut(u16 width, u16 height, u8 data[], float scaleX, f32 scaleY, u16 speed);
+
 #endif
