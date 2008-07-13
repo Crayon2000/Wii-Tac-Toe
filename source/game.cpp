@@ -174,6 +174,10 @@ void Game::Paint()
 		// Draw Cursor
 		Hand->SetPlayer(WTTPlayer[CurrentPlayer].GetSign());
 		Hand->Paint();
+/*
+		sprintf(text, "X = %.02f; Y = %.02f",
+			Hand->GetLeftCorrected(), Hand->GetTopCorrected());
+*/
 	}
 }
 
@@ -373,8 +377,7 @@ bool Game::ControllerManager()
 		Hand->SetTop(WPadData0->ir.sy);
 		Hand->SetAngle(WPadData0->ir.angle);
 	}
-	else
-	if(WPadData0->ir.valid)
+	else if(WPadData0->ir.valid)
 	{
 		Hand->SetLeft(WPadData0->ir.x);
 		Hand->SetTop(WPadData0->ir.y);
@@ -584,9 +587,9 @@ void Game::SelectZone()
 		for(int y = 0; y < 3; y++)
 		{
 			if (Hand->GetLeft() > Table[x][y].GetX() &&
-				Hand->GetLeft() < (unsigned)(Table[x][y].GetX() + 136) &&
+				Hand->GetLeft() < (Table[x][y].GetX() + 136) &&
 			    Hand->GetTop() > Table[x][y].GetY() &&
-				Hand->GetTop() < (unsigned)(Table[x][y].GetY() + 100))
+				Hand->GetTop() < (Table[x][y].GetY() + 100))
 			{
 				if(HandX != x || HandY != y)
 				{

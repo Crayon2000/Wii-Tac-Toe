@@ -17,25 +17,25 @@ class Object
 public:
 	Object();
 	~Object();
-	unsigned int GetLeft();
-	unsigned int GetTop();
+	float GetLeft();
+	float GetTop();
 	unsigned int GetWidth();
 	unsigned int GetHeight();
 	float GetAngle();
 	bool IsVisible();
-	void SetLeft(unsigned int);
-	void SetTop(unsigned int);
+	void SetLeft(float);
+	void SetTop(float);
 	void SetWidth(unsigned int);
 	void SetHeight(unsigned int);
 	void SetSize(unsigned int, unsigned int);
 	void SetAngle(float);
 	void SetVisible(bool);
-	bool IsInside(unsigned int, unsigned int);
+	bool IsInside(float, float);
 protected:
 	virtual void Paint();
 
-	unsigned int Left;
-	unsigned int Top;
+	float Left;
+	float Top;
 	unsigned int Width;
 	unsigned int Height;
 	float Angle;

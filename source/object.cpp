@@ -27,7 +27,7 @@ Object::~Object()
  * @see SetLeft() 
  * @return Left position in pixel.
  */
-unsigned int Object::GetLeft()
+float Object::GetLeft()
 {
 	return Left;
 }
@@ -37,7 +37,7 @@ unsigned int Object::GetLeft()
  * @param[in] Left Left in pixel.
  * @see GetLeft()
  */
-void Object::SetLeft(unsigned int Left)
+void Object::SetLeft(float Left)
 {
 	this->Left = Left;
 }
@@ -47,7 +47,7 @@ void Object::SetLeft(unsigned int Left)
  * @see SetTop()
  * @return Top position in pixel.
  */
-unsigned int Object::GetTop()
+float Object::GetTop()
 {
 	return Top;
 }
@@ -57,7 +57,7 @@ unsigned int Object::GetTop()
  * @param[in] Top Top in pixel.
  * @see GetTop()
  */
-void Object::SetTop(unsigned int Top)
+void Object::SetTop(float Top)
 {
 	this->Top = Top;
 }
@@ -147,7 +147,7 @@ void Object::Paint()
  * @param[in] x X position in pixel.
  * @param[in] y Y position in pixel.
  */
-bool Object::IsInside(unsigned int x, unsigned int y)
+bool Object::IsInside(float x, float y)
 {
 	if (x > Left && x < (Left + Width) && y > Top && y < (Top + Height))
 		return true;

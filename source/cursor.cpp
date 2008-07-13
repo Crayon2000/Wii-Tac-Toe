@@ -61,7 +61,7 @@ void Cursor::SetPlayer(u8 Player)
  * Get the left position corrected of the object.
  * @return Left position corrected in pixel.
  */
-unsigned int Cursor::GetLeftCorrected()
+float Cursor::GetLeftCorrected()
 {
 	return Left*cos(Angle) - Top*sin(Angle);
 }
@@ -70,11 +70,11 @@ unsigned int Cursor::GetLeftCorrected()
  * Get the top position corrected of the object.
  * @return Top position corrected in pixel.
  */
-unsigned int Cursor::GetTopCorrected()
+float Cursor::GetTopCorrected()
 {
 	return Left*sin(Angle) + Top*cos(Angle);
-	//x' = cos( Angle ) * x + sin( Angle ) * y
-	//y' = -sin( Angle ) * x + cos( Angle ) * y
+	//x' = cos( Angle ) * Left + sin( Angle ) * Top
+	//y' = -sin( Angle ) * Left + cos( Angle ) * Top
 	//float px = ir.x + 8.0 + sin(Angle) * 8.0 * 1.41;
     //float py = ir.y + 8.0 - cos(Angle) * 8.0 * 1.41;
     //NewX = Left*cos(Angle) - Top*sin(Angle)
