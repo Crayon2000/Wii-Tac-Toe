@@ -55,7 +55,8 @@ private:
 	
 	u8 *GameImg; // PNG Array
 	u8 *SplashImg;
-	u8 *HoverImg;
+	u8 *HoverImgX;
+	u8 *HoverImgO;
 	u8 *CopiedImg;
 	u8 *TextFont;
 };

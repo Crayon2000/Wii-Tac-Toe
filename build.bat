@@ -13,7 +13,7 @@ zip -q -r wii-tac-toe-src.zip fonts\*.h gfx\*.h source\* Makefile
 if errorlevel 1 goto error
 
 echo Zipping program...
-copy Wii-Tac-Toe.elf Wii-Tac-Toe\boot.elf
+copy Wii-Tac-Toe.elf Wii-Tac-Toe\boot.dol
 if errorlevel 1 goto error
 zip -q wii-tac-toe.zip Wii-Tac-Toe\*
 if errorlevel 1 goto error

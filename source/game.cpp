@@ -20,7 +20,8 @@ extern "C"
 // Graphics
 #include "../gfx/splash.h"
 #include "../gfx/backg.h"
-#include "../gfx/hover.h"
+#include "../gfx/hover_o.h"
+#include "../gfx/hover_x.h"
 
 #define START_SCREEN 	0
 #define GAME_SCREEN 	1
@@ -108,7 +109,8 @@ Game::Game()
 
 	GameImg = GRRLIB_LoadTexture(backg);
 	SplashImg = GRRLIB_LoadTexture(splash);
-	HoverImg = GRRLIB_LoadTexture(hover);
+	HoverImgO = GRRLIB_LoadTexture(hover_o);
+	HoverImgX = GRRLIB_LoadTexture(hover_x);
 	CopiedImg = GRRLIB_LoadTexture(splash);
 
 	TextFont = GRRLIB_LoadTexture(GRRLIB_font1);
@@ -123,7 +125,8 @@ Game::~Game()
 {
 	free(GameImg);
 	free(SplashImg);
-	free(HoverImg);
+	free(HoverImgX);
+	free(HoverImgO);
 	free(TextFont);
 	free(CopiedImg);
 
@@ -259,8 +262,16 @@ void Game::GameScreen()
 
 	if(HandX >= 0 && HandY >= 0 && GameGrid->GetPlayerAtPos(HandX, HandY) == ' ')
 	{
-		GRRLIB_DrawImg(Table[HandX][HandY].GetX(), Table[HandX][HandY].GetY(),
-			136, 100, HoverImg, 0, 1, 1, 255);
+		if(WTTPlayer[CurrentPlayer].GetSign() == 'X')
+		{
+			GRRLIB_DrawImg(Table[HandX][HandY].GetX(), Table[HandX][HandY].GetY(),
+				140, 100, HoverImgX, 0, 1, 1, 255);
+		}
+		else
+		{
+			GRRLIB_DrawImg(Table[HandX][HandY].GetX(), Table[HandX][HandY].GetY(),
+				140, 100, HoverImgO, 0, 1, 1, 255);
+		}
 	}
 }
 
