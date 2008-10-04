@@ -28,6 +28,7 @@ private:
 	void TurnIsOver();
 	void NewGame();
 	void PrintText(u16, u16, const char*, u8 [], u32, u32, int, int, f32);
+	void PrintWrapText(u16, u16, u16, const char*, u8 [], u32, u32, int, int, f32);
 	void ChangeScreen(u8 NewScreen);
 	void ButtonOn(signed char);
 	void SelectZone();

@@ -219,9 +219,8 @@ f32 t2=1;
 }
 
 void GRRLIB_Printf(f32 xpos, f32 ypos, u8 data[], u32 color, f32 zoom, const char *text,...){
-	int i ;
+	int i, size, n = 0;
 	char tmp[1024];
-	int size=0;
 	u16 charHeight = 16, charWidth = 8;
 
 	va_list argp;
@@ -230,9 +229,17 @@ void GRRLIB_Printf(f32 xpos, f32 ypos, u8 data[], u32 color, f32 zoom, const cha
 	va_end(argp);
 
 	GXColor col = GRRLIB_Splitu32(color);
-	for(i=0; i<size; i++){
-		u8 c = tmp[i];
-		GRRLIB_DrawChar(xpos+i*charWidth*zoom, ypos, charWidth, charHeight, data, 0, zoom, zoom, c, 128, col );
+	for(i=0; i<size; i++, n++)
+	{
+		if(tmp[i] == '\n')
+		{
+			ypos += (charHeight + 2); // 2 pixels between each line
+			n = -1;
+		}
+		else
+		{
+			GRRLIB_DrawChar(xpos+n*charWidth*zoom, ypos, charWidth, charHeight, data, 0, zoom, zoom, tmp[i], 128, col );
+		}
 	}
 }
 
@@ -277,6 +284,15 @@ void GRRLIB_InitVideo () {
 
 
 	gp_fifo = (u8 *) memalign(32,DEFAULT_FIFO_SIZE);
+}
+
+void GRRLIB_Stop() {
+    free(MEM_K1_TO_K0(xfb[0])); xfb[0] = NULL;
+    free(MEM_K1_TO_K0(xfb[1])); xfb[1] = NULL;
+    free(gp_fifo); gp_fifo = NULL;
+
+    GX_AbortFrame();
+    GX_Flush();
 }
 
 void GRRLIB_Start(){
@@ -390,6 +406,7 @@ u8 *GRRLIB_Screen2Texture() {
 	GX_SetTexCopyDst(640, 480, GX_TF_RGBA8, GX_FALSE);
 	my_texture = memalign(32, 640 * 480 * 4); // GX_GetTexBufferSize(640, 480, GX_TF_RGBA8, GX_FALSE, 1)
 	GX_CopyTex(my_texture, GX_FALSE);
+	GX_PixModeSync();
 	return my_texture;
 }
 

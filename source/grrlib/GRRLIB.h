@@ -44,6 +44,7 @@ void GRRLIB_GXEngine(Vector v[], GXColor c[], long count,u8 fmt);
 
 void GRRLIB_InitVideo ();
 void GRRLIB_Start();
+void GRRLIB_Stop();
 void GRRLIB_Render ();
 bool GRRLIB_ScrShot(const char*);
 u8 *GRRLIB_Screen2Texture();

@@ -8,6 +8,7 @@ extern "C"
 {
 	#include "grrlib/GRRLIB.h"
 }
+#include "tools.h"
 #include "main.h"
 #include "symbol.h"
 #include "game.h"
@@ -178,7 +179,7 @@ void Game::Paint()
 		Hand->SetPlayer(WTTPlayer[CurrentPlayer].GetSign());
 		Hand->Paint();
 /*
-		sprintf(text, "X = %.02f; Y = %.02f",
+		snprintf(text, 50, "X = %.02f; Y = %.02f",
 			Hand->GetLeftCorrected(), Hand->GetTopCorrected());
 */
 	}
@@ -205,28 +206,28 @@ void Game::StartSreen()
  */
 void Game::GameScreen()
 {
-	int TextLeft;
+	int TextLeft, StrLenght;
 	//int TextTop;
 
 	// Background image
 	GRRLIB_DrawImg(0, 0, 640, 480, GameImg, 0, 1, 1, 255);
 
 	// Draw text
-	PrintText(130, 420, text,
+	PrintWrapText(130, 420, 390, text,
 		TextFont, 0xFF8C8A8C, 0xCC000000, 1, 1, 1.5);
 
 	// Draw score
 	char ScoreText[5];
-	sprintf(ScoreText, "%d", WTTPlayer[0].GetScore());
-	TextLeft = 106 - (strlen(ScoreText) * 8) / 2;
+	StrLenght = snprintf(ScoreText, 5, "%d", WTTPlayer[0].GetScore());
+	TextLeft = 106 - (StrLenght * 8) / 2;
 	PrintText(TextLeft, 85, ScoreText,
 		TextFont, 0xFFFFFFFF, 0xCCE6313A, -2, 2, 3);
-	sprintf(ScoreText, "%d", WTTPlayer[1].GetScore());
-	TextLeft = 106 - (strlen(ScoreText) * 8) / 2;
+	StrLenght = snprintf(ScoreText, 5, "%d", WTTPlayer[1].GetScore());
+	TextLeft = 106 - (StrLenght * 8) / 2;
 	PrintText(TextLeft, 188, ScoreText,
 		TextFont, 0xFFFFFFFF, 0xCC6BB6DE, -2, 2, 3);
-	sprintf(ScoreText, "%d", TieGame);
-	TextLeft = 106 - (strlen(ScoreText) * 8) / 2;
+	StrLenght = snprintf(ScoreText, 5, "%d", TieGame);
+	TextLeft = 106 - (StrLenght * 8) / 2;
 	PrintText(TextLeft, 291, ScoreText,
 		TextFont, 0xFFFFFFFF, 0xCC109642, -2, 2, 3);
 
@@ -458,7 +459,7 @@ bool Game::ControllerManager()
 					}
 					else
 					{	// Position is invalid
-						WiimoteRumble(200000);  // 200 ms
+						Rumble_Wiimote(200);  // 200 ms
 					}
 				}
 				else if((Buttons & WPAD_BUTTON_HOME))
@@ -470,9 +471,9 @@ bool Game::ControllerManager()
 		{
 			WPAD_Rumble(WPAD_CHAN_0, 1); // Rumble on
 			if(GRRLIB_ScrShot("Screenshot.png"))
-				strcpy(text, "A screenshot was taken!!!");
+				strncpy(text, "A screenshot was taken!!!", 50);
 			else
-				strcpy(text, "Screenshot did not work!!!");
+				strncpy(text, "Screenshot did not work!!!", 50);
 			WPAD_Rumble(WPAD_CHAN_0, 0); // Rumble off
 		}
 	}
@@ -488,7 +489,7 @@ void Game::Clear()
 	CurrentPlayer = PlayerToStart;
 	PlayerToStart = !PlayerToStart; // Next other player will start
 	const char *TextTurn[] = {IDS_PLAYERTURN};
-	sprintf(text, TextTurn[rand() % (sizeof(TextTurn) / sizeof(*TextTurn))],
+	snprintf(text, 50, TextTurn[rand() % (sizeof(TextTurn) / sizeof(*TextTurn))],
 		WTTPlayer[CurrentPlayer].GetName());
 	RoundFinished = false;
 }
@@ -506,13 +507,13 @@ void Game::TurnIsOver()
 		if(rand() & 1)
 		{
 			const char *TextWinGame[] = {IDS_PLAYERWIN};
-			sprintf(text, TextWinGame[rand() % (sizeof(TextWinGame) / sizeof(*TextWinGame))],
+			snprintf(text, 50, TextWinGame[rand() % (sizeof(TextWinGame) / sizeof(*TextWinGame))],
 				WTTPlayer[GameWinner].GetName());
 		}
 		else
 		{
 			const char *TextLoseGame[] = {IDS_PLAYERLOSE};
-			sprintf(text, TextLoseGame[rand() % (sizeof(TextLoseGame) / sizeof(*TextLoseGame))],
+			snprintf(text, 50, TextLoseGame[rand() % (sizeof(TextLoseGame) / sizeof(*TextLoseGame))],
 				WTTPlayer[!GameWinner].GetName());
 		}
 		RoundFinished = true;
@@ -521,14 +522,14 @@ void Game::TurnIsOver()
 	{	// Tie game
 		TieGame++;
 		const char *TextTieGame[] = {IDS_PLAYERTIE};
-		strcpy(text, TextTieGame[rand() % (sizeof(TextTieGame) / sizeof(*TextTieGame))]);
+		strncpy(text, TextTieGame[rand() % (sizeof(TextTieGame) / sizeof(*TextTieGame))], 50);
 		RoundFinished = true;
 	}
 	else
 	{
 		CurrentPlayer = !CurrentPlayer; // Change player's turn
 		const char *TextTurn[] = {IDS_PLAYERTURN};
-		sprintf(text, TextTurn[rand() % (sizeof(TextTurn) / sizeof(*TextTurn))],
+		snprintf(text, 50, TextTurn[rand() % (sizeof(TextTurn) / sizeof(*TextTurn))],
 			WTTPlayer[CurrentPlayer].GetName());
 	}
 }
@@ -561,6 +562,37 @@ void Game::PrintText(u16 x, u16 y,
 }
 
 /**
+ *
+ */
+void Game::PrintWrapText(u16 x, u16 y, u16 MaxWidth,
+	const char *Text, u8 Font[], u32 TextColor, u32 ShadowColor,
+	int ShadowOffsetX, int ShadowOffsetY, f32 zoom)
+{
+	char NewText[256];
+	//u16 Offset = 0;
+	
+	strncpy(NewText, Text, 256);
+	word_wrap(NewText, MaxWidth / (8 * zoom)); //    8 = char width
+	
+	
+	PrintText(x, y, NewText,
+		Font, TextColor, ShadowColor,
+		ShadowOffsetX, ShadowOffsetY, zoom);
+/*
+	while()
+	{
+		strrchr(NewText, '\n');
+	
+		PrintText(x + Offset, y, NewText,
+			Font, TextColor, ShadowColor,
+			ShadowOffsetX, ShadowOffsetY, zoom);
+		Offset += 16; // 16 = char height
+	}
+*/
+}
+
+
+/**
  * Change the screen.
  * @param[in] NewScreen New screen to show.
  */
@@ -584,7 +616,7 @@ void Game::ButtonOn(signed char NewSelectedButton)
 {
 	if(SelectedButton != NewSelectedButton)
 	{
-		WiimoteRumble(50000); // 50 ms
+		Rumble_Wiimote(50); // 50 ms
 	}
 }
 
@@ -593,26 +625,28 @@ void Game::ButtonOn(signed char NewSelectedButton)
  */
 void Game::SelectZone()
 {
-	for(int x = 0; x < 3; x++)
+	if(!RoundFinished)
 	{
-		for(int y = 0; y < 3; y++)
+		for(int x = 0; x < 3; x++)
 		{
-			if (Hand->GetLeft() > Table[x][y].GetX() &&
-				Hand->GetLeft() < (Table[x][y].GetX() + 136) &&
-			    Hand->GetTop() > Table[x][y].GetY() &&
-				Hand->GetTop() < (Table[x][y].GetY() + 100))
+			for(int y = 0; y < 3; y++)
 			{
-				if(HandX != x || HandY != y)
+				if (Hand->GetLeft() > Table[x][y].GetX() &&
+					Hand->GetLeft() < (Table[x][y].GetX() + 136) &&
+					Hand->GetTop() > Table[x][y].GetY() &&
+					Hand->GetTop() < (Table[x][y].GetY() + 100))
 				{
-					WiimoteRumble(30000);  // 30 ms
-					HandX = x;
-					HandY = y;
+					if(HandX != x || HandY != y)
+					{
+						Rumble_Wiimote(30);  // 30 ms
+						HandX = x;
+						HandY = y;
+					}
+					return;
 				}
-				return;
 			}
 		}
 	}
-
 	HandX = -1;
 	HandY = -1;
 }

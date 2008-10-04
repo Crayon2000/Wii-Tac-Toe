@@ -8,4 +8,3 @@
  */
 //extern u16 *GRRLIB_buffer;
 
-void WiimoteRumble(int);

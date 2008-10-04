@@ -7,8 +7,6 @@
 //------------------------------------------------------------------------------
 // Headers
 //------------------------------------------------------------------------------
-#include <unistd.h> // usleep
-#include <ogc/lwp.h>
 #include <stdlib.h>
 #include <wiiuse/wpad.h>
 extern "C"
@@ -24,22 +22,6 @@ extern "C"
 // Externals
 //------------------------------------------------------------------------------
 Mtx GXmodelView2D;
-
-void *RumbleThread(void *RumbleTime)
-{
-	int *Time = (int *)RumbleTime;
-	WPAD_Rumble(WPAD_CHAN_0, 1); // Rumble on
-	usleep(*Time);
-	WPAD_Rumble(WPAD_CHAN_0, 0); // Rumble off
-	return 0;
-}
-
-void WiimoteRumble(int RumbleTime)
-{
-	lwp_t thread;
-	LWP_CreateThread(&thread, RumbleThread, &RumbleTime, NULL, 0, 80);
-	LWP_ResumeThread(thread);
-}
 
 /**
  * Entry point.
@@ -73,5 +55,7 @@ int main(int argc, char **argv)
 	}
 
 	delete MyGame;
+	WPAD_Shutdown();
+	GRRLIB_Stop();
 	return 0;
 }
