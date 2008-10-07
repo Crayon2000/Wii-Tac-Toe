@@ -5,6 +5,10 @@
 
 #include "tools.h"
 
+
+static vu32 *_wiilight_reg = (u32*)0xCD0000C0;
+
+
 /**
  *
  */
@@ -100,7 +104,8 @@ char *word_wrap(char *string, size_t line_len)
 }
 
 /**
- *
+ * Waits for an amount of time in msec.
+ * @param[in] milisec Number of milliseconds to wait.
  */
 int msleep(unsigned long milisec)
 {
@@ -112,4 +117,20 @@ int msleep(unsigned long milisec)
     while(nanosleep(&req) == -1)
 		continue;
     return 1;
+}
+
+/**
+ * Turn Wii light off
+ */
+void WIILIGHT_TurnOff()
+{
+	*_wiilight_reg &= ~0x20;
+}
+
+/**
+ * Turn Wii light on
+ */
+void WIILIGHT_TurnOn()
+{
+	*_wiilight_reg |= 0x20;
 }

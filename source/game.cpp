@@ -4,6 +4,7 @@
 #include <gccore.h>
 #include <wiiuse/wpad.h>
 #include <fat.h>
+#include <ogc/conf.h>
 extern "C"
 {
 	#include "grrlib/GRRLIB.h"
@@ -470,10 +471,12 @@ bool Game::ControllerManager()
 		if((Buttons & WPAD_BUTTON_1) && (Buttons & WPAD_BUTTON_2))
 		{
 			WPAD_Rumble(WPAD_CHAN_0, 1); // Rumble on
+			WIILIGHT_TurnOn();
 			if(GRRLIB_ScrShot("Screenshot.png"))
 				strncpy(text, "A screenshot was taken!!!", 50);
 			else
 				strncpy(text, "Screenshot did not work!!!", 50);
+			WIILIGHT_TurnOff();
 			WPAD_Rumble(WPAD_CHAN_0, 0); // Rumble off
 		}
 	}

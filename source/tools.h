@@ -7,5 +7,7 @@ void Rumble_Wiimote(int);
 
 char *word_wrap(char *, size_t);
 
+void WIILIGHT_TurnOn();
+void WIILIGHT_TurnOff();
 //---------------------------------------------------------------------------
 #endif
