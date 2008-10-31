@@ -15,8 +15,8 @@ extern "C"
 #include "game.h"
 
 // Fonts
-#include "../fonts/button_text.h"
-#include "../fonts/font1.h"
+//#include "../fonts/button_text.h"
+//#include "../fonts/font1.h"
 #include "../fonts/GRRLIB_font1.h"
 
 // Graphics
@@ -71,10 +71,10 @@ Game::Game()
 {
 	srand(time(NULL));
 
-	button_text_height = button_text_high / 256;
+	//button_text_height = button_text_high / 256;
 
-	scrore_height = font1_high / 256;
-	scrore_width = font1_width;
+	//scrore_height = font1_high / 256;
+	//scrore_width = font1_width;
 
 	ExitButton = new Button[3];
 
@@ -194,7 +194,7 @@ void Game::StartSreen()
 	GRRLIB_DrawImg(0, 0, 640, 480, SplashImg, 0, 1, 1, 255);
 
 	// Message for synchronization
-	//GRRLIB_Printf(395, 40, TextFont, 0xFFFFFFFF, 1, "Version 0.2");
+	//GRRLIB_Printf(395, 40, TextFont, 0xFFFFFFFF, 1, "Version 0.3");
 	GRRLIB_Printf(50, 310, TextFont, 0xFFFFFFFF, 1, "Programmer: Crayon");
 	GRRLIB_Printf(50, 330, TextFont, 0xFFFFFFFF, 1, "Graphics: Mr_Nick666");
 	
@@ -350,7 +350,7 @@ void Game::MenuScreen()
 	GRRLIB_Rectangle(0, 383, 640, 2, 0xFFFFFFFF, 1);
 	GRRLIB_Rectangle(0, 385, 640, 95, 0xFF000000, 1);
 
-	GRRLIB_Printf(500, 40, TextFont, 0xFFFFFFFF, 1, "Ver. 0.2");
+	GRRLIB_Printf(500, 40, TextFont, 0xFFFFFFFF, 1, "Ver. 0.3");
 
 	MenuButton[0].SetSelected(false);
 	MenuButton[1].SetSelected(false);

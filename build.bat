@@ -9,11 +9,11 @@ if errorlevel 1 goto error
 
 echo Zipping source...
 if errorlevel 1 goto error
-zip -q -r wii-tac-toe-src.zip fonts\*.h gfx\*.h source\* Makefile
+zip -q -r wii-tac-toe-src.zip fonts\*.h gfx\*.h source\* lib\* Makefile
 if errorlevel 1 goto error
 
 echo Zipping program...
-copy Wii-Tac-Toe.elf Wii-Tac-Toe\boot.dol
+copy Wii-Tac-Toe.dol Wii-Tac-Toe\boot.dol
 if errorlevel 1 goto error
 zip -q wii-tac-toe.zip Wii-Tac-Toe\*
 if errorlevel 1 goto error
