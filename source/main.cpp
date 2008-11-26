@@ -22,6 +22,33 @@ extern "C"
 // Externals
 //------------------------------------------------------------------------------
 Mtx GXmodelView2D;
+u8 HWButton = 0;
+
+/**
+ * Callback for the reset button on the Wii.
+ */
+void WiiResetPressed()
+{
+	HWButton = SYS_RETURNTOMENU;
+}
+
+/**
+ * Callback for the power button on the Wii.
+ */
+void WiiPowerPressed()
+{
+	HWButton = SYS_POWEROFF_STANDBY;
+}
+
+/**
+ * Callback for the power button on the Wiimote.
+ * @param[in] chan The Wiimote that pressed the button
+ */
+void WiimotePowerPressed(s32 chan)
+{
+	HWButton = SYS_POWEROFF_STANDBY;
+	//SYS_POWEROFF
+}
 
 /**
  * Entry point.
@@ -44,10 +71,16 @@ int main(int argc, char **argv)
 	// Game initialization
 	Game *MyGame = new Game();
 
+	SYS_SetResetCallback(WiiResetPressed);
+	SYS_SetPowerCallback(WiiPowerPressed);
+	WPAD_SetPowerButtonCallback(WiimotePowerPressed);
+
 	while(1)
 	{
 		WPAD_ScanPads();
 		if(MyGame->ControllerManager())
+			break;
+		if(HWButton)
 			break;
 
 		MyGame->Paint();
@@ -57,5 +90,11 @@ int main(int argc, char **argv)
 	delete MyGame;
 	WPAD_Shutdown();
 	GRRLIB_Stop();
+
+	if(HWButton)
+	{
+		SYS_ResetSystem(HWButton, 0, 0);
+	}
+
 	return 0;
 }

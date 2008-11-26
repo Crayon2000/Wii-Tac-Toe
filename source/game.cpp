@@ -30,35 +30,6 @@ extern "C"
 #define HOME_SCREEN 	2
 #define MENU_SCREEN 	3
 
-#define IDS_PRESS_A  	"Press The A Button"
-
-#define IDS_PLAYERTURN1 "%s, it's your turn."
-#define IDS_PLAYERTURN2 "Waiting for %s."
-#define IDS_PLAYERTURN3 "%s is thinking of is next move."
-#define IDS_PLAYERTURN4 "%s should take the Wiimote and play."
-#define IDS_PLAYERTURN5 "%s, let's play."
-#define IDS_PLAYERTURN6 "%s should play now."
-#define IDS_PLAYERWIN1  "%s won this round."
-#define IDS_PLAYERWIN2  "Is %s the best?"
-#define IDS_PLAYERWIN3  "The game is yours, %s."
-#define IDS_PLAYERWIN4  "%s rules."
-#define IDS_PLAYERLOSE1 "Too bad for %s."
-#define IDS_PLAYERLOSE2 "Better luck next time, %s!"
-#define IDS_PLAYERLOSE3 "%s you really suck."
-#define IDS_PLAYERLOSE4 "%s should practice a little more."
-#define IDS_PLAYERTIE1  "Tie game, that sucks."
-#define IDS_PLAYERTIE2  "You both lose this one."
-#define IDS_PLAYERTIE3  "No winner, no loser."
-#define IDS_PLAYERTIE4  "You both wasted your time, it's a tie."
-
-#define IDS_PLAYERTURN 	IDS_PLAYERTURN1, IDS_PLAYERTURN2, IDS_PLAYERTURN3, \
-						IDS_PLAYERTURN4, IDS_PLAYERTURN5, IDS_PLAYERTURN6
-#define IDS_PLAYERWIN  	IDS_PLAYERWIN1, IDS_PLAYERWIN2, IDS_PLAYERWIN3, \
-						IDS_PLAYERWIN3
-#define IDS_PLAYERLOSE  IDS_PLAYERLOSE1, IDS_PLAYERLOSE2, IDS_PLAYERLOSE3, \
-						IDS_PLAYERLOSE4
-#define IDS_PLAYERTIE  	IDS_PLAYERTIE1, IDS_PLAYERTIE2, IDS_PLAYERTIE3, IDS_PLAYERTIE4
-
 static Point Table[3][3] = {
 	{Point(180, 27), Point(180, 130), Point(180, 232)},
 	{Point(322, 27), Point(322, 130), Point(322, 232)},
@@ -76,44 +47,45 @@ Game::Game()
 	//scrore_height = font1_high / 256;
 	//scrore_width = font1_width;
 
+ 	GameGrid = new Grid();
+	Hand = new Cursor();
+	Lang = new Language();
+
 	ExitButton = new Button[3];
 
 	ExitButton[0].SetLeft((640 / 2) - (ExitButton[0].GetWidth() / 2));
 	ExitButton[0].SetTop(100);
-	ExitButton[0].SetCaption("Close");
+	ExitButton[0].SetCaption(Lang->Text("Close"));
 
 	ExitButton[1].SetLeft((640 / 2) - (ExitButton[1].GetWidth() / 2));
 	ExitButton[1].SetTop(200);
-	ExitButton[1].SetCaption("Reset");
+	ExitButton[1].SetCaption(Lang->Text("Reset"));
 
 	ExitButton[2].SetLeft((640 / 2) - (ExitButton[2].GetWidth() / 2));
 	ExitButton[2].SetTop(300);
-	ExitButton[2].SetCaption("Return to Loader");
+	ExitButton[2].SetCaption(Lang->Text("Return to Loader"));
 
 	MenuButton = new Button[2];
 
 	MenuButton[0].SetLeft((640 / 2) - (MenuButton[0].GetWidth() / 2));
 	MenuButton[0].SetTop(150);
-	MenuButton[0].SetCaption("2 Players (1 Wiimote)");
+	MenuButton[0].SetCaption(Lang->Text("2 Players (1 Wiimote)"));
 
 	MenuButton[1].SetLeft((640 / 2) - (MenuButton[1].GetWidth() / 2));
 	MenuButton[1].SetTop(250);
-	MenuButton[1].SetCaption("1 Player (Vs AI)");
-
- 	GameGrid = new Grid();
-	Hand = new Cursor();
+	MenuButton[1].SetCaption(Lang->Text("1 Player (Vs AI)"));
 
 	WTTPlayer = new Player[2];
 	WTTPlayer[0].SetSign('O');
-	WTTPlayer[0].SetName("Player 1");
+	WTTPlayer[0].SetName(Lang->Text("PLAYER 1"));
 	WTTPlayer[1].SetSign('X');
-	WTTPlayer[1].SetName("Player 2");
+	WTTPlayer[1].SetName(Lang->Text("PLAYER 2"));
 
 	GameImg = GRRLIB_LoadTexture(backg);
 	SplashImg = GRRLIB_LoadTexture(splash);
 	HoverImgO = GRRLIB_LoadTexture(hover_o);
 	HoverImgX = GRRLIB_LoadTexture(hover_x);
-	CopiedImg = GRRLIB_LoadTexture(splash);
+	CopiedImg = NULL;
 
 	TextFont = GRRLIB_LoadTexture(GRRLIB_font1);
 
@@ -134,6 +106,7 @@ Game::~Game()
 
 	delete GameGrid;
 	delete Hand;
+	delete Lang;
 	delete[] ExitButton;
 	delete[] WTTPlayer;
 }
@@ -180,7 +153,7 @@ void Game::Paint()
 		Hand->SetPlayer(WTTPlayer[CurrentPlayer].GetSign());
 		Hand->Paint();
 /*
-		snprintf(text, 50, "X = %.02f; Y = %.02f",
+		snprintf(text, TEXT_SIZE, "X = %.02f; Y = %.02f",
 			Hand->GetLeftCorrected(), Hand->GetTopCorrected());
 */
 	}
@@ -191,15 +164,24 @@ void Game::Paint()
  */
 void Game::StartSreen()
 {
-	GRRLIB_DrawImg(0, 0, 640, 480, SplashImg, 0, 1, 1, 255);
+	if(CopiedImg == NULL)
+	{	// Copy static element
+		GRRLIB_DrawImg(0, 0, 640, 480, SplashImg, 0, 1, 1, 255);
 
-	// Message for synchronization
-	//GRRLIB_Printf(395, 40, TextFont, 0xFFFFFFFF, 1, "Version 0.3");
-	GRRLIB_Printf(50, 310, TextFont, 0xFFFFFFFF, 1, "Programmer: Crayon");
-	GRRLIB_Printf(50, 330, TextFont, 0xFFFFFFFF, 1, "Graphics: Mr_Nick666");
-	
-	int TextLeft = 320 - (strlen(IDS_PRESS_A) * 8);
-	GRRLIB_Printf(TextLeft, 400, TextFont, 0xFF000000, 2, IDS_PRESS_A);
+		// Message for synchronization
+		//GRRLIB_Printf(395, 40, TextFont, 0xFFFFFFFF, 1, "Version 0.4");
+		GRRLIB_Printf(50, 310, TextFont, 0xFFFFFFFF, 1, Lang->Text("Programmer: %s"), "Crayon");
+		GRRLIB_Printf(50, 330, TextFont, 0xFFFFFFFF, 1, Lang->Text("Graphics: %s"), "Mr_Nick666");
+
+		int TextLeft = 320 - (strlen(Lang->Text("Press The A Button")) * 8);
+		GRRLIB_Printf(TextLeft, 400, TextFont, 0xFF000000, 2, Lang->Text("Press The A Button"));
+
+		CopiedImg = GRRLIB_Screen2Texture();
+	}
+	else
+	{
+		GRRLIB_DrawImg(0, 0, 640, 480, CopiedImg, 0, 1, 1, 255);
+	}
 }
 
 /**
@@ -208,10 +190,27 @@ void Game::StartSreen()
 void Game::GameScreen()
 {
 	int TextLeft, StrLenght;
-	//int TextTop;
 
-	// Background image
-	GRRLIB_DrawImg(0, 0, 640, 480, GameImg, 0, 1, 1, 255);
+	if(CopiedImg == NULL)
+	{	// Copy static element
+		// Background image
+		GRRLIB_DrawImg(0, 0, 640, 480, GameImg, 0, 1, 1, 255);
+
+		// Player name
+		TextLeft = 55;
+		PrintText(TextLeft, 50,
+			WTTPlayer[0].GetName(), TextFont, 0xFFFFFFFF, 0xCCE6313A, -2, 2, 1.5);
+		PrintText(TextLeft, 145,
+			WTTPlayer[1].GetName(), TextFont, 0xFFFFFFFF, 0xCC6BB6DE, -2, 2, 1.5);
+		PrintText(TextLeft, 250,
+			Lang->Text("TIE GAME"), TextFont, 0xFFFFFFFF, 0xCC109642, -2, 2, 1.5);
+
+		CopiedImg = GRRLIB_Screen2Texture();
+	}
+	else
+	{
+		GRRLIB_DrawImg(0, 0, 640, 480, CopiedImg, 0, 1, 1, 255);
+	}
 
 	// Draw text
 	PrintWrapText(130, 420, 390, text,
@@ -232,20 +231,6 @@ void Game::GameScreen()
 	PrintText(TextLeft, 291, ScoreText,
 		TextFont, 0xFFFFFFFF, 0xCC109642, -2, 2, 3);
 
-	// Player name
-/*
-	TextLeft = 40;
-	TextTop = 17;
-	PrintText(TextLeft, TextTop,
-		WTTPlayer[0].GetName(), button_text_img, WHITE, 0xE187, -2, 2, 1);
-	TextTop = 143;
-	PrintText(TextLeft, TextTop,
-		WTTPlayer[1].GetName(), button_text_img, WHITE, 0x6DBB, -2, 2, 1);
-	TextTop = 270;
-	PrintText(TextLeft, TextTop,
-		"Tie Game", button_text_img, WHITE, 0x14A8, -2, 2, 1);
-
-*/
 	// Draw grid content
 	Symbol *Sign = new Symbol;
 	for(int x = 0; x < 3; x++)
@@ -283,24 +268,25 @@ void Game::GameScreen()
 void Game::ExitScreen()
 {
 	if(CopiedImg == NULL)
-	{
-		GameScreen();
-		GRRLIB_Rectangle(0, 0, 640, 480, 0xCC000000, 1);
+	{	// Copy static element
+		GameScreen();	// Show Game screen
+		GRRLIB_Rectangle(0, 0, 640, 480, 0xCC000000, 1); // Draw a black rectabgle over it
+
+		GRRLIB_Rectangle(0, 0, 640, 63, 0xFF000000, 1);
+		GRRLIB_Rectangle(0, 63, 640, 2, 0xFF848284, 1);
+
+		GRRLIB_Rectangle(0, 383, 640, 2, 0xFF848284, 1);
+		GRRLIB_Rectangle(0, 385, 640, 95, 0xFF000000, 1);
+
+		GRRLIB_Printf(40, 17, //32, 17,
+			TextFont, 0xFFFFFFFF, 1.8, Lang->Text("HOME Menu"));
+
 		CopiedImg = GRRLIB_Screen2Texture();
 	}
 	else
 	{
 		GRRLIB_DrawImg(0, 0, 640, 480, CopiedImg, 0, 1, 1, 255);
 	}
-
-	GRRLIB_Rectangle(0, 0, 640, 63, 0xFF000000, 1);
-	GRRLIB_Rectangle(0, 63, 640, 2, 0xFF848284, 1);
-
-	GRRLIB_Rectangle(0, 383, 640, 2, 0xFF848284, 1);
-	GRRLIB_Rectangle(0, 385, 640, 95, 0xFF000000, 1);
-
-	GRRLIB_Printf(40, 17, //32, 17,
-		TextFont, 0xFFFFFFFF, 1.8, "HOME Menu");
 
 	ExitButton[0].SetSelected(false);
 	ExitButton[1].SetSelected(false);
@@ -337,20 +323,29 @@ void Game::ExitScreen()
  */
 void Game::MenuScreen()
 {
-	GRRLIB_FillScreen(0XFF000000);	// Clear screen
-	for(int y = 0; y <=480; y+=8)
-	{
-		GRRLIB_Rectangle(0, y, 640, 2, 0x30B0B0B0, 1);
+	if(CopiedImg == NULL)
+	{	// Copy static element
+		GRRLIB_FillScreen(0XFF000000);	// Clear screen
+		for(int y = 0; y <=480; y+=8)
+		{
+			GRRLIB_Rectangle(0, y, 640, 2, 0x30B0B0B0, 1);
+		}
+
+		GRRLIB_Rectangle(0, 0, 640, 63, 0xFF000000, 1);
+		GRRLIB_Rectangle(0, 63, 640, 2, 0xFFFFFFFF, 1);
+
+
+		GRRLIB_Rectangle(0, 383, 640, 2, 0xFFFFFFFF, 1);
+		GRRLIB_Rectangle(0, 385, 640, 95, 0xFF000000, 1);
+
+		GRRLIB_Printf(500, 40, TextFont, 0xFFFFFFFF, 1, Lang->Text("Ver. %s"), "0.4");
+
+		CopiedImg = GRRLIB_Screen2Texture();
 	}
-
-	GRRLIB_Rectangle(0, 0, 640, 63, 0xFF000000, 1);
-	GRRLIB_Rectangle(0, 63, 640, 2, 0xFFFFFFFF, 1);
-
-
-	GRRLIB_Rectangle(0, 383, 640, 2, 0xFFFFFFFF, 1);
-	GRRLIB_Rectangle(0, 385, 640, 95, 0xFF000000, 1);
-
-	GRRLIB_Printf(500, 40, TextFont, 0xFFFFFFFF, 1, "Ver. 0.3");
+	else
+	{
+		GRRLIB_DrawImg(0, 0, 640, 480, CopiedImg, 0, 1, 1, 255);
+	}
 
 	MenuButton[0].SetSelected(false);
 	MenuButton[1].SetSelected(false);
@@ -473,9 +468,9 @@ bool Game::ControllerManager()
 			WPAD_Rumble(WPAD_CHAN_0, 1); // Rumble on
 			WIILIGHT_TurnOn();
 			if(GRRLIB_ScrShot("Screenshot.png"))
-				strncpy(text, "A screenshot was taken!!!", 50);
+				strncpy(text, "A screenshot was taken!!!", TEXT_SIZE);
 			else
-				strncpy(text, "Screenshot did not work!!!", 50);
+				strncpy(text, "Screenshot did not work!!!", TEXT_SIZE);
 			WIILIGHT_TurnOff();
 			WPAD_Rumble(WPAD_CHAN_0, 0); // Rumble off
 		}
@@ -491,9 +486,7 @@ void Game::Clear()
 	GameGrid->Clear();
 	CurrentPlayer = PlayerToStart;
 	PlayerToStart = !PlayerToStart; // Next other player will start
-	const char *TextTurn[] = {IDS_PLAYERTURN};
-	snprintf(text, 50, TextTurn[rand() % (sizeof(TextTurn) / sizeof(*TextTurn))],
-		WTTPlayer[CurrentPlayer].GetName());
+	snprintf(text, TEXT_SIZE, Lang->GetRandomTurnOverMessage(), WTTPlayer[CurrentPlayer].GetName());
 	RoundFinished = false;
 }
 
@@ -507,33 +500,32 @@ void Game::TurnIsOver()
 	{	// A winner is declare
 		GameWinner = (GameWinner == WTTPlayer[0].GetSign()) ? 0 : 1;
 		WTTPlayer[GameWinner].IncScore();
-		if(rand() & 1)
+		char *TextToCopy;
+		strncpy(text, Lang->GetRandomWinningMessage(), TEXT_SIZE);
+		TextToCopy = str_replace(text, "$LOSER$", WTTPlayer[!GameWinner].GetName());
+		if(TextToCopy)
 		{
-			const char *TextWinGame[] = {IDS_PLAYERWIN};
-			snprintf(text, 50, TextWinGame[rand() % (sizeof(TextWinGame) / sizeof(*TextWinGame))],
-				WTTPlayer[GameWinner].GetName());
+			strncpy(text, TextToCopy, TEXT_SIZE);
+			free(TextToCopy);
 		}
-		else
+		TextToCopy = str_replace(text, "$WINNER$", WTTPlayer[GameWinner].GetName());
+		if(TextToCopy)
 		{
-			const char *TextLoseGame[] = {IDS_PLAYERLOSE};
-			snprintf(text, 50, TextLoseGame[rand() % (sizeof(TextLoseGame) / sizeof(*TextLoseGame))],
-				WTTPlayer[!GameWinner].GetName());
+			strncpy(text, TextToCopy, TEXT_SIZE);
+			free(TextToCopy);
 		}
 		RoundFinished = true;
 	}
 	else if(GameGrid->IsFilled())
 	{	// Tie game
 		TieGame++;
-		const char *TextTieGame[] = {IDS_PLAYERTIE};
-		strncpy(text, TextTieGame[rand() % (sizeof(TextTieGame) / sizeof(*TextTieGame))], 50);
+		strncpy(text, Lang->GetRandomTieMessage(), TEXT_SIZE);
 		RoundFinished = true;
 	}
 	else
 	{
 		CurrentPlayer = !CurrentPlayer; // Change player's turn
-		const char *TextTurn[] = {IDS_PLAYERTURN};
-		snprintf(text, 50, TextTurn[rand() % (sizeof(TextTurn) / sizeof(*TextTurn))],
-			WTTPlayer[CurrentPlayer].GetName());
+		snprintf(text, TEXT_SIZE, Lang->GetRandomTurnOverMessage(), WTTPlayer[CurrentPlayer].GetName());
 	}
 }
 

@@ -7,6 +7,9 @@
 #include "button.h"
 #include "cursor.h"
 #include "player.h"
+#include "language.h"
+
+#define TEXT_SIZE 60
 
 /**
  * This is the main class of this project. This is where the magic happens.
@@ -41,7 +44,7 @@ private:
 	Player *WTTPlayer;
 	u8 CurrentScreen;
 	signed char SelectedButton;
-	char text[50];
+	char text[TEXT_SIZE];
 
 	int button_text_height;
 	u8 scrore_height;
@@ -53,6 +56,7 @@ private:
 	Button *ExitButton;
 	Button *MenuButton;
 	Grid *GameGrid;
+	Language *Lang;
 	
 	u8 *GameImg; // PNG Array
 	u8 *SplashImg;
@@ -60,6 +64,8 @@ private:
 	u8 *HoverImgO;
 	u8 *CopiedImg;
 	u8 *TextFont;
+
+//u8 Text[1228800] ATTRIBUTE_ALIGN (32);      // stores (640 * 480 * 4) texture
 };
 
 class Point

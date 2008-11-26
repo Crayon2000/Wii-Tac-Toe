@@ -407,6 +407,7 @@ u8 *GRRLIB_Screen2Texture() {
 	my_texture = memalign(32, 640 * 480 * 4); // GX_GetTexBufferSize(640, 480, GX_TF_RGBA8, GX_FALSE, 1)
 	GX_CopyTex(my_texture, GX_FALSE);
 	GX_PixModeSync();
+	DCFlushRange(my_texture, 640 * 480 * 4);
 	return my_texture;
 }
 

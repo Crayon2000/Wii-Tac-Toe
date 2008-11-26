@@ -2,6 +2,8 @@
 #include <ogc/lwp.h>		// Thread
 #include <wiiuse/wpad.h>	// Wiimote
 #include <ogcsys.h>			// nanosleep
+#include <stdlib.h>
+#include <string.h>
 
 #include "tools.h"
 
@@ -133,4 +135,65 @@ void WIILIGHT_TurnOff()
 void WIILIGHT_TurnOn()
 {
 	*_wiilight_reg |= 0x20;
+}
+
+/**
+ * Replace a string by another string in a string
+ * @param[in] txt String to search.
+ * @param[in] Avant String to be replaced.
+ * @param[in] Apres Replacement string.
+ * @return Pointer to the new string with replaced string, must be freed
+ */
+char *str_replace(const char *txt, const char *Avant, const char *Apres)
+{
+  const char *pos;
+  char *TxtRetour;
+  size_t PosTxtRetour;
+  size_t Long;
+  size_t TailleAllouee;
+
+  pos = strstr (txt, Avant);
+
+  if (pos == NULL)
+  {
+    return NULL;
+  }
+
+  Long = (size_t)pos - (size_t)txt;
+  TailleAllouee = Long + strlen (Apres) + 1;
+  TxtRetour = (char*)malloc(TailleAllouee);
+  PosTxtRetour = 0;
+
+  strncpy (TxtRetour + PosTxtRetour, txt, Long);
+  PosTxtRetour += Long;
+  txt = pos + strlen (Avant);
+
+  Long = strlen (Apres);
+  strncpy (TxtRetour + PosTxtRetour, Apres, Long);
+  PosTxtRetour += Long;
+
+  pos = strstr (txt, Avant);
+  while (pos != NULL)
+  {
+    Long = (size_t)pos - (size_t)txt;
+    TailleAllouee += Long + strlen (Apres);
+    TxtRetour = (char *)realloc (TxtRetour, TailleAllouee);
+
+    strncpy (TxtRetour + PosTxtRetour, txt, Long);
+    PosTxtRetour += Long;
+
+    txt = pos + strlen (Avant);
+
+    Long = strlen (Apres);
+    strncpy (TxtRetour + PosTxtRetour, Apres, Long);
+    PosTxtRetour += Long;
+
+    pos = strstr (txt, Avant);
+  }
+
+  Long = strlen (txt) + 1;
+  TailleAllouee += Long;
+  TxtRetour = (char*)realloc(TxtRetour, TailleAllouee);
+  strncpy (TxtRetour + PosTxtRetour, txt, Long);
+  return TxtRetour;
 }

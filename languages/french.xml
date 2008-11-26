@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<language type="french">
+    <translation from="Programmer: %s" to="Programmation: %s" />
+    <translation from="Graphics: %s" to="Graphiques: %s" />
+    <translation from="Press The A Button" to="Appuyer sur le bouton A" />
+
+    <translation from="Ver. %s" to="Ver. %s" />
+    <translation from="2 Players (1 Wiimote)" to="2 joueurs (1 Wiimote)" />
+    <translation from="1 Player (Vs AI)" to="1 joueur (contre l'IA)" />
+
+    <translation from="HOME Menu" to="Menu HOME" />
+    <translation from="Close" to="Fermer" />
+    <translation from="Reset" to="Réinitialisation" />
+    <translation from="Return to Loader" to="Retourner au Loader" />
+
+    <translation from="PLAYER 1" to="JOUEUR 1" />
+    <translation from="PLAYER 2" to="JOUEUR 2" />
+    <translation from="TIE GAME" to="NULLE" />
+
+    <!-- Variable $WINNER$ and $LOSER$ could be used -->
+    <winning_game>
+        <message id="1" text="$WINNER$ a gagné cette partie." />
+        <message id="2" text="Est-ce que $WINNER$ est le meilleur?" />
+        <message id="3" text="La partie est à toi, $WINNER$." />
+        <message id="4" text="$WINNER$ a cassé $LOSER$." />
+        <message id="5" text="C'est triste pour $LOSER$." />
+        <message id="6" text="Meilleure chance la prochaine fois, $LOSER$!" />
+        <message id="7" text="$LOSER$ a vraiment mal joué." />
+        <message id="8" text="$LOSER$ devrait pratiquer un peu plus." />
+    </winning_game>
+
+    <tie_game>
+        <message id="1" text="C'est dommage, la partie est nulle." />
+        <message id="2" text="Vous avez perdu tous les deux." />
+        <message id="3" text="Au moins il n'y a pas de perdant." />
+        <message id="4" text="Vous avez perdu votre temps, c'est une partie nulle." />
+    </tie_game>
+
+    <turn_over>
+        <message id="1" text="%s, c'est ton tour." />
+        <message id="2" text="On attend après %s." />
+        <message id="3" text="%s pense à la prochaine position." />
+        <message id="4" text="%s devrait prendre la Wiimote et jouer." />
+        <message id="5" text="%s a la tête dans les nuages." />
+        <message id="6" text="%s devrait maintenant jouer." />
+    </turn_over>
+</language>
