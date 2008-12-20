@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<language type="french">
+<language type="french" translator="Crayon">
     <translation from="Programmer: %s" to="Programmation: %s" />
     <translation from="Graphics: %s" to="Graphiques: %s" />
     <translation from="Press The A Button" to="Appuyer sur le bouton A" />

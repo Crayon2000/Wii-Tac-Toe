@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<language type="english">
+<language type="english" translator="Crayon">
     <translation from="Programmer: %s" to="Programmer: %s" />
     <translation from="Graphics: %s" to="Graphics: %s" />
     <translation from="Press The A Button" to="Press The A Button" />
@@ -17,16 +17,16 @@
     <translation from="PLAYER 2" to="PLAYER 2" />
     <translation from="TIE GAME" to="TIE GAME" />
     
-    <!-- Variable $WINNER$ and $LOOSER$ could be used -->
+    <!-- Variable $WINNER$ and $LOSER$ could be used -->
     <winning_game>
         <message id="1" text="$WINNER$ won this round." />
         <message id="2" text="Is $WINNER$ the best?" />
         <message id="3" text="The game is yours, $WINNER$." />
         <message id="4" text="$WINNER$ rules." />
-        <message id="5" text="Too bad for $LOOSER$." />
-        <message id="6" text="Better luck next time, $LOOSER$!" />
-        <message id="7" text="$LOOSER$ you really suck." />
-        <message id="8" text="$LOOSER$ should practice a little more." />
+        <message id="5" text="Too bad for $LOSER$." />
+        <message id="6" text="Better luck next time, $LOSER$!" />
+        <message id="7" text="$LOSER$ you really suck." />
+        <message id="8" text="$LOSER$ should practice a little more." />
     </winning_game>
 
     <tie_game>

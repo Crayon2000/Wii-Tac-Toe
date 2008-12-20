@@ -61,6 +61,7 @@ int main(int argc, char **argv)
 	// Video initialization
 	VIDEO_Init();
 	GRRLIB_InitVideo();
+	GRRLIB_InitFreetype();
 	GRRLIB_Start();
 
 	// Wiimote initialization

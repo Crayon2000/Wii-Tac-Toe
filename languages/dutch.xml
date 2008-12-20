@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language type="dutch" translator="Digdug">
+    <translation from="Programmer: %s" to="Programmeur: %s" />
+    <translation from="Graphics: %s" to="Graphics: %s" />
+    <translation from="Press The A Button" to="Druk op de A knop" />
+
+    <translation from="Ver. %s" to="Ver. %s" />
+    <translation from="2 Players (1 Wiimote)" to="2 Spelers (1 Wiimote)" />
+    <translation from="1 Player (Vs AI)" to="1 Speler (Vs Wii)" />
+
+    <translation from="HOME Menu" to="HOME Menu" />
+    <translation from="Close" to="Sluiten" />
+    <translation from="Reset" to="Reset" />
+    <translation from="Return to Loader" to="Terug naar de Loader" />
+
+    <translation from="PLAYER 1" to="SPELER 1" />
+    <translation from="PLAYER 2" to="SPELER 2" />
+    <translation from="TIE GAME" to="GELIJK SPEL" />
+
+    <!-- Variable $WINNER$ and $LOSER$ could be used -->
+    <winning_game>
+        <message id="1" text="$WINNER$ won deze ronde." />
+        <message id="2" text="Is $WINNER$ de beste?" />
+        <message id="3" text="Dit is jouw spel, $WINNER$." />
+        <message id="4" text="$WINNER$ rules." />
+        <message id="5" text="Jammer voor $LOSER$." />
+        <message id="6" text="Volgende keer beter, $LOSER$!" />
+        <message id="7" text="$LOSER$ jij bent echt slecht." />
+        <message id="8" text="$LOSER$ je zou meer moeten oefenen." />
+    </winning_game>
+
+    <tie_game>
+        <message id="1" text="Gelijk spel, dat zuigt." />
+        <message id="2" text="Beide hebben deze keer verloren." />
+        <message id="3" text="Geen winnaar, geen verliezer." />
+        <message id="4" text="Jullie hebben beide jullie tijd verspild, het is gelijk spel." />
+    </tie_game>
+
+    <turn_over>
+        <message id="1" text="%s, het is jouw beurt." />
+        <message id="2" text="Wachten op %s." />
+        <message id="3" text="%s denkt aan de volgende zet." />
+        <message id="4" text="%s zou de Wiimote moeten pakken en spelen." />
+        <message id="5" text="%s, laten we spelen." />
+        <message id="6" text="%s moet nu spelen." />
+    </turn_over>
+</language>

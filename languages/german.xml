@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language type="german" translator="Exe">
+    <translation from="Programmer: %s" to="Programmierer: %s" />
+    <translation from="Graphics: %s" to="Grafik: %s" />
+    <translation from="Press The A Button" to="Drücke den A-Knopf" />
+
+    <translation from="Ver. %s" to="Ver. %s" />
+    <translation from="2 Players (1 Wiimote)" to="2 Spieler (1 Wiimote)" />
+    <translation from="1 Player (Vs AI)" to="1 Spieler (Vs KI)" />
+
+    <translation from="HOME Menu" to="HOME Menü" />
+    <translation from="Close" to="Schließen" />
+    <translation from="Reset" to="Reset" />
+    <translation from="Return to Loader" to="Zurück zum Loader" />
+
+    <translation from="PLAYER 1" to="Spieler 1" />
+    <translation from="PLAYER 2" to="Spieler 2" />
+    <translation from="TIE GAME" to="Unentschieden" />
+
+    <!-- Variable $WINNER$ and $LOSER$ could be used -->
+    <winning_game>
+        <message id="1" text="$WINNER$ gewinnt diese Runde." />
+        <message id="2" text="Ist $WINNER$ der Beste?" />
+        <message id="3" text="Es ist dein Spiel, $WINNER$." />
+        <message id="4" text="$WINNER$ hat's drauf." />
+        <message id="5" text="Wie schade $LOSER$." />
+        <message id="6" text="Viel Glück beim nächsten Mal, $LOSER$!" />
+        <message id="7" text="$LOSER$, du bist richtig schlecht." />
+        <message id="8" text="$LOSER$, du solltest mehr üben." />
+    </winning_game>
+
+    <tie_game>
+        <message id="1" text="Unentschieden, so ein Mist." />
+        <message id="2" text="Diesmal habt ihr beide verloren." />
+        <message id="3" text="Kein Sieger, kein Verlierer." />
+        <message id="4" text="Ihr habt beide eure Zeit verschwendet, unentschieden." />
+    </tie_game>
+
+    <turn_over>
+        <message id="1" text="%s, du bist dran." />
+        <message id="2" text="Ich warte auf dich %s." />
+        <message id="3" text="%s denkt gerade an seinen nächsten Schritt." />
+        <message id="4" text="%s nimm die Wiimote und spiel." />
+        <message id="5" text="%s, lass uns spielen." />
+        <message id="6" text="%s spiel endlich." />
+    </turn_over>
+</language>
