@@ -9,7 +9,7 @@
 #include "player.h"
 #include "language.h"
 
-#define TEXT_SIZE 60
+#define TEXT_SIZE 100
 
 /**
  * This is the main class of this project. This is where the magic happens.
@@ -24,17 +24,18 @@ public:
 	bool ControllerManager();
 private:
 	void StartSreen();
-	void MenuScreen();
-	void GameScreen();
+	void MenuScreen(bool);
+	void GameScreen(bool);
 	void ExitScreen();
 	void Clear();
 	void TurnIsOver();
 	void NewGame();
-	void PrintText(u16, u16, const char*, u8 [], u32, u32, int, int, f32);
-	void PrintWrapText(u16, u16, u16, const char*, u8 [], u32, u32, int, int, f32);
+	void PrintText(u16, u16, const char*, unsigned int, unsigned int);
+	void PrintWrapText(u16, u16, u16, const char*, unsigned int, unsigned int);
 	void ChangeScreen(u8 NewScreen);
 	void ButtonOn(signed char);
-	void SelectZone();
+	bool SelectZone();
+	void FreeMemImg();
 
 	Cursor *Hand;
 	signed char HandX, HandY;
@@ -43,6 +44,7 @@ private:
 	bool PlayerToStart;
 	Player *WTTPlayer;
 	u8 CurrentScreen;
+	u8 LastScreen;
 	signed char SelectedButton;
 	char text[TEXT_SIZE];
 
@@ -63,7 +65,6 @@ private:
 	u8 *HoverImgX;
 	u8 *HoverImgO;
 	u8 *CopiedImg;
-	u8 *TextFont;
 
 //u8 Text[1228800] ATTRIBUTE_ALIGN (32);      // stores (640 * 480 * 4) texture
 };

@@ -27,11 +27,6 @@ private:
 	void SetLanguage(s32);
 	unsigned int ChildCount(mxml_node_t *, const char *);
 	const char *GetRandomMessage(const char *, int);
-	const char *Convert(const char *);
-
-
-	int UTF8Toascii(unsigned char*, int *, const unsigned char*, int *);
-	int UTF8Toisolat1(unsigned char*, int *, const unsigned char*, int *);
 };
 //---------------------------------------------------------------------------
 #endif

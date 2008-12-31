@@ -44,68 +44,6 @@ static bool isspace(int c)
 }
 
 /**
- *
- * @param[in] string
- * @return
- */
-static size_t get_word(char *string)
-{
-	int tab_size = 0;
-    int i = 0, word_len = 0;
-
-	if(!string[0])
-		return 0;
-	while(isspace(string[i]))
-	{
-		if('\t' == string[i])
-		{
-			if(0 == tab_size)
-				string[i] = ' ';
-			else
-				word_len += tab_size-1;
-		}
-		else if('\n' == string[i])
-		{
-			string[i]=' ';
-		}
-		word_len++;
-		i++;
-	}
-	while(string[i] && !isspace(string[i++]))
-		word_len++;
-	return word_len;
-
-}
-
-/**
- * Insert carriage return in string at line maximum lenght.
- * @param string
- * @param[in] line_len
- * @return
- */
-char *word_wrap(char *string, size_t line_len)
-{
-	size_t len,				// length of current word
-	current_len = 0;  		// current length of line
-	size_t start_line = 0;	// index of beginning if line
-
-	while(0 != (len = get_word(&string[current_len + start_line])))
-	{
-		if(current_len + len < line_len)
-		{
-			current_len += len;
-		}
-		else
-		{
-			string[start_line + current_len] = '\n';
-			start_line += current_len + 1;
-			current_len = 0;
-		}
-	}
-	return string;
-}
-
-/**
  * Waits for an amount of time in msec.
  * @param[in] milisec Number of milliseconds to wait.
  */
@@ -146,54 +84,54 @@ void WIILIGHT_TurnOn()
  */
 char *str_replace(const char *txt, const char *Avant, const char *Apres)
 {
-  const char *pos;
-  char *TxtRetour;
-  size_t PosTxtRetour;
-  size_t Long;
-  size_t TailleAllouee;
+	const char *pos;
+	char *TxtRetour;
+	size_t PosTxtRetour;
+	size_t Long;
+	size_t TailleAllouee;
 
-  pos = strstr (txt, Avant);
+	pos = strstr(txt, Avant);
 
-  if (pos == NULL)
-  {
-    return NULL;
-  }
+	if(pos == NULL)
+	{
+		return NULL;
+	}
 
-  Long = (size_t)pos - (size_t)txt;
-  TailleAllouee = Long + strlen (Apres) + 1;
-  TxtRetour = (char*)malloc(TailleAllouee);
-  PosTxtRetour = 0;
+	Long = (size_t)pos - (size_t)txt;
+	TailleAllouee = Long + strlen(Apres) + 1;
+	TxtRetour = (char*)malloc(TailleAllouee);
+	PosTxtRetour = 0;
 
-  strncpy (TxtRetour + PosTxtRetour, txt, Long);
-  PosTxtRetour += Long;
-  txt = pos + strlen (Avant);
+	strncpy(TxtRetour + PosTxtRetour, txt, Long);
+	PosTxtRetour += Long;
+	txt = pos + strlen(Avant);
 
-  Long = strlen (Apres);
-  strncpy (TxtRetour + PosTxtRetour, Apres, Long);
-  PosTxtRetour += Long;
+	Long = strlen(Apres);
+	strncpy(TxtRetour + PosTxtRetour, Apres, Long);
+	PosTxtRetour += Long;
 
-  pos = strstr (txt, Avant);
-  while (pos != NULL)
-  {
-    Long = (size_t)pos - (size_t)txt;
-    TailleAllouee += Long + strlen (Apres);
-    TxtRetour = (char *)realloc (TxtRetour, TailleAllouee);
+	pos = strstr(txt, Avant);
+	while(pos != NULL)
+	{
+		Long = (size_t)pos - (size_t)txt;
+		TailleAllouee += Long + strlen(Apres);
+		TxtRetour = (char *)realloc(TxtRetour, TailleAllouee);
 
-    strncpy (TxtRetour + PosTxtRetour, txt, Long);
-    PosTxtRetour += Long;
+		strncpy(TxtRetour + PosTxtRetour, txt, Long);
+		PosTxtRetour += Long;
 
-    txt = pos + strlen (Avant);
+		txt = pos + strlen(Avant);
 
-    Long = strlen (Apres);
-    strncpy (TxtRetour + PosTxtRetour, Apres, Long);
-    PosTxtRetour += Long;
+		Long = strlen(Apres);
+		strncpy(TxtRetour + PosTxtRetour, Apres, Long);
+		PosTxtRetour += Long;
 
-    pos = strstr (txt, Avant);
-  }
+		pos = strstr(txt, Avant);
+	}
 
-  Long = strlen (txt) + 1;
-  TailleAllouee += Long;
-  TxtRetour = (char*)realloc(TxtRetour, TailleAllouee);
-  strncpy (TxtRetour + PosTxtRetour, txt, Long);
-  return TxtRetour;
+	Long = strlen(txt) + 1;
+	TailleAllouee += Long;
+	TxtRetour = (char*)realloc(TxtRetour, TailleAllouee);
+	strncpy(TxtRetour + PosTxtRetour, txt, Long);
+	return TxtRetour;
 }

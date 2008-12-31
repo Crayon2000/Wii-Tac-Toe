@@ -57,15 +57,6 @@ const char *Language::Text(const char *From)
  */
 void Language::SetLanguage(s32 Conf_Lang)
 {
-/*
-	CONF_LANG_JAPANESE,
-	CONF_LANG_ENGLISH,
-	CONF_LANG_GERMAN,
-	CONF_LANG_FRENCH,
-	CONF_LANG_SPANISH,
-	CONF_LANG_ITALIAN,
-	CONF_LANG_DUTCH
-*/
 	mxml_node_t *Root_Node;
 	switch(Conf_Lang)
 	{
@@ -81,7 +72,9 @@ void Language::SetLanguage(s32 Conf_Lang)
 		case CONF_LANG_SPANISH:
 			Root_Node = mxmlLoadString(NULL, (char*)spanish, MXML_TEXT_CALLBACK);
 			break;
-		default:
+		case CONF_LANG_ITALIAN:
+		case CONF_LANG_JAPANESE:
+		default:	// LANG_ENGLISH
 			Root_Node = mxmlLoadString(NULL, (char*)english, MXML_TEXT_CALLBACK);
 	}
 	First_Node = mxmlFindElement(Root_Node, Root_Node, "language", NULL, NULL, MXML_DESCEND); 

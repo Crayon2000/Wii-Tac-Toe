@@ -26,7 +26,6 @@ private:
 	unsigned int TextTop;
 	unsigned int TextLeft;
 	u32 TextColor;
-	u8 *button_font;
 	u8 *ButtonImgOn;
 	u8 *ButtonImgOff;
 };

@@ -16,6 +16,14 @@
 
 #include "../libpng/pngu/pngu.h"
 
+/**** FREETYPE START ****/
+extern void GRRLIB_InitFreetype();
+extern void GRRLIB_initTexture(void);
+extern void GRRLIB_Printf2(int x, int y, const char *string, unsigned int fontSize, int color); 
+extern void *GRRLIB_GetTexture(void);
+unsigned int GRRLIB_TextWidth(const char *, unsigned int);
+/**** FREETYPE END ****/
+
 extern Mtx GXmodelView2D;
 
 void GRRLIB_FillScreen(u32 color);

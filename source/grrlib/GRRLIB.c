@@ -6,6 +6,280 @@
 
 #include <fat.h>
 #include "GRRLIB.h"
+
+/******************************************************************************/
+/**** FREETYPE START ****/
+/* This is a very rough implementation if freetype using GRRLIB */
+#include "../fonts/Swis721_Ex_BT.h" // A truetype font
+#include <ft2build.h> /* I presume you have freetype for the Wii installed */
+#include FT_FREETYPE_H
+
+static FT_Library ftLibrary;
+static FT_Face ftFace;
+
+void *fontTempLayer=NULL;
+void *fontTexture=NULL;
+
+/* Static function prototypes */
+static void BitmapTo4x4RGBA(const unsigned char *src, void *dst, const unsigned int width, const unsigned int height);
+static bool BlitGlyph(FT_Bitmap *bitmap, int offset, int top, int color) ;
+
+extern void GRRLIB_InitFreetype(void) 
+{
+	unsigned int error = FT_Init_FreeType(&ftLibrary);
+	if (error) 
+	{
+		exit(0);
+	}
+
+	error = FT_New_Memory_Face(ftLibrary, Swis721_Ex_BT, Swis721_Ex_BT_size, 0, &ftFace);
+	if (error == FT_Err_Unknown_File_Format) 
+	{
+		exit(0);
+	} 
+	else if (error) 
+	{
+		/* Some other error */
+		exit(0);
+	}
+}
+
+extern void GRRLIB_initTexture(void)
+{
+   // Clear previous video frame buffer
+   if (fontTexture!=NULL) free(fontTexture);
+
+   fontTempLayer = (void*) calloc(1, 640 * 480 * 4);
+
+   if (fontTempLayer == NULL) 
+   {
+	  /* Oops! Something went wrong! */
+	  exit(0);
+   }
+}
+
+extern void GRRLIB_Printf2(int x, int y, const char *string, unsigned int fontSize, int color) 
+{
+	unsigned int error = 0;
+	int penX = 0;
+	int penY = fontSize;
+	FT_GlyphSlot slot = ftFace->glyph;
+	FT_UInt glyphIndex = 0;
+	FT_UInt previousGlyph = 0;
+	FT_Bool hasKerning = FT_HAS_KERNING(ftFace);
+
+    error = FT_Set_Pixel_Sizes(ftFace, 0, fontSize);
+	if (error) 
+	{
+		/* Failed to set the font size to the requested size. 
+		 * You probably should set a default size or something. 
+		 * I'll leave that up to the reader. */
+		 FT_Set_Pixel_Sizes(ftFace, 0, 12);
+	}
+	
+	/* Convert the string to UTF32 */
+	size_t length = strlen(string);
+	wchar_t *utf32 = (wchar_t*)malloc(length * sizeof(wchar_t)); 
+	length = mbstowcs(utf32, string, length);
+	
+	/* Loop over each character, drawing it on to the 4, until the 
+	 * end of the string is reached, or until the pixel width is too wide */
+	unsigned int loop = 0;
+	for (loop = 0; loop < length; ++loop)
+    {
+		glyphIndex = FT_Get_Char_Index(ftFace, utf32[ loop ]);
+		
+		/* To the best of my knowledge, none of the other freetype 
+		 * implementations use kerning, so my method ends up looking
+		 * slightly better :) */
+		if (hasKerning && previousGlyph && glyphIndex) 
+		{
+			FT_Vector delta;
+			FT_Get_Kerning(ftFace, previousGlyph, glyphIndex, FT_KERNING_DEFAULT, &delta);
+			penX += delta.x >> 6;
+		}
+	
+		error = FT_Load_Glyph(ftFace, glyphIndex, FT_LOAD_RENDER);
+		if (error)
+        {
+			/* Whoops, something went wrong trying to load the glyph 
+			 * for this character... you should handle this better */
+			continue;
+		}
+	
+		if (BlitGlyph(&slot->bitmap, penX + slot->bitmap_left+x, penY - slot->bitmap_top+y, color) == true) 
+		{
+			/* The glyph was successfully blitted to the buffer, move the pen forwards */
+			penX += slot->advance.x >> 6;
+			previousGlyph = glyphIndex;
+		} 
+		else 
+		{
+			/* BlitGlyph returned false, the line must be full */
+			free(utf32);
+			return;
+		}
+	}
+
+	free(utf32);
+}
+
+/* Returns true if the character was draw on to the buffer, false if otherwise */
+static bool BlitGlyph(FT_Bitmap *bitmap, int offset, int top, int color) 
+{
+	int bitmapWidth = bitmap->width;
+	int bitmapHeight = bitmap->rows;
+
+	if (offset + bitmapWidth > 640) 
+	{
+		/* Drawing this character would over run the buffer, so don't draw it */
+		return false;
+	}
+	if(fontTempLayer == NULL)
+	{
+		return false;
+	}
+
+	/* Draw the glyph onto the buffer, blitting from the bottom up */
+	/* CREDIT: Derived from a function by DragonMinded */
+	unsigned char *p = fontTempLayer;
+	unsigned int y = 0;
+	for (y = 0; y < bitmapHeight; ++y) 
+	{
+		int sywidth = y * bitmapWidth;
+		int dywidth = (y + top) * 640;
+
+		unsigned int column = 0;
+		for (column = 0; column < bitmapWidth; ++column)
+        {
+			unsigned int dstloc = ((column + offset) + dywidth) << 2;
+			
+			/* Copy the alpha value for this pixel into the texture buffer */
+			p[ dstloc + 2 ] = (color & 0xFF);
+			p[ dstloc + 1 ] = ((color >> 8) & 0xFF);
+			p[ dstloc + 0 ] = ((color >> 16) & 0xFF);
+			p[ dstloc + 3 ] = (bitmap->buffer[ column + sywidth ]);
+		}
+	}
+	
+	return true;
+}
+
+/* Render the text string to a 4x4RGBA texture, return a pointer to this texture */
+extern void *GRRLIB_GetTexture(void) 
+{
+	if(fontTempLayer == NULL)
+	{
+		return NULL;
+	}
+
+	/* Create a new buffer, this time to hold the final texture 
+	 * in a format suitable for the Wii */
+	fontTexture = memalign(32, 640 * 480 * 4);
+
+	/* Convert the RGBA temp buffer to a format usuable by GX */
+	BitmapTo4x4RGBA(fontTempLayer, fontTexture, 640, 480);
+	DCFlushRange(fontTexture, 640 * 480 * 4);
+
+	/* The temp buffer is no longer required */
+	free(fontTempLayer);
+	fontTempLayer = NULL;
+
+	return fontTexture;
+}
+
+static void BitmapTo4x4RGBA(const unsigned char *src, void *dst, const unsigned int width, const unsigned int height)
+{
+	unsigned int block = 0;
+	unsigned int i = 0;
+	unsigned int c = 0;
+	unsigned int ar = 0;
+	unsigned int gb = 0;
+	unsigned char *p = (unsigned char*)dst;
+
+	for (block = 0; block < height; block += 4) {
+		for (i = 0; i < width; i += 4) {
+			/* Alpha and Red */
+			for (c = 0; c < 4; ++c) {
+				for (ar = 0; ar < 4; ++ar) {
+					/* Alpha pixels */
+					*p++ = src[(((i + ar) + ((block + c) * width)) * 4) + 3];
+					/* Red pixels */	
+					*p++ = src[((i + ar) + ((block + c) * width)) * 4];
+				}
+			}
+			
+			/* Green and Blue */
+			for (c = 0; c < 4; ++c) {
+				for (gb = 0; gb < 4; ++gb) {
+					/* Green pixels */
+					*p++ = src[(((i + gb) + ((block + c) * width)) * 4) + 1];
+					/* Blue pixels */
+					*p++ = src[(((i + gb) + ((block + c) * width)) * 4) + 2];
+				}
+			}
+		} /* i */
+	} /* block */
+}
+
+unsigned int GRRLIB_TextWidth(const char *string, unsigned int fontSize) {
+	int penX = 0;
+	FT_UInt glyphIndex;
+	FT_UInt previousGlyph = 0;
+	FT_Bool hasKerning = FT_HAS_KERNING(ftFace);
+	unsigned int loop = 0;
+	size_t length;
+	wchar_t *utf32;
+
+	if(string == NULL)
+	{
+		return 0;
+	}
+
+	if(FT_Set_Pixel_Sizes(ftFace, 0, fontSize)) 
+	{
+		/* Failed to set the font size to the requested size. 
+		 * You probably should set a default size or something. */
+		 FT_Set_Pixel_Sizes(ftFace, 0, 12);
+	}
+
+	/* Convert the string to UTF32 */
+	length = strlen(string);
+	utf32 = (wchar_t *)malloc(strlen(string) * sizeof(wchar_t)); 
+	length = mbstowcs(utf32, string, length);
+
+	/* Loop over each character, drawing it on to the 4, until the 
+	 * end of the string is reached, or until the pixel width is too wide */
+	for(loop = 0; loop < length; ++loop)
+    {
+		glyphIndex = FT_Get_Char_Index(ftFace, utf32[ loop ]);
+		
+		/* To the best of my knowledge, none of the other freetype 
+		 * implementations use kerning, so my method ends up looking
+		 * slightly better :) */
+		if(hasKerning && previousGlyph && glyphIndex) 
+		{
+			FT_Vector delta;
+			FT_Get_Kerning(ftFace, previousGlyph, glyphIndex, FT_KERNING_DEFAULT, &delta);
+			penX += delta.x >> 6;
+		}
+	
+		if(FT_Load_Glyph(ftFace, glyphIndex, FT_LOAD_RENDER))
+        {
+			continue;
+		}
+
+		penX += ftFace->glyph->advance.x >> 6;
+		previousGlyph = glyphIndex;
+	}
+
+	free(utf32);
+	return penX;
+}
+
+/**** FREETYPE END ****/
+/******************************************************************************/
+
 #define DEFAULT_FIFO_SIZE (256 * 1024)
 
  u32 fb=0;
@@ -73,6 +347,9 @@ u8 * GRRLIB_LoadTexture(const unsigned char my_png[]) {
 }
 
 void GRRLIB_DrawImg(f32 xpos, f32 ypos, u16 width, u16 height, u8 data[], float degrees, float scaleX, f32 scaleY, u8 alpha ){
+   if(data == NULL)
+	return;
+
    GXTexObj texObj;
 
 	
@@ -386,11 +663,6 @@ bool GRRLIB_ScrShot(const char* File) {
     {
 		ErrorCode = PNGU_EncodeFromYCbYCr(ctx, 640, 480, xfb[fb], 0);
         PNGU_ReleaseImageContext(ctx);
-
-		if(!fatUnmount(PI_INTERNAL_SD))
-		{	// I can only hope it's better than nothing
-			fatUnsafeUnmount(PI_INTERNAL_SD);
-		}
     }
 	return !ErrorCode;
 }

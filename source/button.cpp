@@ -2,8 +2,6 @@
 #include <gccore.h>
 #include "../gfx/button_on.h"
 #include "../gfx/button_off.h"
-//#include "../fonts/button_text.h"
-#include "../fonts/GRRLIB_font1.h"
 #include "button.h"
 
 /**
@@ -17,11 +15,9 @@ Button::Button() : Object()
 	Width = 400;
 	Height = 64;
 
-	TextColor = 0xFF000000;
-
-	button_font = GRRLIB_LoadTexture(GRRLIB_font1);
-	TextHeight = 8;
-	TextWidth = 1024 / 128;
+	TextColor = 0x000000;
+	TextHeight = 12;
+	TextWidth = 100; // random value
 
 	ButtonImgOn = GRRLIB_LoadTexture(button_on);
 	ButtonImgOff = GRRLIB_LoadTexture(button_off);
@@ -32,7 +28,6 @@ Button::Button() : Object()
  */
 Button::~Button()
 {
-	free(button_font);
 	free(ButtonImgOn);
 	free(ButtonImgOff);
 }
@@ -42,11 +37,11 @@ Button::~Button()
  */
 void Button::Paint()
 {
-	GRRLIB_DrawImg(Left, Top, Width, Height, ButtonImgOff, 0, 1, 1, 255);
-	GRRLIB_Printf(TextLeft, TextTop, button_font, TextColor, 1, Caption);
+	GRRLIB_DrawImg(Left, Top, Width, Height, ButtonImgOff, 0, 1.0, 1.0, 255);
+	GRRLIB_Printf2(TextLeft, TextTop, Caption, TextHeight, TextColor);
 	if(Selected)
 	{
-		GRRLIB_DrawImg(Left, Top, Width, Height, ButtonImgOn, 0, 1, 1, 255);
+		GRRLIB_DrawImg(Left, Top, Width, Height, ButtonImgOn, 0, 1.0, 1.0, 255);
 	}
 }
 
@@ -57,7 +52,7 @@ void Button::Paint()
 void Button::SetCaption(const char *Caption)
 {
 	strncpy(this->Caption, Caption, 50);
-	TextWidth *= strlen(this->Caption);
+	TextWidth = GRRLIB_TextWidth(this->Caption, TextHeight);
 	TextTop = Top + (Height / 2) - (TextHeight / 2);
 	TextLeft = Left + (Width / 2) - (TextWidth / 2);
 }
