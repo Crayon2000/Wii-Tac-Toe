@@ -19,7 +19,7 @@ Cursor::Cursor() : Object()
 	Top = 0;
 	Width = 40;
 	Height = 56;
-	
+
 	CursorImgO = GRRLIB_LoadTexture(hand_o);
 	CursorImgX = GRRLIB_LoadTexture(hand_x);
 }

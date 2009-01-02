@@ -42,7 +42,7 @@ const char *Language::Text(const char *From)
 		return "";
 	}
 
-	Text_Node = mxmlFindElement(First_Node, First_Node, "translation", "from", From, MXML_DESCEND); 
+	Text_Node = mxmlFindElement(First_Node, First_Node, "translation", "from", From, MXML_DESCEND);
 	if(Text_Node == NULL)
 	{
 		return "";
@@ -77,7 +77,7 @@ void Language::SetLanguage(s32 Conf_Lang)
 		default:	// LANG_ENGLISH
 			Root_Node = mxmlLoadString(NULL, (char*)english, MXML_TEXT_CALLBACK);
 	}
-	First_Node = mxmlFindElement(Root_Node, Root_Node, "language", NULL, NULL, MXML_DESCEND); 
+	First_Node = mxmlFindElement(Root_Node, Root_Node, "language", NULL, NULL, MXML_DESCEND);
 }
 
 /**
@@ -90,8 +90,8 @@ unsigned int Language::ChildCount(mxml_node_t *Up_Node, const char *Name)
 	if(Up_Node)
 	{
 		mxml_node_t *Message_Node = NULL;
-		for(Message_Node = mxmlFindElement(Up_Node, Up_Node, Name, NULL, NULL, MXML_DESCEND); 
-			Message_Node != NULL; 
+		for(Message_Node = mxmlFindElement(Up_Node, Up_Node, Name, NULL, NULL, MXML_DESCEND);
+			Message_Node != NULL;
 			Message_Node = mxmlFindElement(Message_Node, Up_Node, Name, NULL, NULL, MXML_DESCEND))
 		{
 			Count++;

@@ -24,7 +24,7 @@ Object::~Object()
 
 /**
  * Get the left position of the object.
- * @see SetLeft() 
+ * @see SetLeft()
  * @return Left position in pixel.
  */
 float Object::GetLeft()

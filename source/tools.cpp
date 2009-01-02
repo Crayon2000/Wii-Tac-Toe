@@ -34,20 +34,10 @@ void Rumble_Wiimote(int RumbleTime)
 }
 
 /**
- * Returns true if c is a white-space character (0x09 – 0x0D or 0x20).
- * @param[in] c Integer to test.
- * @return true if c is a white-space character (0x09 – 0x0D or 0x20).
- */
-static bool isspace(int c)
-{
-    return (c == 0x09 || c == 0x0D || c == 0x20);
-}
-
-/**
  * Waits for an amount of time in msec.
  * @param[in] milisec Number of milliseconds to wait.
  */
-int msleep(unsigned long milisec)
+void msleep(unsigned long milisec)
 {
     struct timespec req={0};
     time_t sec = (int)(milisec / 1000);
@@ -56,7 +46,6 @@ int msleep(unsigned long milisec)
     req.tv_nsec = milisec * 1000000L;
     while(nanosleep(&req) == -1)
 		continue;
-    return 1;
 }
 
 /**

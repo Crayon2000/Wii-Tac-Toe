@@ -30,7 +30,6 @@ private:
 	void Clear();
 	void TurnIsOver();
 	void NewGame();
-	void PrintText(u16, u16, const char*, unsigned int, unsigned int);
 	void PrintWrapText(u16, u16, u16, const char*, unsigned int, unsigned int);
 	void ChangeScreen(u8 NewScreen);
 	void ButtonOn(signed char);
@@ -51,7 +50,7 @@ private:
 	int button_text_height;
 	u8 scrore_height;
 	u8 scrore_width;
-	
+
 	u16 TieGame;
 	bool RoundFinished;
 
@@ -59,7 +58,7 @@ private:
 	Button *MenuButton;
 	Grid *GameGrid;
 	Language *Lang;
-	
+
 	u8 *GameImg; // PNG Array
 	u8 *SplashImg;
 	u8 *HoverImgX;

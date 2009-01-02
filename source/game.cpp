@@ -134,7 +134,7 @@ void Game::Paint()
 			GRRLIB_FillScreen(0XFF000000);
 	}
 
-	if(CurrentScreen != START_SCREEN && 
+	if(CurrentScreen != START_SCREEN &&
 		WPAD_Probe(WPAD_CHAN_0, NULL) == WPAD_ERR_NO_CONTROLLER)
 	{	// Controller is disconnected
 		GRRLIB_Rectangle(0, 0, 640, 480, 0xB2000000, 1);
@@ -202,14 +202,14 @@ void Game::GameScreen(bool CopyScreen)
 		char ScoreText[5];
 		snprintf(ScoreText, 5, "%d", WTTPlayer[0].GetScore());
 		TextLeft = 104 - GRRLIB_TextWidth(ScoreText, 35) / 2;
-		PrintText(TextLeft, 77, ScoreText, 0xE6313A, 35);
+		GRRLIB_Printf2(TextLeft, 77, ScoreText, 35, 0xE6313A);
 		snprintf(ScoreText, 5, "%d", WTTPlayer[1].GetScore());
 		TextLeft = 104 - GRRLIB_TextWidth(ScoreText, 35) / 2;
-		PrintText(TextLeft, 177, ScoreText, 0x6BB6DE, 35);
+		GRRLIB_Printf2(TextLeft, 177, ScoreText, 35, 0x6BB6DE);
 		snprintf(ScoreText, 5, "%d", TieGame);
 		TextLeft = 104 - GRRLIB_TextWidth(ScoreText, 35) / 2;
-		PrintText(TextLeft, 282, ScoreText, 0x109642, 35);
-		
+		GRRLIB_Printf2(TextLeft, 282, ScoreText, 35, 0x109642);
+
 		// Draw text at the bottom: Offet 1, 1
 		PrintWrapText(131, 421, 390, text, 0x111111, 15);
 
@@ -239,13 +239,13 @@ void Game::GameScreen(bool CopyScreen)
 		// Draw score
 		snprintf(ScoreText, 5, "%d", WTTPlayer[0].GetScore());
 		TextLeft = 106 - GRRLIB_TextWidth(ScoreText, 35) / 2;
-		PrintText(TextLeft, 75, ScoreText, 0xFFFFFF, 35);
+		GRRLIB_Printf2(TextLeft, 75, ScoreText, 35, 0xFFFFFF);
 		snprintf(ScoreText, 5, "%d", WTTPlayer[1].GetScore());
 		TextLeft = 106 - GRRLIB_TextWidth(ScoreText, 35) / 2;
-		PrintText(TextLeft, 175, ScoreText, 0xFFFFFF, 35);
+		GRRLIB_Printf2(TextLeft, 175, ScoreText, 35, 0xFFFFFF);
 		snprintf(ScoreText, 5, "%d", TieGame);
 		TextLeft = 106 - GRRLIB_TextWidth(ScoreText, 35) / 2;
-		PrintText(TextLeft, 280, ScoreText, 0xFFFFFF, 35);
+		GRRLIB_Printf2(TextLeft, 280, ScoreText, 35, 0xFFFFFF);
 
 		// Draw text at the bottom
 		PrintWrapText(130, 420, 390, text, 0x8C8A8C, 15);
@@ -358,11 +358,10 @@ void Game::MenuScreen(bool CopyScreen)
 		GRRLIB_Rectangle(0, 0, 640, 63, 0xFF000000, 1);
 		GRRLIB_Rectangle(0, 63, 640, 2, 0xFFFFFFFF, 1);
 
-
 		GRRLIB_Rectangle(0, 383, 640, 2, 0xFFFFFFFF, 1);
 		GRRLIB_Rectangle(0, 385, 640, 95, 0xFF000000, 1);
 
-		char VersionText[100] = "";
+		char VersionText[TEXT_SIZE] = "";
 		sprintf(VersionText, Lang->Text("Ver. %s"), "0.4");
 		GRRLIB_Printf2(500, 40, VersionText, 12, 0xFFFFFF);
 
@@ -592,23 +591,14 @@ void Game::FreeMemImg()
 void Game::NewGame()
 {
 	PlayerToStart = rand() & 1; // 0 or 1
-	
+
 	ChangeScreen(START_SCREEN);
-	
+
 	WTTPlayer[0].ResetScore();
 	WTTPlayer[1].ResetScore();
 	TieGame = 0;
-	
-	Clear();
-}
 
-/**
- * Print text on the screen with a shadow.
- */
-void Game::PrintText(u16 x, u16 y,
-	const char *Text, unsigned int TextColor, unsigned int size)
-{
-	GRRLIB_Printf2(x, y, Text, size, TextColor);
+	Clear();
 }
 
 /**
@@ -617,23 +607,21 @@ void Game::PrintText(u16 x, u16 y,
 void Game::PrintWrapText(u16 x, u16 y, u16 maxLineWidth,
 	const char *input, unsigned int TextColor, unsigned int fontSize)
 {
-	char tmp[TEXT_SIZE];
-	char tmp2[TEXT_SIZE];
-	int startIndex = 0,
-		lastSpace = 0;
-	int endIndex = strlen(input) + 1;
+	char tmp[TEXT_SIZE], tmp2[TEXT_SIZE];
 	int ypos = y,
 		i,
-		z = 0;
-	int stepSize = (fontSize * 1.2);
-	int textLeft;
+		z = 0,
+		textLeft,
+		startIndex = 0,
+		lastSpace = 0,
+		stepSize = (fontSize * 1.2);
+	int endIndex = strlen(input) + 1;
 
-    // Make local copy   
+    // Make local copy
     strncpy(tmp, input, TEXT_SIZE);
 
     for(i=0; i<endIndex; i++)
     {
-
 		if(tmp[i] == ' ' || tmp[i] == '\0')
 		{
 			strncpy(tmp2, input+startIndex, TEXT_SIZE);
@@ -643,23 +631,23 @@ void Game::PrintWrapText(u16 x, u16 y, u16 maxLineWidth,
 			if(z >= maxLineWidth)
 			{
 				tmp[lastSpace] = 0;
-				textLeft = x + (maxLineWidth / 2.0) - 
+				textLeft = x + (maxLineWidth / 2.0) -
 					(GRRLIB_TextWidth(tmp+startIndex, fontSize) / 2.0);
-				PrintText(textLeft, ypos, tmp+startIndex,
-					TextColor, fontSize);
+				GRRLIB_Printf2(textLeft, ypos, tmp+startIndex,
+					fontSize, TextColor);
 				startIndex = lastSpace + 1;
 				ypos += stepSize;
 				z = 0;
 			}
-			lastSpace = i;	 
+			lastSpace = i;
 		}
     }
     if(z <= maxLineWidth)
     {
-		textLeft = x + (maxLineWidth / 2.0) - 
+		textLeft = x + (maxLineWidth / 2.0) -
 			(GRRLIB_TextWidth(tmp+startIndex, fontSize) / 2.0);
-	  	PrintText(textLeft, ypos, tmp+startIndex,
-			TextColor, fontSize);
+	  	GRRLIB_Printf2(textLeft, ypos, tmp+startIndex,
+			fontSize, TextColor);
     }
 }
 
