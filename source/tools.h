@@ -3,7 +3,9 @@
 #define ToolsH
 //---------------------------------------------------------------------------
 
-void Rumble_Wiimote(int);
+void RUMBLE_Wiimote(s32, int);
+void RUMBLE_Verify();
+void RUMBLE_Init();
 
 void WIILIGHT_TurnOn();
 void WIILIGHT_TurnOff();

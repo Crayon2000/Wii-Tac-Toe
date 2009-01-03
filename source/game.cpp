@@ -82,6 +82,7 @@ Game::Game()
 	HoverImgX = GRRLIB_LoadTexture(hover_x);
 	CopiedImg = NULL;
 
+	RUMBLE_Init();
 	NewGame();
 }
 
@@ -406,7 +407,9 @@ void Game::MenuScreen(bool CopyScreen)
  */
 bool Game::ControllerManager()
 {
+	RUMBLE_Verify();
 	WPADData *WPadData0 = WPAD_Data(WPAD_CHAN_0);
+	WPADData *WPadData1 = WPAD_Data(WPAD_CHAN_1);
 	unsigned int Buttons = WPAD_ButtonsDown(WPAD_CHAN_0);
 
 	if(WPadData0->ir.smooth_valid)
@@ -495,7 +498,7 @@ bool Game::ControllerManager()
 					}
 					else
 					{	// Position is invalid
-//Rumble_Wiimote(200);  // 200 ms
+						RUMBLE_Wiimote(WPAD_CHAN_0, 200);  // 200 ms
 					}
 				}
 				else if((Buttons & WPAD_BUTTON_HOME))
@@ -503,18 +506,21 @@ bool Game::ControllerManager()
 					ChangeScreen(HOME_SCREEN);
 				}
 		}
-		if((Buttons & WPAD_BUTTON_1) && (Buttons & WPAD_BUTTON_2))
-		{
-			WPAD_Rumble(WPAD_CHAN_0, 1); // Rumble on
-			WIILIGHT_TurnOn();
-			if(GRRLIB_ScrShot("sd:/Screenshot.png"))
-				strncpy(text, "A screenshot was taken!!!", TEXT_SIZE);
-			else
-				strncpy(text, "Screenshot did not work!!!", TEXT_SIZE);
-			WIILIGHT_TurnOff();
-			WPAD_Rumble(WPAD_CHAN_0, 0); // Rumble off
-			FreeMemImg();
-		}
+	}
+	if(((WPadData0->btns_h & WPAD_BUTTON_1) && (WPadData0->btns_h & WPAD_BUTTON_2)) ||
+		((WPadData1->btns_h & WPAD_BUTTON_1) && (WPadData1->btns_h & WPAD_BUTTON_2)))
+	{
+		WPAD_Rumble(WPAD_CHAN_0, 1); // Rumble on
+		WPAD_Rumble(WPAD_CHAN_1, 1); // Rumble on
+		WIILIGHT_TurnOn();
+		if(GRRLIB_ScrShot("sd:/Screenshot.png"))
+			strncpy(text, "A screenshot was taken!!!", TEXT_SIZE);
+		else
+			strncpy(text, "Screenshot did not work!!!", TEXT_SIZE);
+		WIILIGHT_TurnOff();
+		WPAD_Rumble(WPAD_CHAN_0, 0); // Rumble off
+		WPAD_Rumble(WPAD_CHAN_1, 0); // Rumble off
+		FreeMemImg();
 	}
 	return false;
 }
@@ -672,7 +678,7 @@ void Game::ButtonOn(signed char NewSelectedButton)
 {
 	if(SelectedButton != NewSelectedButton)
 	{
-//Rumble_Wiimote(50); // 50 ms
+		RUMBLE_Wiimote(WPAD_CHAN_0, 50); // 50 ms
 	}
 }
 
@@ -695,7 +701,7 @@ bool Game::SelectZone()
 				{
 					if(HandX != x || HandY != y)
 					{
-//Rumble_Wiimote(30);  // 30 ms
+						RUMBLE_Wiimote(WPAD_CHAN_0, 30);  // 30 ms
 						HandX = x;
 						HandY = y;
 					}
