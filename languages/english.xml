@@ -16,7 +16,7 @@
     <translation from="PLAYER 1" to="PLAYER 1" />
     <translation from="PLAYER 2" to="PLAYER 2" />
     <translation from="TIE GAME" to="TIE GAME" />
-    
+
     <!-- Variable $WINNER$ and $LOSER$ could be used -->
     <winning_game>
         <message id="1" text="$WINNER$ won this round." />
