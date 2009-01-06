@@ -653,7 +653,7 @@ void GRRLIB_Render () {
 /**
  * Make a PNG screenshot on the SD card.
  * @param File Name of the file to write.
- * @return True if every thing worked, false otherwise.
+ * @return True if everything worked, false otherwise.
  */
 bool GRRLIB_ScrShot(const char* File) {
     IMGCTX ctx;
@@ -668,15 +668,17 @@ bool GRRLIB_ScrShot(const char* File) {
 }
 
 /**
- * Make a snapshot of the sreen in a texture.
- * @return A texture representing the screen.
+ * Make a snapshot of the screen in a texture.
+ * @return A pointer to a texture representing the screen or NULL if an error occurs.
  */
 u8 *GRRLIB_Screen2Texture() {
 	void *my_texture;
 
+	my_texture = memalign(32, 640 * 480 * 4);
+	if(my_texture == NULL)
+		return NULL;
 	GX_SetTexCopySrc(0, 0, 640, 480);
 	GX_SetTexCopyDst(640, 480, GX_TF_RGBA8, GX_FALSE);
-	my_texture = memalign(32, 640 * 480 * 4); // GX_GetTexBufferSize(640, 480, GX_TF_RGBA8, GX_FALSE, 1)
 	GX_CopyTex(my_texture, GX_FALSE);
 	GX_PixModeSync();
 	DCFlushRange(my_texture, 640 * 480 * 4);

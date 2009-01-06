@@ -15,7 +15,7 @@
 
     <translation from="PLAYER 1" to="Spieler 1" />
     <translation from="PLAYER 2" to="Spieler 2" />
-    <translation from="TIE GAME" to="Unentschieden" />
+    <translation from="TIE GAME" to="Gleichstand" />
 
     <!-- Variable $WINNER$ and $LOSER$ could be used -->
     <winning_game>
