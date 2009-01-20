@@ -59,10 +59,8 @@ void WiimotePowerPressed(s32 chan)
 int main(int argc, char **argv)
 {
 	// Video initialization
-	VIDEO_Init();
-	GRRLIB_InitVideo();
+	GRRLIB_Init();
 	GRRLIB_InitFreetype();
-	GRRLIB_Start();
 
 	// Wiimote initialization
 	WPAD_Init();

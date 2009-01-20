@@ -546,9 +546,20 @@ GXColor GRRLIB_Splitu32(u32 color){
 
 
 //********************************************************************************************
-void GRRLIB_InitVideo () {
+void GRRLIB_Init () {
+
+	VIDEO_Init();
 
 	rmode = VIDEO_GetPreferredMode(NULL);
+
+/*
+if( CONF_GetAspectRatio() )
+{
+	rmode->viWidth = 678;
+	rmode->viXOrigin = (VI_MAX_WIDTH_PAL - 678)/2;
+}
+*/
+
 	VIDEO_Configure (rmode);
 	xfb[0] = (u32 *)MEM_K0_TO_K1(SYS_AllocateFramebuffer(rmode));
 	xfb[1] = (u32 *)MEM_K0_TO_K1(SYS_AllocateFramebuffer(rmode));
@@ -561,22 +572,10 @@ void GRRLIB_InitVideo () {
 
 
 	gp_fifo = (u8 *) memalign(32,DEFAULT_FIFO_SIZE);
-}
-
-void GRRLIB_Stop() {
-    free(MEM_K1_TO_K0(xfb[0])); xfb[0] = NULL;
-    free(MEM_K1_TO_K0(xfb[1])); xfb[1] = NULL;
-    free(gp_fifo); gp_fifo = NULL;
-
-    GX_AbortFrame();
-    GX_Flush();
-}
-
-void GRRLIB_Start(){
    
    f32 yscale;
    u32 xfbHeight;
-   Mtx perspective;
+   Mtx44 perspective;
 
 	GX_Init (gp_fifo, DEFAULT_FIFO_SIZE);
 
@@ -648,6 +647,15 @@ void GRRLIB_Render () {
  	VIDEO_Flush();
  	VIDEO_WaitVSync();
 
+}
+
+void GRRLIB_Stop() {
+    free(MEM_K1_TO_K0(xfb[0])); xfb[0] = NULL;
+    free(MEM_K1_TO_K0(xfb[1])); xfb[1] = NULL;
+    free(gp_fifo); gp_fifo = NULL;
+
+    GX_AbortFrame();
+    GX_Flush();
 }
 
 /**
