@@ -9,10 +9,7 @@
 //------------------------------------------------------------------------------
 #include <stdlib.h>
 #include <wiiuse/wpad.h>
-extern "C"
-{
-	#include "grrlib/GRRLIB.h"
-}
+#include "grrlib/GRRLIB.h"
 #include "game.h"
 #include "main.h"
 

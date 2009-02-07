@@ -16,6 +16,10 @@
 
 #include "../libpng/pngu/pngu.h"
 
+#ifdef __cplusplus
+   extern "C" {
+#endif /* __cplusplus */
+
 /**** FREETYPE START ****/
 extern void GRRLIB_InitFreetype();
 extern void GRRLIB_initTexture(void);
@@ -59,5 +63,9 @@ u8 *GRRLIB_Screen2Texture();
 void GRRLIB_DrawImg_FadeInOut(u16 width, u16 height, u8 data[], float scaleX, f32 scaleY, u16 speed);
 void GRRLIB_DrawImg_FadeIn(u16 width, u16 height, u8 data[], float scaleX, f32 scaleY, u16 speed);
 void GRRLIB_DrawImg_FadeOut(u16 width, u16 height, u8 data[], float scaleX, f32 scaleY, u16 speed);
+
+#ifdef __cplusplus
+   }
+#endif /* __cplusplus */
 
 #endif

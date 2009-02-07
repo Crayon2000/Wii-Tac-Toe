@@ -5,10 +5,7 @@
 #include <wiiuse/wpad.h>
 #include <fat.h>
 #include <ogc/conf.h>
-extern "C"
-{
-	#include "grrlib/GRRLIB.h"
-}
+#include "grrlib/GRRLIB.h"
 #include "tools.h"
 #include "main.h"
 #include "symbol.h"
@@ -45,6 +42,8 @@ Game::Game()
  	GameGrid = new Grid();
 	Hand = new Cursor();
 	Lang = new Language();
+
+    Hand->SetVisible(false);
 
 	ExitButton = new Button[3];
 
@@ -412,18 +411,18 @@ bool Game::ControllerManager()
 	WPADData *WPadData1 = WPAD_Data(WPAD_CHAN_1);
 	unsigned int Buttons = WPAD_ButtonsDown(WPAD_CHAN_0);
 
-	if(WPadData0->ir.smooth_valid)
+	if(WPadData0->ir.valid)
 	{
-		Hand->SetLeft(WPadData0->ir.sx);
-		Hand->SetTop(WPadData0->ir.sy);
-		Hand->SetAngle(WPadData0->ir.angle);
+        // I don't understand this calculation but it works
+		Hand->SetLeft((WPadData0->ir.x / 640 * (640 + Hand->GetWidth() * 2)) - Hand->GetWidth());
+		Hand->SetTop((WPadData0->ir.y / 480 * (480 + Hand->GetHeight() * 2)) - Hand->GetHeight());
+		Hand->SetAngle(WPadData0->orient.roll);
+        Hand->SetVisible(true);
 	}
-	else if(WPadData0->ir.valid)
-	{
-		Hand->SetLeft(WPadData0->ir.x);
-		Hand->SetTop(WPadData0->ir.y);
-		Hand->SetAngle(WPadData0->ir.angle);
-	}
+    else
+    {   // Hide cursor
+        Hand->SetVisible(false);
+    }
 
 	if(Buttons)
 	{

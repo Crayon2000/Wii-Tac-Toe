@@ -38,14 +38,17 @@ Cursor::~Cursor()
  */
 void Cursor::Paint()
 {
-	if(Player == 'O')
-	{
-		GRRLIB_DrawImg(Left, Top, Width, Height, CursorImgO, Angle, 1, 1, 255);
-	}
-	else
-	{
-		GRRLIB_DrawImg(Left, Top, Width, Height, CursorImgX, Angle, 1, 1, 255);
-	}
+    if(Visible)
+    {
+        if(Player == 'O')
+        {
+            GRRLIB_DrawImg(Left, Top, Width, Height, CursorImgO, Angle, 1, 1, 255);
+        }
+        else
+        {
+            GRRLIB_DrawImg(Left, Top, Width, Height, CursorImgX, Angle, 1, 1, 255);
+        }
+    }
 }
 
 /**

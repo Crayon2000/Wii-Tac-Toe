@@ -3,10 +3,7 @@
 #define ObjectH
 //---------------------------------------------------------------------------
 
-extern "C"
-{
-	#include "grrlib/GRRLIB.h"
-}
+#include "grrlib/GRRLIB.h"
 
 /**
  * The Object class is a the basis for every thing you need to draw on the screen.
