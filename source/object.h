@@ -3,6 +3,7 @@
 #define ObjectH
 //---------------------------------------------------------------------------
 
+#include <stdlib.h>
 #include "grrlib/GRRLIB.h"
 
 /**

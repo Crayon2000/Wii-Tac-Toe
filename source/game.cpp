@@ -75,11 +75,11 @@ Game::Game()
 	WTTPlayer[1].SetSign('X');
 	WTTPlayer[1].SetName(Lang->Text("PLAYER 2"));
 
-	GameImg = GRRLIB_LoadTexture(backg);
-	SplashImg = GRRLIB_LoadTexture(splash);
-	HoverImgO = GRRLIB_LoadTexture(hover_o);
-	HoverImgX = GRRLIB_LoadTexture(hover_x);
-	CopiedImg = NULL;
+	GameImg = GRRLIB_LoadTexturePNG(backg);
+	SplashImg = GRRLIB_LoadTexturePNG(splash);
+	HoverImgO = GRRLIB_LoadTexturePNG(hover_o);
+	HoverImgX = GRRLIB_LoadTexturePNG(hover_x);
+	CopiedImg.data = NULL;
 
 	RUMBLE_Init();
 	NewGame();
@@ -90,10 +90,10 @@ Game::Game()
  */
 Game::~Game()
 {
-	free(GameImg);
-	free(SplashImg);
-	free(HoverImgX);
-	free(HoverImgO);
+	free(GameImg.data);
+	free(SplashImg.data);
+	free(HoverImgX.data);
+	free(HoverImgO.data);
 	FreeMemImg();
 
 	delete GameGrid;
@@ -131,13 +131,13 @@ void Game::Paint()
 			}
 			break;
 		default:
-			GRRLIB_FillScreen(0XFF000000);
+			GRRLIB_FillScreen(0x000000FF);
 	}
 
 	if(CurrentScreen != START_SCREEN &&
 		WPAD_Probe(WPAD_CHAN_0, NULL) == WPAD_ERR_NO_CONTROLLER)
 	{	// Controller is disconnected
-		GRRLIB_Rectangle(0, 0, 640, 480, 0xB2000000, 1);
+		GRRLIB_Rectangle(0, 0, 640, 480, 0x000000B2, 1);
 	}
 	else
 	{
@@ -156,10 +156,10 @@ void Game::Paint()
  */
 void Game::StartSreen()
 {
-	if(CopiedImg == NULL)
+	if(CopiedImg.data == NULL)
 	{	// Copy static element
 		GRRLIB_initTexture();	// Init text layer
-		GRRLIB_DrawImg(0, 0, 640, 480, SplashImg, 0, 1, 1, 255);
+		GRRLIB_DrawImg(0, 0, SplashImg, 0, 1, 1, 0xFFFFFFFF);
 
 		char TempText[TEXT_SIZE];
 		sprintf(TempText, Lang->Text("Programmer: %s"), "Crayon");
@@ -171,12 +171,12 @@ void Game::StartSreen()
 		int TextLeft = 320 - (GRRLIB_TextWidth(TempText, 20) / 2);
 		GRRLIB_Printf2(TextLeft, 400, TempText, 20, 0x000000);
 
-		GRRLIB_DrawImg(0, 0, 640, 480, (u8 *)GRRLIB_GetTexture(), 0, 1.0, 1.0, 255);
+		GRRLIB_DrawImg(0, 0, GRRLIB_GetTexture(), 0, 1.0, 1.0, 0xFFFFFFFF);
 		CopiedImg = GRRLIB_Screen2Texture();
 	}
 	else
 	{
-		GRRLIB_DrawImg(0, 0, 640, 480, CopiedImg, 0, 1, 1, 255);
+		GRRLIB_DrawImg(0, 0, CopiedImg, 0, 1, 1, 0xFFFFFFFF);
 	}
 }
 
@@ -187,11 +187,11 @@ void Game::GameScreen(bool CopyScreen)
 {
 	int TextLeft;
 
-	if(CopiedImg == NULL)
+	if(CopiedImg.data == NULL)
 	{	// Copy static element
 		GRRLIB_initTexture();	// Init text layer
 		// Background image
-		GRRLIB_DrawImg(0, 0, 640, 480, GameImg, 0, 1, 1, 255);
+		GRRLIB_DrawImg(0, 0, GameImg, 0, 1, 1, 0xFFFFFFFF);
 
 		// Player name: Offset -2, 2
 		PrintWrapText(42, 50, 125, WTTPlayer[0].GetName(), 0xE6313A, 15);
@@ -228,7 +228,7 @@ void Game::GameScreen(bool CopyScreen)
 		delete Sign;
 
 		// Draw text shadow
-	    GRRLIB_DrawImg(0, 0, 640, 480, (u8 *)GRRLIB_GetTexture(), 0, 1.0, 1.0, 240);
+	    GRRLIB_DrawImg(0, 0, GRRLIB_GetTexture(), 0, 1.0, 1.0, 0xFFFFFFF0);
 		GRRLIB_initTexture();
 
 		// Player name
@@ -250,24 +250,28 @@ void Game::GameScreen(bool CopyScreen)
 		// Draw text at the bottom
 		PrintWrapText(130, 420, 390, text, 0x8C8A8C, 15);
 
-		GRRLIB_DrawImg(0, 0, 640, 480, (u8 *)GRRLIB_GetTexture(), 0, 1.0, 1.0, 255);
+		GRRLIB_DrawImg(0, 0, GRRLIB_GetTexture(), 0, 1.0, 1.0, 0xFFFFFFFF);
 		if(CopyScreen)
+        {
 			CopiedImg = GRRLIB_Screen2Texture();
+        }
 	}
-
-	GRRLIB_DrawImg(0, 0, 640, 480, CopiedImg, 0, 1, 1, 255);
+    if(CopyScreen)
+    {
+        GRRLIB_DrawImg(0, 0, CopiedImg, 0, 1, 1, 0xFFFFFFFF);
+    }
 
 	if(SelectZone() && GameGrid->GetPlayerAtPos(HandX, HandY) == ' ')
 	{
 		if(WTTPlayer[CurrentPlayer].GetSign() == 'X')
 		{
 			GRRLIB_DrawImg(Table[HandX][HandY].GetX(), Table[HandX][HandY].GetY(),
-				140, 100, HoverImgX, 0, 1, 1, 255);
+				HoverImgX, 0, 1, 1, 0xFFFFFFFF);
 		}
 		else
 		{
 			GRRLIB_DrawImg(Table[HandX][HandY].GetX(), Table[HandX][HandY].GetY(),
-				140, 100, HoverImgO, 0, 1, 1, 255);
+				HoverImgO, 0, 1, 1, 0xFFFFFFFF);
 		}
 	}
 }
@@ -277,7 +281,7 @@ void Game::GameScreen(bool CopyScreen)
  */
 void Game::ExitScreen()
 {
-	if(CopiedImg == NULL)
+	if(CopiedImg.data == NULL)
 	{	// Copy static element
 		switch(LastScreen)
 		{
@@ -290,22 +294,22 @@ void Game::ExitScreen()
 		}
 
 		GRRLIB_initTexture();	// Init text layer
-		GRRLIB_Rectangle(0, 0, 640, 480, 0xCC000000, 1); // Draw a black rectangle over it
+		GRRLIB_Rectangle(0, 0, 640, 480, 0x000000CC, 1); // Draw a black rectangle over it
 
-		GRRLIB_Rectangle(0, 0, 640, 63, 0xFF000000, 1);
-		GRRLIB_Rectangle(0, 63, 640, 2, 0xFF848284, 1);
+		GRRLIB_Rectangle(0, 0, 640, 63, 0x000000FF, 1);
+		GRRLIB_Rectangle(0, 63, 640, 2, 0x848284FF, 1);
 
-		GRRLIB_Rectangle(0, 383, 640, 2, 0xFF848284, 1);
-		GRRLIB_Rectangle(0, 385, 640, 95, 0xFF000000, 1);
+		GRRLIB_Rectangle(0, 383, 640, 2, 0x848284FF, 1);
+		GRRLIB_Rectangle(0, 385, 640, 95, 0x000000FF, 1);
 
 		GRRLIB_Printf2(40, 17, Lang->Text("HOME Menu"), 20, 0xFFFFFF);
 
-		GRRLIB_DrawImg(0, 0, 640, 480, (u8 *)GRRLIB_GetTexture(), 0, 1.0, 1.0, 255);
+		GRRLIB_DrawImg(0, 0, GRRLIB_GetTexture(), 0, 1.0, 1.0, 0xFFFFFFFF);
 		CopiedImg = GRRLIB_Screen2Texture();
 	}
 	else
 	{
-		GRRLIB_DrawImg(0, 0, 640, 480, CopiedImg, 0, 1, 1, 255);
+		GRRLIB_DrawImg(0, 0, CopiedImg, 0, 1, 1, 0xFFFFFFFF);
 	}
 
 	GRRLIB_initTexture();	// Init text layer
@@ -338,7 +342,7 @@ void Game::ExitScreen()
 	ExitButton[0].Paint();
 	ExitButton[1].Paint();
 	ExitButton[2].Paint();
-	GRRLIB_DrawImg(0, 0, 640, 480, (u8 *)GRRLIB_GetTexture(), 0, 1.0, 1.0, 255);
+	GRRLIB_DrawImg(0, 0, GRRLIB_GetTexture(), 0, 1.0, 1.0, 0xFFFFFFFF);
 }
 
 /**
@@ -346,32 +350,34 @@ void Game::ExitScreen()
  */
 void Game::MenuScreen(bool CopyScreen)
 {
-	if(CopiedImg == NULL)
+	if(CopiedImg.data == NULL)
 	{	// Copy static element
 		GRRLIB_initTexture();	// Init text layer
-		GRRLIB_FillScreen(0XFF000000);	// Clear screen
+		GRRLIB_FillScreen(0x000000FF);	// Clear screen
 		for(int y = 0; y <=480; y+=8)
 		{
-			GRRLIB_Rectangle(0, y, 640, 2, 0x30B0B0B0, 1);
+			GRRLIB_Rectangle(0, y, 640, 2, 0xB0B0B030, 1);
 		}
 
-		GRRLIB_Rectangle(0, 0, 640, 63, 0xFF000000, 1);
+		GRRLIB_Rectangle(0, 0, 640, 63, 0x000000FF, 1);
 		GRRLIB_Rectangle(0, 63, 640, 2, 0xFFFFFFFF, 1);
 
 		GRRLIB_Rectangle(0, 383, 640, 2, 0xFFFFFFFF, 1);
-		GRRLIB_Rectangle(0, 385, 640, 95, 0xFF000000, 1);
+		GRRLIB_Rectangle(0, 385, 640, 95, 0x000000FF, 1);
 
 		char VersionText[TEXT_SIZE] = "";
-		sprintf(VersionText, Lang->Text("Ver. %s"), "0.4");
+		sprintf(VersionText, Lang->Text("Ver. %s"), "0.5");
 		GRRLIB_Printf2(500, 40, VersionText, 12, 0xFFFFFF);
 
-		GRRLIB_DrawImg(0, 0, 640, 480, (u8 *)GRRLIB_GetTexture(), 0, 1.0, 1.0, 255);
+		GRRLIB_DrawImg(0, 0, GRRLIB_GetTexture(), 0, 1.0, 1.0, 0xFFFFFFFF);
 		if(CopyScreen)
+        {
 			CopiedImg = GRRLIB_Screen2Texture();
+        }
 	}
 	else
 	{
-		GRRLIB_DrawImg(0, 0, 640, 480, CopiedImg, 0, 1, 1, 255);
+		GRRLIB_DrawImg(0, 0, CopiedImg, 0, 1, 1, 0xFFFFFFFF);
 	}
 
 	GRRLIB_initTexture();	// Init text layer
@@ -396,7 +402,7 @@ void Game::MenuScreen(bool CopyScreen)
 	}
 	MenuButton[0].Paint();
 	MenuButton[1].Paint();
-	GRRLIB_DrawImg(0, 0, 640, 480, (u8 *)GRRLIB_GetTexture(), 0, 1.0, 1.0, 255);
+	GRRLIB_DrawImg(0, 0, GRRLIB_GetTexture(), 0, 1.0, 1.0, 0xFFFFFFFF);
 }
 
 /**
@@ -476,10 +482,10 @@ bool Game::ControllerManager()
 						case 2:
 							ExitScreen();
 							Hand->Paint();
-							if(CopiedImg)
-								free(CopiedImg);
+							if(CopiedImg.data)
+								free(CopiedImg.data);
 							CopiedImg = GRRLIB_Screen2Texture();
-							GRRLIB_DrawImg_FadeOut(640, 480, CopiedImg, 1, 1, 5);
+							GRRLIB_DrawImg_FadeOut(CopiedImg, 1, 1, 4);
 							return true; // Exit to loader
 					}
 				}
@@ -583,10 +589,10 @@ void Game::TurnIsOver()
  */
 void Game::FreeMemImg()
 {
-	if(CopiedImg != NULL)
+	if(CopiedImg.data != NULL)
 	{
-		free(CopiedImg);
-		CopiedImg = NULL;
+		free(CopiedImg.data);
+		CopiedImg.data = NULL;
 	}
 }
 

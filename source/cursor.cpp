@@ -20,8 +20,8 @@ Cursor::Cursor() : Object()
 	Width = 40;
 	Height = 56;
 
-	CursorImgO = GRRLIB_LoadTexture(hand_o);
-	CursorImgX = GRRLIB_LoadTexture(hand_x);
+	CursorImgO = GRRLIB_LoadTexturePNG(hand_o);
+	CursorImgX = GRRLIB_LoadTexturePNG(hand_x);
 }
 
 /**
@@ -29,8 +29,8 @@ Cursor::Cursor() : Object()
  */
 Cursor::~Cursor()
 {
-	free(CursorImgX);
-	free(CursorImgO);
+	free(CursorImgX.data);
+	free(CursorImgO.data);
 }
 
 /**
@@ -42,11 +42,11 @@ void Cursor::Paint()
     {
         if(Player == 'O')
         {
-            GRRLIB_DrawImg(Left, Top, Width, Height, CursorImgO, Angle, 1, 1, 255);
+            GRRLIB_DrawImg(Left, Top, CursorImgO, Angle, 1, 1, 0xFFFFFFFF);
         }
         else
         {
-            GRRLIB_DrawImg(Left, Top, Width, Height, CursorImgX, Angle, 1, 1, 255);
+            GRRLIB_DrawImg(Left, Top, CursorImgX, Angle, 1, 1, 0xFFFFFFFF);
         }
     }
 }

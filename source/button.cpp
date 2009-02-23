@@ -19,8 +19,8 @@ Button::Button() : Object()
 	TextHeight = 12;
 	TextWidth = 100; // random value
 
-	ButtonImgOn = GRRLIB_LoadTexture(button_on);
-	ButtonImgOff = GRRLIB_LoadTexture(button_off);
+	ButtonImgOn = GRRLIB_LoadTexturePNG(button_on);
+	ButtonImgOff = GRRLIB_LoadTexturePNG(button_off);
 }
 
 /**
@@ -28,8 +28,8 @@ Button::Button() : Object()
  */
 Button::~Button()
 {
-	free(ButtonImgOn);
-	free(ButtonImgOff);
+	free(ButtonImgOn.data);
+	free(ButtonImgOff.data);
 }
 
 /**
@@ -37,11 +37,11 @@ Button::~Button()
  */
 void Button::Paint()
 {
-	GRRLIB_DrawImg(Left, Top, Width, Height, ButtonImgOff, 0, 1.0, 1.0, 255);
+	GRRLIB_DrawImg(Left, Top, ButtonImgOff, 0, 1.0, 1.0, 0xFFFFFFFF);
 	GRRLIB_Printf2(TextLeft, TextTop, Caption, TextHeight, TextColor);
 	if(Selected)
 	{
-		GRRLIB_DrawImg(Left, Top, Width, Height, ButtonImgOn, 0, 1.0, 1.0, 255);
+		GRRLIB_DrawImg(Left, Top, ButtonImgOn, 0, 1.0, 1.0, 0xFFFFFFFF);
 	}
 }
 

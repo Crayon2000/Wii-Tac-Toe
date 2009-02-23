@@ -26,8 +26,8 @@ private:
 	unsigned int TextTop;
 	unsigned int TextLeft;
 	u32 TextColor;
-	u8 *ButtonImgOn;
-	u8 *ButtonImgOff;
+	GRRLIB_texImg ButtonImgOn;
+	GRRLIB_texImg ButtonImgOff;
 };
 //---------------------------------------------------------------------------
 #endif

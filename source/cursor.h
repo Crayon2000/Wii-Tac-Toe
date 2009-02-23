@@ -20,8 +20,8 @@ public:
 	float GetTopCorrected();
 private:
 	u8 Player;
-	u8 *CursorImgX;
-	u8 *CursorImgO;
+	GRRLIB_texImg CursorImgX;
+	GRRLIB_texImg CursorImgO;
 };
 //---------------------------------------------------------------------------
 #endif

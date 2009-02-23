@@ -59,11 +59,11 @@ private:
 	Grid *GameGrid;
 	Language *Lang;
 
-	u8 *GameImg; // PNG Array
-	u8 *SplashImg;
-	u8 *HoverImgX;
-	u8 *HoverImgO;
-	u8 *CopiedImg;
+	GRRLIB_texImg GameImg;
+	GRRLIB_texImg SplashImg;
+	GRRLIB_texImg HoverImgX;
+	GRRLIB_texImg HoverImgO;
+	GRRLIB_texImg CopiedImg;
 
 //u8 Text[1228800] ATTRIBUTE_ALIGN (32);      // stores (640 * 480 * 4) texture
 };
