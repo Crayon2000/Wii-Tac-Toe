@@ -349,7 +349,7 @@ void GRRLIB_Rectangle(f32 x, f32 y, f32 width, f32 height, u32 color, u8 filled)
 }
 
 /**
- *
+ * Draw a polygon.
  * @param v
  * @param color
  * @param n
@@ -359,7 +359,7 @@ void GRRLIB_NGone(Vector v[], u32 color, long n) {
 }
 
 /**
- *
+ * Draw a filled polygon.
  * @param v
  * @param color
  * @param n
@@ -369,7 +369,7 @@ void GRRLIB_NGoneFilled(Vector v[], u32 color, long n) {
 }
 
 /**
- *
+ * Initialize a tile set.
  * @param tex
  * @param tilew
  * @param tileh
@@ -507,8 +507,7 @@ GRRLIB_texImg GRRLIB_LoadTextureJPG(const unsigned char my_jpg[]) {
  * Print formatted output.
  * @param xpos
  * @param ypos
- * @param tex
- * @param color
+ * @param bmf
  * @param zoom
  * @param text
  * @param ... Optional arguments.
@@ -666,8 +665,8 @@ GRRLIB_texImg GRRLIB_CreateEmptyTexture(unsigned int w, unsigned int h) {
  * @param ypos specifies the y-coordinate of the upper-left corner.
  * @param tex texture to draw.
  * @param degrees angle of rotation.
- * @param scaleX
- * @param scaleY
+ * @param scaleX specifies the x-coordinate scale. -1 could be used for flipping the texture horizontally.
+ * @param scaleY specifies the y-coordinate scale. -1 could be used for flipping the texture vertically.
  * @param color
  */
 void GRRLIB_DrawImg(f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees, float scaleX, f32 scaleY, u32 color ) {
@@ -687,12 +686,12 @@ void GRRLIB_DrawImg(f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees, float 
     guMtxIdentity (m1);
     guMtxScaleApply(m1, m1, scaleX, scaleY, 1.0);
     Vector axis = (Vector) {0, 0, 1 };
-    guMtxRotAxisDeg (m2, &axis, degrees);
+    guMtxRotAxisDeg(m2, &axis, degrees);
     guMtxConcat(m2, m1, m);
 
     guMtxTransApply(m, m, xpos+width, ypos+height, 0);
-    guMtxConcat (GXmodelView2D, m, mv);
-    GX_LoadPosMtxImm (mv, GX_PNMTX0);
+    guMtxConcat(GXmodelView2D, m, mv);
+    GX_LoadPosMtxImm(mv, GX_PNMTX0);
 
     GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
     GX_Position3f32(-width, -height, 0);
@@ -721,12 +720,12 @@ void GRRLIB_DrawImg(f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees, float 
  * Draw a tile.
  * @param xpos specifies the x-coordinate of the upper-left corner.
  * @param ypos specifies the y-coordinate of the upper-left corner.
- * @param tex texture to draw.
+ * @param tex texture containing the tile to draw.
  * @param degrees angle of rotation.
- * @param scaleX
- * @param scaleY
+ * @param scaleX specifies the x-coordinate scale. -1 could be used for flipping the texture horizontally.
+ * @param scaleY specifies the y-coordinate scale. -1 could be used for flipping the texture vertically.
  * @param color
- * @param frame
+ * @param frame specifies the frame to draw.
  */
 void GRRLIB_DrawTile(f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees, float scaleX, f32 scaleY, u32 color, int frame) {
     GXTexObj texObj;
@@ -752,7 +751,7 @@ void GRRLIB_DrawTile(f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees, float
     guMtxIdentity (m1);
     guMtxScaleApply(m1, m1, scaleX, scaleY, 1.0f);
     Vector axis = (Vector) {0, 0, 1 };
-    guMtxRotAxisDeg (m2, &axis, degrees);
+    guMtxRotAxisDeg(m2, &axis, degrees);
     guMtxConcat(m2, m1, m);
     guMtxTransApply(m, m, xpos+width, ypos+height, 0);
     guMtxConcat (GXmodelView2D, m, mv);
@@ -782,12 +781,12 @@ void GRRLIB_DrawTile(f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees, float
 
 /**
  * Print formatted output.
- * @param xpos
- * @param ypos
- * @param tex
- * @param color
- * @param zoom
- * @param text
+ * @param xpos specifies the x-coordinate of the upper-left corner of the text.
+ * @param ypos specifies the y-coordinate of the upper-left corner of the text.
+ * @param tex texture containing the character set.
+ * @param color text color in RGBA format. The alpha channel is used to change the opacity of the text.
+ * @param zoom this is a factor by which the text size will be increase or decrease.
+ * @param text text to draw.
  * @param ... Optional arguments.
  */
 void GRRLIB_Printf(f32 xpos, f32 ypos, GRRLIB_texImg tex, u32 color, f32 zoom, const char *text, ...) {
@@ -821,6 +820,15 @@ bool GRRLIB_PtInRect(int hotx, int hoty, int hotw, int hoth, int wpadx, int wpad
 
 /**
  * Determines whether a specified rectangle lies within another rectangle.
+ * @param rect1x specifies the x-coordinate of the upper-left corner of the rectangle.
+ * @param rect1y specifies the y-coordinate of the upper-left corner of the rectangle.
+ * @param rect1w specifies the width of the rectangle.
+ * @param rect1h specifies the height of the rectangle.
+ * @param rect2x specifies the x-coordinate of the upper-left corner of the rectangle.
+ * @param rect2y specifies the y-coordinate of the upper-left corner of the rectangle.
+ * @param rect2w specifies the width of the rectangle.
+ * @param rect2h specifies the height of the rectangle.
+ * @return If the specified rectangle lies within the other rectangle, the return value is true otherwise it's false.
  */
 bool GRRLIB_RectInRect(int rect1x, int rect1y, int rect1w, int rect1h, int rect2x, int rect2y, int rect2w, int rect2h) {
     return ((rect1x >= rect2x) && (rect1y >= rect2y) &&
@@ -829,6 +837,15 @@ bool GRRLIB_RectInRect(int rect1x, int rect1y, int rect1w, int rect1h, int rect2
 
 /**
  * Determines whether a part of a specified rectangle lies on another rectangle.
+ * @param rect1x specifies the x-coordinate of the upper-left corner of the first rectangle.
+ * @param rect1y specifies the y-coordinate of the upper-left corner of the first rectangle.
+ * @param rect1w specifies the width of the first rectangle.
+ * @param rect1h specifies the height of the first rectangle.
+ * @param rect2x specifies the x-coordinate of the upper-left corner of the second rectangle.
+ * @param rect2y specifies the y-coordinate of the upper-left corner of the second rectangle.
+ * @param rect2w specifies the width of the second rectangle.
+ * @param rect2h specifies the height of the second rectangle.
+ * @return If the specified rectangle lies on the other rectangle, the return value is true otherwise it's false.
  */
 bool GRRLIB_RectOnRect(int rect1x, int rect1y, int rect1w, int rect1h, int rect2x, int rect2y, int rect2w, int rect2h) {
     return (GRRLIB_PtInRect(rect1x, rect1y, rect1w, rect1h, rect2x, rect2y) ||
@@ -1135,8 +1152,7 @@ if( CONF_GetAspectRatio() )
     GX_Init(gp_fifo, DEFAULT_FIFO_SIZE);
 
     // clears the bg to color and clears the z buffer
-    GXColor background = { 0, 0, 0, 0xff };
-    GX_SetCopyClear (background, GX_MAX_Z24);
+    GX_SetCopyClear((GXColor){ 0, 0, 0, 0xff }, GX_MAX_Z24);
 
     // other gx setup
     yscale = GX_GetYScaleFactor(rmode->efbHeight, rmode->xfbHeight);
@@ -1195,7 +1211,7 @@ if( CONF_GetAspectRatio() )
  * Call this function after drawing.
  */
 void GRRLIB_Render() {
-    GX_DrawDone ();
+    GX_DrawDone();
 
     fb ^= 1;        // flip framebuffer
     GX_SetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
