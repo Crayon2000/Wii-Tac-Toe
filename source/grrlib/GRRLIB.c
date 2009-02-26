@@ -292,8 +292,8 @@ void GRRLIB_FillScreen(u32 color) {
 
 /**
  * Draw a dot.
- * @param x specifies the x-coordinate of the dot. 
- * @param y specifies the y-coordinate of the dot. 
+ * @param x specifies the x-coordinate of the dot.
+ * @param y specifies the y-coordinate of the dot.
  * @param color the color of the dot.
  */
 void GRRLIB_Plot(f32 x, f32 y, u32 color) {
@@ -468,28 +468,13 @@ GRRLIB_texImg GRRLIB_LoadTextureJPG(const unsigned char my_jpg[]) {
         n+=2;
     }
 
-    /* Init the JPEG decompressor */
     jpeg_create_decompress(&cinfo);
-
-    /* Use the standard error handler */
     cinfo.err = jpeg_std_error(&jerr);
-
-    /* Don't use a progress handler */
     cinfo.progress = NULL;
-
-    /* Set the source buffer */
     jpeg_memory_src(&cinfo, my_jpg, n);
-
-    /* Read the default header information */
     jpeg_read_header(&cinfo, TRUE);
-
-    /* Get ready to decompress */
     jpeg_start_decompress(&cinfo);
-
-    /* Create a buffer to hold the final image */
     unsigned char *tempBuffer = (unsigned char*) malloc(cinfo.output_width * cinfo.output_height * cinfo.num_components);
-
-    /* Decompress the JPEG into tempBuffer, one row at a time */
     JSAMPROW row_pointer[1];
     row_pointer[0] = (unsigned char*) malloc(cinfo.output_width * cinfo.num_components);
     size_t location = 0;
@@ -516,6 +501,140 @@ GRRLIB_texImg GRRLIB_LoadTextureJPG(const unsigned char my_jpg[]) {
     GRRLIB_FlushTex(my_texture);
 
     return my_texture;
+}
+
+/**
+ * Print formatted output.
+ * @param xpos
+ * @param ypos
+ * @param tex
+ * @param color
+ * @param zoom
+ * @param text
+ * @param ... Optional arguments.
+ */
+void GRRLIB_PrintBMF(f32 xpos, f32 ypos, GRRLIB_bytemapFont bmf, f32 zoom, const char *text, ...) {
+    unsigned int i, j, x, y, n, size;
+    char tmp[1024];
+
+    va_list argp;
+    va_start(argp, text);
+    size = vsprintf(tmp, text, argp);
+    va_end(argp);
+
+    GRRLIB_texImg tex_BMfont = GRRLIB_CreateEmptyTexture(640, 480);
+
+    for(i=0; i<size; i++) {
+        for(j=0; j<bmf.nbChar; j++) {
+            if(tmp[i] == bmf.charDef[j].character) {
+                n=0;
+                for(y=0; y<bmf.charDef[j].height; y++) {
+                    for(x=0; x<bmf.charDef[j].width; x++) {
+                        if(bmf.charDef[j].data[n]) {
+                            GRRLIB_SetPixelTotexImg(xpos + x + bmf.charDef[j].relx, ypos + y + bmf.charDef[j].rely,
+                                tex_BMfont, bmf.palette[bmf.charDef[j].data[n]]);
+                            //GRRLIB_Plot(xpos + x + bmf.charDef[j].relx, ypos + y + bmf.charDef[j].rely,
+                            //    bmf.palette[bmf.charDef[j].data[n]]);
+                        }
+                        n++;
+                    }
+                }
+                xpos += bmf.charDef[j].shift + bmf.addSpace;
+                break;
+            }
+        }
+    }
+    GRRLIB_FlushTex(tex_BMfont);
+
+    GRRLIB_DrawImg(0, 0, tex_BMfont, 0, 1, 1, 0xFFFFFFFF);
+
+    free(tex_BMfont.data);
+}
+
+/**
+ * Load a ByteMap font structure from a buffer.
+ * @param my_bmf the ByteMap font buffer to load.
+ * @return A GRRLIB_bytemapFont structure filled with BMF informations.
+ */
+GRRLIB_bytemapFont GRRLIB_LoadBMF(const unsigned char my_bmf[]) {
+    GRRLIB_bytemapFont fontArray;
+    int i, j = 1;
+    u8 lineheight, usedcolors, highestcolor, nbPalette;
+    short int sizeover, sizeunder, sizeinner, numcolpal;
+    u16 nbPixels;
+
+    // Initialize everything to zero
+    memset(&fontArray, 0, sizeof(fontArray));
+
+    if(my_bmf[0]==0xE1 && my_bmf[1]==0xE6 && my_bmf[2]==0xD5 && my_bmf[3]==0x1A) {
+        fontArray.version = my_bmf[4];
+        lineheight = my_bmf[5];
+        sizeover = my_bmf[6];
+        sizeunder = my_bmf[7];
+        fontArray.addSpace = my_bmf[8];
+        sizeinner = my_bmf[9];
+        usedcolors = my_bmf[10];
+        highestcolor = my_bmf[11];
+        nbPalette = my_bmf[16];
+        numcolpal = 3 * nbPalette;
+        fontArray.palette = (u32 *)calloc(nbPalette + 1, sizeof(u32));
+        for(i=0; i < numcolpal; i+=3) {
+            fontArray.palette[j++] = ((((my_bmf[i+17]<<2)+3)<<24) | (((my_bmf[i+18]<<2)+3)<<16) | (((my_bmf[i+19]<<2)+3)<<8) | 0xFF);
+        }
+        j = my_bmf[17 + numcolpal];
+        fontArray.name = (char *)calloc(j + 1, sizeof(char));
+        memcpy(fontArray.name, &my_bmf[18 + numcolpal], j);
+        j = 18 + numcolpal + j;
+        fontArray.nbChar = (my_bmf[j] | my_bmf[j+1]<<8);
+        fontArray.charDef = (GRRLIB_bytemapChar *)calloc(fontArray.nbChar, sizeof(GRRLIB_bytemapChar));
+        j++;
+        for(i=0; i < fontArray.nbChar; i++) {
+            fontArray.charDef[i].character = my_bmf[++j];
+            fontArray.charDef[i].width = my_bmf[++j];
+            fontArray.charDef[i].height = my_bmf[++j];
+            fontArray.charDef[i].relx = my_bmf[++j];
+            fontArray.charDef[i].rely = my_bmf[++j];
+            fontArray.charDef[i].shift = my_bmf[++j];
+            nbPixels = fontArray.charDef[i].width * fontArray.charDef[i].height;
+            fontArray.charDef[i].data = malloc(nbPixels);
+            if(nbPixels && fontArray.charDef[i].data) {
+                memcpy(fontArray.charDef[i].data, &my_bmf[++j], nbPixels);
+                j += (nbPixels - 1);
+            }
+        }
+    }
+    return fontArray;
+}
+
+/**
+ * Free memory.
+ * @param bmf a GRRLIB_bytemapFont structure.
+ */
+void GRRLIB_FreeBMF(GRRLIB_bytemapFont bmf)
+{
+    unsigned int i;
+
+    for(i=0; i<bmf.nbChar; i++) {
+        free(bmf.charDef[i].data);
+    }
+    free(bmf.charDef);
+    free(bmf.palette);
+    free(bmf.name);
+}
+
+/**
+ * Load a texture from a buffer.
+ * @param my_img the JPEG or PNG buffer to load.
+ * @return A GRRLIB_texImg structure filled with imgage informations.
+ */
+GRRLIB_texImg GRRLIB_LoadTexture(const unsigned char my_img[]) {
+
+    if(my_img[0]==0xFF && my_img[1]==0xD8 && my_img[2]==0xFF) {
+        return(GRRLIB_LoadTextureJPG(my_img));
+    }
+    else {
+        return(GRRLIB_LoadTexturePNG(my_img));
+    }
 }
 
 /**
@@ -668,6 +787,7 @@ void GRRLIB_DrawTile(f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees, float
  * @param tex
  * @param color
  * @param zoom
+ * @param text
  * @param ... Optional arguments.
  */
 void GRRLIB_Printf(f32 xpos, f32 ypos, GRRLIB_texImg tex, u32 color, f32 zoom, const char *text, ...) {
@@ -772,24 +892,185 @@ void GRRLIB_FlushTex(GRRLIB_texImg tex)
 /**
  * Change a texture to gray scale.
  * @see GRRLIB_FlushTex
- * @param tex the texture to change.
+ * @param texsrc the texture source.
+ * @param texdest the texture grayscaled destination.
  */
-void GRRLIB_BMFX_GrayScale(GRRLIB_texImg tex) {
+void GRRLIB_BMFX_Grayscale(GRRLIB_texImg texsrc, GRRLIB_texImg texdest) {
     unsigned int x, y;
-    u8 r, g, b, gray;
+    u8 gray;
     u32 color;
 
-    for(y=0; y<tex.h; y++) {
-        for(x=0; x<tex.w; x++) {
-            color = GRRLIB_GetPixelFromtexImg(x, y, tex);
+    for(y=0; y<texsrc.h; y++) {
+        for(x=0; x<texsrc.w; x++) {
+            color = GRRLIB_GetPixelFromtexImg(x, y, texsrc);
 
-            b = (color>>24) & 0xFF;
-            g = (color>>16) & 0xFF;
-            r = (color>>8) & 0xFF;
-            gray = ((r*77 + g*150 + b*28) / (255));
+            gray = (((color >> 24 & 0xFF)*77 + (color >> 16 & 0xFF)*150 + (color >> 8 & 0xFF)*28) / (255));
 
-            GRRLIB_SetPixelTotexImg(x, y, tex,
+            GRRLIB_SetPixelTotexImg(x, y, texdest,
                 ((gray << 24) | (gray << 16) | (gray << 8) | (color & 0xFF)));
+        }
+    }
+}
+
+/**
+ * Invert colors of the texture.
+ * @see GRRLIB_FlushTex
+ * @param texsrc the texture source.
+ * @param texdest the texture destination.
+ */
+void GRRLIB_BMFX_Invert(GRRLIB_texImg texsrc, GRRLIB_texImg texdest) {
+    unsigned int x, y;
+    u32 color;
+
+    for(y=0; y<texsrc.h; y++) {
+        for(x=0; x<texsrc.w; x++) {
+            color = GRRLIB_GetPixelFromtexImg(x, y, texsrc);
+
+            GRRLIB_SetPixelTotexImg(x, y, texdest,
+                ((0xFFFFFF - (color >> 8 & 0xFFFFFF)) << 8)  | (color & 0xFF));
+        }
+    }
+}
+
+/**
+ * Flip texture horizontal.
+ * @see GRRLIB_FlushTex
+ * @param texsrc the texture source.
+ * @param texdest the texture destination.
+ */
+void GRRLIB_BMFX_FlipH(GRRLIB_texImg texsrc, GRRLIB_texImg texdest) {
+    unsigned int x, y, txtWidth = texsrc.w - 1;
+
+    for(y=0; y<texsrc.h; y++) {
+        for(x=0; x<texsrc.w; x++) {
+            GRRLIB_SetPixelTotexImg(txtWidth - x, y, texdest,
+                GRRLIB_GetPixelFromtexImg(x, y, texsrc));
+        }
+    }
+}
+
+/**
+ * Flip texture vertical.
+ * @see GRRLIB_FlushTex
+ * @param texsrc the texture source.
+ * @param texdest the texture destination.
+ */
+void GRRLIB_BMFX_FlipV(GRRLIB_texImg texsrc, GRRLIB_texImg texdest) {
+    unsigned int x, y, texHeight = texsrc.h - 1;
+
+    for(y=0; y<texsrc.h; y++) {
+        for(x=0; x<texsrc.w; x++) {
+            GRRLIB_SetPixelTotexImg(x, texHeight - y, texdest,
+                GRRLIB_GetPixelFromtexImg(x, y, texsrc));
+        }
+    }
+}
+
+/**
+ * Blur a texture.
+ * @see GRRLIB_FlushTex
+ * @param texsrc the texture source.
+ * @param texdest the texture destination.
+ * @param factor the blur factor.
+ */
+void GRRLIB_BMFX_Blur(GRRLIB_texImg texsrc, GRRLIB_texImg texdest, int factor) {
+    int numba = (1+(factor<<1))*(1+(factor<<1));
+
+    int x, y;
+    int k, l;
+    int tmp=0;
+    int newr, newg, newb, newa;
+    u32 colours[numba];
+    u32 thiscol;
+
+    for (x = 0; x < texsrc.w; x++) {
+        for (y = 0; y < texsrc.h; y++) {
+            newr = 0;
+            newg = 0;
+            newb = 0;
+            newa = 0;
+
+            tmp=0;
+            thiscol = GRRLIB_GetPixelFromtexImg(x, y, texsrc);
+
+            for (k = x - factor; k <= x + factor; k++) {
+                for (l = y - factor; l <= y + factor; l++) {
+                    if (k < 0) { colours[tmp] = thiscol; }
+                    else if (k >= texsrc.w) { colours[tmp] = thiscol; }
+                    else if (l < 0) { colours[tmp] = thiscol; }
+                    else if (l >= texsrc.h) { colours[tmp] = thiscol; }
+                    else{ colours[tmp] = GRRLIB_GetPixelFromtexImg(k, l, texsrc); }
+                    tmp++;
+                }
+            }
+
+            for (tmp = 0; tmp < numba; tmp++) {
+                newr += (colours[tmp] >> 24) & 0xFF;
+                newg += (colours[tmp] >> 16) & 0xFF;
+                newb += (colours[tmp] >> 8) & 0xFF;
+                newa += colours[tmp] & 0xFF;
+            }
+
+            newr /= numba;
+            newg /= numba;
+            newb /= numba;
+            newa /= numba;
+
+            GRRLIB_SetPixelTotexImg(x, y, texdest, (newr<<24) | (newg<<16) | (newb<<8) | newa);
+        }
+    }
+}
+
+/**
+ * A texture effect.
+ * @see GRRLIB_FlushTex
+ * @param texsrc the texture source.
+ * @param texdest the texture destination.
+ * @param factor The factor level of the effect.
+ */
+void GRRLIB_BMFX_Pixelate(GRRLIB_texImg texsrc, GRRLIB_texImg texdest, int factor) {
+    unsigned int x, y;
+    unsigned int xx, yy;
+    u32 rgb;
+
+    for(x=0; x<texsrc.w-1-factor; x+= factor) {
+        for(y=0; y<texsrc.h-1-factor; y+=factor) {
+            rgb=GRRLIB_GetPixelFromtexImg(x, y, texsrc);
+                for(xx=x; xx<x+factor; xx++) {
+                    for(yy=y; yy<y+factor; yy++) {
+                        GRRLIB_SetPixelTotexImg(xx, yy, texdest, rgb);
+                    }
+                }
+        }
+    }
+}
+
+/**
+ * A texture effect.
+ * @see GRRLIB_FlushTex
+ * @param texsrc the texture source.
+ * @param texdest the texture destination.
+ * @param factor The factor level of the effect.
+ */
+void GRRLIB_BMFX_Scatter(GRRLIB_texImg texsrc, GRRLIB_texImg texdest, int factor) {
+    unsigned int x, y;
+    int val1, val2;
+    u32 val3, val4;
+    int factorx2 = factor*2;
+
+    for(y=0; y<texsrc.h; y++) {
+        for(x=0; x<texsrc.w; x++) {
+            val1 = x + (int) (factorx2 * (rand() / (RAND_MAX + 1.0))) - factor;
+            val2 = y + (int) (factorx2 * (rand() / (RAND_MAX + 1.0))) - factor;
+
+            if((val1 >= texsrc.w) || (val1 <0) || (val2 >= texsrc.h) || (val2 <0)) {
+            }
+            else {
+                val3 = GRRLIB_GetPixelFromtexImg(x, y, texsrc);
+                val4 = GRRLIB_GetPixelFromtexImg(val1, val2, texsrc);
+                GRRLIB_SetPixelTotexImg(x, y, texdest, val4);
+                GRRLIB_SetPixelTotexImg(val1, val2, texdest, val3);
+            }
         }
     }
 }
@@ -798,6 +1079,7 @@ void GRRLIB_BMFX_GrayScale(GRRLIB_texImg tex) {
  *
  * @param v
  * @param color
+ * @param n
  * @param fmt
  */
 void GRRLIB_GXEngine(Vector v[], u32 color, long n, u8 fmt) {

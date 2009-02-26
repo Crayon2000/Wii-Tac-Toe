@@ -19,8 +19,8 @@ Button::Button() : Object()
 	TextHeight = 12;
 	TextWidth = 100; // random value
 
-	ButtonImgOn = GRRLIB_LoadTexturePNG(button_on);
-	ButtonImgOff = GRRLIB_LoadTexturePNG(button_off);
+	ButtonImgOn = GRRLIB_LoadTexture(button_on);
+	ButtonImgOff = GRRLIB_LoadTexture(button_off);
 }
 
 /**

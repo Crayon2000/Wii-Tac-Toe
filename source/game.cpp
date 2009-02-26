@@ -75,10 +75,10 @@ Game::Game()
 	WTTPlayer[1].SetSign('X');
 	WTTPlayer[1].SetName(Lang->Text("PLAYER 2"));
 
-	GameImg = GRRLIB_LoadTexturePNG(backg);
-	SplashImg = GRRLIB_LoadTexturePNG(splash);
-	HoverImgO = GRRLIB_LoadTexturePNG(hover_o);
-	HoverImgX = GRRLIB_LoadTexturePNG(hover_x);
+	GameImg = GRRLIB_LoadTexture(backg);
+	SplashImg = GRRLIB_LoadTexture(splash);
+	HoverImgO = GRRLIB_LoadTexture(hover_o);
+	HoverImgX = GRRLIB_LoadTexture(hover_x);
 	CopiedImg.data = NULL;
 
 	RUMBLE_Init();

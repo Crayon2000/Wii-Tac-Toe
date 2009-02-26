@@ -12,8 +12,8 @@ Symbol::Symbol() : Object()
 {
     this->Player = 'X';
 
-	ImgO = GRRLIB_LoadTexturePNG(o);
-	ImgX = GRRLIB_LoadTexturePNG(x);
+	ImgO = GRRLIB_LoadTexture(o);
+	ImgX = GRRLIB_LoadTexture(x);
 
 	Width = 136;
 	Height = 100;
