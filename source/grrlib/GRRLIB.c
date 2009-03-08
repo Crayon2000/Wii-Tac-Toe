@@ -1,5 +1,5 @@
 /*===========================================
-        GRRLIB (GX version) 3.0.5 alpha
+        GRRLIB (GX version) 4.0.0
         Code     : NoNameNo
         Additional Code : Crayon
         GX hints : RedShade
@@ -9,12 +9,22 @@
 #include <malloc.h>
 #include <stdarg.h>
 #include <string.h>
+#include <math.h>
 #include "../libpng/pngu/pngu.h"
 #include "../libjpeg/jpeglib.h"
 #include "GRRLIB.h"
+#include <ogc/conf.h>
 #include <fat.h>
 
+#define DEFAULT_FIFO_SIZE (256 * 1024) /**< GX fifo buffer size. */
 
+u32 fb = 0;
+static void *xfb[2] = {NULL, NULL};
+GXRModeObj *rmode;
+void *gp_fifo = NULL;
+
+static void RawTo4x4RGBA(const unsigned char *src, void *dst, const unsigned int width, const unsigned int height);
+static GRRLIB_drawSettings GRRLIB_Settings;
 
 /******************************************************************************/
 /**** FREETYPE START ****/
@@ -275,16 +285,18 @@ unsigned int GRRLIB_TextWidth(const char *string, unsigned int fontSize) {
 
 
 
-#define DEFAULT_FIFO_SIZE (256 * 1024)
 
-u32 fb = 0;
-static void *xfb[2] = { NULL, NULL};
-GXRModeObj *rmode;
-void *gp_fifo = NULL;
+/**
+ * Turn AntiAliasing on/off
+ * @param aa Set to true to enable AntiAliasing. (Default: Enabled)
+ */
+void GRRLIB_SetAntiAliasing( bool aa ) {
+    GRRLIB_Settings.antialias = aa;
+}
 
 /**
  * Clear screen with a specific color.
- * @param color the color to use to fill the screen.
+ * @param color The color to use to fill the screen.
  */
 void GRRLIB_FillScreen(u32 color) {
     GRRLIB_Rectangle(-40, -40, 680, 520, color, 1);
@@ -292,9 +304,9 @@ void GRRLIB_FillScreen(u32 color) {
 
 /**
  * Draw a dot.
- * @param x specifies the x-coordinate of the dot.
- * @param y specifies the y-coordinate of the dot.
- * @param color the color of the dot.
+ * @param x Specifies the x-coordinate of the dot.
+ * @param y Specifies the y-coordinate of the dot.
+ * @param color The color of the dot in RGBA format.
  */
 void GRRLIB_Plot(f32 x, f32 y, u32 color) {
     Vector v[] = {{x,y,0.0f}};
@@ -303,10 +315,10 @@ void GRRLIB_Plot(f32 x, f32 y, u32 color) {
 }
 
 /**
- *
- * @param v
- * @param color
- * @param n
+ * Draw an array of points.
+ * @param v Array containing the points.
+ * @param color The color of the points in RGBA format.
+ * @param n Number of points in the vector array.
  */
 void GRRLIB_NPlot(Vector v[], u32 color, long n) {
     GRRLIB_GXEngine(v, color, n, GX_POINTS);
@@ -314,11 +326,11 @@ void GRRLIB_NPlot(Vector v[], u32 color, long n) {
 
 /**
  * Draw a line.
- * @param x1 start point for line for the x coordinate.
- * @param y1 start point for line for the y coordinate.
- * @param x2 end point for line for the x coordinate.
- * @param y2 end point for line for the x coordinate.
- * @param color line color.
+ * @param x1 Starting point for line for the x coordinate.
+ * @param y1 Starting point for line for the y coordinate.
+ * @param x2 Ending point for line for the x coordinate.
+ * @param y2 Ending point for line for the x coordinate.
+ * @param color Line color in RGBA format.
  */
 void GRRLIB_Line(f32 x1, f32 y1, f32 x2, f32 y2, u32 color) {
     Vector v[] = {{x1,y1,0.0f}, {x2,y2,0.0f}};
@@ -328,31 +340,62 @@ void GRRLIB_Line(f32 x1, f32 y1, f32 x2, f32 y2, u32 color) {
 
 /**
  * Draw a rectangle.
- * @param x specifies the x-coordinate of the upper-left corner of the rectangle.
- * @param y specifies the y-coordinate of the upper-left corner of the rectangle.
- * @param width the width of the rectangle.
- * @param height the height of the rectangle.
- * @param color the color of the rectangle.
- * @param filled true to fill the rectangle with a color.
+ * @param x Specifies the x-coordinate of the upper-left corner of the rectangle.
+ * @param y Specifies the y-coordinate of the upper-left corner of the rectangle.
+ * @param width The width of the rectangle.
+ * @param height The height of the rectangle.
+ * @param color The color of the rectangle in RGBA format.
+ * @param filled Set to true to fill the rectangle.
  */
 void GRRLIB_Rectangle(f32 x, f32 y, f32 width, f32 height, u32 color, u8 filled) {
     f32 x2 = x+width;
     f32 y2 = y+height;
     Vector v[] = {{x,y,0.0f}, {x2,y,0.0f}, {x2,y2,0.0f}, {x,y2,0.0f}, {x,y,0.0f}};
 
-    if(!filled) {
+    if (!filled) {
         GRRLIB_NGone(v, color, 5);
     }
-    else{
+    else {
         GRRLIB_NGoneFilled(v, color, 4);
     }
 }
 
 /**
+ * Draw a circle.
+ * @author Dark_Link
+ * @param x Specifies the x-coordinate of the circle.
+ * @param y Specifies the y-coordinate of the circle.
+ * @param radius The radius of the circle.
+ * @param color The color of the circle in RGBA format.
+ * @param filled Set to true to fill the circle.
+ */
+void GRRLIB_Circle(f32 x, f32 y, f32 radius, u32 color, u8 filled) {
+    Vector v[36];
+    u32 a;
+    f32 ra;
+    f32 G_DTOR = M_DTOR * 10;
+
+    for (a = 0; a < 36; a++) {
+        ra = a * G_DTOR;
+
+        v[a].x = cos(ra) * radius + x;
+        v[a].y = sin(ra) * radius + y;
+        v[a].z = 0.0f;
+    }
+
+    if (!filled) {
+        GRRLIB_GXEngine(v, color, 36, GX_LINESTRIP);
+    }
+    else {
+        GRRLIB_GXEngine(v, color, 36, GX_TRIANGLEFAN);
+    }
+}
+
+/**
  * Draw a polygon.
- * @param v
- * @param color
- * @param n
+ * @param v The vector containing the coordinates of the polygon.
+ * @param color The color of the filled polygon in RGBA format.
+ * @param n Number of points in the vector.
  */
 void GRRLIB_NGone(Vector v[], u32 color, long n) {
     GRRLIB_GXEngine(v, color, n, GX_LINESTRIP);
@@ -360,53 +403,18 @@ void GRRLIB_NGone(Vector v[], u32 color, long n) {
 
 /**
  * Draw a filled polygon.
- * @param v
- * @param color
- * @param n
+ * @param v The vector containing the coordinates of the polygon.
+ * @param color The color of the filled polygon in RGBA format.
+ * @param n Number of points in the vector.
  */
 void GRRLIB_NGoneFilled(Vector v[], u32 color, long n) {
     GRRLIB_GXEngine(v, color, n, GX_TRIANGLEFAN);
 }
 
-/**
- * Initialize a tile set.
- * @param tex
- * @param tilew
- * @param tileh
- * @param tilestart
- */
-void GRRLIB_InitTileSet(struct GRRLIB_texImg *tex, unsigned int tilew, unsigned int tileh, unsigned int tilestart) {
-    tex->tilew = tilew;
-    tex->tileh = tileh;
-    tex->nbtilew = tex->w / tilew;
-    tex->nbtileh = tex->h / tileh;
-    tex->tilestart = tilestart;
-}
 
 /**
- * Load a texture from a buffer.
- * @param my_png the PNG buffer to load.
- * @return A GRRLIB_texImg structure filled with PNG informations.
- */
-GRRLIB_texImg GRRLIB_LoadTexturePNG(const unsigned char my_png[]) {
-    PNGUPROP imgProp;
-    IMGCTX ctx;
-    GRRLIB_texImg my_texture;
-
-    ctx = PNGU_SelectImageFromBuffer(my_png);
-    PNGU_GetImageProperties (ctx, &imgProp);
-    my_texture.data = memalign (32, imgProp.imgWidth * imgProp.imgHeight * 4);
-    PNGU_DecodeTo4x4RGBA8 (ctx, imgProp.imgWidth, imgProp.imgHeight, my_texture.data, 255);
-    PNGU_ReleaseImageContext (ctx);
-    my_texture.w = imgProp.imgWidth;
-    my_texture.h = imgProp.imgHeight;
-    GRRLIB_FlushTex(my_texture);
-    return my_texture;
-}
-
-/**
- * Convert a raw bmp (RGB, no alpha) to 4x4RGBA.
- * @author DrTwox
+ * Convert a raw BMP (RGB, no alpha) to 4x4RGBA.
+ * @author DragonMinded
  * @param src
  * @param dst
  * @param width
@@ -445,12 +453,52 @@ static void RawTo4x4RGBA(const unsigned char *src, void *dst, const unsigned int
     } /* block */
 }
 
+
+/**
+ * Initialize a tile set.
+ * @param tex The texture to initialize.
+ * @param tilew Width of the tile.
+ * @param tileh Height of the tile.
+ * @param tilestart Offset for starting position. (Used in fonts)
+ */
+void GRRLIB_InitTileSet(struct GRRLIB_texImg *tex, unsigned int tilew, unsigned int tileh, unsigned int tilestart) {
+    tex->tilew = tilew;
+    tex->tileh = tileh;
+    if (tilew) // Avoid division by zero
+        tex->nbtilew = tex->w / tilew;
+    if (tileh) // Avoid division by zero
+        tex->nbtileh = tex->h / tileh;
+    tex->tilestart = tilestart;
+}
+
 /**
  * Load a texture from a buffer.
- * Take Care to have a JPG finnishing by 0xFF 0xD9 !!!!
+ * @param my_png the PNG buffer to load.
+ * @return A GRRLIB_texImg structure filled with image informations.
+ */
+GRRLIB_texImg GRRLIB_LoadTexturePNG(const unsigned char my_png[]) {
+    PNGUPROP imgProp;
+    IMGCTX ctx;
+    GRRLIB_texImg my_texture;
+
+    ctx = PNGU_SelectImageFromBuffer(my_png);
+    PNGU_GetImageProperties(ctx, &imgProp);
+    my_texture.data = memalign(32, imgProp.imgWidth * imgProp.imgHeight * 4);
+    PNGU_DecodeTo4x4RGBA8(ctx, imgProp.imgWidth, imgProp.imgHeight, my_texture.data, 255);
+    PNGU_ReleaseImageContext(ctx);
+    my_texture.w = imgProp.imgWidth;
+    my_texture.h = imgProp.imgHeight;
+    GRRLIB_SetHandle( &my_texture, 0, 0 );
+    GRRLIB_FlushTex(my_texture);
+    return my_texture;
+}
+
+/**
+ * Load a texture from a buffer.
+ * Take care to have the JPG finnish with 0xFF 0xD9!!
  * @author DrTwox
- * @param my_jpg the JPEG buffer to load.
- * @return A GRRLIB_texImg structure filled with PNG informations.
+ * @param my_jpg The JPEG buffer to load.
+ * @return A GRRLIB_texImg structure filled with image informations.
  */
 GRRLIB_texImg GRRLIB_LoadTextureJPG(const unsigned char my_jpg[]) {
     struct jpeg_decompress_struct cinfo;
@@ -459,9 +507,9 @@ GRRLIB_texImg GRRLIB_LoadTextureJPG(const unsigned char my_jpg[]) {
     int n = 0;
     unsigned int i;
 
-    if((my_jpg[0]==0xff) && (my_jpg[1]==0xd8) && (my_jpg[2]==0xff)) {
-        while(1) {
-            if((my_jpg[n]==0xff) && (my_jpg[n+1]==0xd9))
+    if ((my_jpg[0]==0xff) && (my_jpg[1]==0xd8) && (my_jpg[2]==0xff)) {
+        while(true) {
+            if ((my_jpg[n]==0xff) && (my_jpg[n+1]==0xd9))
                 break;
             n++;
         }
@@ -490,7 +538,7 @@ GRRLIB_texImg GRRLIB_LoadTextureJPG(const unsigned char my_jpg[]) {
     my_texture.data = memalign(32, cinfo.output_width * cinfo.output_height * 4);
     RawTo4x4RGBA(tempBuffer, my_texture.data, cinfo.output_width, cinfo.output_height);
 
-    /* Done - do cleanup and release memory */
+    /* Done - Do cleanup and release allocated memory */
     jpeg_finish_decompress(&cinfo);
     jpeg_destroy_decompress(&cinfo);
     free(row_pointer[0]);
@@ -498,6 +546,7 @@ GRRLIB_texImg GRRLIB_LoadTextureJPG(const unsigned char my_jpg[]) {
 
     my_texture.w = cinfo.output_width;
     my_texture.h = cinfo.output_height;
+    GRRLIB_SetHandle( &my_texture, 0, 0 );
     GRRLIB_FlushTex(my_texture);
 
     return my_texture;
@@ -505,11 +554,11 @@ GRRLIB_texImg GRRLIB_LoadTextureJPG(const unsigned char my_jpg[]) {
 
 /**
  * Print formatted output.
- * @param xpos
- * @param ypos
- * @param bmf
- * @param zoom
- * @param text
+ * @param xpos Specifies the x-coordinate of the upper-left corner of the text.
+ * @param ypos Specifies the y-coordinate of the upper-left corner of the text.
+ * @param bmf The ByteMap font to use.
+ * @param zoom This is a factor by which the text size will be increase or decrease.
+ * @param text Text to draw.
  * @param ... Optional arguments.
  */
 void GRRLIB_PrintBMF(f32 xpos, f32 ypos, GRRLIB_bytemapFont bmf, f32 zoom, const char *text, ...) {
@@ -523,13 +572,13 @@ void GRRLIB_PrintBMF(f32 xpos, f32 ypos, GRRLIB_bytemapFont bmf, f32 zoom, const
 
     GRRLIB_texImg tex_BMfont = GRRLIB_CreateEmptyTexture(640, 480);
 
-    for(i=0; i<size; i++) {
-        for(j=0; j<bmf.nbChar; j++) {
-            if(tmp[i] == bmf.charDef[j].character) {
+    for (i=0; i<size; i++) {
+        for (j=0; j<bmf.nbChar; j++) {
+            if (tmp[i] == bmf.charDef[j].character) {
                 n=0;
-                for(y=0; y<bmf.charDef[j].height; y++) {
-                    for(x=0; x<bmf.charDef[j].width; x++) {
-                        if(bmf.charDef[j].data[n]) {
+                for (y=0; y<bmf.charDef[j].height; y++) {
+                    for (x=0; x<bmf.charDef[j].width; x++) {
+                        if (bmf.charDef[j].data[n]) {
                             GRRLIB_SetPixelTotexImg(xpos + x + bmf.charDef[j].relx, ypos + y + bmf.charDef[j].rely,
                                 tex_BMfont, bmf.palette[bmf.charDef[j].data[n]]);
                             //GRRLIB_Plot(xpos + x + bmf.charDef[j].relx, ypos + y + bmf.charDef[j].rely,
@@ -543,16 +592,15 @@ void GRRLIB_PrintBMF(f32 xpos, f32 ypos, GRRLIB_bytemapFont bmf, f32 zoom, const
             }
         }
     }
+
     GRRLIB_FlushTex(tex_BMfont);
-
     GRRLIB_DrawImg(0, 0, tex_BMfont, 0, 1, 1, 0xFFFFFFFF);
-
     free(tex_BMfont.data);
 }
 
 /**
  * Load a ByteMap font structure from a buffer.
- * @param my_bmf the ByteMap font buffer to load.
+ * @param my_bmf The ByteMap font buffer to load.
  * @return A GRRLIB_bytemapFont structure filled with BMF informations.
  */
 GRRLIB_bytemapFont GRRLIB_LoadBMF(const unsigned char my_bmf[]) {
@@ -565,7 +613,7 @@ GRRLIB_bytemapFont GRRLIB_LoadBMF(const unsigned char my_bmf[]) {
     // Initialize everything to zero
     memset(&fontArray, 0, sizeof(fontArray));
 
-    if(my_bmf[0]==0xE1 && my_bmf[1]==0xE6 && my_bmf[2]==0xD5 && my_bmf[3]==0x1A) {
+    if (my_bmf[0]==0xE1 && my_bmf[1]==0xE6 && my_bmf[2]==0xD5 && my_bmf[3]==0x1A) {
         fontArray.version = my_bmf[4];
         lineheight = my_bmf[5];
         sizeover = my_bmf[6];
@@ -577,7 +625,7 @@ GRRLIB_bytemapFont GRRLIB_LoadBMF(const unsigned char my_bmf[]) {
         nbPalette = my_bmf[16];
         numcolpal = 3 * nbPalette;
         fontArray.palette = (u32 *)calloc(nbPalette + 1, sizeof(u32));
-        for(i=0; i < numcolpal; i+=3) {
+        for (i=0; i < numcolpal; i+=3) {
             fontArray.palette[j++] = ((((my_bmf[i+17]<<2)+3)<<24) | (((my_bmf[i+18]<<2)+3)<<16) | (((my_bmf[i+19]<<2)+3)<<8) | 0xFF);
         }
         j = my_bmf[17 + numcolpal];
@@ -587,7 +635,7 @@ GRRLIB_bytemapFont GRRLIB_LoadBMF(const unsigned char my_bmf[]) {
         fontArray.nbChar = (my_bmf[j] | my_bmf[j+1]<<8);
         fontArray.charDef = (GRRLIB_bytemapChar *)calloc(fontArray.nbChar, sizeof(GRRLIB_bytemapChar));
         j++;
-        for(i=0; i < fontArray.nbChar; i++) {
+        for (i=0; i < fontArray.nbChar; i++) {
             fontArray.charDef[i].character = my_bmf[++j];
             fontArray.charDef[i].width = my_bmf[++j];
             fontArray.charDef[i].height = my_bmf[++j];
@@ -596,7 +644,7 @@ GRRLIB_bytemapFont GRRLIB_LoadBMF(const unsigned char my_bmf[]) {
             fontArray.charDef[i].shift = my_bmf[++j];
             nbPixels = fontArray.charDef[i].width * fontArray.charDef[i].height;
             fontArray.charDef[i].data = malloc(nbPixels);
-            if(nbPixels && fontArray.charDef[i].data) {
+            if (nbPixels && fontArray.charDef[i].data) {
                 memcpy(fontArray.charDef[i].data, &my_bmf[++j], nbPixels);
                 j += (nbPixels - 1);
             }
@@ -606,14 +654,13 @@ GRRLIB_bytemapFont GRRLIB_LoadBMF(const unsigned char my_bmf[]) {
 }
 
 /**
- * Free memory.
+ * Free memory allocated by ByteMap fonts.
  * @param bmf a GRRLIB_bytemapFont structure.
  */
-void GRRLIB_FreeBMF(GRRLIB_bytemapFont bmf)
-{
+void GRRLIB_FreeBMF(GRRLIB_bytemapFont bmf) {
     unsigned int i;
 
-    for(i=0; i<bmf.nbChar; i++) {
+    for (i=0; i<bmf.nbChar; i++) {
         free(bmf.charDef[i].data);
     }
     free(bmf.charDef);
@@ -623,35 +670,34 @@ void GRRLIB_FreeBMF(GRRLIB_bytemapFont bmf)
 
 /**
  * Load a texture from a buffer.
- * @param my_img the JPEG or PNG buffer to load.
- * @return A GRRLIB_texImg structure filled with imgage informations.
+ * @param my_img The JPEG or PNG buffer to load.
+ * @return A GRRLIB_texImg structure filled with image informations.
  */
 GRRLIB_texImg GRRLIB_LoadTexture(const unsigned char my_img[]) {
-
-    if(my_img[0]==0xFF && my_img[1]==0xD8 && my_img[2]==0xFF) {
-        return(GRRLIB_LoadTextureJPG(my_img));
+    if (my_img[0]==0xFF && my_img[1]==0xD8 && my_img[2]==0xFF) {
+        return (GRRLIB_LoadTextureJPG(my_img));
     }
     else {
-        return(GRRLIB_LoadTexturePNG(my_img));
+        return (GRRLIB_LoadTexturePNG(my_img));
     }
 }
 
 /**
  * Create an empty texture.
- * @param w width of the new texture to create.
- * @param h height of the new texture to create.
+ * @param w Width of the new texture to create.
+ * @param h Height of the new texture to create.
  * @return A GRRLIB_texImg structure newly created.
  */
 GRRLIB_texImg GRRLIB_CreateEmptyTexture(unsigned int w, unsigned int h) {
     unsigned int x, y;
     GRRLIB_texImg my_texture;
 
-    my_texture.data = memalign (32, h * w * 4);
+    my_texture.data = memalign(32, h * w * 4);
     my_texture.w = w;
     my_texture.h = h;
     // Initialize the texture
-    for(y=0; y<h; y++) {
-        for(x=0; x<w; x++) {
+    for (y = 0; y < h; y++) {
+        for (x = 0; x < w; x++) {
             GRRLIB_SetPixelTotexImg(x, y, my_texture, 0x00000000);
         }
     }
@@ -661,71 +707,71 @@ GRRLIB_texImg GRRLIB_CreateEmptyTexture(unsigned int w, unsigned int h) {
 
 /**
  * Draw a texture.
- * @param xpos specifies the x-coordinate of the upper-left corner.
- * @param ypos specifies the y-coordinate of the upper-left corner.
- * @param tex texture to draw.
- * @param degrees angle of rotation.
- * @param scaleX specifies the x-coordinate scale. -1 could be used for flipping the texture horizontally.
- * @param scaleY specifies the y-coordinate scale. -1 could be used for flipping the texture vertically.
- * @param color
+ * @param xpos Specifies the x-coordinate of the upper-left corner.
+ * @param ypos Specifies the y-coordinate of the upper-left corner.
+ * @param tex The texture to draw.
+ * @param degrees Angle of rotation.
+ * @param scaleX Specifies the x-coordinate scale. -1 could be used for flipping the texture horizontally.
+ * @param scaleY Specifies the y-coordinate scale. -1 could be used for flipping the texture vertically.
+ * @param color Color in RGBA format.
  */
-void GRRLIB_DrawImg(f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees, float scaleX, f32 scaleY, u32 color ) {
+void GRRLIB_DrawImg(f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees, float scaleX, f32 scaleY, u32 color) {
     GXTexObj texObj;
     u16 width, height;
     Mtx m, m1, m2, mv;
 
     GX_InitTexObj(&texObj, tex.data, tex.w, tex.h, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
-//    GX_InitTexObjLOD(&texObj, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1);
+    if (GRRLIB_Settings.antialias == false) { GX_InitTexObjLOD(&texObj, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1); }
     GX_LoadTexObj(&texObj, GX_TEXMAP0);
 
-    GX_SetTevOp (GX_TEVSTAGE0, GX_MODULATE);
-    GX_SetVtxDesc (GX_VA_TEX0, GX_DIRECT);
+    GX_SetTevOp(GX_TEVSTAGE0, GX_MODULATE);
+    GX_SetVtxDesc(GX_VA_TEX0, GX_DIRECT);
 
     width = tex.w * 0.5;
     height = tex.h * 0.5;
-    guMtxIdentity (m1);
+    guMtxIdentity(m1);
     guMtxScaleApply(m1, m1, scaleX, scaleY, 1.0);
     Vector axis = (Vector) {0, 0, 1 };
-    guMtxRotAxisDeg(m2, &axis, degrees);
+    guMtxRotAxisDeg (m2, &axis, degrees);
     guMtxConcat(m2, m1, m);
 
-    guMtxTransApply(m, m, xpos+width, ypos+height, 0);
+    guMtxTransApply(m, m, xpos+width+tex.handlex-tex.offsetx+(scaleX*( -tex.handley*sin(-DegToRad(degrees)) - tex.handlex*cos(-DegToRad(degrees)) )), ypos+height+tex.handley-tex.offsety+(scaleX*( -tex.handley*cos(-DegToRad(degrees)) + tex.handlex*sin(-DegToRad(degrees)) )), 0);
     guMtxConcat(GXmodelView2D, m, mv);
+
     GX_LoadPosMtxImm(mv, GX_PNMTX0);
-
     GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
-    GX_Position3f32(-width, -height, 0);
-    GX_Color1u32(color);
-    GX_TexCoord2f32(0, 0);
-
-    GX_Position3f32(width, -height, 0);
-    GX_Color1u32(color);
-    GX_TexCoord2f32(1, 0);
-
-    GX_Position3f32(width, height, 0);
-    GX_Color1u32(color);
-    GX_TexCoord2f32(1, 1);
-
-    GX_Position3f32(-width, height, 0);
-    GX_Color1u32(color);
-    GX_TexCoord2f32(0, 1);
+        GX_Position3f32(-width, -height, 0);
+        GX_Color1u32(color);
+        GX_TexCoord2f32(0, 0);
+    
+        GX_Position3f32(width, -height, 0);
+        GX_Color1u32(color);
+        GX_TexCoord2f32(1, 0);
+    
+        GX_Position3f32(width, height, 0);
+        GX_Color1u32(color);
+        GX_TexCoord2f32(1, 1);
+    
+        GX_Position3f32(-width, height, 0);
+        GX_Color1u32(color);
+        GX_TexCoord2f32(0, 1);
     GX_End();
-    GX_LoadPosMtxImm (GXmodelView2D, GX_PNMTX0);
+    GX_LoadPosMtxImm(GXmodelView2D, GX_PNMTX0);
 
-    GX_SetTevOp (GX_TEVSTAGE0, GX_PASSCLR);
-    GX_SetVtxDesc (GX_VA_TEX0, GX_NONE);
+    GX_SetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
+    GX_SetVtxDesc(GX_VA_TEX0, GX_NONE);
 }
 
 /**
  * Draw a tile.
- * @param xpos specifies the x-coordinate of the upper-left corner.
- * @param ypos specifies the y-coordinate of the upper-left corner.
- * @param tex texture containing the tile to draw.
- * @param degrees angle of rotation.
- * @param scaleX specifies the x-coordinate scale. -1 could be used for flipping the texture horizontally.
- * @param scaleY specifies the y-coordinate scale. -1 could be used for flipping the texture vertically.
- * @param color
- * @param frame specifies the frame to draw.
+ * @param xpos Specifies the x-coordinate of the upper-left corner.
+ * @param ypos Specifies the y-coordinate of the upper-left corner.
+ * @param tex The texture containing the tile to draw.
+ * @param degrees Angle of rotation.
+ * @param scaleX Specifies the x-coordinate scale. -1 could be used for flipping the texture horizontally.
+ * @param scaleY Specifies the y-coordinate scale. -1 could be used for flipping the texture vertically.
+ * @param color Color in RGBA format.
+ * @param frame Specifies the frame to draw.
  */
 void GRRLIB_DrawTile(f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees, float scaleX, f32 scaleY, u32 color, int frame) {
     GXTexObj texObj;
@@ -740,53 +786,55 @@ void GRRLIB_DrawTile(f32 xpos, f32 ypos, GRRLIB_texImg tex, float degrees, float
     f32 t2 = (((int)(frame/tex.nbtilew)+1)/(f32)tex.nbtileh)-(FRAME_CORR/tex.h);
 
     GX_InitTexObj(&texObj, tex.data, tex.tilew*tex.nbtilew, tex.tileh*tex.nbtileh, GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
-    GX_InitTexObjLOD(&texObj, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1);
+    if (GRRLIB_Settings.antialias == false) { GX_InitTexObjLOD(&texObj, GX_NEAR, GX_NEAR, 0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1); }
     GX_LoadTexObj(&texObj, GX_TEXMAP0);
 
-    GX_SetTevOp (GX_TEVSTAGE0, GX_MODULATE);
-    GX_SetVtxDesc (GX_VA_TEX0, GX_DIRECT);
+    GX_SetTevOp(GX_TEVSTAGE0, GX_MODULATE);
+    GX_SetVtxDesc(GX_VA_TEX0, GX_DIRECT);
 
     width = tex.tilew * 0.5f;
     height = tex.tileh * 0.5f;
-    guMtxIdentity (m1);
+    guMtxIdentity(m1);
     guMtxScaleApply(m1, m1, scaleX, scaleY, 1.0f);
+    
     Vector axis = (Vector) {0, 0, 1 };
     guMtxRotAxisDeg(m2, &axis, degrees);
     guMtxConcat(m2, m1, m);
-    guMtxTransApply(m, m, xpos+width, ypos+height, 0);
-    guMtxConcat (GXmodelView2D, m, mv);
-    GX_LoadPosMtxImm (mv, GX_PNMTX0);
+    guMtxTransApply(m, m, xpos+width+tex.handlex-tex.offsetx+(scaleX*( -tex.handley*sin(-DegToRad(degrees)) - tex.handlex*cos(-DegToRad(degrees)) )), ypos+height+tex.handley-tex.offsety+(scaleX*( -tex.handley*cos(-DegToRad(degrees)) + tex.handlex*sin(-DegToRad(degrees)) )), 0);
+    guMtxConcat(GXmodelView2D, m, mv);
+    
+    GX_LoadPosMtxImm(mv, GX_PNMTX0);
     GX_Begin(GX_QUADS, GX_VTXFMT0, 4);
-    GX_Position3f32(-width, -height, 0);
-    GX_Color1u32(color);
-    GX_TexCoord2f32(s1, t1);
-
-    GX_Position3f32(width, -height,  0);
-    GX_Color1u32(color);
-    GX_TexCoord2f32(s2, t1);
-
-    GX_Position3f32(width, height,  0);
-    GX_Color1u32(color);
-    GX_TexCoord2f32(s2, t2);
-
-    GX_Position3f32(-width, height,  0);
-    GX_Color1u32(color);
-    GX_TexCoord2f32(s1, t2);
+        GX_Position3f32(-width, -height, 0);
+        GX_Color1u32(color);
+        GX_TexCoord2f32(s1, t1);
+    
+        GX_Position3f32(width, -height,  0);
+        GX_Color1u32(color);
+        GX_TexCoord2f32(s2, t1);
+    
+        GX_Position3f32(width, height,  0);
+        GX_Color1u32(color);
+        GX_TexCoord2f32(s2, t2);
+    
+        GX_Position3f32(-width, height,  0);
+        GX_Color1u32(color);
+        GX_TexCoord2f32(s1, t2);
     GX_End();
-    GX_LoadPosMtxImm (GXmodelView2D, GX_PNMTX0);
+    GX_LoadPosMtxImm(GXmodelView2D, GX_PNMTX0);
 
-    GX_SetTevOp (GX_TEVSTAGE0, GX_PASSCLR);
-    GX_SetVtxDesc (GX_VA_TEX0, GX_NONE);
+    GX_SetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
+    GX_SetVtxDesc(GX_VA_TEX0, GX_NONE);
 }
 
 /**
  * Print formatted output.
- * @param xpos specifies the x-coordinate of the upper-left corner of the text.
- * @param ypos specifies the y-coordinate of the upper-left corner of the text.
- * @param tex texture containing the character set.
- * @param color text color in RGBA format. The alpha channel is used to change the opacity of the text.
- * @param zoom this is a factor by which the text size will be increase or decrease.
- * @param text text to draw.
+ * @param xpos Specifies the x-coordinate of the upper-left corner of the text.
+ * @param ypos Specifies the y-coordinate of the upper-left corner of the text.
+ * @param tex The texture containing the character set.
+ * @param color Text color in RGBA format. The alpha channel is used to change the opacity of the text.
+ * @param zoom This is a factor by which the text size will be increase or decrease.
+ * @param text Text to draw.
  * @param ... Optional arguments.
  */
 void GRRLIB_Printf(f32 xpos, f32 ypos, GRRLIB_texImg tex, u32 color, f32 zoom, const char *text, ...) {
@@ -798,20 +846,20 @@ void GRRLIB_Printf(f32 xpos, f32 ypos, GRRLIB_texImg tex, u32 color, f32 zoom, c
     size = vsprintf(tmp, text, argp);
     va_end(argp);
 
-    for(i=0; i<size; i++) {
+    for (i = 0; i < size; i++) {
         u8 c = tmp[i]-tex.tilestart;
         GRRLIB_DrawTile(xpos+i*tex.tilew*zoom, ypos, tex, 0, zoom, zoom, color, c);
     }
 }
 
 /**
- * Determines whether the specified point lies within the specified rectangle.
- * @param hotx specifies the x-coordinate of the upper-left corner of the rectangle.
- * @param hoty specifies the y-coordinate of the upper-left corner of the rectangle.
- * @param hotw the width of the rectangle.
- * @param hoth the height of the rectangle.
- * @param wpadx specifies the x-coordinate of the point.
- * @param wpady specifies the y-coordinate of the point.
+ * Determine whether the specified point lies within the specified rectangle.
+ * @param hotx Specifies the x-coordinate of the upper-left corner of the rectangle.
+ * @param hoty Specifies the y-coordinate of the upper-left corner of the rectangle.
+ * @param hotw The width of the rectangle.
+ * @param hoth The height of the rectangle.
+ * @param wpadx Specifies the x-coordinate of the point.
+ * @param wpady Specifies the y-coordinate of the point.
  * @return If the specified point lies within the rectangle, the return value is true otherwise it's false.
  */
 bool GRRLIB_PtInRect(int hotx, int hoty, int hotw, int hoth, int wpadx, int wpady) {
@@ -819,15 +867,15 @@ bool GRRLIB_PtInRect(int hotx, int hoty, int hotw, int hoth, int wpadx, int wpad
 }
 
 /**
- * Determines whether a specified rectangle lies within another rectangle.
- * @param rect1x specifies the x-coordinate of the upper-left corner of the rectangle.
- * @param rect1y specifies the y-coordinate of the upper-left corner of the rectangle.
- * @param rect1w specifies the width of the rectangle.
- * @param rect1h specifies the height of the rectangle.
- * @param rect2x specifies the x-coordinate of the upper-left corner of the rectangle.
- * @param rect2y specifies the y-coordinate of the upper-left corner of the rectangle.
- * @param rect2w specifies the width of the rectangle.
- * @param rect2h specifies the height of the rectangle.
+ * Determine whether a specified rectangle lies within another rectangle.
+ * @param rect1x Specifies the x-coordinate of the upper-left corner of the rectangle.
+ * @param rect1y Specifies the y-coordinate of the upper-left corner of the rectangle.
+ * @param rect1w Specifies the width of the rectangle.
+ * @param rect1h Specifies the height of the rectangle.
+ * @param rect2x Specifies the x-coordinate of the upper-left corner of the rectangle.
+ * @param rect2y Specifies the y-coordinate of the upper-left corner of the rectangle.
+ * @param rect2w Specifies the width of the rectangle.
+ * @param rect2h Specifies the height of the rectangle.
  * @return If the specified rectangle lies within the other rectangle, the return value is true otherwise it's false.
  */
 bool GRRLIB_RectInRect(int rect1x, int rect1y, int rect1w, int rect1h, int rect2x, int rect2y, int rect2w, int rect2h) {
@@ -836,15 +884,15 @@ bool GRRLIB_RectInRect(int rect1x, int rect1y, int rect1w, int rect1h, int rect2
 }
 
 /**
- * Determines whether a part of a specified rectangle lies on another rectangle.
- * @param rect1x specifies the x-coordinate of the upper-left corner of the first rectangle.
- * @param rect1y specifies the y-coordinate of the upper-left corner of the first rectangle.
- * @param rect1w specifies the width of the first rectangle.
- * @param rect1h specifies the height of the first rectangle.
- * @param rect2x specifies the x-coordinate of the upper-left corner of the second rectangle.
- * @param rect2y specifies the y-coordinate of the upper-left corner of the second rectangle.
- * @param rect2w specifies the width of the second rectangle.
- * @param rect2h specifies the height of the second rectangle.
+ * Determine whether a part of a specified rectangle lies on another rectangle.
+ * @param rect1x Specifies the x-coordinate of the upper-left corner of the first rectangle.
+ * @param rect1y Specifies the y-coordinate of the upper-left corner of the first rectangle.
+ * @param rect1w Specifies the width of the first rectangle.
+ * @param rect1h Specifies the height of the first rectangle.
+ * @param rect2x Specifies the x-coordinate of the upper-left corner of the second rectangle.
+ * @param rect2y Specifies the y-coordinate of the upper-left corner of the second rectangle.
+ * @param rect2w Specifies the width of the second rectangle.
+ * @param rect2h Specifies the height of the second rectangle.
  * @return If the specified rectangle lies on the other rectangle, the return value is true otherwise it's false.
  */
 bool GRRLIB_RectOnRect(int rect1x, int rect1y, int rect1w, int rect1h, int rect2x, int rect2y, int rect2w, int rect2h) {
@@ -855,11 +903,60 @@ bool GRRLIB_RectOnRect(int rect1x, int rect1y, int rect1w, int rect1h, int rect2
 }
 
 /**
+ * Clip the drawing area to an rectangle.
+ * @param x The x-coordinate of the rectangle.
+ * @param y The y-coordinate of the rectangle.
+ * @param width The width of the rectangle.
+ * @param height The height of the rectangle.
+ */
+void GRRLIB_ClipDrawing( int x, int y, int width, int height ) {
+    GX_SetClipMode( GX_CLIP_ENABLE );
+    GX_SetScissor( x, y, width, height );
+}
+
+/**
+ * Reset the clipping to normal.
+ */
+void GRRLIB_ClipReset() {
+    GX_SetClipMode( GX_CLIP_DISABLE );
+    GX_SetScissor( 0, 0, rmode->fbWidth, rmode->efbHeight );
+}
+
+/**
+ * Set a texture's X and Y handles. (e.g. for rotation)
+ * @param tex The texture to set the handle on.
+ * @param x The handle's x-coordinate.
+ * @param y The handle's y-coordinate.
+ */
+void GRRLIB_SetHandle( GRRLIB_texImg * tex, int x, int y ) {
+    if (tex->tilew) {
+        tex->handlex = -(tex->tilew/2) + x;
+        tex->handley = -(tex->tileh/2) + y;
+    } else {
+        tex->handlex = -(tex->w/2) + x;
+        tex->handley = -(tex->h/2) + y;
+    }
+    tex->offsetx = x;
+    tex->offsety = y;
+}
+
+/**
+ * Center a texture's handles. (e.g. for rotation)
+ * @param tex The texture to center.
+ */
+void GRRLIB_SetMidHandle( GRRLIB_texImg * tex ) {
+    tex->handlex = 0;
+    tex->handley = 0;
+    tex->offsetx = 0;
+    tex->offsety = 0;
+}
+
+/**
  * Return the color value of a pixel from a GRRLIB_texImg.
- * @param x specifies the x-coordinate of the pixel in the texture.
- * @param y specifies the y-coordinate of the pixel in the texture.
- * @param tex texture to get the color from.
- * @return The color of a pixel.
+ * @param x Specifies the x-coordinate of the pixel in the texture.
+ * @param y Specifies the y-coordinate of the pixel in the texture.
+ * @param tex The texture to get the color from.
+ * @return The color of a pixel in RGBA format.
  */
 u32 GRRLIB_GetPixelFromtexImg(int x, int y, GRRLIB_texImg tex) {
     u8 *truc = (u8*)tex.data;
@@ -873,16 +970,16 @@ u32 GRRLIB_GetPixelFromtexImg(int x, int y, GRRLIB_texImg tex) {
     g=*(truc+offset+32);
     b=*(truc+offset+33);
 
-    return((r<<24) | (g<<16) | (b<<8) | a);
+    return ((r<<24) | (g<<16) | (b<<8) | a);
 }
 
 /**
  * Set the color value of a pixel to a GRRLIB_texImg.
  * @see GRRLIB_FlushTex
- * @param x specifies the x-coordinate of the pixel in the texture.
- * @param y specifies the y-coordinate of the pixel in the texture.
- * @param tex texture to set the color to.
- * @param color the color of the pixel.
+ * @param x Specifies the x-coordinate of the pixel in the texture.
+ * @param y Specifies the y-coordinate of the pixel in the texture.
+ * @param tex The texture to set the color to.
+ * @param color The color of the pixel in RGBA format.
  */
 void GRRLIB_SetPixelTotexImg(int x, int y, GRRLIB_texImg tex, u32 color) {
     u8 *truc = (u8*)tex.data;
@@ -897,28 +994,27 @@ void GRRLIB_SetPixelTotexImg(int x, int y, GRRLIB_texImg tex, u32 color) {
 }
 
 /**
- * Writes the contents of a texture in the data cache down to main memory.
+ * Write the contents of a texture in the data cache down to main memory.
  * For performance the CPU holds a data cache where modifications are stored before they get written down to mainmemory.
- * @param tex the texture to flush.
+ * @param tex The texture to flush.
  */
-void GRRLIB_FlushTex(GRRLIB_texImg tex)
-{
+void GRRLIB_FlushTex(GRRLIB_texImg tex) {
     DCFlushRange(tex.data, tex.w * tex.h * 4);
 }
 
 /**
  * Change a texture to gray scale.
  * @see GRRLIB_FlushTex
- * @param texsrc the texture source.
- * @param texdest the texture grayscaled destination.
+ * @param texsrc The texture source.
+ * @param texdest The texture grayscaled destination.
  */
 void GRRLIB_BMFX_Grayscale(GRRLIB_texImg texsrc, GRRLIB_texImg texdest) {
     unsigned int x, y;
     u8 gray;
     u32 color;
 
-    for(y=0; y<texsrc.h; y++) {
-        for(x=0; x<texsrc.w; x++) {
+    for (y = 0; y < texsrc.h; y++) {
+        for (x = 0; x < texsrc.w; x++) {
             color = GRRLIB_GetPixelFromtexImg(x, y, texsrc);
 
             gray = (((color >> 24 & 0xFF)*77 + (color >> 16 & 0xFF)*150 + (color >> 8 & 0xFF)*28) / (255));
@@ -932,17 +1028,16 @@ void GRRLIB_BMFX_Grayscale(GRRLIB_texImg texsrc, GRRLIB_texImg texdest) {
 /**
  * Invert colors of the texture.
  * @see GRRLIB_FlushTex
- * @param texsrc the texture source.
- * @param texdest the texture destination.
+ * @param texsrc The texture source.
+ * @param texdest The texture destination.
  */
 void GRRLIB_BMFX_Invert(GRRLIB_texImg texsrc, GRRLIB_texImg texdest) {
     unsigned int x, y;
     u32 color;
 
-    for(y=0; y<texsrc.h; y++) {
-        for(x=0; x<texsrc.w; x++) {
+    for (y = 0; y < texsrc.h; y++) {
+        for (x = 0; x < texsrc.w; x++) {
             color = GRRLIB_GetPixelFromtexImg(x, y, texsrc);
-
             GRRLIB_SetPixelTotexImg(x, y, texdest,
                 ((0xFFFFFF - (color >> 8 & 0xFFFFFF)) << 8)  | (color & 0xFF));
         }
@@ -952,14 +1047,14 @@ void GRRLIB_BMFX_Invert(GRRLIB_texImg texsrc, GRRLIB_texImg texdest) {
 /**
  * Flip texture horizontal.
  * @see GRRLIB_FlushTex
- * @param texsrc the texture source.
- * @param texdest the texture destination.
+ * @param texsrc The texture source.
+ * @param texdest The texture destination.
  */
 void GRRLIB_BMFX_FlipH(GRRLIB_texImg texsrc, GRRLIB_texImg texdest) {
     unsigned int x, y, txtWidth = texsrc.w - 1;
 
-    for(y=0; y<texsrc.h; y++) {
-        for(x=0; x<texsrc.w; x++) {
+    for (y = 0; y < texsrc.h; y++) {
+        for (x = 0; x < texsrc.w; x++) {
             GRRLIB_SetPixelTotexImg(txtWidth - x, y, texdest,
                 GRRLIB_GetPixelFromtexImg(x, y, texsrc));
         }
@@ -969,14 +1064,14 @@ void GRRLIB_BMFX_FlipH(GRRLIB_texImg texsrc, GRRLIB_texImg texdest) {
 /**
  * Flip texture vertical.
  * @see GRRLIB_FlushTex
- * @param texsrc the texture source.
- * @param texdest the texture destination.
+ * @param texsrc The texture source.
+ * @param texdest The texture destination.
  */
 void GRRLIB_BMFX_FlipV(GRRLIB_texImg texsrc, GRRLIB_texImg texdest) {
     unsigned int x, y, texHeight = texsrc.h - 1;
 
-    for(y=0; y<texsrc.h; y++) {
-        for(x=0; x<texsrc.w; x++) {
+    for (y = 0; y < texsrc.h; y++) {
+        for (x = 0; x < texsrc.w; x++) {
             GRRLIB_SetPixelTotexImg(x, texHeight - y, texdest,
                 GRRLIB_GetPixelFromtexImg(x, y, texsrc));
         }
@@ -984,11 +1079,11 @@ void GRRLIB_BMFX_FlipV(GRRLIB_texImg texsrc, GRRLIB_texImg texdest) {
 }
 
 /**
- * Blur a texture.
+ * A texture effect. (Blur)
  * @see GRRLIB_FlushTex
- * @param texsrc the texture source.
- * @param texdest the texture destination.
- * @param factor the blur factor.
+ * @param texsrc The texture source.
+ * @param texdest The texture destination.
+ * @param factor The blur factor.
  */
 void GRRLIB_BMFX_Blur(GRRLIB_texImg texsrc, GRRLIB_texImg texdest, int factor) {
     int numba = (1+(factor<<1))*(1+(factor<<1));
@@ -1016,7 +1111,7 @@ void GRRLIB_BMFX_Blur(GRRLIB_texImg texsrc, GRRLIB_texImg texdest, int factor) {
                     else if (k >= texsrc.w) { colours[tmp] = thiscol; }
                     else if (l < 0) { colours[tmp] = thiscol; }
                     else if (l >= texsrc.h) { colours[tmp] = thiscol; }
-                    else{ colours[tmp] = GRRLIB_GetPixelFromtexImg(k, l, texsrc); }
+                    else { colours[tmp] = GRRLIB_GetPixelFromtexImg(k, l, texsrc); }
                     tmp++;
                 }
             }
@@ -1039,10 +1134,10 @@ void GRRLIB_BMFX_Blur(GRRLIB_texImg texsrc, GRRLIB_texImg texdest, int factor) {
 }
 
 /**
- * A texture effect.
+ * A texture effect. (Pixelate)
  * @see GRRLIB_FlushTex
- * @param texsrc the texture source.
- * @param texdest the texture destination.
+ * @param texsrc The texture source.
+ * @param texdest The texture destination.
  * @param factor The factor level of the effect.
  */
 void GRRLIB_BMFX_Pixelate(GRRLIB_texImg texsrc, GRRLIB_texImg texdest, int factor) {
@@ -1050,11 +1145,11 @@ void GRRLIB_BMFX_Pixelate(GRRLIB_texImg texsrc, GRRLIB_texImg texdest, int facto
     unsigned int xx, yy;
     u32 rgb;
 
-    for(x=0; x<texsrc.w-1-factor; x+= factor) {
-        for(y=0; y<texsrc.h-1-factor; y+=factor) {
-            rgb=GRRLIB_GetPixelFromtexImg(x, y, texsrc);
-                for(xx=x; xx<x+factor; xx++) {
-                    for(yy=y; yy<y+factor; yy++) {
+    for (x = 0; x < texsrc.w - 1 - factor; x += factor) {
+        for (y = 0; y < texsrc.h - 1 - factor; y +=factor) {
+            rgb = GRRLIB_GetPixelFromtexImg(x, y, texsrc);
+                for (xx = x; xx < x + factor; xx++) {
+                    for (yy = y; yy < y + factor; yy++) {
                         GRRLIB_SetPixelTotexImg(xx, yy, texdest, rgb);
                     }
                 }
@@ -1063,10 +1158,10 @@ void GRRLIB_BMFX_Pixelate(GRRLIB_texImg texsrc, GRRLIB_texImg texdest, int facto
 }
 
 /**
- * A texture effect.
+ * A texture effect. (Scatter)
  * @see GRRLIB_FlushTex
- * @param texsrc the texture source.
- * @param texdest the texture destination.
+ * @param texsrc The texture source.
+ * @param texdest The texture destination.
  * @param factor The factor level of the effect.
  */
 void GRRLIB_BMFX_Scatter(GRRLIB_texImg texsrc, GRRLIB_texImg texdest, int factor) {
@@ -1075,12 +1170,12 @@ void GRRLIB_BMFX_Scatter(GRRLIB_texImg texsrc, GRRLIB_texImg texdest, int factor
     u32 val3, val4;
     int factorx2 = factor*2;
 
-    for(y=0; y<texsrc.h; y++) {
-        for(x=0; x<texsrc.w; x++) {
+    for (y = 0; y < texsrc.h; y++) {
+        for (x = 0; x < texsrc.w; x++) {
             val1 = x + (int) (factorx2 * (rand() / (RAND_MAX + 1.0))) - factor;
             val2 = y + (int) (factorx2 * (rand() / (RAND_MAX + 1.0))) - factor;
 
-            if((val1 >= texsrc.w) || (val1 <0) || (val2 >= texsrc.h) || (val2 <0)) {
+            if ((val1 >= texsrc.w) || (val1 < 0) || (val2 >= texsrc.h) || (val2 < 0)) {
             }
             else {
                 val3 = GRRLIB_GetPixelFromtexImg(x, y, texsrc);
@@ -1093,17 +1188,13 @@ void GRRLIB_BMFX_Scatter(GRRLIB_texImg texsrc, GRRLIB_texImg texdest, int factor
 }
 
 /**
- *
- * @param v
- * @param color
- * @param n
- * @param fmt
+ * Draws a vector.
  */
 void GRRLIB_GXEngine(Vector v[], u32 color, long n, u8 fmt) {
     int i;
 
     GX_Begin(fmt, GX_VTXFMT0, n);
-    for(i=0; i<n; i++) {
+    for (i = 0; i < n; i++) {
         GX_Position3f32(v[i].x, v[i].y,  v[i].z);
         GX_Color1u32(color);
     }
@@ -1121,40 +1212,38 @@ void GRRLIB_Init() {
 
     VIDEO_Init();
     rmode = VIDEO_GetPreferredMode(NULL);
-    if(rmode == NULL)
+    if (rmode == NULL)
         return;
 
+    // Widescreen patch by CashMan's Productions (http://www.CashMan-Productions.fr.nf)
+    if (CONF_GetAspectRatio() == CONF_ASPECT_16_9) {
+        rmode->viWidth = 678;
+        rmode->viXOrigin = (VI_MAX_WIDTH_NTSC - 678)/2;
+    }
 
-if( CONF_GetAspectRatio() )
-{
-	rmode->viWidth = 678;
-	rmode->viXOrigin = (VI_MAX_WIDTH_PAL - 678)/2;
-}
-
-
-    VIDEO_Configure (rmode);
+    VIDEO_Configure(rmode);
     xfb[0] = (u32 *)MEM_K0_TO_K1(SYS_AllocateFramebuffer(rmode));
     xfb[1] = (u32 *)MEM_K0_TO_K1(SYS_AllocateFramebuffer(rmode));
-    if(xfb[0] == NULL || xfb[1] == NULL)
+    if (xfb[0] == NULL || xfb[1] == NULL)
         return;
 
     VIDEO_SetNextFramebuffer(xfb[fb]);
-    VIDEO_SetBlack(FALSE);
+    VIDEO_SetBlack(true);
     VIDEO_Flush();
     VIDEO_WaitVSync();
-    if(rmode->viTVMode&VI_NON_INTERLACE)
+    if (rmode->viTVMode&VI_NON_INTERLACE)
         VIDEO_WaitVSync();
 
     gp_fifo = (u8 *) memalign(32, DEFAULT_FIFO_SIZE);
-    if(gp_fifo == NULL)
+    if (gp_fifo == NULL)
         return;
     memset(gp_fifo, 0, DEFAULT_FIFO_SIZE);
     GX_Init(gp_fifo, DEFAULT_FIFO_SIZE);
 
-    // clears the bg to color and clears the z buffer
+    // Clears the BG to color and clears the z-buffer
     GX_SetCopyClear((GXColor){ 0, 0, 0, 0xff }, GX_MAX_Z24);
 
-    // other gx setup
+    // Other GX setup
     yscale = GX_GetYScaleFactor(rmode->efbHeight, rmode->xfbHeight);
     xfbHeight = GX_SetDispCopyYScale(yscale);
     GX_SetScissor(0, 0, rmode->fbWidth, rmode->efbHeight);
@@ -1171,10 +1260,10 @@ if( CONF_GetAspectRatio() )
     GX_SetDispCopyGamma(GX_GM_1_0);
 
 
-    // setup the vertex descriptor
-    // tells the flipper to expect direct data
+    // Setup the vertex descriptor
+    // Tells the flipper to expect direct data
     GX_ClearVtxDesc();
-    GX_InvVtxCache ();
+    GX_InvVtxCache();
     GX_InvalidateTexAll();
 
     GX_SetVtxDesc(GX_VA_TEX0, GX_NONE);
@@ -1182,22 +1271,22 @@ if( CONF_GetAspectRatio() )
     GX_SetVtxDesc(GX_VA_CLR0, GX_DIRECT);
 
 
-    GX_SetVtxAttrFmt (GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
-    GX_SetVtxAttrFmt (GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GX_SetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GX_SetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
     GX_SetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
-    GX_SetZMode (GX_FALSE, GX_LEQUAL, GX_TRUE);
+    GX_SetZMode(GX_FALSE, GX_LEQUAL, GX_TRUE);
 
     GX_SetNumChans(1);
     GX_SetNumTexGens(1);
-    GX_SetTevOp (GX_TEVSTAGE0, GX_PASSCLR);
+    GX_SetTevOp(GX_TEVSTAGE0, GX_PASSCLR);
     GX_SetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR0A0);
     GX_SetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
 
     guMtxIdentity(GXmodelView2D);
-    guMtxTransApply (GXmodelView2D, GXmodelView2D, 0.0F, 0.0F, -50.0F);
+    guMtxTransApply(GXmodelView2D, GXmodelView2D, 0.0F, 0.0F, -50.0F);
     GX_LoadPosMtxImm(GXmodelView2D, GX_PNMTX0);
 
-    guOrtho(perspective,0, 479, 0, 639, 0, 300.0F);
+    guOrtho(perspective, 0, rmode->efbHeight, 0, rmode->fbWidth, 0, 300.0f);
     GX_LoadProjectionMtx(perspective, GX_ORTHOGRAPHIC);
 
     GX_SetViewport(0, 0, rmode->fbWidth, rmode->efbHeight, 0, 1);
@@ -1205,6 +1294,10 @@ if( CONF_GetAspectRatio() )
     GX_SetAlphaUpdate(GX_TRUE);
 
     GX_SetCullMode(GX_CULL_NONE);
+    VIDEO_SetBlack(false);
+    
+     // Default settings
+    GRRLIB_Settings.antialias = true;
 }
 
 /**
@@ -1213,7 +1306,7 @@ if( CONF_GetAspectRatio() )
 void GRRLIB_Render() {
     GX_DrawDone();
 
-    fb ^= 1;        // flip framebuffer
+    fb ^= 1;        // Flip framebuffer
     GX_SetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
     GX_SetColorUpdate(GX_TRUE);
     GX_CopyDisp(xfb[fb], GX_TRUE);
@@ -1226,43 +1319,49 @@ void GRRLIB_Render() {
  * Call this before exiting your application.
  */
 void GRRLIB_Exit() {
+    GX_SetClipMode( GX_CLIP_DISABLE );
+    GX_SetScissor( 0, 0, rmode->fbWidth, rmode->efbHeight );
+    GRRLIB_FillScreen( 0x000000FF );
+    GRRLIB_Render();
     GX_Flush();
     GX_AbortFrame();
 
-    if(xfb[0] != NULL) {
+    if (xfb[0] != NULL) {
         free(MEM_K1_TO_K0(xfb[0]));
         xfb[0] = NULL;
     }
-    if(xfb[1] != NULL) {
+    if (xfb[1] != NULL) {
         free(MEM_K1_TO_K0(xfb[1]));
         xfb[1] = NULL;
     }
-    if(gp_fifo != NULL) {
+    if (gp_fifo != NULL) {
         free(gp_fifo);
         gp_fifo = NULL;
     }
 }
 
-
-
-
-
 /**
  * Make a PNG screenshot on the SD card.
- * @param File Name of the file to write.
- * @return True if everything worked, false otherwise.
+ * libfat is required to use the function.
+ * @param File name of the file to write.
+ * @return true if every thing worked, false otherwise.
  */
-bool GRRLIB_ScrShot(const char* File) {
-    IMGCTX ctx;
-	int ErrorCode = -1;
+bool GRRLIB_ScrShot(const char* File)
+{
+    int ErrorCode = -1;
+    IMGCTX pngContext;
 
-    if(fatInitDefault() && (ctx = PNGU_SelectImageFromDevice(File)))
-    {
-		ErrorCode = PNGU_EncodeFromYCbYCr(ctx, 640, 480, xfb[fb], 0);
-        PNGU_ReleaseImageContext(ctx);
+    if(fatInitDefault() && (pngContext = PNGU_SelectImageFromDevice(File))) {
+        ErrorCode = PNGU_EncodeFromYCbYCr(pngContext, rmode->fbWidth, rmode->efbHeight, xfb[fb], 0);
+        PNGU_ReleaseImageContext(pngContext);
     }
-	return !ErrorCode;
+    return !ErrorCode;
 }
+
+
+
+
+
 
 /**
  * Make a snapshot of the screen in a texture.
