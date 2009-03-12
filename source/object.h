@@ -14,7 +14,7 @@ class Object
 {
 public:
 	Object();
-	~Object();
+	virtual ~Object();
 	float GetLeft();
 	float GetTop();
 	unsigned int GetWidth();

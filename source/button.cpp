@@ -11,17 +11,17 @@
  */
 Button::Button() : Object()
 {
-    this->Type = btnStdMenu;
+    Type = btnStdMenu;
     Init();
 }
 
 /**
  * Constructor for the Button class.
-  * @param[in] Type Button type.
+  * @param[in] NewType Button type.
  */
-Button::Button(buttonType Type) : Object()
+Button::Button(buttonType NewType) : Object()
 {
-    this->Type = Type;
+    Type = NewType;
     Init();
 }
 
@@ -91,20 +91,20 @@ void Button::Paint()
 
 /**
  * Set text height of the button.
- * @param[in] Text height of the button.
+ * @param[in] NewHeight height of the button.
  */
-void Button::SetTextHeight(unsigned int TextHeight)
+void Button::SetTextHeight(unsigned int NewHeight)
 {
-    this->TextHeight = TextHeight;
+    TextHeight = NewHeight;
 }
 
 /**
  * Set caption on the button.
- * @param[in] Caption Text to put on the button.
+ * @param[in] NewCaption Text to put on the button.
  */
-void Button::SetCaption(const char *Caption)
+void Button::SetCaption(const char *NewCaption)
 {
-	strncpy(this->Caption, Caption, 50);
+	strncpy(Caption, NewCaption, 50);
 	TextWidth = GRRLIB_TextWidth(this->Caption, TextHeight);
 	TextTop = Top + (Height / 2) - (TextHeight / 2);
 	TextLeft = Left + (Width / 2) - (TextWidth / 2);
@@ -116,18 +116,18 @@ void Button::SetCaption(const char *Caption)
 
 /**
  * Set the button state, selected or not.
- * @param[in] Selected Set to true to select the button, false otherwise.
+ * @param[in] IsSelected Set to true to select the button, false otherwise.
  */
-void Button::SetSelected(bool Selected)
+void Button::SetSelected(bool IsSelected)
 {
-	this->Selected = Selected;
+	Selected = IsSelected;
 }
 
 /**
  * Set the text color on the button.
- * @param[in] TextColor Color of the text when the button is not selected.
+ * @param[in] NewColor Color of the text when the button is not selected.
  */
-void Button::SetTextColor(u32 TextColor)
+void Button::SetTextColor(u32 NewColor)
 {
-	this->TextColor = TextColor;
+	TextColor = NewColor;
 }

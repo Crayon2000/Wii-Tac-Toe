@@ -45,19 +45,24 @@ Game::Game()
 
     Hand->SetVisible(false);
 
-	ExitButton = new Button[3];
+	ExitButton1 = new Button(btnHome);
+	ExitButton1->SetLeft(430);
+	ExitButton1->SetTop(20);
+    ExitButton1->SetTextHeight(20);
+	ExitButton1->SetCaption(Lang->Text("Close"));
 
-	ExitButton[0].SetLeft((640 / 2) - (ExitButton[0].GetWidth() / 2));
-	ExitButton[0].SetTop(100);
-	ExitButton[0].SetCaption(Lang->Text("Close"));
+	ExitButton2 = new Button(btnHomeMenu);
+	ExitButton2->SetLeft((640 / 2) + 20);
+	ExitButton2->SetTop(165);
+	ExitButton2->SetCaption(Lang->Text("Reset"));
 
-	ExitButton[1].SetLeft((640 / 2) - (ExitButton[1].GetWidth() / 2));
-	ExitButton[1].SetTop(200);
-	ExitButton[1].SetCaption(Lang->Text("Reset"));
-
-	ExitButton[2].SetLeft((640 / 2) - (ExitButton[2].GetWidth() / 2));
-	ExitButton[2].SetTop(300);
-	ExitButton[2].SetCaption(Lang->Text("Return to Loader"));
+	ExitButton3 = new Button(btnHomeMenu);
+	ExitButton3->SetLeft((640 / 2) - ExitButton2->GetWidth() - 20);
+	ExitButton3->SetTop(165);
+    //if(!!*(u32 *)0x80001800) // that returns true for hbc, false for load-from-trucha-signed-disc. think it also returns false for tp hack
+    //    ExitButton3->SetCaption("Return to HBC");
+	//else
+        ExitButton3->SetCaption(Lang->Text("Return to Loader"));
 
 	MenuButton = new Button[2];
 
@@ -99,7 +104,9 @@ Game::~Game()
 	delete GameGrid;
 	delete Hand;
 	delete Lang;
-	delete[] ExitButton;
+	delete ExitButton1;
+    delete ExitButton2;
+    delete ExitButton3;
 	delete[] WTTPlayer;
 }
 
@@ -172,7 +179,7 @@ void Game::StartSreen()
 		GRRLIB_Printf2(TextLeft, 400, TempText, 20, 0x000000);
 
 		GRRLIB_DrawImg(0, 0, GRRLIB_GetTexture(), 0, 1.0, 1.0, 0xFFFFFFFF);
-		CopiedImg = GRRLIB_Screen2Texture();
+        CopiedImg = GRRLIB_Screen2Texture();
 	}
 	else
 	{
@@ -293,18 +300,13 @@ void Game::ExitScreen()
 				break;
 		}
 
-		GRRLIB_initTexture();	// Init text layer
 		GRRLIB_Rectangle(0, 0, 640, 480, 0x000000CC, 1); // Draw a black rectangle over it
 
-		GRRLIB_Rectangle(0, 0, 640, 63, 0x000000FF, 1);
-		GRRLIB_Rectangle(0, 63, 640, 2, 0x848284FF, 1);
+        GRRLIB_Rectangle(0, 78, 640, 2, 0x848284FF, 1);
 
-		GRRLIB_Rectangle(0, 383, 640, 2, 0x848284FF, 1);
-		GRRLIB_Rectangle(0, 385, 640, 95, 0x000000FF, 1);
+        GRRLIB_Rectangle(0, 383, 640, 2, 0x848284FF, 1);
+        GRRLIB_Rectangle(0, 385, 640, 95, 0x000000FF, 1);
 
-		GRRLIB_Printf2(40, 17, Lang->Text("HOME Menu"), 20, 0xFFFFFF);
-
-		GRRLIB_DrawImg(0, 0, GRRLIB_GetTexture(), 0, 1.0, 1.0, 0xFFFFFFFF);
 		CopiedImg = GRRLIB_Screen2Texture();
 	}
 	else
@@ -312,26 +314,33 @@ void Game::ExitScreen()
 		GRRLIB_DrawImg(0, 0, CopiedImg, 0, 1, 1, 0xFFFFFFFF);
 	}
 
+    if(GRRLIB_PtInRect(0, 0, 640, 78, Hand->GetLeft(), Hand->GetTop()))
+        GRRLIB_Rectangle(0, 0, 640, 78, 0x30B6EBFF, 1);
+    else
+        GRRLIB_Rectangle(0, 0, 640, 78, 0x000000FF, 1);
+
 	GRRLIB_initTexture();	// Init text layer
 
-	ExitButton[0].SetSelected(false);
-	ExitButton[1].SetSelected(false);
-	ExitButton[2].SetSelected(false);
-	if(ExitButton[0].IsInside(Hand->GetLeft(), Hand->GetTop()))
+    GRRLIB_Printf2(30, 20, Lang->Text("HOME Menu"), 30, 0xFFFFFF);
+
+	ExitButton1->SetSelected(false);
+	ExitButton2->SetSelected(false);
+	ExitButton3->SetSelected(false);
+	if(GRRLIB_PtInRect(0, 0, 640, 78, Hand->GetLeft(), Hand->GetTop()))
 	{
-		ExitButton[0].SetSelected(true);
+		ExitButton1->SetSelected(true);
 		ButtonOn(0);
 		SelectedButton = 0;
 	}
-	else if(ExitButton[1].IsInside(Hand->GetLeft(), Hand->GetTop()))
+	else if(ExitButton2->IsInside(Hand->GetLeft(), Hand->GetTop()))
 	{
-		ExitButton[1].SetSelected(true);
+		ExitButton2->SetSelected(true);
 		ButtonOn(1);
 		SelectedButton = 1;
 	}
-	else if(ExitButton[2].IsInside(Hand->GetLeft(), Hand->GetTop()))
+	else if(ExitButton3->IsInside(Hand->GetLeft(), Hand->GetTop()))
 	{
-		ExitButton[2].SetSelected(true);
+		ExitButton3->SetSelected(true);
 		ButtonOn(2);
 		SelectedButton = 2;
 	}
@@ -339,9 +348,9 @@ void Game::ExitScreen()
 	{
 		SelectedButton = -1;
 	}
-	ExitButton[0].Paint();
-	ExitButton[1].Paint();
-	ExitButton[2].Paint();
+	ExitButton1->Paint();
+	ExitButton2->Paint();
+	ExitButton3->Paint();
 	GRRLIB_DrawImg(0, 0, GRRLIB_GetTexture(), 0, 1.0, 1.0, 0xFFFFFFFF);
 }
 
@@ -485,7 +494,7 @@ bool Game::ControllerManager()
 							if(CopiedImg.data)
 								free(CopiedImg.data);
 							CopiedImg = GRRLIB_Screen2Texture();
-							GRRLIB_DrawImg_FadeOut(CopiedImg, 1, 1, 4);
+							GRRLIB_DrawImg_FadeOut(CopiedImg, 1, 1, 3);
 							return true; // Exit to loader
 					}
 				}

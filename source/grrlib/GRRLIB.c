@@ -1341,6 +1341,10 @@ GRRLIB_texImg GRRLIB_Screen2Texture() {
 
     tex.w = 640;
     tex.h = 480;
+    tex.handlex = 0; tex.handley = 0;
+    tex.offsetx = 0; tex.offsety = 0;
+    tex.tiledtex = false;
+    GRRLIB_SetHandle( &tex, 0, 0 );
 	tex.data = memalign(32, tex.w * tex.h * 4);
 	if(tex.data != NULL) {
         GX_SetTexCopySrc(0, 0, 640, 480);

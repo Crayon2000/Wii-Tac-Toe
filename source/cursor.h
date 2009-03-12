@@ -16,8 +16,6 @@ public:
 	~Cursor();
 	void Paint();
 	void SetPlayer(u8);
-	float GetLeftCorrected();
-	float GetTopCorrected();
 private:
 	u8 Player;
 	GRRLIB_texImg CursorImgX;

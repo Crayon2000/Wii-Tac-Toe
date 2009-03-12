@@ -54,7 +54,9 @@ private:
 	u16 TieGame;
 	bool RoundFinished;
 
-	Button *ExitButton;
+	Button *ExitButton1;
+    Button *ExitButton2;
+    Button *ExitButton3;
 	Button *MenuButton;
 	Grid *GameGrid;
 	Language *Lang;
