@@ -84,7 +84,7 @@ Game::Game()
 	SplashImg = GRRLIB_LoadTexture(splash);
 	HoverImgO = GRRLIB_LoadTexture(hover_o);
 	HoverImgX = GRRLIB_LoadTexture(hover_x);
-	CopiedImg.data = NULL;
+	CopiedImg = NULL;
 
 	RUMBLE_Init();
 	NewGame();
@@ -95,10 +95,10 @@ Game::Game()
  */
 Game::~Game()
 {
-	free(GameImg.data);
-	free(SplashImg.data);
-	free(HoverImgX.data);
-	free(HoverImgO.data);
+	GRRLIB_FreeTexture(GameImg);
+	GRRLIB_FreeTexture(SplashImg);
+	GRRLIB_FreeTexture(HoverImgX);
+	GRRLIB_FreeTexture(HoverImgO);
 	FreeMemImg();
 
 	delete GameGrid;
@@ -163,7 +163,7 @@ void Game::Paint()
  */
 void Game::StartSreen()
 {
-	if(CopiedImg.data == NULL)
+	if(CopiedImg == NULL)
 	{	// Copy static element
 		GRRLIB_initTexture();	// Init text layer
 		GRRLIB_DrawImg(0, 0, SplashImg, 0, 1, 1, 0xFFFFFFFF);
@@ -194,7 +194,7 @@ void Game::GameScreen(bool CopyScreen)
 {
 	int TextLeft;
 
-	if(CopiedImg.data == NULL)
+	if(CopiedImg == NULL)
 	{	// Copy static element
 		GRRLIB_initTexture();	// Init text layer
 		// Background image
@@ -288,7 +288,7 @@ void Game::GameScreen(bool CopyScreen)
  */
 void Game::ExitScreen()
 {
-	if(CopiedImg.data == NULL)
+	if(CopiedImg == NULL)
 	{	// Copy static element
 		switch(LastScreen)
 		{
@@ -359,7 +359,7 @@ void Game::ExitScreen()
  */
 void Game::MenuScreen(bool CopyScreen)
 {
-	if(CopiedImg.data == NULL)
+	if(CopiedImg == NULL)
 	{	// Copy static element
 		GRRLIB_initTexture();	// Init text layer
 		GRRLIB_FillScreen(0x000000FF);	// Clear screen
@@ -491,8 +491,8 @@ bool Game::ControllerManager()
 						case 2:
 							ExitScreen();
 							Hand->Paint();
-							if(CopiedImg.data)
-								free(CopiedImg.data);
+							if(CopiedImg)
+								GRRLIB_FreeTexture(CopiedImg);
 							CopiedImg = GRRLIB_Screen2Texture();
 							GRRLIB_DrawImg_FadeOut(CopiedImg, 1, 1, 3);
 							return true; // Exit to loader
@@ -598,10 +598,10 @@ void Game::TurnIsOver()
  */
 void Game::FreeMemImg()
 {
-	if(CopiedImg.data != NULL)
+	if(CopiedImg != NULL)
 	{
-		free(CopiedImg.data);
-		CopiedImg.data = NULL;
+        GRRLIB_FreeTexture(CopiedImg);
+        CopiedImg = NULL;
 	}
 }
 

@@ -25,9 +25,9 @@ Cursor::Cursor() : Object()
  */
 Cursor::~Cursor()
 {
-	free(CursorImgX.data);
-	free(CursorImgO.data);
-    free(CursorShadow.data);
+	GRRLIB_FreeTexture(CursorImgX);
+	GRRLIB_FreeTexture(CursorImgO);
+    GRRLIB_FreeTexture(CursorShadow);
 }
 
 /**

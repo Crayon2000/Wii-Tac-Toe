@@ -18,9 +18,9 @@ public:
 	void SetPlayer(u8);
 private:
 	u8 Player;
-	GRRLIB_texImg CursorImgX;
-	GRRLIB_texImg CursorImgO;
-    GRRLIB_texImg CursorShadow;
+	GRRLIB_texImg *CursorImgX;
+	GRRLIB_texImg *CursorImgO;
+    GRRLIB_texImg *CursorShadow;
 };
 //---------------------------------------------------------------------------
 #endif

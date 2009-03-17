@@ -18,8 +18,8 @@ public:
 	void SetPlayer(unsigned char);
 private:
 	unsigned char Player;
-	GRRLIB_texImg ImgX;
-	GRRLIB_texImg ImgO;
+	GRRLIB_texImg *ImgX;
+	GRRLIB_texImg *ImgO;
 };
 //---------------------------------------------------------------------------
 #endif

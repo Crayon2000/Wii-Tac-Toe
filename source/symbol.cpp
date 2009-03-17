@@ -24,8 +24,8 @@ Symbol::Symbol() : Object()
  */
 Symbol::~Symbol()
 {
-	free(ImgO.data);
-	free(ImgX.data);
+	GRRLIB_FreeTexture(ImgO);
+	GRRLIB_FreeTexture(ImgX);
 }
 
 /**

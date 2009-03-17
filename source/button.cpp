@@ -30,10 +30,10 @@ Button::Button(buttonType NewType) : Object()
  */
 Button::~Button()
 {
-    if(ButtonImgOn.data)
-        free(ButtonImgOn.data);
-    if(ButtonImgOff.data)
-        free(ButtonImgOff.data);
+    if(ButtonImgOn)
+        GRRLIB_FreeTexture(ButtonImgOn);
+    if(ButtonImgOff)
+        GRRLIB_FreeTexture(ButtonImgOff);
 }
 
 /**
@@ -44,11 +44,11 @@ void Button::Init()
     switch(Type)
     {
         case btnHomeMenu:
-            ButtonImgOn.data = NULL;
+            ButtonImgOn = NULL;
             ButtonImgOff = GRRLIB_LoadTexture(button_home);
             break;
         case btnHome:
-            ButtonImgOn.data = NULL;
+            ButtonImgOn = NULL;
             ButtonImgOff = GRRLIB_LoadTexture(home_button);
             break;
         default:
@@ -60,8 +60,8 @@ void Button::Init()
 
 	Left = 0;
 	Top = 0;
-	Width = ButtonImgOff.w;
-	Height = ButtonImgOff.h;
+	Width = ButtonImgOff->w;
+	Height = ButtonImgOff->h;
 
 	TextColor = 0x000000;
 	TextHeight = 14;

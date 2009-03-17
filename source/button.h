@@ -39,8 +39,8 @@ private:
 	unsigned int TextLeft;
 	u32 TextColor;
     buttonType Type;
-	GRRLIB_texImg ButtonImgOn;
-	GRRLIB_texImg ButtonImgOff;
+	GRRLIB_texImg *ButtonImgOn;
+	GRRLIB_texImg *ButtonImgOff;
 };
 //---------------------------------------------------------------------------
 #endif
