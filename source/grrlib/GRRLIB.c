@@ -1126,6 +1126,13 @@ void GRRLIB_Init() {
     if (rmode == NULL)
         return;
 
+	// Video Mode Correction
+    switch (rmode->viTVMode) {
+    	case VI_DEBUG_PAL:	// PAL 50hz 576i
+    		rmode = &TVPal574IntDfScale;
+    		break;
+    }
+
     // Widescreen patch by CashMan's Productions (http://www.CashMan-Productions.fr.nf)
     if (CONF_GetAspectRatio() == CONF_ASPECT_16_9) {
         rmode->viWidth = 678;
@@ -1355,25 +1362,14 @@ u32 GRRLIB_GetColor( u8 r, u8 g, u8 b, u8 a ) {
 GRRLIB_texImg *GRRLIB_Screen2Texture() {
     GRRLIB_texImg *tex = (struct GRRLIB_texImg *)calloc(1, sizeof(GRRLIB_texImg));
 
-/*
-    GX_SetZMode(GX_TRUE, GX_LEQUAL, GX_TRUE);
-    GX_SetColorUpdate(GX_TRUE);
-    GX_SetAlphaUpdate(GX_TRUE);
-    GX_SetTexCopySrc(0, 0, tex->w, tex->h);
-    GX_SetTexCopyDst(tex->w, tex->h, GX_TF_RGBA8, GX_FALSE); // TODO: GX_FALSE is whether to mipmap, this should be 
-    GX_DrawDone();
-    GX_CopyTex(tex->data, GX_TRUE);
-    GX_Flush();
-    GX_PixModeSync(); // TODO: Remove this, put it ONCE after I ind everything
-*/
     if(tex != NULL) {
         tex->w = rmode->fbWidth;
         tex->h = rmode->efbHeight;
         GRRLIB_SetHandle( tex, 0, 0 );
         tex->data = memalign(32, tex->w * tex->h * 4);
         if(tex->data != NULL) {
-            GX_SetTexCopySrc(0, 0, tex->w, tex->h);
-            GX_SetTexCopyDst(tex->w, tex->h, GX_TF_RGBA8, GX_FALSE);
+            GX_SetTexCopySrc(0, 0, rmode->fbWidth, rmode->efbHeight);
+            GX_SetTexCopyDst(rmode->fbWidth, rmode->efbHeight, GX_TF_RGBA8, GX_FALSE);
             GX_CopyTex(tex->data, GX_FALSE);
             GX_PixModeSync();
             GRRLIB_FlushTex(tex);

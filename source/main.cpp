@@ -18,7 +18,7 @@
 //------------------------------------------------------------------------------
 // Externals
 //------------------------------------------------------------------------------
-Mtx GXmodelView2D;
+extern GXRModeObj *rmode;
 u8 HWButton = 0;
 
 /**
@@ -62,10 +62,10 @@ int main(int argc, char **argv)
 	// Wiimote initialization
 	WPAD_Init();
 	WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
-	WPAD_SetVRes(WPAD_CHAN_0, 640, 480);
+	WPAD_SetVRes(WPAD_CHAN_0, rmode->fbWidth, rmode->efbHeight);
 
 	// Game initialization
-	Game *MyGame = new Game();
+	Game *MyGame = new Game(rmode->fbWidth, rmode->efbHeight);
 
 	SYS_SetResetCallback(WiiResetPressed);
 	SYS_SetPowerCallback(WiiPowerPressed);

@@ -18,7 +18,7 @@
 class Game
 {
 public:
-	Game();
+	Game(u16, u16);
 	~Game();
 	void Paint();
 	bool ControllerManager();
@@ -47,10 +47,6 @@ private:
 	signed char SelectedButton;
 	char text[TEXT_SIZE];
 
-	int button_text_height;
-	u8 scrore_height;
-	u8 scrore_width;
-
 	u16 TieGame;
 	bool RoundFinished;
 
@@ -66,6 +62,8 @@ private:
 	GRRLIB_texImg *HoverImgX;
 	GRRLIB_texImg *HoverImgO;
 	GRRLIB_texImg *CopiedImg;
+
+    u16 ScreenWidth, ScreenHeight;
 
 //u8 Text[1228800] ATTRIBUTE_ALIGN (32);      // stores (640 * 480 * 4) texture
 };

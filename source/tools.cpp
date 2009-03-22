@@ -103,11 +103,11 @@ void WIILIGHT_TurnOn()
 /**
  * Replace a string by another string in a string
  * @param[in] txt String to search.
- * @param[in] Avant String to be replaced.
- * @param[in] Apres Replacement string.
+ * @param[in] Before String to be replaced.
+ * @param[in] After Replacement string.
  * @return Pointer to the new string with replaced string, must be freed
  */
-char *str_replace(const char *txt, const char *Avant, const char *Apres)
+char *str_replace(const char *txt, const char *Before, const char *After)
 {
 	const char *pos;
 	char *TxtRetour;
@@ -115,7 +115,7 @@ char *str_replace(const char *txt, const char *Avant, const char *Apres)
 	size_t Long;
 	size_t TailleAllouee;
 
-	pos = strstr(txt, Avant);
+	pos = strstr(txt, Before);
 
 	if(pos == NULL)
 	{
@@ -123,35 +123,35 @@ char *str_replace(const char *txt, const char *Avant, const char *Apres)
 	}
 
 	Long = (size_t)pos - (size_t)txt;
-	TailleAllouee = Long + strlen(Apres) + 1;
+	TailleAllouee = Long + strlen(After) + 1;
 	TxtRetour = (char*)malloc(TailleAllouee);
 	PosTxtRetour = 0;
 
 	strncpy(TxtRetour + PosTxtRetour, txt, Long);
 	PosTxtRetour += Long;
-	txt = pos + strlen(Avant);
+	txt = pos + strlen(Before);
 
-	Long = strlen(Apres);
-	strncpy(TxtRetour + PosTxtRetour, Apres, Long);
+	Long = strlen(After);
+	strncpy(TxtRetour + PosTxtRetour, After, Long);
 	PosTxtRetour += Long;
 
-	pos = strstr(txt, Avant);
+	pos = strstr(txt, Before);
 	while(pos != NULL)
 	{
 		Long = (size_t)pos - (size_t)txt;
-		TailleAllouee += Long + strlen(Apres);
+		TailleAllouee += Long + strlen(After);
 		TxtRetour = (char *)realloc(TxtRetour, TailleAllouee);
 
 		strncpy(TxtRetour + PosTxtRetour, txt, Long);
 		PosTxtRetour += Long;
 
-		txt = pos + strlen(Avant);
+		txt = pos + strlen(Before);
 
-		Long = strlen(Apres);
-		strncpy(TxtRetour + PosTxtRetour, Apres, Long);
+		Long = strlen(After);
+		strncpy(TxtRetour + PosTxtRetour, After, Long);
 		PosTxtRetour += Long;
 
-		pos = strstr(txt, Avant);
+		pos = strstr(txt, Before);
 	}
 
 	Long = strlen(txt) + 1;

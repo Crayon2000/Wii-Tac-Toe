@@ -30,14 +30,12 @@ static Point Table[3][3] = {
 /**
  * Constructor for the Game class.
  */
-Game::Game()
+Game::Game(u16 GameScreenWidth, u16 GameScreenHeight)
 {
 	srand(time(NULL));
 
-	//button_text_height = button_text_high / 256;
-
-	//scrore_height = font1_high / 256;
-	//scrore_width = font1_width;
+    ScreenWidth = GameScreenWidth;
+    ScreenHeight = GameScreenHeight;
 
  	GameGrid = new Grid();
 	Hand = new Cursor();
@@ -52,12 +50,12 @@ Game::Game()
 	ExitButton1->SetCaption(Lang->Text("Close"));
 
 	ExitButton2 = new Button(btnHomeMenu);
-	ExitButton2->SetLeft((640 / 2) + 20);
+	ExitButton2->SetLeft((ScreenWidth / 2) + 20);
 	ExitButton2->SetTop(165);
 	ExitButton2->SetCaption(Lang->Text("Reset"));
 
 	ExitButton3 = new Button(btnHomeMenu);
-	ExitButton3->SetLeft((640 / 2) - ExitButton2->GetWidth() - 20);
+	ExitButton3->SetLeft((ScreenWidth / 2) - ExitButton2->GetWidth() - 20);
 	ExitButton3->SetTop(165);
     //if(!!*(u32 *)0x80001800) // that returns true for hbc, false for load-from-trucha-signed-disc. think it also returns false for tp hack
     //    ExitButton3->SetCaption("Return to HBC");
@@ -66,11 +64,11 @@ Game::Game()
 
 	MenuButton = new Button[2];
 
-	MenuButton[0].SetLeft((640 / 2) - (MenuButton[0].GetWidth() / 2));
+	MenuButton[0].SetLeft((ScreenWidth / 2) - (MenuButton[0].GetWidth() / 2));
 	MenuButton[0].SetTop(150);
 	MenuButton[0].SetCaption(Lang->Text("2 Players (1 Wiimote)"));
 
-	MenuButton[1].SetLeft((640 / 2) - (MenuButton[1].GetWidth() / 2));
+	MenuButton[1].SetLeft((ScreenWidth / 2) - (MenuButton[1].GetWidth() / 2));
 	MenuButton[1].SetTop(250);
 	MenuButton[1].SetCaption(Lang->Text("1 Player (Vs AI)"));
 
@@ -144,17 +142,13 @@ void Game::Paint()
 	if(CurrentScreen != START_SCREEN &&
 		WPAD_Probe(WPAD_CHAN_0, NULL) == WPAD_ERR_NO_CONTROLLER)
 	{	// Controller is disconnected
-		GRRLIB_Rectangle(0, 0, 640, 480, 0x000000B2, 1);
+		GRRLIB_Rectangle(0, 0, ScreenWidth, ScreenHeight, 0x000000B2, 1);
 	}
 	else
 	{
 		// Draw Cursor
 		Hand->SetPlayer(WTTPlayer[CurrentPlayer].GetSign());
 		Hand->Paint();
-/*
-		snprintf(text, TEXT_SIZE, "X = %.02f; Y = %.02f",
-			Hand->GetLeftCorrected(), Hand->GetTopCorrected());
-*/
 	}
 }
 
@@ -189,6 +183,7 @@ void Game::StartSreen()
 
 /**
  * Draw the game screen.
+ * @param[in] CopyScreen If true the screen is copied to a buffer.
  */
 void Game::GameScreen(bool CopyScreen)
 {
@@ -300,12 +295,12 @@ void Game::ExitScreen()
 				break;
 		}
 
-		GRRLIB_Rectangle(0, 0, 640, 480, 0x000000CC, 1); // Draw a black rectangle over it
+		GRRLIB_Rectangle(0, 0, ScreenWidth, ScreenHeight, 0x000000CC, 1); // Draw a black rectangle over it
 
-        GRRLIB_Rectangle(0, 78, 640, 2, 0x848284FF, 1);
+        GRRLIB_Rectangle(0, 78, ScreenWidth, 2, 0x848284FF, 1);
 
-        GRRLIB_Rectangle(0, 383, 640, 2, 0x848284FF, 1);
-        GRRLIB_Rectangle(0, 385, 640, 95, 0x000000FF, 1);
+        GRRLIB_Rectangle(0, 383, ScreenWidth, 2, 0x848284FF, 1);
+        GRRLIB_Rectangle(0, 385, ScreenWidth, 95, 0x000000FF, 1);
 
 		CopiedImg = GRRLIB_Screen2Texture();
 	}
@@ -314,10 +309,10 @@ void Game::ExitScreen()
 		GRRLIB_DrawImg(0, 0, CopiedImg, 0, 1, 1, 0xFFFFFFFF);
 	}
 
-    if(GRRLIB_PtInRect(0, 0, 640, 78, Hand->GetLeft(), Hand->GetTop()))
-        GRRLIB_Rectangle(0, 0, 640, 78, 0x30B6EBFF, 1);
+    if(GRRLIB_PtInRect(0, 0, ScreenWidth, 78, Hand->GetLeft(), Hand->GetTop()))
+        GRRLIB_Rectangle(0, 0, ScreenWidth, 78, 0x30B6EBFF, 1);
     else
-        GRRLIB_Rectangle(0, 0, 640, 78, 0x000000FF, 1);
+        GRRLIB_Rectangle(0, 0, ScreenWidth, 78, 0x000000FF, 1);
 
 	GRRLIB_initTexture();	// Init text layer
 
@@ -326,7 +321,7 @@ void Game::ExitScreen()
 	ExitButton1->SetSelected(false);
 	ExitButton2->SetSelected(false);
 	ExitButton3->SetSelected(false);
-	if(GRRLIB_PtInRect(0, 0, 640, 78, Hand->GetLeft(), Hand->GetTop()))
+	if(GRRLIB_PtInRect(0, 0, ScreenWidth, 78, Hand->GetLeft(), Hand->GetTop()))
 	{
 		ExitButton1->SetSelected(true);
 		ButtonOn(0);
@@ -356,6 +351,7 @@ void Game::ExitScreen()
 
 /**
  * Draw the menu screen.
+ * @param[in] CopyScreen If true the screen is copied to a buffer.
  */
 void Game::MenuScreen(bool CopyScreen)
 {
@@ -363,16 +359,16 @@ void Game::MenuScreen(bool CopyScreen)
 	{	// Copy static element
 		GRRLIB_initTexture();	// Init text layer
 		GRRLIB_FillScreen(0x000000FF);	// Clear screen
-		for(int y = 0; y <=480; y+=8)
+		for(int y = 0; y <=ScreenHeight; y+=8)
 		{
-			GRRLIB_Rectangle(0, y, 640, 2, 0xB0B0B030, 1);
+			GRRLIB_Rectangle(0, y, ScreenWidth, 2, 0xB0B0B030, 1);
 		}
 
-		GRRLIB_Rectangle(0, 0, 640, 63, 0x000000FF, 1);
-		GRRLIB_Rectangle(0, 63, 640, 2, 0xFFFFFFFF, 1);
+		GRRLIB_Rectangle(0, 0, ScreenWidth, 63, 0x000000FF, 1);
+		GRRLIB_Rectangle(0, 63, ScreenWidth, 2, 0xFFFFFFFF, 1);
 
-		GRRLIB_Rectangle(0, 383, 640, 2, 0xFFFFFFFF, 1);
-		GRRLIB_Rectangle(0, 385, 640, 95, 0x000000FF, 1);
+		GRRLIB_Rectangle(0, 383, ScreenWidth, 2, 0xFFFFFFFF, 1);
+		GRRLIB_Rectangle(0, 385, ScreenWidth, 95, 0x000000FF, 1);
 
 		char VersionText[TEXT_SIZE] = "";
 		sprintf(VersionText, Lang->Text("Ver. %s"), "0.5");
@@ -416,7 +412,6 @@ void Game::MenuScreen(bool CopyScreen)
 
 /**
  * Controls all inputs.
- * @param[in] Buttons Buttons down.
  * @return True to exit to loader, false otherwise.
  */
 bool Game::ControllerManager()
@@ -429,8 +424,8 @@ bool Game::ControllerManager()
 	if(WPadData0->ir.valid)
 	{
         // I don't understand this calculation but it works
-		Hand->SetLeft((WPadData0->ir.x / 640 * (640 + Hand->GetWidth() * 2)) - Hand->GetWidth());
-		Hand->SetTop((WPadData0->ir.y / 480 * (480 + Hand->GetHeight() * 2)) - Hand->GetHeight());
+		Hand->SetLeft((WPadData0->ir.x / ScreenWidth * (ScreenWidth + Hand->GetWidth() * 2)) - Hand->GetWidth());
+		Hand->SetTop((WPadData0->ir.y / ScreenHeight * (ScreenHeight + Hand->GetHeight() * 2)) - Hand->GetHeight());
 		Hand->SetAngle(WPadData0->orient.roll);
         Hand->SetVisible(true);
 	}
