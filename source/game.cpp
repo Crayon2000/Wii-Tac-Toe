@@ -3,7 +3,6 @@
 #include <string.h>
 #include <gccore.h>
 #include <wiiuse/wpad.h>
-#include <fat.h>
 #include <ogc/conf.h>
 #include "grrlib/GRRLIB.h"
 #include "tools.h"
@@ -489,6 +488,8 @@ bool Game::ControllerManager()
 							if(CopiedImg)
 								GRRLIB_FreeTexture(CopiedImg);
 							CopiedImg = GRRLIB_Screen2Texture();
+                            WPAD_Rumble(WPAD_CHAN_0, 0); // Rumble off, just in case
+                            WPAD_Rumble(WPAD_CHAN_1, 0); // Rumble off, just in case
 							GRRLIB_DrawImg_FadeOut(CopiedImg, 1, 1, 3);
 							return true; // Exit to loader
 					}

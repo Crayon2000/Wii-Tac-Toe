@@ -35,7 +35,6 @@ Language::~Language()
  */
 const char *Language::Text(const char *From)
 {
-
 	mxml_node_t *Text_Node;
 
 	if(From == NULL)
