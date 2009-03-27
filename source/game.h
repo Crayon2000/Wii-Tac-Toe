@@ -59,8 +59,7 @@ private:
 
 	GRRLIB_texImg *GameImg;
 	GRRLIB_texImg *SplashImg;
-	GRRLIB_texImg *HoverImgX;
-	GRRLIB_texImg *HoverImgO;
+	GRRLIB_texImg *HoverImg;
 	GRRLIB_texImg *CopiedImg;
 
     u16 ScreenWidth, ScreenHeight;

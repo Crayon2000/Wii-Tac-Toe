@@ -13,8 +13,7 @@
 // Graphics
 #include "../gfx/splash.h"
 #include "../gfx/backg.h"
-#include "../gfx/hover_o.h"
-#include "../gfx/hover_x.h"
+#include "../gfx/hover.h"
 
 #define START_SCREEN 	0
 #define GAME_SCREEN 	1
@@ -22,9 +21,9 @@
 #define MENU_SCREEN 	3
 
 static Point Table[3][3] = {
-	{Point(180, 27), Point(180, 130), Point(180, 232)},
-	{Point(322, 27), Point(322, 130), Point(322, 232)},
-	{Point(464, 27), Point(464, 130), Point(464, 232)}};
+	{Point(180, 28), Point(180, 131), Point(180, 233)},
+	{Point(322, 28), Point(322, 131), Point(322, 233)},
+	{Point(464, 28), Point(464, 131), Point(464, 233)}};
 
 /**
  * Constructor for the Game class.
@@ -79,8 +78,7 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight)
 
 	GameImg = GRRLIB_LoadTexture(backg);
 	SplashImg = GRRLIB_LoadTexture(splash);
-	HoverImgO = GRRLIB_LoadTexture(hover_o);
-	HoverImgX = GRRLIB_LoadTexture(hover_x);
+	HoverImg = GRRLIB_LoadTexture(hover);
 	CopiedImg = NULL;
 
 	RUMBLE_Init();
@@ -94,8 +92,7 @@ Game::~Game()
 {
 	GRRLIB_FreeTexture(GameImg);
 	GRRLIB_FreeTexture(SplashImg);
-	GRRLIB_FreeTexture(HoverImgX);
-	GRRLIB_FreeTexture(HoverImgO);
+	GRRLIB_FreeTexture(HoverImg);
 	FreeMemImg();
 
 	delete GameGrid;
@@ -221,8 +218,8 @@ void Game::GameScreen(bool CopyScreen)
 			for(int y = 0; y < 3; y++)
 			{
 				Sign->SetPlayer(GameGrid->GetPlayerAtPos(x, y));
-				Sign->SetLeft(180 + x * 142);
-				Sign->SetTop(29 + y * 103);
+				Sign->SetLeft(Table[x][y].GetX());
+				Sign->SetTop(Table[x][y].GetY());
 				Sign->Paint();
 			}
 		}
@@ -267,12 +264,12 @@ void Game::GameScreen(bool CopyScreen)
 		if(WTTPlayer[CurrentPlayer].GetSign() == 'X')
 		{
 			GRRLIB_DrawImg(Table[HandX][HandY].GetX(), Table[HandX][HandY].GetY(),
-				HoverImgX, 0, 1, 1, 0xFFFFFFFF);
+				HoverImg, 0, 1, 1, 0x0093DDFF);
 		}
 		else
 		{
 			GRRLIB_DrawImg(Table[HandX][HandY].GetX(), Table[HandX][HandY].GetY(),
-				HoverImgO, 0, 1, 1, 0xFFFFFFFF);
+				HoverImg, 0, 1, 1, 0xDA251DFF);
 		}
 	}
 }
