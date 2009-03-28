@@ -143,7 +143,12 @@ void Game::Paint()
 	else
 	{
 		// Draw Cursor
-		Hand->SetPlayer(WTTPlayer[CurrentPlayer].GetSign());
+        if(CurrentScreen == HOME_SCREEN)
+            Hand->SetPlayer(curP1);
+        else if(WTTPlayer[CurrentPlayer].GetSign() == 'O')
+            Hand->SetPlayer(curO);
+        else if(WTTPlayer[CurrentPlayer].GetSign() == 'X')
+            Hand->SetPlayer(curX);
 		Hand->Paint();
 	}
 }
@@ -367,7 +372,7 @@ void Game::MenuScreen(bool CopyScreen)
 		GRRLIB_Rectangle(0, 385, ScreenWidth, 95, 0x000000FF, 1);
 
 		char VersionText[TEXT_SIZE] = "";
-		sprintf(VersionText, Lang->Text("Ver. %s"), "0.5");
+		sprintf(VersionText, Lang->Text("Ver. %s"), "0.6");
 		GRRLIB_Printf2(500, 40, VersionText, 12, 0xFFFFFF);
 
 		GRRLIB_DrawImg(0, 0, GRRLIB_GetTexture(), 0, 1.0, 1.0, 0xFFFFFFFF);

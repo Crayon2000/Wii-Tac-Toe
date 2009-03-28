@@ -13,7 +13,7 @@
 #include "game.h"
 #include "main.h"
 
-#include <iostream>
+#define SYS_RETURNTOHBMENU   7
 
 //------------------------------------------------------------------------------
 // Externals
@@ -87,7 +87,7 @@ int main(int argc, char **argv)
 	WPAD_Shutdown();
 	GRRLIB_Exit();
 
-	if(HWButton)
+	if(HWButton && HWButton != SYS_RETURNTOHBMENU)
 	{
 		SYS_ResetSystem(HWButton, 0, 0);
 	}
