@@ -20,6 +20,7 @@ public:
 	unsigned int GetWidth();
 	unsigned int GetHeight();
 	float GetAngle();
+    u8 GetAlpha();
 	bool IsVisible();
 	void SetLeft(float);
 	void SetTop(float);
@@ -27,6 +28,7 @@ public:
 	void SetHeight(unsigned int);
 	void SetSize(unsigned int, unsigned int);
 	void SetAngle(float);
+    void SetAlpha(u8);
 	void SetVisible(bool);
 	bool IsInside(float, float);
 protected:
@@ -38,6 +40,7 @@ protected:
 	unsigned int Height;
 	float Angle;
 	bool Visible;
+    u8 Alpha;
 	//char *Name;
 	//void *Parent;
 };

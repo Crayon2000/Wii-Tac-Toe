@@ -23,6 +23,15 @@ public:
 	void Paint();
 	bool ControllerManager();
 private:
+    /**
+     * Types of game.
+     */
+    enum gameMode {
+        modeVsAI,       /**< Play vs AI. */
+        modeVsHuman1,   /**< Play vs a human with 1 Wii Remote. */
+        modeVsHuman2    /**< Play vs a human with 2 Wii Remote. */
+    };
+
 	void StartSreen();
 	void MenuScreen(bool);
 	void GameScreen(bool);
@@ -35,6 +44,7 @@ private:
 	void ButtonOn(signed char);
 	bool SelectZone();
 	void FreeMemImg();
+    void ChangeCursor();
 
 	Cursor *Hand;
 	signed char HandX, HandY;
@@ -64,7 +74,8 @@ private:
 
     u16 ScreenWidth, ScreenHeight;
 
-//u8 Text[1228800] ATTRIBUTE_ALIGN (32);      // stores (640 * 480 * 4) texture
+    u8 AIThinkLoop;
+    gameMode GameMode;
 };
 
 class Point

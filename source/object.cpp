@@ -168,3 +168,21 @@ void Object::SetAngle(float Angle)
 {
 	this->Angle = Angle;
 }
+
+/**
+ * Get the alpha of the object.
+ * @return Alpha color (0-255).
+ */
+u8 Object::GetAlpha()
+{
+	return Alpha;
+}
+
+/**
+ * Set the alpha channel of the object.
+ * @param[in] Alpha Alpha color.
+ */
+void Object::SetAlpha(u8 Alpha)
+{
+	this->Alpha = Alpha;
+}

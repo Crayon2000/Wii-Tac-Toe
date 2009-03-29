@@ -33,9 +33,8 @@ Cursor::Cursor() : Object()
     // Default values
     Left = 0;
     Top = 0;
-    Width = CursorImgO->w;
-    Height = CursorImgO->h;
-    Type = curX;
+    Alpha = 0xFF;
+    SetPlayer(curX);
 }
 
 /**
@@ -56,25 +55,10 @@ void Cursor::Paint()
 {
     if(Visible)
     {
-        switch(Type)
-        {
-            case curO:
-                GRRLIB_DrawImg(Left + 3, Top + 3, CursorImgO, Angle, 1, 1, 0x00000044);
-                GRRLIB_DrawImg(Left, Top, CursorImgO, Angle, 1, 1, 0xFFFFFFFF);
-                break;
-            case curX:
-                GRRLIB_DrawImg(Left + 3, Top + 3, CursorImgO, Angle, 1, 1, 0x00000044);
-                GRRLIB_DrawImg(Left, Top, CursorImgX, Angle, 1, 1, 0xFFFFFFFF);
-                break;
-            case curP1:
-                GRRLIB_DrawImg(Left + 3, Top + 3, CursorMenu1, Angle, 1, 1, 0x00000044);
-                GRRLIB_DrawImg(Left, Top, CursorMenu1, Angle, 1, 1, 0xFFFFFFFF);
-                break;
-            case curP2:
-                GRRLIB_DrawImg(Left + 3, Top + 3, CursorMenu2, Angle, 1, 1, 0x00000044);
-                GRRLIB_DrawImg(Left, Top, CursorMenu2, Angle, 1, 1, 0xFFFFFFFF);
-                break;
-        }
+        // Draw the shadow
+        GRRLIB_DrawImg(Left + 3, Top + 3, CurrentCursor, Angle, 1, 1, 0x00000000 | ((Alpha == 0xFF) ? 0x44 : 0x11));
+        // Draw the cursor
+        GRRLIB_DrawImg(Left, Top, CurrentCursor, Angle, 1, 1, 0xFFFFFF00 | Alpha);
     }
 }
 
@@ -83,10 +67,27 @@ void Cursor::Paint()
  * @param[in] TypeOfCursor Player sign, either X or O.
  * @return Previous cursor.
  */
-cursorType Cursor::SetPlayer(cursorType TypeOfCursor)
+cursorType Cursor::SetPlayer(cursorType NewCType)
 {
-    cursorType Previous = Type;
-    Type = TypeOfCursor;
-    return Previous;
+    cursorType PreviousType = Type;
+    Type = NewCType;
+    switch(Type)
+    {
+        case curO:
+            CurrentCursor = CursorImgO;
+            break;
+        case curX:
+            CurrentCursor = CursorImgX;
+            break;
+        case curP1:
+            CurrentCursor = CursorMenu1;
+            break;
+        case curP2:
+            CurrentCursor = CursorMenu2;
+            break;
+    }
+    Width = CurrentCursor->w;
+    Height = CurrentCursor->h;
+    return PreviousType;
 }
 

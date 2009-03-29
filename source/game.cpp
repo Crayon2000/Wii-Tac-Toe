@@ -125,10 +125,16 @@ void Game::Paint()
 			// AI
 			if(!RoundFinished && WTTPlayer[CurrentPlayer].GetType() == PLAYER_CPU)
 			{	// AI
-				GameGrid->SetPlayerAI(WTTPlayer[CurrentPlayer].GetSign());
-				TurnIsOver();
-				//GRRLIB_Render();
-				//usleep(900000); // Wait 0.9 sec
+                if(AIThinkLoop > (rand() % 10 + 20))
+                {
+                    GameGrid->SetPlayerAI(WTTPlayer[CurrentPlayer].GetSign());
+                    TurnIsOver();
+                    AIThinkLoop = 0;
+                }
+                else
+                {
+                    AIThinkLoop++;
+                }
 			}
 			break;
 		default:
@@ -142,13 +148,6 @@ void Game::Paint()
 	}
 	else
 	{
-		// Draw Cursor
-        if(CurrentScreen == HOME_SCREEN)
-            Hand->SetPlayer(curP1);
-        else if(WTTPlayer[CurrentPlayer].GetSign() == 'O')
-            Hand->SetPlayer(curO);
-        else if(WTTPlayer[CurrentPlayer].GetSign() == 'X')
-            Hand->SetPlayer(curX);
 		Hand->Paint();
 	}
 }
@@ -452,10 +451,12 @@ bool Game::ControllerManager()
 					{
 						case 0:
 							WTTPlayer[1].SetType(PLAYER_HUMAN);
+                            GameMode = modeVsHuman1;
 							ChangeScreen(GAME_SCREEN);
 							break;
 						case 1:
 							WTTPlayer[1].SetType(PLAYER_CPU);
+                            GameMode = modeVsAI;
 							ChangeScreen(GAME_SCREEN);
 							break;
 					}
@@ -548,6 +549,7 @@ void Game::Clear()
 	snprintf(text, TEXT_SIZE, Lang->GetRandomTurnOverMessage(), WTTPlayer[CurrentPlayer].GetName());
 	RoundFinished = false;
 	FreeMemImg();
+    ChangeCursor();
 }
 
 /**
@@ -589,6 +591,7 @@ void Game::TurnIsOver()
 	}
 
 	FreeMemImg();
+    ChangeCursor();
 }
 
 /**
@@ -615,6 +618,8 @@ void Game::NewGame()
 	WTTPlayer[0].ResetScore();
 	WTTPlayer[1].ResetScore();
 	TieGame = 0;
+
+    AIThinkLoop = 0;
 
 	Clear();
 }
@@ -680,6 +685,7 @@ void Game::ChangeScreen(u8 NewScreen)
 	CurrentScreen = NewScreen;
 
 	FreeMemImg();
+    ChangeCursor();
 }
 
 /**
@@ -700,7 +706,7 @@ void Game::ButtonOn(signed char NewSelectedButton)
  */
 bool Game::SelectZone()
 {
-	if(!RoundFinished)
+	if(!RoundFinished && AIThinkLoop == 0)
 	{
 		for(int x = 0; x < 3; x++)
 		{
@@ -725,4 +731,40 @@ bool Game::SelectZone()
 	HandX = -1;
 	HandY = -1;
 	return false;
+}
+
+/**
+ * Change the cursor.
+ */
+void Game::ChangeCursor()
+{
+    if(CurrentScreen == HOME_SCREEN)
+    {
+        Hand->SetPlayer(curP1);
+        Hand->SetAlpha(0xFF);
+    }
+    else if(CurrentScreen == GAME_SCREEN)
+    {
+        if(GameMode == modeVsHuman1)
+        {
+            if(WTTPlayer[CurrentPlayer].GetSign() == 'O')
+                Hand->SetPlayer(curO);
+            else if(WTTPlayer[CurrentPlayer].GetSign() == 'X')
+                Hand->SetPlayer(curX);
+            Hand->SetAlpha(0xFF);
+        }
+        else
+        {
+            Hand->SetPlayer(curO);
+            if(CurrentPlayer == 0 || RoundFinished)
+                Hand->SetAlpha(0xFF);
+            else
+                Hand->SetAlpha(0x55);
+        }
+    }
+    else
+    {
+        Hand->SetPlayer(curO);
+        Hand->SetAlpha(0xFF);
+    }
 }

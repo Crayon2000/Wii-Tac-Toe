@@ -72,47 +72,47 @@ bool Grid::SetPlayer(u8 Player, u8 X, u8 Y)
  */
 void Grid::SetPlayerAI(u8 Player)
 {
-	u8 TestBoard[3][3];
+    u8 TestBoard[3][3];
 
-	// Test win
-	for(int x = 0; x < 3; x++)
-	{
-		for(int y = 0; y < 3; y++)
-		{
-			memcpy(TestBoard, Board, sizeof(TestBoard));
-			if(TestBoard[x][y] == ' ')
-			{
-				TestBoard[x][y] = Player;
-				if(IsPlayerWinning(Player, TestBoard))
-				{
-					SetPlayer(Player, x, y);
-					return;
-				}
-			}
-		}
-	}
+    // Test win
+    for(int x = 0; x < 3; x++)
+    {
+        for(int y = 0; y < 3; y++)
+        {
+            memcpy(TestBoard, Board, sizeof(TestBoard));
+            if(TestBoard[x][y] == ' ')
+            {
+                TestBoard[x][y] = Player;
+                if(IsPlayerWinning(Player, TestBoard))
+                {
+                    SetPlayer(Player, x, y);
+                    return;
+                }
+            }
+        }
+    }
 
-	// Test block
-	u8 Opponent = (Player == 'X') ? 'O' : 'X';
-	for(int x = 0; x < 3; x++)
-	{
-		for(int y = 0; y < 3; y++)
-		{
-			memcpy(TestBoard, Board, sizeof(TestBoard));
-			if(TestBoard[x][y] == ' ')
-			{
-				TestBoard[x][y] = Opponent;
-				if(IsPlayerWinning(Opponent, TestBoard))
-				{
-					SetPlayer(Player, x, y);
-					return;
-				}
-			}
-		}
-	}
+    // Test block
+    u8 Opponent = (Player == 'X') ? 'O' : 'X';
+    for(int x = 0; x < 3; x++)
+    {
+        for(int y = 0; y < 3; y++)
+        {
+            memcpy(TestBoard, Board, sizeof(TestBoard));
+            if(TestBoard[x][y] == ' ')
+            {
+                TestBoard[x][y] = Opponent;
+                if(IsPlayerWinning(Opponent, TestBoard))
+                {
+                    SetPlayer(Player, x, y);
+                    return;
+                }
+            }
+        }
+    }
 
-	// Play at random position
-	SetPlayerRandom(Player);
+    // Play at random position
+    SetPlayerRandom(Player);
 }
 
 /**
@@ -121,11 +121,11 @@ void Grid::SetPlayerAI(u8 Player)
  */
 void Grid::SetPlayerRandom(u8 Player)
 {
-	bool OK = true;
-	while(OK)
-	{
-		OK = !SetPlayer(Player, rand() % 3, rand() % 3);
-	}
+    bool OK = true;
+    while(OK)
+    {
+        OK = !SetPlayer(Player, rand() % 3, rand() % 3);
+    }
 }
 
 /**
@@ -144,13 +144,13 @@ u8 Grid::GetPlayerAtPos(u8 X, u8 Y)
  */
 void Grid::Clear()
 {
-	for(int x = 0; x < 3; x++)
-	{
-		for(int y = 0; y < 3; y++)
-		{
-			Board[x][y] = ' ';
-		}
-	}
+    for(int x = 0; x < 3; x++)
+    {
+        for(int y = 0; y < 3; y++)
+        {
+            Board[x][y] = ' ';
+        }
+    }
 }
 
 /**
@@ -170,7 +170,7 @@ u8 Grid::GetWinner()
 {
     if(IsPlayerWinning('X'))
         return 'X';
-    if(IsPlayerWinning('O'))
+    else if(IsPlayerWinning('O'))
         return 'O';
     else
         return ' ';
@@ -237,14 +237,14 @@ bool Grid::IsPlayerWinning(u8 Player)
  */
 bool Grid::IsFilled()
 {
-	for(int x = 0; x < 3; x++)
-	{
-		for(int y = 0; y < 3; y++)
-		{
-			if(Board[x][y] == ' ')
-			    return false;
-		}
-	}
-	return true;
+    for(int x = 0; x < 3; x++)
+    {
+        for(int y = 0; y < 3; y++)
+        {
+            if(Board[x][y] == ' ')
+                return false;
+        }
+    }
+    return true;
 }
 

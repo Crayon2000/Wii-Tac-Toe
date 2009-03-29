@@ -32,6 +32,7 @@ private:
 	GRRLIB_texImg *CursorImgO;
 	GRRLIB_texImg *CursorMenu1;
 	GRRLIB_texImg *CursorMenu2;
+    GRRLIB_texImg *CurrentCursor;
 };
 //---------------------------------------------------------------------------
 #endif
