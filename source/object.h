@@ -13,36 +13,36 @@
 class Object
 {
 public:
-	Object();
-	virtual ~Object();
-	float GetLeft();
-	float GetTop();
-	unsigned int GetWidth();
-	unsigned int GetHeight();
-	float GetAngle();
+    Object();
+    virtual ~Object();
+    float GetLeft();
+    float GetTop();
+    unsigned int GetWidth();
+    unsigned int GetHeight();
+    float GetAngle();
     u8 GetAlpha();
-	bool IsVisible();
-	void SetLeft(float);
-	void SetTop(float);
-	void SetWidth(unsigned int);
-	void SetHeight(unsigned int);
-	void SetSize(unsigned int, unsigned int);
-	void SetAngle(float);
+    bool IsVisible();
+    void SetLeft(float);
+    void SetTop(float);
+    void SetWidth(unsigned int);
+    void SetHeight(unsigned int);
+    void SetSize(unsigned int, unsigned int);
+    void SetAngle(float);
     void SetAlpha(u8);
-	void SetVisible(bool);
-	bool IsInside(float, float);
+    void SetVisible(bool);
+    bool IsInside(float, float);
 protected:
-	virtual void Paint();
+    virtual void Paint();
 
-	float Left;
-	float Top;
-	unsigned int Width;
-	unsigned int Height;
-	float Angle;
-	bool Visible;
+    float Left;
+    float Top;
+    unsigned int Width;
+    unsigned int Height;
+    float Angle;
+    bool Visible;
     u8 Alpha;
-	//char *Name;
-	//void *Parent;
+    //char *Name;
+    //void *Parent;
 };
 //---------------------------------------------------------------------------
 #endif

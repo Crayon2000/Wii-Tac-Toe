@@ -41,7 +41,7 @@ private:
 	void NewGame();
 	void PrintWrapText(u16, u16, u16, const char*, unsigned int, unsigned int);
 	void ChangeScreen(u8 NewScreen);
-	void ButtonOn(signed char);
+	void ButtonOn(s8);
 	bool SelectZone();
 	void FreeMemImg();
     void ChangeCursor();

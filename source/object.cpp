@@ -7,9 +7,9 @@
  */
 Object::Object()
 {
-	Left = 0;
-	Top = 0;
-	Angle = 0.0;
+    Left = 0;
+    Top = 0;
+    Angle = 0.0;
 }
 
 /**
@@ -26,7 +26,7 @@ Object::~Object()
  */
 float Object::GetLeft()
 {
-	return Left;
+    return Left;
 }
 
 /**
@@ -36,7 +36,7 @@ float Object::GetLeft()
  */
 void Object::SetLeft(float Left)
 {
-	this->Left = Left;
+    this->Left = Left;
 }
 
 /**
@@ -46,7 +46,7 @@ void Object::SetLeft(float Left)
  */
 float Object::GetTop()
 {
-	return Top;
+    return Top;
 }
 
 /**
@@ -56,7 +56,7 @@ float Object::GetTop()
  */
 void Object::SetTop(float Top)
 {
-	this->Top = Top;
+    this->Top = Top;
 }
 
 /**
@@ -66,7 +66,7 @@ void Object::SetTop(float Top)
  */
 unsigned int Object::GetWidth()
 {
-	return Width;
+    return Width;
 }
 
 /**
@@ -76,7 +76,7 @@ unsigned int Object::GetWidth()
  */
 void Object::SetWidth(unsigned int Width)
 {
-	this->Width = Width;
+    this->Width = Width;
 }
 
 /**
@@ -86,7 +86,7 @@ void Object::SetWidth(unsigned int Width)
  */
 unsigned int Object::GetHeight()
 {
-	return Height;
+    return Height;
 }
 
 /**
@@ -96,7 +96,7 @@ unsigned int Object::GetHeight()
  */
 void Object::SetHeight(unsigned int Height)
 {
-	this->Height = Height;
+    this->Height = Height;
 }
 
 /**
@@ -108,8 +108,8 @@ void Object::SetHeight(unsigned int Height)
  */
 void Object::SetSize(unsigned int Width, unsigned int Height)
 {
-	this->Width = Width;
-	this->Height = Height;
+    this->Width = Width;
+    this->Height = Height;
 }
 
 /**
@@ -119,7 +119,7 @@ void Object::SetSize(unsigned int Width, unsigned int Height)
  */
 bool Object::IsVisible()
 {
-	return Visible;
+    return Visible;
 }
 
 /**
@@ -129,7 +129,7 @@ bool Object::IsVisible()
  */
 void Object::SetVisible(bool Visible)
 {
-	this->Visible = Visible;
+    this->Visible = Visible;
 }
 
 /**
@@ -146,9 +146,9 @@ void Object::Paint()
  */
 bool Object::IsInside(float x, float y)
 {
-	if (x > Left && x < (Left + Width) && y > Top && y < (Top + Height))
-		return true;
-	return false;
+    if (x > Left && x < (Left + Width) && y > Top && y < (Top + Height))
+        return true;
+    return false;
 }
 
 /**
@@ -157,7 +157,7 @@ bool Object::IsInside(float x, float y)
  */
 float Object::GetAngle()
 {
-	return Angle;
+    return Angle;
 }
 
 /**
@@ -166,7 +166,7 @@ float Object::GetAngle()
  */
 void Object::SetAngle(float Angle)
 {
-	this->Angle = Angle;
+    this->Angle = Angle;
 }
 
 /**
@@ -175,7 +175,7 @@ void Object::SetAngle(float Angle)
  */
 u8 Object::GetAlpha()
 {
-	return Alpha;
+    return Alpha;
 }
 
 /**
@@ -184,5 +184,5 @@ u8 Object::GetAlpha()
  */
 void Object::SetAlpha(u8 Alpha)
 {
-	this->Alpha = Alpha;
+    this->Alpha = Alpha;
 }

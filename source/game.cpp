@@ -36,10 +36,11 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight)
     ScreenHeight = GameScreenHeight;
 
  	GameGrid = new Grid();
-	Hand = new Cursor();
+	Hand = new Cursor[2];
 	Lang = new Language();
 
-    Hand->SetVisible(false);
+    Hand[0].SetVisible(false);
+    Hand[1].SetVisible(false);
 
 	ExitButton1 = new Button(btnHome);
 	ExitButton1->SetLeft(430);
@@ -96,7 +97,7 @@ Game::~Game()
 	FreeMemImg();
 
 	delete GameGrid;
-	delete Hand;
+	delete[] Hand;
 	delete Lang;
 	delete ExitButton1;
     delete ExitButton2;
@@ -148,7 +149,8 @@ void Game::Paint()
 	}
 	else
 	{
-		Hand->Paint();
+        Hand[1].Paint();
+		Hand[0].Paint();
 	}
 }
 
@@ -309,7 +311,7 @@ void Game::ExitScreen()
 		GRRLIB_DrawImg(0, 0, CopiedImg, 0, 1, 1, 0xFFFFFFFF);
 	}
 
-    if(GRRLIB_PtInRect(0, 0, ScreenWidth, 78, Hand->GetLeft(), Hand->GetTop()))
+    if(GRRLIB_PtInRect(0, 0, ScreenWidth, 78, Hand[0].GetLeft(), Hand[0].GetTop()))
         GRRLIB_Rectangle(0, 0, ScreenWidth, 78, 0x30B6EBFF, 1);
     else
         GRRLIB_Rectangle(0, 0, ScreenWidth, 78, 0x000000FF, 1);
@@ -321,19 +323,19 @@ void Game::ExitScreen()
 	ExitButton1->SetSelected(false);
 	ExitButton2->SetSelected(false);
 	ExitButton3->SetSelected(false);
-	if(GRRLIB_PtInRect(0, 0, ScreenWidth, 78, Hand->GetLeft(), Hand->GetTop()))
+	if(GRRLIB_PtInRect(0, 0, ScreenWidth, 78, Hand[0].GetLeft(), Hand[0].GetTop()))
 	{
 		ExitButton1->SetSelected(true);
 		ButtonOn(0);
 		SelectedButton = 0;
 	}
-	else if(ExitButton2->IsInside(Hand->GetLeft(), Hand->GetTop()))
+	else if(ExitButton2->IsInside(Hand[0].GetLeft(), Hand[0].GetTop()))
 	{
 		ExitButton2->SetSelected(true);
 		ButtonOn(1);
 		SelectedButton = 1;
 	}
-	else if(ExitButton3->IsInside(Hand->GetLeft(), Hand->GetTop()))
+	else if(ExitButton3->IsInside(Hand[0].GetLeft(), Hand[0].GetTop()))
 	{
 		ExitButton3->SetSelected(true);
 		ButtonOn(2);
@@ -389,13 +391,13 @@ void Game::MenuScreen(bool CopyScreen)
 
 	MenuButton[0].SetSelected(false);
 	MenuButton[1].SetSelected(false);
-	if(MenuButton[0].IsInside(Hand->GetLeft(), Hand->GetTop()))
+	if(MenuButton[0].IsInside(Hand[0].GetLeft(), Hand[0].GetTop()))
 	{
 		MenuButton[0].SetSelected(true);
 		ButtonOn(0);
 		SelectedButton = 0;
 	}
-	else if(MenuButton[1].IsInside(Hand->GetLeft(), Hand->GetTop()))
+	else if(MenuButton[1].IsInside(Hand[0].GetLeft(), Hand[0].GetTop()))
 	{
 		MenuButton[1].SetSelected(true);
 		ButtonOn(1);
@@ -419,33 +421,46 @@ bool Game::ControllerManager()
 	RUMBLE_Verify();
 	WPADData *WPadData0 = WPAD_Data(WPAD_CHAN_0);
 	WPADData *WPadData1 = WPAD_Data(WPAD_CHAN_1);
-	unsigned int Buttons = WPAD_ButtonsDown(WPAD_CHAN_0);
+	unsigned int Buttons0 = WPAD_ButtonsDown(WPAD_CHAN_0);
+    unsigned int Buttons1 = WPAD_ButtonsDown(WPAD_CHAN_1);
 
 	if(WPadData0->ir.valid)
 	{
         // I don't understand this calculation but it works
-		Hand->SetLeft((WPadData0->ir.x / ScreenWidth * (ScreenWidth + Hand->GetWidth() * 2)) - Hand->GetWidth());
-		Hand->SetTop((WPadData0->ir.y / ScreenHeight * (ScreenHeight + Hand->GetHeight() * 2)) - Hand->GetHeight());
-		Hand->SetAngle(WPadData0->orient.roll);
-        Hand->SetVisible(true);
+		Hand[0].SetLeft((WPadData0->ir.x / ScreenWidth * (ScreenWidth + Hand[0].GetWidth() * 2)) - Hand[0].GetWidth());
+		Hand[0].SetTop((WPadData0->ir.y / ScreenHeight * (ScreenHeight + Hand[0].GetHeight() * 2)) - Hand[0].GetHeight());
+		Hand[0].SetAngle(WPadData0->orient.roll);
+        Hand[0].SetVisible(true);
 	}
     else
     {   // Hide cursor
-        Hand->SetVisible(false);
+        Hand[0].SetVisible(false);
+    }
+	if(WPadData1->ir.valid && CurrentScreen == HOME_SCREEN)
+	{
+        // I don't understand this calculation but it works
+		Hand[1].SetLeft((WPadData1->ir.x / ScreenWidth * (ScreenWidth + Hand[1].GetWidth() * 2)) - Hand[1].GetWidth());
+		Hand[1].SetTop((WPadData1->ir.y / ScreenHeight * (ScreenHeight + Hand[1].GetHeight() * 2)) - Hand[1].GetHeight());
+		Hand[1].SetAngle(WPadData1->orient.roll);
+        Hand[1].SetVisible(true);
+	}
+    else
+    {   // Hide cursor
+        Hand[1].SetVisible(false);
     }
 
-	if(Buttons)
+	if(Buttons0 || Buttons1)
 	{
 		switch(CurrentScreen)
 		{
 			case START_SCREEN:
-				if((Buttons & WPAD_BUTTON_A))
+				if((Buttons0 & WPAD_BUTTON_A))
 				{
 					ChangeScreen(MENU_SCREEN);
 				}
 				break;
 			case MENU_SCREEN:
-				if((Buttons & WPAD_BUTTON_A))
+				if((Buttons0 & WPAD_BUTTON_A))
 				{
 					switch(SelectedButton)
 					{
@@ -461,21 +476,21 @@ bool Game::ControllerManager()
 							break;
 					}
 				}
-				else if((Buttons & WPAD_BUTTON_B))
+				else if((Buttons0 & WPAD_BUTTON_B))
 				{
 					ChangeScreen(START_SCREEN);
 				}
-				else if((Buttons & WPAD_BUTTON_HOME))
+				else if((Buttons0 & WPAD_BUTTON_HOME) || (Buttons1 & WPAD_BUTTON_HOME))
 				{
 					ChangeScreen(HOME_SCREEN);
 				}
 				break;
 			case HOME_SCREEN:
-				if((Buttons & WPAD_BUTTON_HOME))
+				if((Buttons0 & WPAD_BUTTON_HOME) || (Buttons1 & WPAD_BUTTON_HOME))
 				{
 					ChangeScreen(LastScreen);
 				}
-				else if((Buttons & WPAD_BUTTON_A))
+				else if((Buttons0 & WPAD_BUTTON_A))
 				{
 					switch(SelectedButton)
 					{
@@ -487,7 +502,8 @@ bool Game::ControllerManager()
 							break;
 						case 2:
 							ExitScreen();
-							Hand->Paint();
+                            Hand[1].Paint();
+							Hand[0].Paint();
 							if(CopiedImg)
 								GRRLIB_FreeTexture(CopiedImg);
 							CopiedImg = GRRLIB_Screen2Texture();
@@ -499,7 +515,7 @@ bool Game::ControllerManager()
 				}
 				break;
 			default:
-				if((Buttons & WPAD_BUTTON_A))
+				if((Buttons0 & WPAD_BUTTON_A))
 				{
 					if(RoundFinished)
 					{
@@ -514,7 +530,7 @@ bool Game::ControllerManager()
 						RUMBLE_Wiimote(WPAD_CHAN_0, 200);  // 200 ms
 					}
 				}
-				else if((Buttons & WPAD_BUTTON_HOME))
+				else if((Buttons0 & WPAD_BUTTON_HOME) || (Buttons1 & WPAD_BUTTON_HOME))
 				{
 					ChangeScreen(HOME_SCREEN);
 				}
@@ -692,7 +708,7 @@ void Game::ChangeScreen(u8 NewScreen)
  * Rumble if on button.
  * @param[in] NewSelectedButton New button to select.
  */
-void Game::ButtonOn(signed char NewSelectedButton)
+void Game::ButtonOn(s8 NewSelectedButton)
 {
 	if(SelectedButton != NewSelectedButton)
 	{
@@ -712,10 +728,10 @@ bool Game::SelectZone()
 		{
 			for(int y = 0; y < 3; y++)
 			{
-				if (Hand->GetLeft() > Table[x][y].GetX() &&
-					Hand->GetLeft() < (Table[x][y].GetX() + 136) &&
-					Hand->GetTop() > Table[x][y].GetY() &&
-					Hand->GetTop() < (Table[x][y].GetY() + 100))
+				if (Hand[0].GetLeft() > Table[x][y].GetX() &&
+					Hand[0].GetLeft() < (Table[x][y].GetX() + 136) &&
+					Hand[0].GetTop() > Table[x][y].GetY() &&
+					Hand[0].GetTop() < (Table[x][y].GetY() + 100))
 				{
 					if(HandX != x || HandY != y)
 					{
@@ -740,31 +756,43 @@ void Game::ChangeCursor()
 {
     if(CurrentScreen == HOME_SCREEN)
     {
-        Hand->SetPlayer(curP1);
-        Hand->SetAlpha(0xFF);
+        Hand[0].SetPlayer(curP1);
+        Hand[0].SetAlpha(0xFF);
+        Hand[1].SetPlayer(curP2);
+        Hand[1].SetAlpha(0xFF);
     }
     else if(CurrentScreen == GAME_SCREEN)
     {
         if(GameMode == modeVsHuman1)
         {
             if(WTTPlayer[CurrentPlayer].GetSign() == 'O')
-                Hand->SetPlayer(curO);
+                Hand[0].SetPlayer(curO);
             else if(WTTPlayer[CurrentPlayer].GetSign() == 'X')
-                Hand->SetPlayer(curX);
-            Hand->SetAlpha(0xFF);
+                Hand[0].SetPlayer(curX);
+            Hand[0].SetAlpha(0xFF);
+            Hand[1].SetVisible(false);
         }
         else
         {
-            Hand->SetPlayer(curO);
+            Hand[0].SetPlayer(curO);
             if(CurrentPlayer == 0 || RoundFinished)
-                Hand->SetAlpha(0xFF);
+            {
+                Hand[0].SetAlpha(0xFF);
+                Hand[1].SetAlpha(0x55);
+            }
             else
-                Hand->SetAlpha(0x55);
+            {
+                Hand[0].SetAlpha(0x55);
+                Hand[1].SetAlpha(0xFF);
+            }
         }
     }
     else
     {
-        Hand->SetPlayer(curO);
-        Hand->SetAlpha(0xFF);
+        Hand[0].SetPlayer(curO);
+        Hand[0].SetAlpha(0xFF);
+        Hand[1].SetPlayer(curX);
+        Hand[1].SetAlpha(0xFF);
     }
+    Hand[1].SetAlpha(0x55);
 }
