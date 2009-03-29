@@ -63,6 +63,8 @@ int main(int argc, char **argv)
 	WPAD_Init();
 	WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
 	WPAD_SetVRes(WPAD_CHAN_0, rmode->fbWidth, rmode->efbHeight);
+	WPAD_SetDataFormat(WPAD_CHAN_1, WPAD_FMT_BTNS_ACC_IR);
+	WPAD_SetVRes(WPAD_CHAN_1, rmode->fbWidth, rmode->efbHeight);
 
 	// Game initialization
 	Game *MyGame = new Game(rmode->fbWidth, rmode->efbHeight);

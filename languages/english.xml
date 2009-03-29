@@ -40,7 +40,7 @@
         <message id="1" text="%s, it's your turn." />
         <message id="2" text="Waiting for %s." />
         <message id="3" text="%s is thinking of is next move." />
-        <message id="4" text="%s should take the Wiimote and play." />
+        <message id="4" text="%s should take the Wii Remote and play." />
         <message id="5" text="%s, let's play." />
         <message id="6" text="%s should play now." />
     </turn_over>
