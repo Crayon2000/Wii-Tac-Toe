@@ -4,6 +4,7 @@
 #include <gccore.h>
 #include <wiiuse/wpad.h>
 #include <ogc/conf.h>
+#include <asndlib.h>
 #include "grrlib/GRRLIB.h"
 #include "tools.h"
 #include "main.h"
@@ -14,6 +15,11 @@
 #include "../gfx/splash.h"
 #include "../gfx/backg.h"
 #include "../gfx/hover.h"
+
+// Audio
+#include "../audio/button_rollover.h"
+
+#define BUTTON_VOICE    0
 
 #define START_SCREEN 	0
 #define GAME_SCREEN 	1
@@ -83,6 +89,8 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight)
 	CopiedImg = NULL;
 
 	RUMBLE_Init();
+    ASND_Init();
+    ASND_Pause(0);
 	NewGame();
 }
 
@@ -103,6 +111,7 @@ Game::~Game()
     delete ExitButton2;
     delete ExitButton3;
 	delete[] WTTPlayer;
+    ASND_End();
 }
 
 /**
@@ -710,10 +719,11 @@ void Game::ChangeScreen(u8 NewScreen)
  */
 void Game::ButtonOn(s8 NewSelectedButton)
 {
-	if(SelectedButton != NewSelectedButton)
-	{
-		RUMBLE_Wiimote(WPAD_CHAN_0, 50); // 50 ms
-	}
+    if(SelectedButton != NewSelectedButton)
+    {
+        ASND_SetVoice(BUTTON_VOICE, VOICE_MONO_16BIT, 44100, 0, (void *)button_rollover, button_rollover_size, 32, 32, NULL);
+        RUMBLE_Wiimote(WPAD_CHAN_0, 50); // 50 ms
+    }
 }
 
 /**
@@ -735,9 +745,14 @@ bool Game::SelectZone()
 				{
 					if(HandX != x || HandY != y)
 					{
-						RUMBLE_Wiimote(WPAD_CHAN_0, 30);  // 30 ms
 						HandX = x;
 						HandY = y;
+                        if(GameGrid->GetPlayerAtPos(HandX, HandY) == ' ')
+                        {   // Zone is empty
+                            ASND_SetVoice(BUTTON_VOICE, VOICE_MONO_16BIT, 44100, 0, (void *)button_rollover,
+                                button_rollover_size, 32, 32, NULL);
+                            RUMBLE_Wiimote(WPAD_CHAN_0, 30);  // 30 ms
+                        }
 					}
 					return true;
 				}
