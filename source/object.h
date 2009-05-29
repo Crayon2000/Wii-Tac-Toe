@@ -34,13 +34,13 @@ public:
 protected:
     virtual void Paint();
 
-    float Left;
-    float Top;
-    unsigned int Width;
-    unsigned int Height;
-    float Angle;
-    bool Visible;
-    u8 Alpha;
+    float Left;         /**< Specifies the x-coordinate of the upper-left corner of the object. */
+    float Top;          /**< Specifies the y-coordinate of the upper-left corner of the object. */
+    unsigned int Width; /**< The width of the object. */
+    unsigned int Height;/**< The height of the object. */
+    float Angle;        /**< The angle in degree of the object. */
+    bool Visible;       /**< Control the visibility of the objet. If Visible is true, the objet appears. If Visible is false, the objet is not visible. */
+    u8 Alpha;           /**< Change the opacity of the object (0-255). */
     //char *Name;
     //void *Parent;
 };

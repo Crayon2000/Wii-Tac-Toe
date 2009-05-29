@@ -64,7 +64,7 @@ void Cursor::Paint()
 
 /**
  * Set cursor.
- * @param[in] TypeOfCursor Player sign, either X or O.
+ * @param[in] NewCType Player sign, either X or O.
  * @return Previous cursor.
  */
 cursorType Cursor::SetPlayer(cursorType NewCType)

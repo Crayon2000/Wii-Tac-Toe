@@ -8,10 +8,13 @@
 
 #include "tools.h"
 
+/**
+ * Structure to hold the rumble data.
+ */
 typedef struct _rumble_data
 {
-	bool rumbeling;
-	u64 time2rumble;
+	bool rumbeling;  /**< True if Wiimote is rumbeling, false otherwise. */
+	u64 time2rumble; /**< Time to rumble in milisecond. */
 } RUMBLE_DATA;
 
 static RUMBLE_DATA Rumble_Info[WPAD_MAX_WIIMOTES];

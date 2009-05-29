@@ -21,8 +21,7 @@ enum buttonType {
 class Button : public Object
 {
 public:
-	Button();
-	Button(buttonType);
+	Button(buttonType = btnStdMenu);
 	~Button();
 	void Paint();
 	void SetCaption(const char *);
@@ -30,7 +29,6 @@ public:
 	void SetTextColor(u32);
     void SetTextHeight(unsigned int);
 private:
-    void Init();
 	bool Selected;
 	char Caption[50 + 1];
 	unsigned int TextWidth;

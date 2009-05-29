@@ -21,7 +21,7 @@ void Player::SetName(const char *Name)
 
 /**
  * Return the player name.
- * return The name of the player.
+ * @return The name of the player.
  */
 char *Player::GetName()
 {

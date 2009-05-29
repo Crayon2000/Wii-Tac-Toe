@@ -8,39 +8,12 @@
 
 /**
  * Constructor for the Button class.
- */
-Button::Button() : Object()
-{
-    Type = btnStdMenu;
-    Init();
-}
-
-/**
- * Constructor for the Button class.
   * @param[in] NewType Button type.
  */
 Button::Button(buttonType NewType) : Object()
 {
     Type = NewType;
-    Init();
-}
 
-/**
- * Destructor for the Button class.
- */
-Button::~Button()
-{
-    if(ButtonImgOn)
-        GRRLIB_FreeTexture(ButtonImgOn);
-    if(ButtonImgOff)
-        GRRLIB_FreeTexture(ButtonImgOff);
-}
-
-/**
- * Initialize the Button class.
- */
-void Button::Init()
-{
     switch(Type)
     {
         case btnHomeMenu:
@@ -66,6 +39,17 @@ void Button::Init()
 	TextColor = 0x000000;
 	TextHeight = 14;
 	TextWidth = 100; // random value
+}
+
+/**
+ * Destructor for the Button class.
+ */
+Button::~Button()
+{
+    if(ButtonImgOn)
+        GRRLIB_FreeTexture(ButtonImgOn);
+    if(ButtonImgOff)
+        GRRLIB_FreeTexture(ButtonImgOff);
 }
 
 /**

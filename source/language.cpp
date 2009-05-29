@@ -31,7 +31,7 @@ Language::~Language()
 }
 
 /**
- * Load a text from an XML file in memory
+ * Load a text from an XML file in memory.
  */
 const char *Language::Text(const char *From)
 {
@@ -52,7 +52,7 @@ const char *Language::Text(const char *From)
 }
 
 /**
- * Set the proper language
+ * Set the proper language.
  * @param[in] Conf_Lang Language ID to set.
  */
 void Language::SetLanguage(s32 Conf_Lang)
@@ -83,7 +83,7 @@ void Language::SetLanguage(s32 Conf_Lang)
 }
 
 /**
- * Count the number of child in a node
+ * Count the number of child in a node.
  */
 unsigned int Language::ChildCount(mxml_node_t *Up_Node, const char *Name)
 {
@@ -103,7 +103,7 @@ unsigned int Language::ChildCount(mxml_node_t *Up_Node, const char *Name)
 }
 
 /**
- * Get a random message
+ * Get a random message.
  */
 const char *Language::GetRandomMessage(const char *Type, int Count)
 {
@@ -115,14 +115,23 @@ const char *Language::GetRandomMessage(const char *Type, int Count)
 	return mxmlElementGetAttr(Text_Node, "text");
 }
 
+/**
+ * Get a random winning message.
+ */
 const char *Language::GetRandomWinningMessage()
 {
 	return GetRandomMessage("winning_game", WinningCount);
 }
+/**
+ * Get a random tie message.
+ */
 const char *Language::GetRandomTieMessage()
 {
 	return GetRandomMessage("tie_game", TieCount);
 }
+/**
+ * Get a random turn over message.
+ */
 const char *Language::GetRandomTurnOverMessage()
 {
 	return GetRandomMessage("turn_over", TurnOverCount);

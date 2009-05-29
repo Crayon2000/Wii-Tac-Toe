@@ -18,11 +18,11 @@ public:
 	const char *GetRandomWinningMessage();
 	const char *GetRandomTieMessage();
 	const char *GetRandomTurnOverMessage();
+private:
+	mxml_node_t *First_Node;
 	int TieCount;
 	int WinningCount;
 	int TurnOverCount;
-private:
-	mxml_node_t *First_Node;
 
 	void SetLanguage(s32);
 	unsigned int ChildCount(mxml_node_t *, const char *);
