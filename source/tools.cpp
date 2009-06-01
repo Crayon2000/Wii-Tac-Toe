@@ -1,10 +1,8 @@
-#include <unistd.h> 			// usleep
-#include <ogc/lwp.h>			// Thread
-#include <wiiuse/wpad.h>		// Wiimote
-#include <ogcsys.h>				// nanosleep
-#include <stdlib.h>
-#include <string.h>
-#include <ogc/lwp_watchdog.h>	// gettime
+#include <unistd.h>             // usleep
+#include <ogc/lwp.h>            // Thread
+#include <wiiuse/wpad.h>        // Wiimote
+#include <ogcsys.h>             // nanosleep
+#include <ogc/lwp_watchdog.h>   // gettime
 
 #include "tools.h"
 
@@ -13,8 +11,8 @@
  */
 typedef struct _rumble_data
 {
-	bool rumbeling;  /**< True if Wiimote is rumbeling, false otherwise. */
-	u64 time2rumble; /**< Time to rumble in milisecond. */
+    bool rumbeling;  /**< True if Wiimote is rumbeling, false otherwise. */
+    u64 time2rumble; /**< Time to rumble in milisecond. */
 } RUMBLE_DATA;
 
 static RUMBLE_DATA Rumble_Info[WPAD_MAX_WIIMOTES];
@@ -27,9 +25,9 @@ static vu32 *_wiilight_reg = (u32*)0xCD0000C0;
  */
 void RUMBLE_Wiimote(s32 chan, int rumble_time)
 {
-	Rumble_Info[chan].time2rumble = ticks_to_millisecs(gettime()) + rumble_time;
-	Rumble_Info[chan].rumbeling = true;
-	WPAD_Rumble(chan, 1); // Rumble on
+    Rumble_Info[chan].time2rumble = ticks_to_millisecs(gettime()) + rumble_time;
+    Rumble_Info[chan].rumbeling = true;
+    WPAD_Rumble(chan, 1); // Rumble on
 }
 
 /**
@@ -37,12 +35,12 @@ void RUMBLE_Wiimote(s32 chan, int rumble_time)
  */
 void RUMBLE_Init()
 {
-	int i;
-	for(i = 0; i < WPAD_MAX_WIIMOTES; i++)
-	{
-		Rumble_Info[i].rumbeling = false;
-		Rumble_Info[i].time2rumble = 0;
-	}
+    int i;
+    for(i = 0; i < WPAD_MAX_WIIMOTES; i++)
+    {
+        Rumble_Info[i].rumbeling = false;
+        Rumble_Info[i].time2rumble = 0;
+    }
 }
 
 /**
@@ -50,26 +48,26 @@ void RUMBLE_Init()
  */
 void RUMBLE_Verify()
 {
-	if(Rumble_Info[WPAD_CHAN_0].rumbeling && ticks_to_millisecs(gettime()) > Rumble_Info[WPAD_CHAN_0].time2rumble)
-	{
-		WPAD_Rumble(WPAD_CHAN_0, 0); // Rumble off
-		Rumble_Info[WPAD_CHAN_0].rumbeling = false;
-	}
-	if(Rumble_Info[WPAD_CHAN_1].rumbeling && ticks_to_millisecs(gettime()) > Rumble_Info[WPAD_CHAN_1].time2rumble)
-	{
-		WPAD_Rumble(WPAD_CHAN_1, 0); // Rumble off
-		Rumble_Info[WPAD_CHAN_1].rumbeling = false;
-	}
-	if(Rumble_Info[WPAD_CHAN_2].rumbeling && ticks_to_millisecs(gettime()) > Rumble_Info[WPAD_CHAN_2].time2rumble)
-	{
-		WPAD_Rumble(WPAD_CHAN_2, 0); // Rumble off
-		Rumble_Info[WPAD_CHAN_2].rumbeling = false;
-	}
-	if(Rumble_Info[WPAD_CHAN_3].rumbeling && ticks_to_millisecs(gettime()) > Rumble_Info[WPAD_CHAN_3].time2rumble)
-	{
-		WPAD_Rumble(WPAD_CHAN_3, 0); // Rumble off
-		Rumble_Info[WPAD_CHAN_3].rumbeling = false;
-	}
+    if(Rumble_Info[WPAD_CHAN_0].rumbeling && ticks_to_millisecs(gettime()) > Rumble_Info[WPAD_CHAN_0].time2rumble)
+    {
+        WPAD_Rumble(WPAD_CHAN_0, 0); // Rumble off
+        Rumble_Info[WPAD_CHAN_0].rumbeling = false;
+    }
+    if(Rumble_Info[WPAD_CHAN_1].rumbeling && ticks_to_millisecs(gettime()) > Rumble_Info[WPAD_CHAN_1].time2rumble)
+    {
+        WPAD_Rumble(WPAD_CHAN_1, 0); // Rumble off
+        Rumble_Info[WPAD_CHAN_1].rumbeling = false;
+    }
+    if(Rumble_Info[WPAD_CHAN_2].rumbeling && ticks_to_millisecs(gettime()) > Rumble_Info[WPAD_CHAN_2].time2rumble)
+    {
+        WPAD_Rumble(WPAD_CHAN_2, 0); // Rumble off
+        Rumble_Info[WPAD_CHAN_2].rumbeling = false;
+    }
+    if(Rumble_Info[WPAD_CHAN_3].rumbeling && ticks_to_millisecs(gettime()) > Rumble_Info[WPAD_CHAN_3].time2rumble)
+    {
+        WPAD_Rumble(WPAD_CHAN_3, 0); // Rumble off
+        Rumble_Info[WPAD_CHAN_3].rumbeling = false;
+    }
 }
 
 /**
@@ -84,7 +82,7 @@ void msleep(unsigned long milisec)
     req.tv_sec = sec;
     req.tv_nsec = milisec * 1000000L;
     while(nanosleep(&req) == -1)
-		continue;
+        continue;
 }
 
 /**
@@ -92,7 +90,7 @@ void msleep(unsigned long milisec)
  */
 void WIILIGHT_TurnOff()
 {
-	*_wiilight_reg &= ~0x20;
+    *_wiilight_reg &= ~0x20;
 }
 
 /**
@@ -100,7 +98,7 @@ void WIILIGHT_TurnOff()
  */
 void WIILIGHT_TurnOn()
 {
-	*_wiilight_reg |= 0x20;
+    *_wiilight_reg |= 0x20;
 }
 
 /**
@@ -113,11 +111,11 @@ void WIILIGHT_TurnOn()
 string str_replace(const string &txt, const string &Before, const string &After)
 {
     string str = txt;
-    size_t pos = 0, len = After.length();
+    size_t pos = 0, AfterSize = After.length(), BeforeSize = Before.length();
     while((pos = str.find(Before, pos)) != string::npos)
     {
-        str.replace(pos, len, After);
-        pos += len;
+        str.replace(pos, BeforeSize, After, 0, AfterSize);
+        pos += AfterSize;
     }
     return str;
 }

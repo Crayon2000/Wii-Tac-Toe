@@ -29,16 +29,16 @@ Button::Button(buttonType NewType) : Object()
             ButtonImgOff = GRRLIB_LoadTexture(button_off);
     }
 
-	Selected = false;
+    Selected = false;
 
-	Left = 0;
-	Top = 0;
-	Width = ButtonImgOff->w;
-	Height = ButtonImgOff->h;
+    Left = 0;
+    Top = 0;
+    Width = ButtonImgOff->w;
+    Height = ButtonImgOff->h;
 
-	TextColor = 0x000000;
-	TextHeight = 14;
-	TextWidth = 100; // random value
+    TextColor = 0x000000;
+    TextHeight = 14;
+    TextWidth = 100; // random value
 }
 
 /**
@@ -62,11 +62,11 @@ void Button::Paint()
         GRRLIB_DrawImg(Left + 4, Top + 5, ButtonImgOff, 0, 1.0, 1.0, 0x00000055);
     }
     GRRLIB_DrawImg(Left, Top, ButtonImgOff, 0, 1.0, 1.0, 0xFFFFFFFF);
-	GRRLIB_Printf2(TextLeft, TextTop, Caption.c_str(), TextHeight, TextColor);
-	if(Type == btnStdMenu && Selected)
-	{   // Hover color
-		GRRLIB_DrawImg(Left, Top, ButtonImgOn, 0, 1.0, 1.0, 0xFFFFFFFF);
-	}
+    GRRLIB_Printf2(TextLeft, TextTop, Caption.c_str(), TextHeight, TextColor);
+    if(Type == btnStdMenu && Selected)
+    {   // Hover color
+        GRRLIB_DrawImg(Left, Top, ButtonImgOn, 0, 1.0, 1.0, 0xFFFFFFFF);
+    }
     else if(Type == btnHomeMenu && Selected)
     {   // Hover color
         GRRLIB_DrawImg(Left, Top, ButtonImgOff, 0, 1.0, 1.0, 0x0000FF33);
@@ -88,10 +88,10 @@ void Button::SetTextHeight(unsigned int NewHeight)
  */
 void Button::SetCaption(const char *NewCaption)
 {
-	Caption = NewCaption;
-	TextWidth = GRRLIB_TextWidth(Caption.c_str(), TextHeight);
-	TextTop = Top + (Height / 2) - (TextHeight / 2);
-	TextLeft = Left + (Width / 2) - (TextWidth / 2);
+    Caption = NewCaption;
+    TextWidth = GRRLIB_TextWidth(Caption.c_str(), TextHeight);
+    TextTop = Top + (Height / 2) - (TextHeight / 2);
+    TextLeft = Left + (Width / 2) - (TextWidth / 2);
     if(Type == btnHome)
     {
         TextLeft += 20;
@@ -104,7 +104,7 @@ void Button::SetCaption(const char *NewCaption)
  */
 void Button::SetSelected(bool IsSelected)
 {
-	Selected = IsSelected;
+    Selected = IsSelected;
 }
 
 /**
@@ -113,5 +113,5 @@ void Button::SetSelected(bool IsSelected)
  */
 void Button::SetTextColor(u32 NewColor)
 {
-	TextColor = NewColor;
+    TextColor = NewColor;
 }

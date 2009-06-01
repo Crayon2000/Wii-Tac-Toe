@@ -18,10 +18,10 @@
 class Game
 {
 public:
-	Game(u16, u16);
-	~Game();
-	void Paint();
-	bool ControllerManager();
+    Game(u16, u16);
+    ~Game();
+    void Paint();
+    bool ControllerManager();
 private:
     /**
      * Types of game.
@@ -32,45 +32,45 @@ private:
         modeVsHuman2    /**< Play vs a human with 2 Wii Remote. */
     };
 
-	void StartSreen();
-	void MenuScreen(bool);
-	void GameScreen(bool);
-	void ExitScreen();
-	void Clear();
-	void TurnIsOver();
-	void NewGame();
-	void PrintWrapText(u16, u16, u16, const char*, unsigned int, unsigned int);
-	void ChangeScreen(u8 NewScreen);
-	void ButtonOn(s8);
-	bool SelectZone();
-	void FreeMemImg();
+    void StartSreen();
+    void MenuScreen(bool);
+    void GameScreen(bool);
+    void ExitScreen();
+    void Clear();
+    void TurnIsOver();
+    void NewGame();
+    void PrintWrapText(u16, u16, u16, const char*, unsigned int, unsigned int);
+    void ChangeScreen(u8 NewScreen);
+    void ButtonOn(s8);
+    bool SelectZone();
+    void FreeMemImg();
     void ChangeCursor();
 
-	Cursor *Hand;
-	signed char HandX, HandY;
+    Cursor *Hand;
+    signed char HandX, HandY;
 
-	bool CurrentPlayer;
-	bool PlayerToStart;
-	Player *WTTPlayer;
-	u8 CurrentScreen;
-	u8 LastScreen;
-	signed char SelectedButton;
-	char text[TEXT_SIZE];
+    bool CurrentPlayer;
+    bool PlayerToStart;
+    Player *WTTPlayer;
+    u8 CurrentScreen;
+    u8 LastScreen;
+    signed char SelectedButton;
+    char text[TEXT_SIZE];
 
-	u16 TieGame;
-	bool RoundFinished;
+    u16 TieGame;
+    bool RoundFinished;
 
-	Button *ExitButton1;
+    Button *ExitButton1;
     Button *ExitButton2;
     Button *ExitButton3;
-	Button *MenuButton;
-	Grid *GameGrid;
-	Language *Lang;
+    Button *MenuButton;
+    Grid *GameGrid;
+    Language *Lang;
 
-	GRRLIB_texImg *GameImg;
-	GRRLIB_texImg *SplashImg;
-	GRRLIB_texImg *HoverImg;
-	GRRLIB_texImg *CopiedImg;
+    GRRLIB_texImg *GameImg;
+    GRRLIB_texImg *SplashImg;
+    GRRLIB_texImg *HoverImg;
+    GRRLIB_texImg *CopiedImg;
 
     u16 ScreenWidth, ScreenHeight;
 
@@ -90,35 +90,35 @@ public:
     /**
      * Constructor for the Point class.
      */
-	Point(u16 x, u16 y)
-	{
-		this->x = x;
-		this->y = y;
-	}
+    Point(u16 x, u16 y)
+    {
+        this->x = x;
+        this->y = y;
+    }
     /**
      * Get the x position.
      */
-	u16 GetX()
-	{
-		return x;
-	}
+    u16 GetX()
+    {
+        return x;
+    }
     /**
      * Get the y position.
      */
-	u16 GetY()
-	{
-		return y;
-	}
+    u16 GetY()
+    {
+        return y;
+    }
     /**
      * Set the new position.
      * @param[in] x Specifies the x-coordinate.
      * @param[in] y Specifies the y-coordinate.
      */
-	void setLocation(u16 x, u16 y)
-	{
-		this->x = x;
-		this->y = y;
-	}
+    void setLocation(u16 x, u16 y)
+    {
+        this->x = x;
+        this->y = y;
+    }
 };
 //---------------------------------------------------------------------------
 #endif

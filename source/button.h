@@ -24,24 +24,24 @@ enum buttonType {
 class Button : public Object
 {
 public:
-	Button(buttonType = btnStdMenu);
-	~Button();
-	void Paint();
-	void SetCaption(const char *);
-	void SetSelected(bool);
-	void SetTextColor(u32);
+    Button(buttonType = btnStdMenu);
+    ~Button();
+    void Paint();
+    void SetCaption(const char *);
+    void SetSelected(bool);
+    void SetTextColor(u32);
     void SetTextHeight(unsigned int);
 private:
-	bool Selected;
-	string Caption;
-	unsigned int TextWidth;
-	unsigned int TextHeight;
-	unsigned int TextTop;
-	unsigned int TextLeft;
-	u32 TextColor;
+    bool Selected;
+    string Caption;
+    unsigned int TextWidth;
+    unsigned int TextHeight;
+    unsigned int TextTop;
+    unsigned int TextLeft;
+    u32 TextColor;
     buttonType Type;
-	GRRLIB_texImg *ButtonImgOn;
-	GRRLIB_texImg *ButtonImgOff;
+    GRRLIB_texImg *ButtonImgOn;
+    GRRLIB_texImg *ButtonImgOff;
 };
 //---------------------------------------------------------------------------
 #endif

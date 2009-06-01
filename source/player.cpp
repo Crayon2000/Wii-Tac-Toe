@@ -5,13 +5,13 @@
  */
 Player::Player()
 {
-	Score = 0;
-	Type = PLAYER_HUMAN;
+    Score = 0;
+    Type = PLAYER_HUMAN;
 }
 
 /**
  * Set the player name.
- * @param[in] Name Give a name to the player.
+ * @param[in] AName Give a name to the player.
  */
 void Player::SetName(const char *AName)
 {
@@ -29,7 +29,7 @@ const char *Player::GetName()
 
 /**
  * Set the player sign.
- * @param[in] Sign Give a sign to the player.
+ * @param[in] ASign Give a sign to the player.
  */
 void Player::SetSign(unsigned char ASign)
 {
@@ -72,7 +72,7 @@ void Player::ResetScore()
 
 /**
  * Set the player type.
- * @param[in] Type Give the type of player.
+ * @param[in] AType Give the type of player.
  */
 void Player::SetType(unsigned char AType)
 {

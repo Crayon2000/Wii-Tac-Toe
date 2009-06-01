@@ -22,16 +22,16 @@ enum cursorType {
 class Cursor : public Object
 {
 public:
-	Cursor();
-	~Cursor();
-	void Paint();
-	cursorType SetPlayer(cursorType);
+    Cursor();
+    ~Cursor();
+    void Paint();
+    cursorType SetPlayer(cursorType);
 private:
-	cursorType Type;
-	GRRLIB_texImg *CursorImgX;
-	GRRLIB_texImg *CursorImgO;
-	GRRLIB_texImg *CursorMenu1;
-	GRRLIB_texImg *CursorMenu2;
+    cursorType Type;
+    GRRLIB_texImg *CursorImgX;
+    GRRLIB_texImg *CursorImgO;
+    GRRLIB_texImg *CursorMenu1;
+    GRRLIB_texImg *CursorMenu2;
     GRRLIB_texImg *CurrentCursor;
 };
 //---------------------------------------------------------------------------

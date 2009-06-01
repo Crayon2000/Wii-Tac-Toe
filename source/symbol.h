@@ -12,14 +12,14 @@
 class Symbol : public Object
 {
 public:
-	Symbol();
-	~Symbol();
-	void Paint();
-	void SetPlayer(unsigned char);
+    Symbol();
+    ~Symbol();
+    void Paint();
+    void SetPlayer(unsigned char);
 private:
-	unsigned char Player;
-	GRRLIB_texImg *ImgX;
-	GRRLIB_texImg *ImgO;
+    unsigned char Player;
+    GRRLIB_texImg *ImgX;
+    GRRLIB_texImg *ImgO;
 };
 //---------------------------------------------------------------------------
 #endif
