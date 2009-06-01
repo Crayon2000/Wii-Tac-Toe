@@ -3,7 +3,10 @@
 #define ButtonH
 //---------------------------------------------------------------------------
 
+#include <string>
 #include "object.h"
+
+using namespace std;
 
 /**
  * Types of button that could be used.
@@ -30,7 +33,7 @@ public:
     void SetTextHeight(unsigned int);
 private:
 	bool Selected;
-	char Caption[50 + 1];
+	string Caption;
 	unsigned int TextWidth;
 	unsigned int TextHeight;
 	unsigned int TextTop;

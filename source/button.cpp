@@ -62,7 +62,7 @@ void Button::Paint()
         GRRLIB_DrawImg(Left + 4, Top + 5, ButtonImgOff, 0, 1.0, 1.0, 0x00000055);
     }
     GRRLIB_DrawImg(Left, Top, ButtonImgOff, 0, 1.0, 1.0, 0xFFFFFFFF);
-	GRRLIB_Printf2(TextLeft, TextTop, Caption, TextHeight, TextColor);
+	GRRLIB_Printf2(TextLeft, TextTop, Caption.c_str(), TextHeight, TextColor);
 	if(Type == btnStdMenu && Selected)
 	{   // Hover color
 		GRRLIB_DrawImg(Left, Top, ButtonImgOn, 0, 1.0, 1.0, 0xFFFFFFFF);
@@ -88,8 +88,8 @@ void Button::SetTextHeight(unsigned int NewHeight)
  */
 void Button::SetCaption(const char *NewCaption)
 {
-	strncpy(Caption, NewCaption, 50);
-	TextWidth = GRRLIB_TextWidth(this->Caption, TextHeight);
+	Caption = NewCaption;
+	TextWidth = GRRLIB_TextWidth(Caption.c_str(), TextHeight);
 	TextTop = Top + (Height / 2) - (TextHeight / 2);
 	TextLeft = Left + (Width / 2) - (TextWidth / 2);
     if(Type == btnHome)

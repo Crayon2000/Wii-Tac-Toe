@@ -1,4 +1,3 @@
-#include <string.h>
 #include "player.h"
 
 /**
@@ -14,27 +13,27 @@ Player::Player()
  * Set the player name.
  * @param[in] Name Give a name to the player.
  */
-void Player::SetName(const char *Name)
+void Player::SetName(const char *AName)
 {
-    strcpy(this->Name, Name);
+    Name = AName;
 }
 
 /**
  * Return the player name.
  * @return The name of the player.
  */
-char *Player::GetName()
+const char *Player::GetName()
 {
-    return Name;
+    return Name.c_str();
 }
 
 /**
  * Set the player sign.
  * @param[in] Sign Give a sign to the player.
  */
-void Player::SetSign(unsigned char Sign)
+void Player::SetSign(unsigned char ASign)
 {
-    this->Sign = Sign;
+    Sign = ASign;
 }
 
 /**
@@ -75,9 +74,9 @@ void Player::ResetScore()
  * Set the player type.
  * @param[in] Type Give the type of player.
  */
-void Player::SetType(unsigned char Type)
+void Player::SetType(unsigned char AType)
 {
-    this->Type = Type;
+    Type = AType;
 }
 
 /**

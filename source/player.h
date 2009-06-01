@@ -3,6 +3,9 @@
 #define PlayerH
 //---------------------------------------------------------------------------
 
+#include <string>
+using namespace std;
+
 #define PLAYER_HUMAN 	0
 #define PLAYER_CPU 		1
 
@@ -14,9 +17,9 @@ class Player
 {
 public:
 	Player();
-	//~Player();
+	virtual ~Player() {};
 	void SetName(const char *);
-	char *GetName();
+	const char *GetName();
 	void SetSign(unsigned char);
 	unsigned char GetSign();
 	unsigned int GetScore();
@@ -26,7 +29,7 @@ public:
 	unsigned char GetType();
 private:
 	unsigned int Score;
-	char Name[50];
+	string Name;
 	unsigned char Sign;
 	unsigned char Type;
 };

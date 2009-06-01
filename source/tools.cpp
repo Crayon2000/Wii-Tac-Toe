@@ -110,56 +110,14 @@ void WIILIGHT_TurnOn()
  * @param[in] After Replacement string.
  * @return Pointer to the new string with replaced string, must be freed
  */
-char *str_replace(const char *txt, const char *Before, const char *After)
+string str_replace(const string &txt, const string &Before, const string &After)
 {
-	const char *pos;
-	char *TxtRetour;
-	size_t PosTxtRetour;
-	size_t Long;
-	size_t TailleAllouee;
-
-	pos = strstr(txt, Before);
-
-	if(pos == NULL)
-	{
-		return NULL;
-	}
-
-	Long = (size_t)pos - (size_t)txt;
-	TailleAllouee = Long + strlen(After) + 1;
-	TxtRetour = (char*)malloc(TailleAllouee);
-	PosTxtRetour = 0;
-
-	strncpy(TxtRetour + PosTxtRetour, txt, Long);
-	PosTxtRetour += Long;
-	txt = pos + strlen(Before);
-
-	Long = strlen(After);
-	strncpy(TxtRetour + PosTxtRetour, After, Long);
-	PosTxtRetour += Long;
-
-	pos = strstr(txt, Before);
-	while(pos != NULL)
-	{
-		Long = (size_t)pos - (size_t)txt;
-		TailleAllouee += Long + strlen(After);
-		TxtRetour = (char *)realloc(TxtRetour, TailleAllouee);
-
-		strncpy(TxtRetour + PosTxtRetour, txt, Long);
-		PosTxtRetour += Long;
-
-		txt = pos + strlen(Before);
-
-		Long = strlen(After);
-		strncpy(TxtRetour + PosTxtRetour, After, Long);
-		PosTxtRetour += Long;
-
-		pos = strstr(txt, Before);
-	}
-
-	Long = strlen(txt) + 1;
-	TailleAllouee += Long;
-	TxtRetour = (char*)realloc(TxtRetour, TailleAllouee);
-	strncpy(TxtRetour + PosTxtRetour, txt, Long);
-	return TxtRetour;
+    string str = txt;
+    size_t pos = 0, len = After.length();
+    while((pos = str.find(Before, pos)) != string::npos)
+    {
+        str.replace(pos, len, After);
+        pos += len;
+    }
+    return str;
 }

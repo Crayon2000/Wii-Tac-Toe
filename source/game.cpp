@@ -590,20 +590,11 @@ void Game::TurnIsOver()
 	{	// A winner is declare
 		GameWinner = (GameWinner == WTTPlayer[0].GetSign()) ? 0 : 1;
 		WTTPlayer[GameWinner].IncScore();
-		char *TextToCopy;
+        string TextToCopy;
 		strncpy(text, Lang->GetRandomWinningMessage(), TEXT_SIZE);
 		TextToCopy = str_replace(text, "$LOSER$", WTTPlayer[!GameWinner].GetName());
-		if(TextToCopy)
-		{
-			strncpy(text, TextToCopy, TEXT_SIZE);
-			free(TextToCopy);
-		}
-		TextToCopy = str_replace(text, "$WINNER$", WTTPlayer[GameWinner].GetName());
-		if(TextToCopy)
-		{
-			strncpy(text, TextToCopy, TEXT_SIZE);
-			free(TextToCopy);
-		}
+		TextToCopy = str_replace(TextToCopy, "$WINNER$", WTTPlayer[GameWinner].GetName());
+		strncpy(text, TextToCopy.c_str(), TEXT_SIZE);
 		RoundFinished = true;
 	}
 	else if(GameGrid->IsFilled())
@@ -623,7 +614,7 @@ void Game::TurnIsOver()
 }
 
 /**
- * Free the texture
+ * Free the texture.
  */
 void Game::FreeMemImg()
 {
@@ -653,7 +644,13 @@ void Game::NewGame()
 }
 
 /**
- * Print the text with multiple lines if needed
+ * Print the text with multiple lines if needed.
+ * @param[in] x Specifies the x-coordinate of the upper-left corner of the text.
+ * @param[in] y Specifies the y-coordinate of the upper-left corner of the text.
+ * @param[in] maxLineWidth Maximum width of the string.
+ * @param[in] input Text to draw.
+ * @param[in] TextColor Text color in RGBA format. The alpha channel is used to change the opacity of the text.
+ * @param[in] fontSize Size of the text.
  */
 void Game::PrintWrapText(u16 x, u16 y, u16 maxLineWidth,
 	const char *input, unsigned int TextColor, unsigned int fontSize)
@@ -730,7 +727,7 @@ void Game::ButtonOn(s8 NewSelectedButton)
 }
 
 /**
- * Check if a zone is selected
+ * Check if a zone is selected.
  * @return true if in a zone, false otherwize
  */
 bool Game::SelectZone()
