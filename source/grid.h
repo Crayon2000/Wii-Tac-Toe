@@ -20,7 +20,6 @@ public:
     void SetPlayerRandom(u8);
     void SetPlayerAI(u8);
     u8 GetPlayerAtPos(u8, u8);
-    //u8[][] GetGrid();
     u8 GetWinner();
     void Clear();
     bool IsFilled();

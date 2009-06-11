@@ -60,6 +60,19 @@ void Object::SetTop(float Top)
 }
 
 /**
+ * Set the left and top position of the object.
+ * @param[in] Left Left in pixel.
+ * @param[in] Top Top in pixel.
+ * @see SetLeft()
+ * @see SetTop()
+ */
+void Object::SetLocation(float Left, float Top)
+{
+    this->Left = Left;
+    this->Top = Top;
+}
+
+/**
  * Get the width of the object.
  * @see SetWidth()
  * @return Width of the object.
@@ -130,13 +143,6 @@ bool Object::IsVisible()
 void Object::SetVisible(bool Visible)
 {
     this->Visible = Visible;
-}
-
-/**
- * Draw an image on screen.
- */
-void Object::Paint()
-{
 }
 
 /**
