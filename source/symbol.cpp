@@ -10,7 +10,7 @@
  */
 Symbol::Symbol() : Object()
 {
-    this->Player = 'X';
+    Player = 'X';
 
     ImgO = GRRLIB_LoadTexture(o);
     ImgX = GRRLIB_LoadTexture(x);
@@ -45,9 +45,9 @@ void Symbol::Paint()
 
 /**
  * Set the current player to draw on the screen.
- * @param[in] Player Player sign, either X or O.
+ * @param[in] APlayer Player sign, either X or O.
  */
-void Symbol::SetPlayer(unsigned char Player)
+void Symbol::SetPlayer(unsigned char APlayer)
 {
-    this->Player = Player;
+    Player = APlayer;
 }
