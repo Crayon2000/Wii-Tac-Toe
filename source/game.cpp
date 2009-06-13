@@ -231,13 +231,13 @@ void Game::GameScreen(bool CopyScreen)
 
         // Draw grid content
         Symbol *Sign = new Symbol;
-        u8 x, y;
-        for(x = 0; x < 3; x++)
+        for(int x = 0; x < 3; x++)
         {
-            for(y = 0; y < 3; y++)
+            for(int y = 0; y < 3; y++)
             {
                 Sign->SetPlayer(GameGrid->GetPlayerAtPos(x, y));
-                Sign->SetLocation(Table[x][y].GetX(), Table[x][y].GetY());
+                Sign->SetLeft(Table[x][y].GetX());
+                Sign->SetTop(Table[x][y].GetY());
                 Sign->Paint();
             }
         }

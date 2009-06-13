@@ -24,7 +24,6 @@ public:
     bool IsVisible();
     void SetLeft(float);
     void SetTop(float);
-    void SetLocation(float, float);
     void SetWidth(unsigned int);
     void SetHeight(unsigned int);
     void SetSize(unsigned int, unsigned int);
@@ -33,7 +32,7 @@ public:
     void SetVisible(bool);
     bool IsInside(float, float);
 protected:
-    virtual void Paint() = 0; /**< Draw an image on screen. */
+    virtual void Paint();
 
     float Left;         /**< Specifies the x-coordinate of the upper-left corner of the object. */
     float Top;          /**< Specifies the y-coordinate of the upper-left corner of the object. */
