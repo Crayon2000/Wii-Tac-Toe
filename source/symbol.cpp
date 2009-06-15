@@ -51,3 +51,12 @@ void Symbol::SetPlayer(unsigned char APlayer)
 {
     Player = APlayer;
 }
+
+/**
+ * Set the left and top position of the object.
+ * @param[in] APoint Position in pixel.
+ */
+void Symbol::SetLocation(Point APoint)
+{
+    Object::SetLocation(APoint.GetX(), APoint.GetY());
+}

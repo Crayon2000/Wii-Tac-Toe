@@ -7,7 +7,6 @@
 #include <asndlib.h>
 #include "grrlib/GRRLIB.h"
 #include "tools.h"
-#include "main.h"
 #include "symbol.h"
 #include "game.h"
 
@@ -237,7 +236,7 @@ void Game::GameScreen(bool CopyScreen)
             for(y = 0; y < 3; y++)
             {
                 Sign->SetPlayer(GameGrid->GetPlayerAtPos(x, y));
-                Sign->SetLocation(Table[x][y].GetX(), Table[x][y].GetY());
+                Sign->SetLocation(Table[x][y]);
                 Sign->Paint();
             }
         }

@@ -1,4 +1,8 @@
-//---------------------------------------------------------------------------
+/**
+ * @file player.h
+ * Contains the Player class.
+ */
+
 #ifndef PlayerH
 #define PlayerH
 //---------------------------------------------------------------------------
@@ -6,8 +10,8 @@
 #include <string>
 using namespace std;
 
-#define PLAYER_HUMAN    0
-#define PLAYER_CPU      1
+#define PLAYER_HUMAN    0   /**< Indentify a human player. */
+#define PLAYER_CPU      1   /**< Indentify a computer player. */
 
 /**
  * This class is used managed players.

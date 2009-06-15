@@ -1,4 +1,8 @@
-//---------------------------------------------------------------------------
+/**
+ * @file game.h
+ * Contains the Game class.
+ */
+ 
 #ifndef GameH
 #define GameH
 //---------------------------------------------------------------------------
@@ -10,7 +14,7 @@
 #include "language.h"
 #include "types.h"
 
-#define TEXT_SIZE 100
+#define TEXT_SIZE 100   /**< Maximum length of the text. */
 
 /**
  * This is the main class of this project. This is where the magic happens.

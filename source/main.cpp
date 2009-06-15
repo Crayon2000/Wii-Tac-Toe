@@ -2,7 +2,9 @@
 // Project:   Wii-Tac-Toe
 //==============================================================================
 
-/** \mainpage Wii-Tac-Toe Documentation
+/**
+ * @mainpage Wii-Tac-Toe Documentation
+ * Wii-Tac-Toe is a Tic-Tac-Toe game for the Nintendo Wii.
  */
 //------------------------------------------------------------------------------
 // Headers
@@ -11,7 +13,6 @@
 #include <wiiuse/wpad.h>
 #include "grrlib/GRRLIB.h"
 #include "game.h"
-#include "main.h"
 
 #define SYS_RETURNTOHBMENU   7
 
