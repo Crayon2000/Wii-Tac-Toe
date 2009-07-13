@@ -1,5 +1,3 @@
-#include <unistd.h>             // usleep
-#include <ogc/lwp.h>            // Thread
 #include <wiiuse/wpad.h>        // Wiimote
 #include <ogcsys.h>             // nanosleep
 #include <ogc/lwp_watchdog.h>   // gettime
@@ -11,7 +9,7 @@
  */
 typedef struct _rumble_data
 {
-    bool rumbeling;  /**< True if Wiimote is rumbeling, false otherwise. */
+    bool rumbeling;  /**< True if Wii Remote is rumbeling, false otherwise. */
     u64 time2rumble; /**< Time to rumble in milisecond. */
 } RUMBLE_DATA;
 
