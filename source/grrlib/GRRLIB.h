@@ -89,7 +89,7 @@ typedef struct GRRLIB_bytemapFont {
 void GRRLIB_SetAntiAliasing(bool aa);
 bool GRRLIB_GetAntiAliasing();
 
-void GRRLIB_SetBlend( unsigned char blendmode );
+void GRRLIB_SetBlend(unsigned char blendmode);
 unsigned char GRRLIB_GetBlend();
 
 
@@ -109,7 +109,7 @@ GRRLIB_texImg *GRRLIB_CreateEmptyTexture(unsigned int, unsigned int);
 GRRLIB_texImg *GRRLIB_LoadTexture(const unsigned char my_img[]);
 GRRLIB_texImg *GRRLIB_LoadTextureJPG(const unsigned char my_jpg[]);
 GRRLIB_texImg *GRRLIB_LoadTexturePNG(const unsigned char my_png[]);
-GRRLIB_texImg *GRRLIB_LoadTextureFromFile(const char *filename);
+
 void GRRLIB_FreeTexture(struct GRRLIB_texImg *tex);
 
 GRRLIB_bytemapFont *GRRLIB_LoadBMF(const unsigned char my_bmf[]);
@@ -117,9 +117,10 @@ void GRRLIB_FreeBMF(GRRLIB_bytemapFont *bmf);
 
 void GRRLIB_InitTileSet(struct GRRLIB_texImg *tex, unsigned int tilew, unsigned int tileh, unsigned int tilestart);
 
-extern void GRRLIB_DrawImg(f32 xpos, f32 ypos, struct GRRLIB_texImg *tex, float degrees, float scaleX, f32 scaleY, u32 color );
+extern void GRRLIB_DrawImg(f32 xpos, f32 ypos, struct GRRLIB_texImg *tex, float degrees, float scaleX, f32 scaleY, u32 color);
 extern void GRRLIB_DrawImgQuad(Vector pos[4], struct GRRLIB_texImg *tex, u32 color);
 extern void GRRLIB_DrawTile(f32 xpos, f32 ypos, struct GRRLIB_texImg *tex, float degrees, float scaleX, f32 scaleY, u32 color, int frame);
+extern void GRRLIB_DrawTileQuad(Vector pos[4], struct GRRLIB_texImg *tex, u32 color,int frame);
 
 void GRRLIB_Printf(f32 xpos, f32 ypos, struct GRRLIB_texImg *tex, u32 color, f32 zoom, const char *text, ...);
 void GRRLIB_PrintBMF(f32 xpos, f32 ypos, struct GRRLIB_bytemapFont *bmf, f32 zoom, const char *text, ...);
@@ -128,11 +129,11 @@ bool GRRLIB_PtInRect(int hotx, int hoty, int hotw, int hoth, int wpadx, int wpad
 bool GRRLIB_RectInRect(int rect1x, int rect1y, int rect1w, int rect1h, int rect2x, int rect2y, int rect2w, int rect2h);
 bool GRRLIB_RectOnRect(int rect1x, int rect1y, int rect1w, int rect1h, int rect2x, int rect2y, int rect2w, int rect2h);
 
-void GRRLIB_ClipDrawing( int x, int y, int width, int height );
+void GRRLIB_ClipDrawing(int x, int y, int width, int height);
 void GRRLIB_ClipReset();
 
 void GRRLIB_SetHandle(struct GRRLIB_texImg *tex, int x, int y);
-void GRRLIB_SetMidHandle( struct GRRLIB_texImg *tex, bool enabled );
+void GRRLIB_SetMidHandle(struct GRRLIB_texImg *tex, bool enabled);
 
 u32 GRRLIB_GetPixelFromtexImg(int x, int y, struct GRRLIB_texImg *tex);
 void GRRLIB_SetPixelTotexImg(int x, int y, struct GRRLIB_texImg *tex, u32 color);
