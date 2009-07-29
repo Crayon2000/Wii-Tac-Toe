@@ -7,7 +7,6 @@
 #include <asndlib.h>
 #include "grrlib/GRRLIB.h"
 #include "tools.h"
-#include "symbol.h"
 #include "game.h"
 
 // Graphics
@@ -46,6 +45,17 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight)
     GameGrid = new Grid();
     Hand = new Cursor[2];
     Lang = new Language();
+
+    u8 x, y;
+    GridSign = new Symbol*[3];
+    for(x = 0; x < 3; x++)
+    {
+        GridSign[x] = new Symbol[3];
+        for(y = 0; y < 3; y++)
+        {
+            GridSign[x][y].SetLocation(Table[x][y]);
+        }
+    }
 
     Hand[0].SetVisible(false);
     Hand[1].SetVisible(false);
@@ -113,6 +123,13 @@ Game::~Game()
     delete ExitButton2;
     delete ExitButton3;
     delete[] WTTPlayer;
+
+    for(u8 i = 0; i < 3; i++)
+    {
+        delete[] GridSign[i];
+    }
+    delete[] GridSign;
+
     ASND_End();
 }
 
@@ -228,20 +245,6 @@ void Game::GameScreen(bool CopyScreen)
         // Draw text at the bottom: Offet 1, 1
         PrintWrapText(131, 421, 390, text, 0x111111, 15);
 
-        // Draw grid content
-        Symbol *Sign = new Symbol;
-        u8 x, y;
-        for(x = 0; x < 3; x++)
-        {
-            for(y = 0; y < 3; y++)
-            {
-                Sign->SetPlayer(GameGrid->GetPlayerAtPos(x, y));
-                Sign->SetLocation(Table[x][y]);
-                Sign->Paint();
-            }
-        }
-        delete Sign;
-
         // Draw text shadow
         GRRLIB_DrawImg(0, 0, GRRLIB_GetTexture(), 0, 1.0, 1.0, 0xFFFFFFF0);
         GRRLIB_initTexture();
@@ -276,18 +279,23 @@ void Game::GameScreen(bool CopyScreen)
         GRRLIB_DrawImg(0, 0, CopiedImg, 0, 1, 1, 0xFFFFFFFF);
     }
 
-    if(SelectZone() && GameGrid->GetPlayerAtPos(HandX, HandY) == ' ')
+    // Draw grid content
+    u8 x, y;
+    for(x = 0; x < 3; x++)
     {
-        if(WTTPlayer[CurrentPlayer].GetSign() == 'X')
+        for(y = 0; y < 3; y++)
         {
-            GRRLIB_DrawImg(Table[HandX][HandY].GetX(), Table[HandX][HandY].GetY(),
-                HoverImg, 0, 1, 1, 0x0093DDFF);
+            GridSign[x][y].SetPlayer(GameGrid->GetPlayerAtPos(x, y));
+            GridSign[x][y].Paint();
         }
-        else
-        {
-            GRRLIB_DrawImg(Table[HandX][HandY].GetX(), Table[HandX][HandY].GetY(),
-                HoverImg, 0, 1, 1, 0xDA251DFF);
-        }
+    }
+
+    // Draw selection box
+    if(GameGrid->GetPlayerAtPos(HandX, HandY) == ' ' && SelectZone())
+    {
+        u32 HoverColor =  (WTTPlayer[CurrentPlayer].GetSign() == 'X') ? 0x0093DDFF : 0xDA251DFF;
+        GRRLIB_DrawImg(Table[HandX][HandY].GetX(), Table[HandX][HandY].GetY(),
+            HoverImg, 0, 1, 1, HoverColor);
     }
 }
 

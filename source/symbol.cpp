@@ -10,7 +10,7 @@
  */
 Symbol::Symbol() : Object()
 {
-    Player = 'X';
+    Player = ' ';
 
     ImgO = GRRLIB_LoadTexture(o);
     ImgX = GRRLIB_LoadTexture(x);

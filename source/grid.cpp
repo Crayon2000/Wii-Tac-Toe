@@ -113,19 +113,25 @@ void Grid::SetPlayerAI(u8 Player)
     }
 
     // Play at random position
-    SetPlayerRandom(Player);
+    GetRandomPosition(&x, &y);
+    SetPlayer(Player, x, y);
 }
 
 /**
- * Set player at a random position.
- * @param[in] Player Player sign, either X or O.
+ * Get a random valid position to set a player.
+ * @param[out] x A valid random X coordinate in the grid.
+ * @param[out] Y A valid random Y coordinate in the grid.
  */
-void Grid::SetPlayerRandom(u8 Player)
+void Grid::GetRandomPosition(u8 *X, u8 *Y)
 {
-    bool OK = true;
-    while(OK)
+    while(1)
     {
-        OK = !SetPlayer(Player, rand() % 3, rand() % 3);
+        *X = rand() % 3;
+        *Y = rand() % 3;
+        if(Board[*X][*Y] == ' ')
+        {
+            return;
+        }
     }
 }
 

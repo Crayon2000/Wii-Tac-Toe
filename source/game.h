@@ -8,6 +8,7 @@
 //---------------------------------------------------------------------------
 
 #include "grid.h"
+#include "symbol.h"
 #include "button.h"
 #include "cursor.h"
 #include "player.h"
@@ -71,6 +72,7 @@ private:
     Button *MenuButton;
     Grid *GameGrid;
     Language *Lang;
+    Symbol **GridSign;
 
     GRRLIB_texImg *GameImg;
     GRRLIB_texImg *SplashImg;

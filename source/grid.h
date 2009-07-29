@@ -21,7 +21,7 @@ public:
     bool SetPlayerX(u8, u8);
     bool SetPlayerO(u8, u8);
     bool SetPlayer(u8, u8, u8);
-    void SetPlayerRandom(u8);
+    void GetRandomPosition(u8 *, u8 *);
     void SetPlayerAI(u8);
     u8 GetPlayerAtPos(u8, u8);
     u8 GetWinner();
