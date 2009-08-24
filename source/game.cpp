@@ -291,7 +291,7 @@ void Game::GameScreen(bool CopyScreen)
     }
 
     // Draw selection box
-    if(GameGrid->GetPlayerAtPos(HandX, HandY) == ' ' && SelectZone())
+    if(SelectZone() && GameGrid->GetPlayerAtPos(HandX, HandY) == ' ')
     {
         u32 HoverColor =  (WTTPlayer[CurrentPlayer].GetSign() == 'X') ? 0x0093DDFF : 0xDA251DFF;
         GRRLIB_DrawImg(Table[HandX][HandY].GetX(), Table[HandX][HandY].GetY(),

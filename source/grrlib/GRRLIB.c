@@ -106,10 +106,10 @@ inline void GRRLIB_FillScreen(u32 color) {
  * @param color The color of the dot in RGBA format.
  */
 inline void GRRLIB_Plot(f32 x, f32 y, u32 color) {
-    Vector v[] = {{x,y,0.0f}};
-    u32 ncolor[] = {color};
-
-    GRRLIB_NPlot(v, ncolor, 1);
+    GX_Begin(GX_POINTS, GX_VTXFMT0, 1);
+        GX_Position3f32(x, y,  0);
+        GX_Color1u32(color);
+    GX_End();
 }
 
 /**
@@ -131,10 +131,12 @@ void GRRLIB_NPlot(Vector v[], u32 color[], long n) {
  * @param color Line color in RGBA format.
  */
 inline void GRRLIB_Line(f32 x1, f32 y1, f32 x2, f32 y2, u32 color) {
-    Vector v[] = {{x1,y1,0.0f}, {x2,y2,0.0f}};
-    u32 ncolor[] = {color,color};
-
-    GRRLIB_NGone(v, ncolor, 2);
+    GX_Begin(GX_LINES, GX_VTXFMT0, 2);
+        GX_Position3f32(x1, y1,  0);
+        GX_Color1u32(color);
+        GX_Position3f32(x2, y2, 0);
+        GX_Color1u32(color);
+    GX_End();
 }
 
 /**
