@@ -18,38 +18,6 @@ Grid::~Grid()
 }
 
 /**
- * Set player X at a certain position.
- * @param[in] X X coordinate in the grid.
- * @param[in] Y Y coordinate in the grid.
- * @return Return false if a player already occupied this position.
- */
-bool Grid::SetPlayerX(u8 X, u8 Y)
-{
-    if(Board[X][Y] == ' ')
-    {
-        Board[X][Y] = 'X';
-        return true;
-    }
-    return false;
-}
-
-/**
- * Set player O at a certain position.
- * @param[in] X X coordinate in the grid.
- * @param[in] Y Y coordinate in the grid.
- * @return Return false if a player already occupied this position.
- */
-bool Grid::SetPlayerO(u8 X, u8 Y)
-{
-    if(Board[X][Y] == ' ')
-    {
-        Board[X][Y] = 'O';
-        return true;
-    }
-    return false;
-}
-
-/**
  * Set player at a certain position.
  * @param[in] Player Player sign, either X or O.
  * @param[in] X X coordinate in the grid.
@@ -58,12 +26,17 @@ bool Grid::SetPlayerO(u8 X, u8 Y)
  */
 bool Grid::SetPlayer(u8 Player, u8 X, u8 Y)
 {
-    if(Player == 'X')
-        return SetPlayerX(X, Y);
-    else if(Player == 'O')
-        return SetPlayerO(X, Y);
-    else
-        return false;
+    if(Board[X][Y] == ' ' &&
+        (Player == 'X' || Player == 'O'))
+    {
+        Board[X][Y] = Player;
+        if(IsPlayerWinning(Player))
+        {
+            Winner = Player;
+        }
+        return true;
+    }
+    return false;
 }
 
 /**
@@ -119,7 +92,7 @@ void Grid::SetPlayerAI(u8 Player)
 
 /**
  * Get a random valid position to set a player.
- * @param[out] x A valid random X coordinate in the grid.
+ * @param[out] X A valid random X coordinate in the grid.
  * @param[out] Y A valid random Y coordinate in the grid.
  */
 void Grid::GetRandomPosition(u8 *X, u8 *Y)
@@ -151,6 +124,7 @@ u8 Grid::GetPlayerAtPos(u8 X, u8 Y)
  */
 void Grid::Clear()
 {
+    Winner = ' ';
     memset(Board, ' ', sizeof(Board));
 }
 
@@ -160,54 +134,49 @@ void Grid::Clear()
  */
 u8 Grid::GetWinner()
 {
-    if(IsPlayerWinning('X'))
-        return 'X';
-    else if(IsPlayerWinning('O'))
-        return 'O';
-    else
-        return ' ';
+    return Winner;
 }
 
 /**
  * Check if a specific player is winning on a specific board.
  * @param[in] Player Player sign, either X or O.
- * @param[in] MyBord A specific board to test.
+ * @param[in] MyBoard A specific board to test.
  * @return Return true if the player is winning, false otherwise.
  */
-bool Grid::IsPlayerWinning(u8 Player, u8 MyBord[3][3])
+bool Grid::IsPlayerWinning(u8 Player, u8 MyBoard[3][3])
 {
     // Check rows
-    if((MyBord[0][0] == Player) & (MyBord[1][0] == Player) & (MyBord[2][0] == Player))
+    if((MyBoard[0][0] == Player) & (MyBoard[1][0] == Player) & (MyBoard[2][0] == Player))
     {
         return true;
     }
-    if((MyBord[0][1] == Player) & (MyBord[1][1] == Player) & (MyBord[2][1] == Player))
+    if((MyBoard[0][1] == Player) & (MyBoard[1][1] == Player) & (MyBoard[2][1] == Player))
     {
         return true;
     }
-    if((MyBord[0][2] == Player) & (MyBord[1][2] == Player) & (MyBord[2][2] == Player))
+    if((MyBoard[0][2] == Player) & (MyBoard[1][2] == Player) & (MyBoard[2][2] == Player))
     {
         return true;
     }
-    // Check colums
-    if((MyBord[0][0] == Player) & (MyBord[0][1] == Player) & (MyBord[0][2] == Player))
+    // Check columns
+    if((MyBoard[0][0] == Player) & (MyBoard[0][1] == Player) & (MyBoard[0][2] == Player))
     {
         return true;
     }
-    if((MyBord[1][0] == Player) & (MyBord[1][1] == Player) & (MyBord[1][2] == Player))
+    if((MyBoard[1][0] == Player) & (MyBoard[1][1] == Player) & (MyBoard[1][2] == Player))
     {
         return true;
     }
-    if((MyBord[2][0] == Player) & (MyBord[2][1] == Player) & (MyBord[2][2] == Player))
+    if((MyBoard[2][0] == Player) & (MyBoard[2][1] == Player) & (MyBoard[2][2] == Player))
     {
         return true;
     }
     // Check diagonals
-    if((MyBord[0][0] == Player) & (MyBord[1][1] == Player) & (MyBord[2][2] == Player))
+    if((MyBoard[0][0] == Player) & (MyBoard[1][1] == Player) & (MyBoard[2][2] == Player))
     {
         return true;
     }
-    if((MyBord[2][0] == Player) & (MyBord[1][1] == Player) & (MyBord[0][2] == Player))
+    if((MyBoard[2][0] == Player) & (MyBoard[1][1] == Player) & (MyBoard[0][2] == Player))
     {
         return true;
     }

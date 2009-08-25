@@ -18,8 +18,6 @@ class Grid
 public:
     Grid();
     ~Grid();
-    bool SetPlayerX(u8, u8);
-    bool SetPlayerO(u8, u8);
     bool SetPlayer(u8, u8, u8);
     void GetRandomPosition(u8 *, u8 *);
     void SetPlayerAI(u8);
@@ -29,6 +27,7 @@ public:
     bool IsFilled();
 private:
     u8 Board[3][3];
+    u8 Winner;
 
     bool IsPlayerWinning(u8);
     bool IsPlayerWinning(u8, u8 MyBord[3][3]);
