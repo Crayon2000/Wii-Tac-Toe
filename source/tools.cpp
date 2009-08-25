@@ -14,10 +14,9 @@ typedef struct _rumble_data
 } RUMBLE_DATA;
 
 static RUMBLE_DATA Rumble_Info[WPAD_MAX_WIIMOTES];
-static vu32 *_wiilight_reg = (u32*)0xCD0000C0;
 
 /**
- * Set rumbeling time for a specific controller
+ * Set rumbeling time for a specific controller.
  * @param[in] chan Controller ID
  * @param[in] rumble_time Time to rumble in milisecond
  */
@@ -29,7 +28,7 @@ void RUMBLE_Wiimote(s32 chan, int rumble_time)
 }
 
 /**
- * Initialize rumbeling to false
+ * Initialize rumbeling to false.
  */
 void RUMBLE_Init()
 {
@@ -42,7 +41,7 @@ void RUMBLE_Init()
 }
 
 /**
- * Stop rumbeling if time is elapsed
+ * Stop rumbeling if time is elapsed.
  */
 void RUMBLE_Verify()
 {
@@ -84,23 +83,23 @@ void msleep(unsigned long milisec)
 }
 
 /**
- * Turn Wii light off
+ * Turn Wii light off.
  */
 void WIILIGHT_TurnOff()
 {
-    *_wiilight_reg &= ~0x20;
+    *(u32*)0xCD0000C0 &= ~0x20;
 }
 
 /**
- * Turn Wii light on
+ * Turn Wii light on.
  */
 void WIILIGHT_TurnOn()
 {
-    *_wiilight_reg |= 0x20;
+    *(u32*)0xCD0000C0 |= 0x20;
 }
 
 /**
- * Replace a string by another string in a string
+ * Replace a string by another string in a string.
  * @param[in] txt String to search.
  * @param[in] Before String to be replaced.
  * @param[in] After Replacement string.

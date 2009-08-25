@@ -224,11 +224,16 @@ typedef unsigned int JDIMENSION;
  */
 
 #ifndef HAVE_BOOLEAN
-typedef int boolean;
+# ifndef boolean                /* this works around the bug in gctypes.h */
+    typedef int boolean;
+# endif
+#define HAVE_BOOLEAN
 #endif
+
 #ifndef FALSE			/* in case these macros already exist */
 #define FALSE	0		/* values of boolean */
 #endif
+
 #ifndef TRUE
 #define TRUE	1
 #endif
