@@ -49,7 +49,6 @@ private:
     void ChangeScreen(u8 NewScreen);
     void ButtonOn(s8);
     bool SelectZone();
-    void FreeMemImg();
     void ChangeCursor();
 
     Cursor *Hand;
@@ -74,10 +73,12 @@ private:
     Language *Lang;
     Symbol **GridSign;
 
-    GRRLIB_texImg *GameImg;
-    GRRLIB_texImg *SplashImg;
-    GRRLIB_texImg *HoverImg;
-    GRRLIB_texImg *CopiedImg;
+    GRRLIB_texImg *GameImg;     /**< Background texture for the game. */
+    GRRLIB_texImg *SplashImg;   /**< Splash screen texture. */
+    GRRLIB_texImg *HoverImg;    /**< Texture to put over a symbol when selected. */
+    GRRLIB_texImg *CopiedImg;   /**< Texture to store a temporary copy of the screen. */
+
+    bool Copied;
 
     u16 ScreenWidth, ScreenHeight;
 

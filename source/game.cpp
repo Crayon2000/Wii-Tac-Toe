@@ -98,7 +98,7 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight)
     GameImg = GRRLIB_LoadTexture(backg);
     SplashImg = GRRLIB_LoadTexture(splash);
     HoverImg = GRRLIB_LoadTexture(hover);
-    CopiedImg = NULL;
+    CopiedImg = GRRLIB_CreateEmptyTexture(ScreenWidth, ScreenHeight);
 
     RUMBLE_Init();
     ASND_Init();
@@ -114,7 +114,7 @@ Game::~Game()
     GRRLIB_FreeTexture(GameImg);
     GRRLIB_FreeTexture(SplashImg);
     GRRLIB_FreeTexture(HoverImg);
-    FreeMemImg();
+    GRRLIB_FreeTexture(CopiedImg);
 
     delete GameGrid;
     delete[] Hand;
@@ -187,7 +187,7 @@ void Game::Paint()
  */
 void Game::StartSreen()
 {
-    if(CopiedImg == NULL)
+    if(!Copied)
     {   // Copy static element
         GRRLIB_initTexture();   // Init text layer
         GRRLIB_DrawImg(0, 0, SplashImg, 0, 1, 1, 0xFFFFFFFF);
@@ -203,7 +203,8 @@ void Game::StartSreen()
         GRRLIB_Printf2(TextLeft, 400, TempText, 20, 0x000000);
 
         GRRLIB_DrawImg(0, 0, GRRLIB_GetTexture(), 0, 1.0, 1.0, 0xFFFFFFFF);
-        CopiedImg = GRRLIB_Screen2Texture();
+        GRRLIB_Screen2Texture(CopiedImg);
+        Copied = true;
     }
     else
     {
@@ -219,7 +220,7 @@ void Game::GameScreen(bool CopyScreen)
 {
     int TextLeft;
 
-    if(CopiedImg == NULL)
+    if(!Copied)
     {   // Copy static element
         GRRLIB_initTexture();   // Init text layer
         // Background image
@@ -271,7 +272,8 @@ void Game::GameScreen(bool CopyScreen)
         GRRLIB_DrawImg(0, 0, GRRLIB_GetTexture(), 0, 1.0, 1.0, 0xFFFFFFFF);
         if(CopyScreen)
         {
-            CopiedImg = GRRLIB_Screen2Texture();
+            GRRLIB_Screen2Texture(CopiedImg);
+            Copied = true;
         }
     }
     if(CopyScreen)
@@ -304,7 +306,7 @@ void Game::GameScreen(bool CopyScreen)
  */
 void Game::ExitScreen()
 {
-    if(CopiedImg == NULL)
+    if(!Copied)
     {   // Copy static element
         switch(LastScreen)
         {
@@ -323,7 +325,8 @@ void Game::ExitScreen()
         GRRLIB_Rectangle(0, 383, ScreenWidth, 2, 0x848284FF, 1);
         GRRLIB_Rectangle(0, 385, ScreenWidth, 95, 0x000000FF, 1);
 
-        CopiedImg = GRRLIB_Screen2Texture();
+        GRRLIB_Screen2Texture(CopiedImg);
+        Copied = true;
     }
     else
     {
@@ -376,7 +379,7 @@ void Game::ExitScreen()
  */
 void Game::MenuScreen(bool CopyScreen)
 {
-    if(CopiedImg == NULL)
+    if(!Copied)
     {   // Copy static element
         GRRLIB_initTexture();   // Init text layer
         GRRLIB_FillScreen(0x000000FF);  // Clear screen
@@ -398,7 +401,8 @@ void Game::MenuScreen(bool CopyScreen)
         GRRLIB_DrawImg(0, 0, GRRLIB_GetTexture(), 0, 1.0, 1.0, 0xFFFFFFFF);
         if(CopyScreen)
         {
-            CopiedImg = GRRLIB_Screen2Texture();
+            GRRLIB_Screen2Texture(CopiedImg);
+            Copied = true;
         }
     }
     else
@@ -523,9 +527,7 @@ bool Game::ControllerManager()
                             ExitScreen();
                             Hand[1].Paint();
                             Hand[0].Paint();
-                            if(CopiedImg)
-                                GRRLIB_FreeTexture(CopiedImg);
-                            CopiedImg = GRRLIB_Screen2Texture();
+                            GRRLIB_Screen2Texture(CopiedImg);
                             WPAD_Rumble(WPAD_CHAN_0, 0); // Rumble off, just in case
                             WPAD_Rumble(WPAD_CHAN_1, 0); // Rumble off, just in case
                             GRRLIB_DrawImg_FadeOut(CopiedImg, 1, 1, 3);
@@ -568,7 +570,7 @@ bool Game::ControllerManager()
         WIILIGHT_TurnOff();
         WPAD_Rumble(WPAD_CHAN_0, 0); // Rumble off
         WPAD_Rumble(WPAD_CHAN_1, 0); // Rumble off
-        FreeMemImg();
+        Copied = false;
     }
     return false;
 }
@@ -583,7 +585,7 @@ void Game::Clear()
     PlayerToStart = !PlayerToStart; // Next other player will start
     snprintf(text, TEXT_SIZE, Lang->GetRandomTurnOverMessage(), WTTPlayer[CurrentPlayer].GetName());
     RoundFinished = false;
-    FreeMemImg();
+    Copied = false;
     ChangeCursor();
 }
 
@@ -616,20 +618,8 @@ void Game::TurnIsOver()
         snprintf(text, TEXT_SIZE, Lang->GetRandomTurnOverMessage(), WTTPlayer[CurrentPlayer].GetName());
     }
 
-    FreeMemImg();
+    Copied = false;
     ChangeCursor();
-}
-
-/**
- * Free the texture.
- */
-void Game::FreeMemImg()
-{
-    if(CopiedImg != NULL)
-    {
-        GRRLIB_FreeTexture(CopiedImg);
-        CopiedImg = NULL;
-    }
 }
 
 /**
@@ -716,7 +706,7 @@ void Game::ChangeScreen(u8 NewScreen)
     LastScreen = CurrentScreen;
     CurrentScreen = NewScreen;
 
-    FreeMemImg();
+    Copied = false;
     ChangeCursor();
 }
 

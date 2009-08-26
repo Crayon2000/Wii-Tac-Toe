@@ -26,7 +26,6 @@ THE SOFTWARE.
  * Make a snapshot of the screen in a texture.
  * @param tex A pointer to a texture representing the screen or NULL if an error occurs.
  */
-/*
 void  GRRLIB_Screen2Texture (GRRLIB_texImg *tex) {
     if(tex->data != NULL) {
         GX_SetTexCopySrc(0, 0, rmode->fbWidth, rmode->efbHeight);
@@ -36,4 +35,3 @@ void  GRRLIB_Screen2Texture (GRRLIB_texImg *tex) {
         GRRLIB_FlushTex(tex);
     }
 }
-*/
