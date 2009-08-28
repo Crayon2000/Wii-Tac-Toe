@@ -16,8 +16,10 @@
 
 // Audio
 #include "../audio/button_rollover.h"
+#include "../audio/tic-tac.h"
 
-#define BUTTON_VOICE    0
+#define MODPLAYER_VOICE 0
+#define BUTTON_VOICE    1
 
 #define START_SCREEN    0
 #define GAME_SCREEN     1
@@ -103,6 +105,10 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight)
     RUMBLE_Init();
     ASND_Init();
     ASND_Pause(0);
+    MODPlay_Init(&ModTrack);
+    MODPlay_SetMOD(&ModTrack, tic_tac);
+    MODPlay_SetVolume(&ModTrack, 48, 48); // Maximum volume is 64
+    MODPlay_Start(&ModTrack);
     NewGame();
 }
 
@@ -130,6 +136,8 @@ Game::~Game()
     }
     delete[] GridSign;
 
+    MODPlay_Unload(&ModTrack);
+    ASND_Pause(1);
     ASND_End();
 }
 
@@ -281,21 +289,44 @@ void Game::GameScreen(bool CopyScreen)
         GRRLIB_DrawImg(0, 0, CopiedImg, 0, 1, 1, 0xFFFFFFFF);
     }
 
+    u32 HoverColor = (WTTPlayer[CurrentPlayer].GetSign() == 'X') ? 0x0093DDFF : 0xDA251DFF;
+
     // Draw grid content
+    if(RoundFinished)
+    {
+        if(AlphaDirection)
+        {
+            SymbolAlpha++;
+            if(SymbolAlpha > 128)
+                AlphaDirection = !AlphaDirection;
+        }
+        else
+        {
+            SymbolAlpha--;
+            if(SymbolAlpha < 5)
+                AlphaDirection = !AlphaDirection;
+        }
+    }
     u8 x, y;
     for(x = 0; x < 3; x++)
     {
         for(y = 0; y < 3; y++)
         {
             GridSign[x][y].SetPlayer(GameGrid->GetPlayerAtPos(x, y));
+            GridSign[x][y].SetColor(0xFFFFFFFF);
             GridSign[x][y].Paint();
+            if(GameGrid->WinningBoard[x][y])
+            {
+                GridSign[x][y].SetColor(HoverColor);
+                GridSign[x][y].SetAlpha(SymbolAlpha);
+                GridSign[x][y].Paint();
+            }
         }
     }
 
     // Draw selection box
     if(SelectZone() && GameGrid->GetPlayerAtPos(HandX, HandY) == ' ')
     {
-        u32 HoverColor =  (WTTPlayer[CurrentPlayer].GetSign() == 'X') ? 0x0093DDFF : 0xDA251DFF;
         GRRLIB_DrawImg(Table[HandX][HandY].GetX(), Table[HandX][HandY].GetY(),
             HoverImg, 0, 1, 1, HoverColor);
     }
@@ -306,6 +337,7 @@ void Game::GameScreen(bool CopyScreen)
  */
 void Game::ExitScreen()
 {
+    MODPlay_Pause(&ModTrack, true);
     if(!Copied)
     {   // Copy static element
         switch(LastScreen)
@@ -395,7 +427,7 @@ void Game::MenuScreen(bool CopyScreen)
         GRRLIB_Rectangle(0, 385, ScreenWidth, 95, 0x000000FF, 1);
 
         char VersionText[TEXT_SIZE] = "";
-        sprintf(VersionText, Lang->Text("Ver. %s"), "0.6");
+        sprintf(VersionText, Lang->Text("Ver. %s"), "0.7");
         GRRLIB_Printf2(500, 40, VersionText, 12, 0xFFFFFF);
 
         GRRLIB_DrawImg(0, 0, GRRLIB_GetTexture(), 0, 1.0, 1.0, 0xFFFFFFFF);
@@ -511,6 +543,7 @@ bool Game::ControllerManager()
             case HOME_SCREEN:
                 if((Buttons0 & WPAD_BUTTON_HOME) || (Buttons1 & WPAD_BUTTON_HOME))
                 {
+                    MODPlay_Pause(&ModTrack, false);
                     ChangeScreen(LastScreen);
                 }
                 else if((Buttons0 & WPAD_BUTTON_A))
@@ -518,6 +551,7 @@ bool Game::ControllerManager()
                     switch(SelectedButton)
                     {
                         case 0:
+                            MODPlay_Pause(&ModTrack, false);
                             ChangeScreen(LastScreen);
                             break;
                         case 1:
@@ -605,6 +639,8 @@ void Game::TurnIsOver()
         TextToCopy = str_replace(TextToCopy, "$WINNER$", WTTPlayer[GameWinner].GetName());
         strncpy(text, TextToCopy.c_str(), TEXT_SIZE);
         RoundFinished = true;
+        SymbolAlpha = 5;
+        AlphaDirection = 0;
     }
     else if(GameGrid->IsFilled())
     {   // Tie game
@@ -718,7 +754,7 @@ void Game::ButtonOn(s8 NewSelectedButton)
 {
     if(SelectedButton != NewSelectedButton)
     {
-        ASND_SetVoice(BUTTON_VOICE, VOICE_MONO_16BIT, 44100, 0, (void *)button_rollover, button_rollover_size, 32, 32, NULL);
+        ASND_SetVoice(BUTTON_VOICE, VOICE_MONO_16BIT, 44100, 0, (void *)button_rollover, button_rollover_size, 76, 76, NULL);
         RUMBLE_Wiimote(WPAD_CHAN_0, 50); // 50 ms
     }
 }

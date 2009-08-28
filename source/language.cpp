@@ -76,7 +76,10 @@ void Language::SetLanguage(s32 Conf_Lang)
             Root_Node = mxmlLoadString(NULL, (char*)italian, MXML_TEXT_CALLBACK);
             break;
         case CONF_LANG_JAPANESE:
-        default:    // LANG_ENGLISH
+        case CONF_LANG_KOREAN:
+        case CONF_LANG_SIMP_CHINESE:
+        case CONF_LANG_TRAD_CHINESE:
+        default:    // CONF_LANG_ENGLISH
             Root_Node = mxmlLoadString(NULL, (char*)english, MXML_TEXT_CALLBACK);
     }
     First_Node = mxmlFindElement(Root_Node, Root_Node, "language", NULL, NULL, MXML_DESCEND);
