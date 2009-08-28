@@ -30,6 +30,7 @@ bool Grid::SetPlayer(u8 Player, u8 X, u8 Y)
         (Player == 'X' || Player == 'O'))
     {
         Board[X][Y] = Player;
+        memset(WinningBoard, false, sizeof(WinningBoard));
         if(IsPlayerWinning(Player))
         {
             Winner = Player;
@@ -86,26 +87,7 @@ void Grid::SetPlayerAI(u8 Player)
     }
 
     // Play at random position
-    GetRandomPosition(&x, &y);
-    SetPlayer(Player, x, y);
-}
-
-/**
- * Get a random valid position to set a player.
- * @param[out] X A valid random X coordinate in the grid.
- * @param[out] Y A valid random Y coordinate in the grid.
- */
-void Grid::GetRandomPosition(u8 *X, u8 *Y)
-{
-    while(1)
-    {
-        *X = rand() % 3;
-        *Y = rand() % 3;
-        if(Board[*X][*Y] == ' ')
-        {
-            return;
-        }
-    }
+    while(!SetPlayer(Player, rand() % 3, rand() % 3)) {}
 }
 
 /**
@@ -148,36 +130,44 @@ bool Grid::IsPlayerWinning(u8 Player, u8 MyBoard[3][3])
     // Check rows
     if((MyBoard[0][0] == Player) & (MyBoard[1][0] == Player) & (MyBoard[2][0] == Player))
     {
+        WinningBoard[0][0] = true; WinningBoard[1][0] = true; WinningBoard[2][0] = true;
         return true;
     }
     if((MyBoard[0][1] == Player) & (MyBoard[1][1] == Player) & (MyBoard[2][1] == Player))
     {
+        WinningBoard[0][1] = true; WinningBoard[1][1] = true; WinningBoard[2][1] = true;
         return true;
     }
     if((MyBoard[0][2] == Player) & (MyBoard[1][2] == Player) & (MyBoard[2][2] == Player))
     {
+        WinningBoard[0][2] = true; WinningBoard[1][2] = true; WinningBoard[2][2] = true;
         return true;
     }
     // Check columns
     if((MyBoard[0][0] == Player) & (MyBoard[0][1] == Player) & (MyBoard[0][2] == Player))
     {
+        WinningBoard[0][0] = true; WinningBoard[0][1] = true; WinningBoard[0][2] = true;
         return true;
     }
     if((MyBoard[1][0] == Player) & (MyBoard[1][1] == Player) & (MyBoard[1][2] == Player))
     {
+        WinningBoard[1][0] = true; WinningBoard[1][1] = true; WinningBoard[1][2] = true;
         return true;
     }
     if((MyBoard[2][0] == Player) & (MyBoard[2][1] == Player) & (MyBoard[2][2] == Player))
     {
+        WinningBoard[2][0] = true; WinningBoard[2][1] = true; WinningBoard[2][2] = true;
         return true;
     }
     // Check diagonals
     if((MyBoard[0][0] == Player) & (MyBoard[1][1] == Player) & (MyBoard[2][2] == Player))
     {
+        WinningBoard[0][0] = true; WinningBoard[1][1] = true; WinningBoard[2][2] = true;
         return true;
     }
     if((MyBoard[2][0] == Player) & (MyBoard[1][1] == Player) & (MyBoard[0][2] == Player))
     {
+        WinningBoard[2][0] = true; WinningBoard[1][1] = true; WinningBoard[0][2] = true;
         return true;
     }
     return false;

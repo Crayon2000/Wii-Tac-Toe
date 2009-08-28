@@ -25,6 +25,7 @@ public:
     unsigned int GetHeight();
     float GetAngle();
     u8 GetAlpha();
+    u32 GetColor();
     bool IsVisible();
     void SetLeft(float);
     void SetTop(float);
@@ -34,6 +35,7 @@ public:
     void SetSize(unsigned int, unsigned int);
     void SetAngle(float);
     void SetAlpha(u8);
+    void SetColor(u32);
     void SetVisible(bool);
     bool IsInside(float, float);
 protected:
@@ -45,7 +47,7 @@ protected:
     unsigned int Height;/**< The height of the object. */
     float Angle;        /**< The angle in degree of the object. */
     bool Visible;       /**< Control the visibility of the objet. If Visible is true, the objet appears. If Visible is false, the objet is not visible. */
-    u8 Alpha;           /**< Change the opacity of the object (0-255). */
+    u32 Color;          /**< Color of the object (RGBA). */
     //char *Name;
     //void *Parent;
 };

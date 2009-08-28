@@ -33,7 +33,6 @@ Cursor::Cursor() : Object()
     // Default values
     Left = 0;
     Top = 0;
-    Alpha = 0xFF;
     SetPlayer(curX);
 }
 
@@ -56,9 +55,9 @@ void Cursor::Paint()
     if(Visible)
     {
         // Draw the shadow
-        GRRLIB_DrawImg(Left + 3, Top + 3, CurrentCursor, Angle, 1, 1, 0x00000000 | ((Alpha == 0xFF) ? 0x44 : 0x11));
+        GRRLIB_DrawImg(Left + 3, Top + 3, CurrentCursor, Angle, 1, 1, 0x00000000 | ((A(Color) == 0xFF) ? 0x44 : 0x11));
         // Draw the cursor
-        GRRLIB_DrawImg(Left, Top, CurrentCursor, Angle, 1, 1, 0xFFFFFF00 | Alpha);
+        GRRLIB_DrawImg(Left, Top, CurrentCursor, Angle, 1, 1, Color);
     }
 }
 

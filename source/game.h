@@ -14,6 +14,7 @@
 #include "player.h"
 #include "language.h"
 #include "types.h"
+#include <gcmodplay.h>
 
 #define TEXT_SIZE 100   /**< Maximum length of the text. */
 
@@ -84,6 +85,11 @@ private:
 
     u8 AIThinkLoop;
     gameMode GameMode;
+
+    u8 SymbolAlpha;
+    bool AlphaDirection;
+
+    MODPlay ModTrack; 
 };
 //---------------------------------------------------------------------------
 #endif

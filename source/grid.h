@@ -19,12 +19,12 @@ public:
     Grid();
     ~Grid();
     bool SetPlayer(u8, u8, u8);
-    void GetRandomPosition(u8 *, u8 *);
     void SetPlayerAI(u8);
     u8 GetPlayerAtPos(u8, u8);
     u8 GetWinner();
     void Clear();
     bool IsFilled();
+    bool WinningBoard[3][3];
 private:
     u8 Board[3][3];
     u8 Winner;

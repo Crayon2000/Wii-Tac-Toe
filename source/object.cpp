@@ -10,6 +10,7 @@ Object::Object()
     Left = 0;
     Top = 0;
     Angle = 0.0;
+    Color = 0xFFFFFFFF;
 }
 
 /**
@@ -182,7 +183,7 @@ void Object::SetAngle(float Angle)
  */
 u8 Object::GetAlpha()
 {
-    return Alpha;
+    return A(Color);
 }
 
 /**
@@ -191,5 +192,23 @@ u8 Object::GetAlpha()
  */
 void Object::SetAlpha(u8 Alpha)
 {
-    this->Alpha = Alpha;
+    Color = (Color & 0xFFFFFF00) | (Alpha & 0xFF);
+}
+
+/**
+ * Get the color of the object.
+ * @return The color of the object (RGBA).
+ */
+u32 Object::GetColor()
+{
+    return Color;
+}
+
+/**
+ * Set the color of the texture.
+ * @param[in] AColor New color (RGB).
+ */
+void Object::SetColor(u32 AColor)
+{
+   Color = AColor;
 }

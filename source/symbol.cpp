@@ -35,11 +35,11 @@ void Symbol::Paint()
 {
     if(Player == 'X' || Player == 'x')
     {
-        GRRLIB_DrawImg(Left, Top, ImgX, 0, 1, 1, 0xFFFFFFFF);
+        GRRLIB_DrawImg(Left, Top, ImgX, Angle, 1, 1, Color);
     }
     else if(Player == 'O' || Player == 'o')
     {
-        GRRLIB_DrawImg(Left, Top, ImgO, 0, 1, 1, 0xFFFFFFFF);
+        GRRLIB_DrawImg(Left, Top, ImgO, Angle, 1, 1, Color);
     }
 }
 
