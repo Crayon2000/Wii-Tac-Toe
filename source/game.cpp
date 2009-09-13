@@ -16,10 +16,12 @@
 
 // Audio
 #include "../audio/button_rollover.h"
+#include "../audio/screen_change.h"
 #include "../audio/tic-tac.h"
 
 #define MODPLAYER_VOICE 0
 #define BUTTON_VOICE    1
+#define SCREEN_VOICE    2
 
 #define START_SCREEN    0
 #define GAME_SCREEN     1
@@ -92,9 +94,9 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight)
     MenuButton[1].SetCaption(Lang->Text("1 Player (Vs AI)"));
 
     WTTPlayer = new Player[2];
-    WTTPlayer[0].SetSign('O');
+    WTTPlayer[0].SetSign('X');
     WTTPlayer[0].SetName(Lang->Text("PLAYER 1"));
-    WTTPlayer[1].SetSign('X');
+    WTTPlayer[1].SetSign('O');
     WTTPlayer[1].SetName(Lang->Text("PLAYER 2"));
 
     GameImg = GRRLIB_LoadTexture(backg);
@@ -105,10 +107,6 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight)
     RUMBLE_Init();
     ASND_Init();
     ASND_Pause(0);
-    MODPlay_Init(&ModTrack);
-    MODPlay_SetMOD(&ModTrack, tic_tac);
-    MODPlay_SetVolume(&ModTrack, 48, 48); // Maximum volume is 64
-    MODPlay_Start(&ModTrack);
     NewGame();
 }
 
@@ -235,18 +233,18 @@ void Game::GameScreen(bool CopyScreen)
         GRRLIB_DrawImg(0, 0, GameImg, 0, 1, 1, 0xFFFFFFFF);
 
         // Player name: Offset -2, 2
-        PrintWrapText(42, 50, 125, WTTPlayer[0].GetName(), 0xE6313A, 15);
-        PrintWrapText(42, 145, 125, WTTPlayer[1].GetName(), 0x6BB6DE, 15);
+        PrintWrapText(42, 50, 125, WTTPlayer[0].GetName(), 0x6BB6DE, 15);
+        PrintWrapText(42, 145, 125, WTTPlayer[1].GetName(), 0xE6313A, 15);
         PrintWrapText(42, 250, 125, Lang->Text("TIE GAME"), 0x109642, 15);
 
         // Draw score: Offset -2, 2
         char ScoreText[5];
         snprintf(ScoreText, 5, "%d", WTTPlayer[0].GetScore());
         TextLeft = 104 - GRRLIB_TextWidth(ScoreText, 35) / 2;
-        GRRLIB_Printf2(TextLeft, 77, ScoreText, 35, 0xE6313A);
+        GRRLIB_Printf2(TextLeft, 77, ScoreText, 35, 0x6BB6DE);
         snprintf(ScoreText, 5, "%d", WTTPlayer[1].GetScore());
         TextLeft = 104 - GRRLIB_TextWidth(ScoreText, 35) / 2;
-        GRRLIB_Printf2(TextLeft, 177, ScoreText, 35, 0x6BB6DE);
+        GRRLIB_Printf2(TextLeft, 177, ScoreText, 35, 0xE6313A);
         snprintf(ScoreText, 5, "%d", TieGame);
         TextLeft = 104 - GRRLIB_TextWidth(ScoreText, 35) / 2;
         GRRLIB_Printf2(TextLeft, 282, ScoreText, 35, 0x109642);
@@ -296,13 +294,13 @@ void Game::GameScreen(bool CopyScreen)
     {
         if(AlphaDirection)
         {
-            SymbolAlpha++;
+            SymbolAlpha += 2;
             if(SymbolAlpha > 128)
                 AlphaDirection = !AlphaDirection;
         }
         else
         {
-            SymbolAlpha--;
+            SymbolAlpha -= 2;
             if(SymbolAlpha < 5)
                 AlphaDirection = !AlphaDirection;
         }
@@ -663,9 +661,15 @@ void Game::TurnIsOver()
  */
 void Game::NewGame()
 {
+    MODPlay_Init(&ModTrack);
+    MODPlay_SetMOD(&ModTrack, tic_tac);
+    MODPlay_SetVolume(&ModTrack, 48, 48); // Maximum volume is 64
+    MODPlay_SetStereo(&ModTrack, true);
+    MODPlay_Start(&ModTrack);
+
     PlayerToStart = rand() & 1; // 0 or 1
 
-    ChangeScreen(START_SCREEN);
+    ChangeScreen(START_SCREEN, false);
 
     WTTPlayer[0].ResetScore();
     WTTPlayer[1].ResetScore();
@@ -735,9 +739,16 @@ void Game::PrintWrapText(u16 x, u16 y, u16 maxLineWidth,
 /**
  * Change the screen.
  * @param[in] NewScreen New screen to show.
+ * @param[in] PlaySound Set to true to play a sound. Default value is true.
  */
-void Game::ChangeScreen(u8 NewScreen)
+void Game::ChangeScreen(u8 NewScreen, bool PlaySound)
 {
+    if(PlaySound)
+    {
+        ASND_SetVoice(SCREEN_VOICE, VOICE_MONO_16BIT, 44100, 0,
+            (void *)screen_change, screen_change_size, 100, 100, NULL);
+    }
+
     SelectedButton = -1;
     LastScreen = CurrentScreen;
     CurrentScreen = NewScreen;
@@ -754,7 +765,8 @@ void Game::ButtonOn(s8 NewSelectedButton)
 {
     if(SelectedButton != NewSelectedButton)
     {
-        ASND_SetVoice(BUTTON_VOICE, VOICE_MONO_16BIT, 44100, 0, (void *)button_rollover, button_rollover_size, 76, 76, NULL);
+        ASND_SetVoice(BUTTON_VOICE, VOICE_MONO_16BIT, 44100, 0,
+            (void *)button_rollover, button_rollover_size, 80, 80, NULL);
         RUMBLE_Wiimote(WPAD_CHAN_0, 50); // 50 ms
     }
 }
@@ -782,8 +794,8 @@ bool Game::SelectZone()
                         HandY = y;
                         if(GameGrid->GetPlayerAtPos(HandX, HandY) == ' ')
                         {   // Zone is empty
-                            ASND_SetVoice(BUTTON_VOICE, VOICE_MONO_16BIT, 44100, 0, (void *)button_rollover,
-                                button_rollover_size, 32, 32, NULL);
+                            ASND_SetVoice(BUTTON_VOICE, VOICE_MONO_16BIT, 44100, 0,
+                                (void *)button_rollover, button_rollover_size, 90, 90, NULL);
                             RUMBLE_Wiimote(WPAD_CHAN_0, 30);  // 30 ms
                         }
                     }
@@ -822,7 +834,7 @@ void Game::ChangeCursor()
         }
         else
         {
-            Hand[0].SetPlayer(curO);
+            Hand[0].SetPlayer(curX);
             if(CurrentPlayer == 0 || RoundFinished)
             {
                 Hand[0].SetAlpha(0xFF);
@@ -837,9 +849,9 @@ void Game::ChangeCursor()
     }
     else
     {
-        Hand[0].SetPlayer(curO);
+        Hand[0].SetPlayer(curX);
         Hand[0].SetAlpha(0xFF);
-        Hand[1].SetPlayer(curX);
+        Hand[1].SetPlayer(curO);
         Hand[1].SetAlpha(0xFF);
     }
     Hand[1].SetAlpha(0x55);
