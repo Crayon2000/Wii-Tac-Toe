@@ -11,8 +11,6 @@ GRRLIB_texImg *GRRLIB_GetTexture(void);
 unsigned int GRRLIB_TextWidth(const char *, unsigned int);
 /**** FREETYPE END ****/
 
-bool GRRLIB_ScrShot(const char*);
-
 void GRRLIB_DrawImg_FadeInOut(struct GRRLIB_texImg *tex, float scaleX, f32 scaleY, u16 speed);
 void GRRLIB_DrawImg_FadeIn(struct GRRLIB_texImg *tex, float scaleX, f32 scaleY, u16 speed);
 void GRRLIB_DrawImg_FadeOut(struct GRRLIB_texImg *tex, float scaleX, f32 scaleY, u16 speed);

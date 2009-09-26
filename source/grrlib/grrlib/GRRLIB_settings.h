@@ -25,9 +25,7 @@ THE SOFTWARE.
  * Inline functions for configuring the GRRLIB settings.
  */
 
-#include <math.h>
-
-#include "../GRRLIB.h"
+#include "../grrlib.h"
 
 extern  GRRLIB_drawSettings  GRRLIB_Settings;
 
@@ -36,7 +34,7 @@ extern  GRRLIB_drawSettings  GRRLIB_Settings;
  * @param blendmode The blending mode to use (Default: GRRLIB_BLEND_ALPHA).
  */
 INLINE
-void  GRRLIB_SetBlend (const int blendmode) {
+void  GRRLIB_SetBlend (const GRRLIB_blendMode blendmode) {
     GRRLIB_Settings.blend = blendmode;
     switch (GRRLIB_Settings.blend) {
         case GRRLIB_BLEND_ALPHA:
@@ -62,7 +60,7 @@ void  GRRLIB_SetBlend (const int blendmode) {
  * @return The current blending mode.
  */
 INLINE
-int  GRRLIB_GetBlend (void) {
+GRRLIB_blendMode  GRRLIB_GetBlend (void) {
     return GRRLIB_Settings.blend;
 }
 

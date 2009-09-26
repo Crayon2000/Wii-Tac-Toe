@@ -56,6 +56,9 @@ void  GRRLIB_BMFX_FlipV     (const GRRLIB_texImg *texsrc,
 void  GRRLIB_BMFX_Grayscale (const GRRLIB_texImg *texsrc,
                              GRRLIB_texImg *texdest) ;
 
+void  GRRLIB_BMFX_Sepia     (const GRRLIB_texImg *texsrc,
+                             GRRLIB_texImg *texdest) ;
+
 void  GRRLIB_BMFX_Invert    (const GRRLIB_texImg *texsrc,
                              GRRLIB_texImg *texdest) ;
 
@@ -70,13 +73,20 @@ void  GRRLIB_BMFX_Pixelate  (const GRRLIB_texImg *texsrc,
 
 //------------------------------------------------------------------------------
 // GRRLIB_core.c - GRRLIB core functions
-void  GRRLIB_Init (void) ;
+int   GRRLIB_Init (void) ;
 void  GRRLIB_Exit (void) ;
 
 //------------------------------------------------------------------------------
 // GRRLIB_fbAdvanced.c - Render to framebuffer: Advanced primitives
 void  GRRLIB_Circle (const f32 x,  const f32 y,  const f32 radius,
                      const u32 color, const u8 filled) ;
+
+//------------------------------------------------------------------------------
+// GRRLIB_fileIO - File I/O (SD Card)
+int             GRRLIB_LoadFile            (const char* filename,
+                                            unsigned char* *data) ;
+GRRLIB_texImg*  GRRLIB_LoadTextureFromFile (const char* filename) ;
+bool            GRRLIB_ScrShot             (const char* filename) ;
 
 //------------------------------------------------------------------------------
 //! GRRLIB_print.c - Will someome please tell me what these are :)

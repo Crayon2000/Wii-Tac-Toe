@@ -3,23 +3,6 @@
 #include <fat.h>
 
 /**
- * Make a PNG screenshot on the SD card.
- * libfat is required to use the function.
- * @param File name of the file to write.
- * @return true if every thing worked, false otherwise.
- */
-bool GRRLIB_ScrShot(const char* File) {
-    int ErrorCode = -1;
-    IMGCTX pngContext;
-
-    if(fatInitDefault() && (pngContext = PNGU_SelectImageFromDevice(File))) {
-        ErrorCode = PNGU_EncodeFromYCbYCr(pngContext, rmode->fbWidth, rmode->efbHeight, xfb[fb], 0);
-        PNGU_ReleaseImageContext(pngContext);
-    }
-    return !ErrorCode;
-}
-
-/**
  * Fade in, than fade out.
  * @param data   Texture.
  * @param scaleX Texture X scale.
