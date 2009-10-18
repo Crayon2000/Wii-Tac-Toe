@@ -64,7 +64,7 @@ int  GRRLIB_LoadFile(const char* filename, unsigned char* *data) {
 /**
  * Load a texture from a file.
  * @param filename The JPEG or PNG filename to load.
- * @return A GRRLIB_texImg structure filled with image informations.
+ * @return A GRRLIB_texImg structure filled with image information.
  */
 GRRLIB_texImg*  GRRLIB_LoadTextureFromFile(const char *filename) {
     GRRLIB_texImg  *tex;
@@ -83,9 +83,9 @@ GRRLIB_texImg*  GRRLIB_LoadTextureFromFile(const char *filename) {
 }
 
 /**
- * Make a PNG screenshot on the SD card.
+ * Make a PNG screenshot.
  * libfat is required to use the function.
- * @param filename name of the file to write.
+ * @param filename Name of the file to write.
  * @return bool true=everything worked, false=problems occurred.
  */
 bool  GRRLIB_ScrShot(const char* filename) {

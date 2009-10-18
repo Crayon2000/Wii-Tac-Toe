@@ -76,20 +76,9 @@ static bool BlitGlyph(FT_Bitmap *bitmap, int offset, int top, int color) ;
 
 extern void GRRLIB_InitFreetype(void) 
 {
-	unsigned int error = FT_Init_FreeType(&ftLibrary);
-	if (error) 
+	if (FT_Init_FreeType(&ftLibrary) ||
+		FT_New_Memory_Face(ftLibrary, Swis721_Ex_BT, Swis721_Ex_BT_size, 0, &ftFace)) 
 	{
-		exit(0);
-	}
-
-	error = FT_New_Memory_Face(ftLibrary, Swis721_Ex_BT, Swis721_Ex_BT_size, 0, &ftFace);
-	if (error == FT_Err_Unknown_File_Format) 
-	{
-		exit(0);
-	} 
-	else if (error) 
-	{
-		/* Some other error */
 		exit(0);
 	}
 
@@ -112,6 +101,9 @@ extern void GRRLIB_initTexture(void)
     memset(fontTempLayer->data, 1, fontTempLayer->w * fontTempLayer->h * 4);
 }
 
+/**
+ * Print function for TTF font.
+ */
 extern void GRRLIB_Printf2(int x, int y, const char *string, unsigned int fontSize, int color) 
 {
 	unsigned int error = 0;
@@ -138,7 +130,7 @@ extern void GRRLIB_Printf2(int x, int y, const char *string, unsigned int fontSi
 
 	/* Loop over each character, drawing it on to the 4, until the 
 	 * end of the string is reached, or until the pixel width is too wide */
-	unsigned int loop = 0;
+	unsigned int loop;
 	for (loop = 0; loop < length; ++loop)
     {
 		glyphIndex = FT_Get_Char_Index(ftFace, utf32[ loop ]);
@@ -178,7 +170,9 @@ extern void GRRLIB_Printf2(int x, int y, const char *string, unsigned int fontSi
 	free(utf32);
 }
 
-/* Returns true if the character was draw on to the buffer, false if otherwise */
+/**
+ * Returns true if the character was draw on to the buffer, false if otherwise.
+ */
 static bool BlitGlyph(FT_Bitmap *bitmap, int offset, int top, int color) 
 {
 	int bitmapWidth = bitmap->width;
@@ -217,7 +211,9 @@ static bool BlitGlyph(FT_Bitmap *bitmap, int offset, int top, int color)
 	return true;
 }
 
-/* Render the text string to a 4x4RGBA texture, return a pointer to this texture */
+/**
+ * Render the text string to a 4x4RGBA texture, return a pointer to this texture.
+ */
 GRRLIB_texImg *GRRLIB_GetTexture(void) 
 {
     BitmapTo4x4RGBA(fontTempLayer->data, fontTexture->data, 640, 480);
@@ -226,7 +222,9 @@ GRRLIB_texImg *GRRLIB_GetTexture(void)
 	return fontTexture;
 }
 
-/* Convert the RGBA temp buffer to a format usuable by GX */
+/**
+ * Convert the RGBA temp buffer to a format usuable by GX.
+ */
 static void BitmapTo4x4RGBA(const unsigned char *src, void *dst, const unsigned int width, const unsigned int height)
 {
 	unsigned int block, i, c, ar, gb;
@@ -257,12 +255,18 @@ static void BitmapTo4x4RGBA(const unsigned char *src, void *dst, const unsigned 
 	} /* block */
 }
 
+/**
+ * Get the width of a text in pixel.
+ * @param string The text to check.
+ * @param fontSize The size of the font.
+ * @return The width of a text in pixel.
+ */
 unsigned int GRRLIB_TextWidth(const char *string, unsigned int fontSize) {
 	int penX = 0;
 	FT_UInt glyphIndex;
 	FT_UInt previousGlyph = 0;
 	FT_Bool hasKerning = FT_HAS_KERNING(ftFace);
-	unsigned int loop = 0;
+	unsigned int loop;
 	size_t length;
 	wchar_t *utf32;
 
