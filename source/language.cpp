@@ -9,6 +9,8 @@
 #include "../languages/spanish.h"
 #include "../languages/italian.h"
 
+#define ICONV_BUFSIZE 1024
+
 /**
  * Constructor for the Language class.
  */
@@ -49,6 +51,14 @@ const char *Language::Text(const char *From)
     }
 
     return mxmlElementGetAttr(Text_Node, "to");
+}
+
+/**
+ * Load a text from an XML file in memory.
+ */
+wstring Language::String(const char *From)
+{
+    return Utf82Unicode(Text(From));
 }
 
 /**
@@ -108,34 +118,90 @@ unsigned int Language::ChildCount(mxml_node_t *Up_Node, const char *Name)
 /**
  * Get a random message.
  */
-const char *Language::GetRandomMessage(const char *Type, int Count)
+const wchar_t *Language::GetRandomMessage(const char *Type, int Count)
 {
     char RandNum[4] = "";
 
     sprintf(RandNum, "%d", rand() % Count + 1);
     mxml_node_t *Up_Node = mxmlFindElement(First_Node, First_Node, Type, NULL, NULL, MXML_DESCEND);
     mxml_node_t *Text_Node = mxmlFindElement(Up_Node, Up_Node, "message", "id", RandNum, MXML_DESCEND);
-    return mxmlElementGetAttr(Text_Node, "text");
+    return Utf82Unicode(mxmlElementGetAttr(Text_Node, "text")).c_str();
 }
 
 /**
  * Get a random winning message.
  */
-const char *Language::GetRandomWinningMessage()
+const wchar_t *Language::GetRandomWinningMessage()
 {
     return GetRandomMessage("winning_game", WinningCount);
 }
 /**
  * Get a random tie message.
  */
-const char *Language::GetRandomTieMessage()
+const wchar_t *Language::GetRandomTieMessage()
 {
     return GetRandomMessage("tie_game", TieCount);
 }
 /**
  * Get a random turn over message.
  */
-const char *Language::GetRandomTurnOverMessage()
+const wchar_t *Language::GetRandomTurnOverMessage()
 {
     return GetRandomMessage("turn_over", TurnOverCount);
+}
+
+/**
+ * Convert a utf-8 to Unicode.
+ * @param[in] text utf-8 string.
+ * @return A Unicode string.
+ */
+wstring Language::Utf82Unicode(const string &text) {
+    const char *inpos = text.c_str();
+    int incharsleft = text.size() + 1;
+
+    wstring result;
+    wchar_t outbuf[ICONV_BUFSIZE];
+    outbuf[ICONV_BUFSIZE - 1] = 0;
+
+    while (incharsleft)
+    {
+        wchar_t *outpos = outbuf;
+        int outcharsleft = ICONV_BUFSIZE - 1;
+
+        while (incharsleft && outcharsleft)
+        {
+            wchar_t wc = (unsigned char) *inpos++;
+
+            if (wc <= 0x7F)
+            {
+                incharsleft -= 1;
+            }
+            else if (wc <= 0xDF)
+            {
+                wc = (wc & 0x3F) << 6;
+                wc |= (*inpos++ & 0x3F);
+                incharsleft -= 2;
+            }
+            else if (wc <= 0xEF)
+            {
+                wc = (wc & 0x3F) << 12;
+                wc |= (*inpos++ & 0x3F) << 6;
+                wc |= (*inpos++ & 0x3F);
+                incharsleft -= 3;
+            }
+            else if (wc <= 0xF7)
+            {
+                wc = (wc & 0x07) << 18;
+                wc |= (*inpos++ & 0x3F) << 12;
+                wc |= (*inpos++ & 0x3F) << 6;
+                wc |= (*inpos++ & 0x3F);
+                incharsleft -= 4;
+            }
+            *outpos++ = wc;
+            --outcharsleft;
+        }
+        result += outbuf;
+    }
+
+    return result;
 }

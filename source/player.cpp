@@ -13,7 +13,7 @@ Player::Player()
  * Set the player name.
  * @param[in] AName Give a name to the player.
  */
-void Player::SetName(const char *AName)
+void Player::SetName(const wstring AName)
 {
     Name = AName;
 }
@@ -22,9 +22,9 @@ void Player::SetName(const char *AName)
  * Return the player name.
  * @return The name of the player.
  */
-const char *Player::GetName()
+wstring Player::GetName()
 {
-    return Name.c_str();
+    return Name;
 }
 
 /**

@@ -22,8 +22,8 @@ class Player
 public:
     Player();
     virtual ~Player() {};
-    void SetName(const char *);
-    const char *GetName();
+    void SetName(wstring);
+    wstring GetName();
     void SetSign(unsigned char);
     unsigned char GetSign();
     unsigned int GetScore();
@@ -33,7 +33,7 @@ public:
     unsigned char GetType();
 private:
     unsigned int Score;
-    string Name;
+    wstring Name;
     unsigned char Sign;
     unsigned char Type;
 };

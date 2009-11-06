@@ -1,6 +1,7 @@
 #include "grrlib.h"
 
 #include <fat.h>
+#include <wchar.h>
 
 /**
  * Fade in, than fade out.
@@ -61,7 +62,7 @@ void GRRLIB_DrawImg_FadeOut(struct GRRLIB_texImg *tex, float scaleX, f32 scaleY,
 /**** FREETYPE START ****/
 /* This is a very rough implementation if freetype using GRRLIB */
 #include "../fonts/Swis721_Ex_BT.h" // A truetype font
-#include <ft2build.h> /* I presume you have freetype for the Wii installed */
+#include "../freetype/config/ftheader.h"
 #include FT_FREETYPE_H
 
 static FT_Library ftLibrary;
@@ -168,6 +169,69 @@ extern void GRRLIB_Printf2(int x, int y, const char *string, unsigned int fontSi
 	}
 
 	free(utf32);
+}
+
+/**
+ * Print function for TTF font.
+ */
+extern void GRRLIB_Printf2W(int x, int y, const wchar_t *utf32, unsigned int fontSize, int color) 
+{
+	unsigned int error = 0;
+	int penX = 0;
+	int penY = fontSize;
+	FT_GlyphSlot slot = ftFace->glyph;
+	FT_UInt glyphIndex = 0;
+	FT_UInt previousGlyph = 0;
+	FT_Bool hasKerning = FT_HAS_KERNING(ftFace);
+
+    error = FT_Set_Pixel_Sizes(ftFace, 0, fontSize);
+	if (error) 
+	{
+		/* Failed to set the font size to the requested size. 
+		 * You probably should set a default size or something. 
+		 * I'll leave that up to the reader. */
+		 FT_Set_Pixel_Sizes(ftFace, 0, 12);
+	}
+
+	size_t length = wcslen(utf32);
+
+	/* Loop over each character, drawing it on to the 4, until the 
+	 * end of the string is reached, or until the pixel width is too wide */
+	unsigned int loop;
+	for (loop = 0; loop < length; ++loop)
+    {
+		glyphIndex = FT_Get_Char_Index(ftFace, utf32[ loop ]);
+
+		/* To the best of my knowledge, none of the other freetype 
+		 * implementations use kerning, so my method ends up looking
+		 * slightly better :) */
+		if (hasKerning && previousGlyph && glyphIndex) 
+		{
+			FT_Vector delta;
+			FT_Get_Kerning(ftFace, previousGlyph, glyphIndex, FT_KERNING_DEFAULT, &delta);
+			penX += delta.x >> 6;
+		}
+
+		error = FT_Load_Glyph(ftFace, glyphIndex, FT_LOAD_RENDER);
+		if (error)
+        {
+			/* Whoops, something went wrong trying to load the glyph 
+			 * for this character... you should handle this better */
+			continue;
+		}
+
+		if (BlitGlyph(&slot->bitmap, penX + slot->bitmap_left+x, penY - slot->bitmap_top+y, color) == true) 
+		{
+			/* The glyph was successfully blitted to the buffer, move the pen forwards */
+			penX += slot->advance.x >> 6;
+			previousGlyph = glyphIndex;
+		} 
+		else 
+		{
+			/* BlitGlyph returned false, the line must be full */
+			return;
+		}
+	}
 }
 
 /**
@@ -313,6 +377,62 @@ unsigned int GRRLIB_TextWidth(const char *string, unsigned int fontSize) {
 	}
 
 	free(utf32);
+	return penX;
+}
+
+/**
+ * Get the width of a text in pixel.
+ * @param string The text to check.
+ * @param fontSize The size of the font.
+ * @return The width of a text in pixel.
+ */
+unsigned int GRRLIB_TextWidthW(const wchar_t *utf32, unsigned int fontSize) {
+	int penX = 0;
+	FT_UInt glyphIndex;
+	FT_UInt previousGlyph = 0;
+	FT_Bool hasKerning = FT_HAS_KERNING(ftFace);
+	unsigned int loop;
+	size_t length;
+
+	if(utf32 == NULL)
+	{
+		return 0;
+	}
+
+	if(FT_Set_Pixel_Sizes(ftFace, 0, fontSize)) 
+	{
+		/* Failed to set the font size to the requested size. 
+		 * You probably should set a default size or something. */
+		 FT_Set_Pixel_Sizes(ftFace, 0, 12);
+	}
+
+	length = wcslen(utf32);
+
+	/* Loop over each character, drawing it on to the 4, until the 
+	 * end of the string is reached, or until the pixel width is too wide */
+	for(loop = 0; loop < length; ++loop)
+    {
+		glyphIndex = FT_Get_Char_Index(ftFace, utf32[ loop ]);
+
+		/* To the best of my knowledge, none of the other freetype 
+		 * implementations use kerning, so my method ends up looking
+		 * slightly better :) */
+		if(hasKerning && previousGlyph && glyphIndex) 
+		{
+			FT_Vector delta;
+			FT_Get_Kerning(ftFace, previousGlyph, glyphIndex, FT_KERNING_DEFAULT, &delta);
+			penX += delta.x >> 6;
+		}
+
+		if(FT_Load_Glyph(ftFace, glyphIndex, FT_LOAD_RENDER))
+        {
+			continue;
+		}
+
+		penX += ftFace->glyph->advance.x >> 6;
+		previousGlyph = glyphIndex;
+	}
+
 	return penX;
 }
 

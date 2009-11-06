@@ -116,3 +116,22 @@ string str_replace(const string &txt, const string &Before, const string &After)
     }
     return str;
 }
+
+/**
+ * Replace a wide string by another wide string in a wide string.
+ * @param[in] txt String to search.
+ * @param[in] Before String to be replaced.
+ * @param[in] After Replacement string.
+ * @return Pointer to the new wide string with replaced string, must be freed
+ */
+wstring str_replaceW(const wstring &txt, const wstring &Before, const wstring &After)
+{
+    wstring str = txt;
+    size_t pos = 0, AfterSize = After.length(), BeforeSize = Before.length();
+    while((pos = str.find(Before, pos)) != string::npos)
+    {
+        str.replace(pos, BeforeSize, After, 0, AfterSize);
+        pos += AfterSize;
+    }
+    return str;
+}

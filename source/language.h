@@ -8,6 +8,9 @@
 //---------------------------------------------------------------------------
 
 #include "mxml/mxml.h"
+#include <string>
+
+using namespace std;
 
 /**
  * This a class to manage different languages.
@@ -19,9 +22,10 @@ public:
     Language();
     ~Language();
     const char *Text(const char *);
-    const char *GetRandomWinningMessage();
-    const char *GetRandomTieMessage();
-    const char *GetRandomTurnOverMessage();
+    wstring String(const char *);
+    const wchar_t *GetRandomWinningMessage();
+    const wchar_t *GetRandomTieMessage();
+    const wchar_t *GetRandomTurnOverMessage();
 private:
     mxml_node_t *First_Node;
     int TieCount;
@@ -30,7 +34,8 @@ private:
 
     void SetLanguage(s32);
     unsigned int ChildCount(mxml_node_t *, const char *);
-    const char *GetRandomMessage(const char *, int);
+    const wchar_t *GetRandomMessage(const char *, int);
+    wstring Utf82Unicode(const string &);
 };
 //---------------------------------------------------------------------------
 #endif

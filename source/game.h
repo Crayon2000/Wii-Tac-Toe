@@ -14,6 +14,7 @@
 #include "player.h"
 #include "language.h"
 #include "types.h"
+#include "grrlib/GRRLIB.h"
 #include <gcmodplay.h>
 
 #define TEXT_SIZE 100   /**< Maximum length of the text. */
@@ -46,7 +47,7 @@ private:
     void Clear();
     void TurnIsOver();
     void NewGame();
-    void PrintWrapText(u16, u16, u16, const char*, unsigned int, unsigned int);
+    void PrintWrapText(u16, u16, u16, const wchar_t*, unsigned int, unsigned int);
     void ChangeScreen(u8 NewScreen, bool = true);
     void ButtonOn(s8);
     bool SelectZone();
@@ -61,7 +62,7 @@ private:
     u8 CurrentScreen;
     u8 LastScreen;
     signed char SelectedButton;
-    char text[TEXT_SIZE];
+    wchar_t text[TEXT_SIZE];
 
     u16 TieGame;
     bool RoundFinished;

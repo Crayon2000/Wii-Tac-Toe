@@ -32,12 +32,13 @@ public:
     ~Button();
     void Paint();
     void SetCaption(const char *);
+    void SetCaption(const wstring &);
     void SetSelected(bool);
     void SetTextColor(u32);
     void SetTextHeight(unsigned int);
 private:
     bool Selected;
-    string Caption;
+    wstring Caption;
     unsigned int TextWidth;
     unsigned int TextHeight;
     unsigned int TextTop;

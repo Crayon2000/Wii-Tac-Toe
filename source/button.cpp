@@ -39,6 +39,7 @@ Button::Button(buttonType NewType) : Object()
     TextColor = 0x000000;
     TextHeight = 14;
     TextWidth = 100; // random value
+    Caption = L"";
 }
 
 /**
@@ -62,7 +63,7 @@ void Button::Paint()
         GRRLIB_DrawImg(Left + 4, Top + 5, ButtonImgOff, 0, 1.0, 1.0, 0x00000055);
     }
     GRRLIB_DrawImg(Left, Top, ButtonImgOff, 0, 1.0, 1.0, 0xFFFFFFFF);
-    GRRLIB_Printf2(TextLeft, TextTop, Caption.c_str(), TextHeight, TextColor);
+    GRRLIB_Printf2W(TextLeft, TextTop, Caption.c_str(), TextHeight, TextColor);
     if(Type == btnStdMenu && Selected)
     {   // Hover color
         GRRLIB_DrawImg(Left, Top, ButtonImgOn, 0, 1.0, 1.0, 0xFFFFFFFF);
@@ -88,8 +89,20 @@ void Button::SetTextHeight(unsigned int NewHeight)
  */
 void Button::SetCaption(const char *NewCaption)
 {
+    size_t length = strlen(NewCaption);
+    wchar_t *utf32 = (wchar_t*)malloc(length * sizeof(wchar_t)); 
+    mbstowcs(utf32, NewCaption, length);
+    SetCaption(utf32);
+}
+
+/**
+ * Set caption on the button.
+ * @param[in] NewCaption Text to put on the button.
+ */
+void Button::SetCaption(const wstring &NewCaption)
+{
     Caption = NewCaption;
-    TextWidth = GRRLIB_TextWidth(Caption.c_str(), TextHeight);
+    TextWidth = GRRLIB_TextWidthW(Caption.c_str(), TextHeight);
     TextTop = Top + (Height / 2) - (TextHeight / 2);
     TextLeft = Left + (Width / 2) - (TextWidth / 2);
     if(Type == btnHome)
