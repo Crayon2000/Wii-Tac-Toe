@@ -20,9 +20,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ------------------------------------------------------------------------------*/
 
-#include "../libjpeg/jpeglib.h"
+#include "jpeglib.h"
 #include <malloc.h>
-#include "../libpng/pngu/pngu.h"
+#include "pngu.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -31,10 +31,10 @@ THE SOFTWARE.
 /**
  * Convert a raw BMP (RGB, no alpha) to 4x4RGBA.
  * @author DragonMinded
- * @param src
- * @param dst
- * @param width
- * @param height
+ * @param src Source.
+ * @param dst Destination.
+ * @param width Width.
+ * @param height Height.
 */
 static
 void  RawTo4x4RGBA (const u8 *src, void *dst,
@@ -75,7 +75,7 @@ void  RawTo4x4RGBA (const u8 *src, void *dst,
 /**
  * Load a texture from a buffer.
  * @param my_img The JPEG or PNG buffer to load.
- * @return A GRRLIB_texImg structure filled with image informations.
+ * @return A GRRLIB_texImg structure filled with image information.
  */
 GRRLIB_texImg*  GRRLIB_LoadTexture (const u8 my_img[]) {
     // Check for jpeg signature
@@ -88,7 +88,7 @@ GRRLIB_texImg*  GRRLIB_LoadTexture (const u8 my_img[]) {
 /**
  * Load a texture from a buffer.
  * @param my_png the PNG buffer to load.
- * @return A GRRLIB_texImg structure filled with image informations.
+ * @return A GRRLIB_texImg structure filled with image information.
  */
 GRRLIB_texImg*  GRRLIB_LoadTexturePNG (const u8 *my_png) {
     PNGUPROP imgProp;
@@ -116,7 +116,7 @@ GRRLIB_texImg*  GRRLIB_LoadTexturePNG (const u8 *my_png) {
  * Take care to have the JPG finnish with 0xFF 0xD9!!
  * @author DrTwox
  * @param my_jpg The JPEG buffer to load.
- * @return A GRRLIB_texImg structure filled with image informations.
+ * @return A GRRLIB_texImg structure filled with image information.
  */
 GRRLIB_texImg*  GRRLIB_LoadTextureJPG (const u8 *my_jpg) {
     struct jpeg_decompress_struct cinfo;
@@ -177,11 +177,11 @@ GRRLIB_texImg*  GRRLIB_LoadTextureJPG (const u8 *my_jpg) {
  * Currently only performs "a-over-b (normal) alpha compositing" (opacity)
  * Ie. Light source is behind the eye, not behind the canvas!
  * @author BlueChip
- * @param xoff   : The x-offset within the canvas (negative values allowed)
- * @param yoff   : The y-offset within the canvas (negative values allowed)
- * @param layer  : The layer/sprite to draw
- * @param canvas : The canvas/textured-image on which to draw
- * @param mode   : Currently unused - will be composition mode
+ * @param xoff   The x-offset within the canvas (negative values allowed)
+ * @param yoff   The y-offset within the canvas (negative values allowed)
+ * @param layer  The layer/sprite to draw
+ * @param canvas The canvas/textured-image on which to draw
+ * @param mode   Currently unused - will be composition mode
  */
 void  GRRLIB_Compose( int xoff, int yoff, GRRLIB_texImg* layer,
                       GRRLIB_texImg* canvas, GRRLIB_ComposeMode mode )

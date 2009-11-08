@@ -17,9 +17,9 @@ include $(DEVKITPPC)/wii_rules
 #---------------------------------------------------------------------------------
 TARGET		:=	Wii-Tac-Toe
 BUILD		:=	build
-SOURCES		:=	source source/grrlib source/libpng/pngu fonts
+SOURCES		:=	source source/grrlib source/libpng/pngu
 DATA		:=	data
-INCLUDES	:=
+INCLUDES	:=  source/libjpeg source/libpng/pngu source/grrlib
 
 #---------------------------------------------------------------------------------
 # options for code generation

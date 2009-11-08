@@ -21,7 +21,7 @@ THE SOFTWARE.
 ------------------------------------------------------------------------------*/
 #include "grrlib.h"
 #include <stdio.h>
-#include "../libpng/pngu/pngu.h"
+#include "pngu.h"
 
 /**
  * Load a file to memory.

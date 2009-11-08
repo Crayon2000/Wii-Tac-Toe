@@ -198,9 +198,9 @@ void Game::StartSreen()
         GRRLIB_DrawImg(0, 0, SplashImg, 0, 1, 1, 0xFFFFFFFF);
 
         wchar_t TempText[TEXT_SIZE];
-        swprintf(TempText, TEXT_SIZE, Lang->String("Programmer: %s").c_str(), "Crayon");
+        swprintf(TempText, TEXT_SIZE, Lang->String("Programmer: %ls").c_str(), L"Crayon");
         GRRLIB_Printf2W(50, 310, TempText, 11, 0xFFFFFF);
-        swprintf(TempText, TEXT_SIZE, Lang->String("Graphics: %s").c_str(), "Mr_Nick666");
+        swprintf(TempText, TEXT_SIZE, Lang->String("Graphics: %ls").c_str(), L"Mr_Nick666");
         GRRLIB_Printf2W(50, 330, TempText, 11, 0xFFFFFF);
 
         wcsncpy(TempText, Lang->String("Press The A Button").c_str(), TEXT_SIZE);
@@ -232,9 +232,9 @@ void Game::GameScreen(bool CopyScreen)
         GRRLIB_DrawImg(0, 0, GameImg, 0, 1, 1, 0xFFFFFFFF);
 
         // Player name: Offset -2, 2
-        PrintWrapText(42, 50, 125, WTTPlayer[0].GetName().c_str(), 0x6BB6DE, 15);
-        PrintWrapText(42, 145, 125, WTTPlayer[1].GetName().c_str(), 0xE6313A, 15);
-        PrintWrapText(42, 250, 125, Lang->String("TIE GAME").c_str(), 0x109642, 15);
+        PrintWrapText(42, 50, 125, WTTPlayer[0].GetName(), 0x6BB6DE, 15);
+        PrintWrapText(42, 145, 125, WTTPlayer[1].GetName(), 0xE6313A, 15);
+        PrintWrapText(42, 250, 125, Lang->String("TIE GAME"), 0x109642, 15);
 
         // Draw score: Offset -2, 2
         wchar_t ScoreText[5];
@@ -256,9 +256,9 @@ void Game::GameScreen(bool CopyScreen)
         GRRLIB_initTexture();
 
         // Player name
-        PrintWrapText(44, 48, 125, WTTPlayer[0].GetName().c_str(), 0xFFFFFF, 15);
-        PrintWrapText(44, 143, 125, WTTPlayer[1].GetName().c_str(), 0xFFFFFF, 15);
-        PrintWrapText(44, 248, 125, Lang->String("TIE GAME").c_str(), 0xFFFFFF, 15);
+        PrintWrapText(44, 48, 125, WTTPlayer[0].GetName(), 0xFFFFFF, 15);
+        PrintWrapText(44, 143, 125, WTTPlayer[1].GetName(), 0xFFFFFF, 15);
+        PrintWrapText(44, 248, 125, Lang->String("TIE GAME"), 0xFFFFFF, 15);
 
         // Draw score
         swprintf(ScoreText, 5, L"%d", WTTPlayer[0].GetScore());
@@ -424,7 +424,7 @@ void Game::MenuScreen(bool CopyScreen)
         GRRLIB_Rectangle(0, 385, ScreenWidth, 95, 0x000000FF, 1);
 
         wchar_t VersionText[TEXT_SIZE] = L"";
-        swprintf(VersionText, TEXT_SIZE, Lang->String("Ver. %s").c_str(), "0.8");
+        swprintf(VersionText, TEXT_SIZE, Lang->String("Ver. %ls").c_str(), L"0.8");
         GRRLIB_Printf2W(500, 40, VersionText, 12, 0xFFFFFF);
 
         GRRLIB_DrawImg(0, 0, GRRLIB_GetTexture(), 0, 1.0, 1.0, 0xFFFFFFFF);
@@ -689,35 +689,31 @@ void Game::NewGame()
  * @param[in] fontSize Size of the text.
  */
 void Game::PrintWrapText(u16 x, u16 y, u16 maxLineWidth,
-    const wchar_t *input, unsigned int TextColor, unsigned int fontSize)
+    const wstring &input, unsigned int TextColor, unsigned int fontSize)
 {
-    wchar_t tmp[TEXT_SIZE], tmp2[TEXT_SIZE];
+    wstring tmp = input + L" ", // Make local copy
+            tmp2;
+    wstring::iterator startIndex = tmp.begin(),
+                      lastSpace = tmp.begin(),
+                      i = tmp.begin();
     int ypos = y,
-        i,
         z = 0,
         textLeft,
-        startIndex = 0,
-        lastSpace = 0,
         stepSize = (fontSize * 1.2);
-    int endIndex = wcslen(input) + 1;
 
-    // Make local copy
-    wcsncpy(tmp, input, TEXT_SIZE);
-
-    for(i=0; i<endIndex; i++)
+    while(i != tmp.end())
     {
-        if(tmp[i] == ' ' || tmp[i] == '\0')
+        if(*i == L' ')
         {
-            wcsncpy(tmp2, input+startIndex, TEXT_SIZE);
-            tmp2[i] = 0;
-            z = GRRLIB_TextWidthW(tmp2, fontSize);
+            tmp2.assign(startIndex, i);
+            z = GRRLIB_TextWidthW(tmp2.c_str(), fontSize);
 
             if(z >= maxLineWidth)
             {
-                tmp[lastSpace] = 0;
+                *lastSpace = 0;
                 textLeft = x + (maxLineWidth / 2.0) -
-                    (GRRLIB_TextWidthW(tmp+startIndex, fontSize) / 2.0);
-                GRRLIB_Printf2W(textLeft, ypos, tmp+startIndex,
+                    (GRRLIB_TextWidthW(&(*startIndex), fontSize) / 2.0);
+                GRRLIB_Printf2W(textLeft, ypos, &(*startIndex),
                     fontSize, TextColor);
                 startIndex = lastSpace + 1;
                 ypos += stepSize;
@@ -725,12 +721,13 @@ void Game::PrintWrapText(u16 x, u16 y, u16 maxLineWidth,
             }
             lastSpace = i;
         }
+        ++i;
     }
     if(z <= maxLineWidth)
     {
         textLeft = x + (maxLineWidth / 2.0) -
-            (GRRLIB_TextWidthW(tmp+startIndex, fontSize) / 2.0);
-        GRRLIB_Printf2W(textLeft, ypos, tmp+startIndex,
+            (GRRLIB_TextWidthW(&(*startIndex), fontSize) / 2.0);
+        GRRLIB_Printf2W(textLeft, ypos, &(*startIndex),
             fontSize, TextColor);
     }
 }
