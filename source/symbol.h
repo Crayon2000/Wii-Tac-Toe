@@ -2,7 +2,7 @@
  * @file symbol.h
  * Contains the Symbol class.
  */
- 
+
 #ifndef SymbolH
 #define SymbolH
 //---------------------------------------------------------------------------

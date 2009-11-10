@@ -208,7 +208,7 @@ void Game::StartSreen()
         GRRLIB_Printf2W(TextLeft, 400, TempText, 20, 0x000000);
 
         GRRLIB_DrawImg(0, 0, GRRLIB_GetTexture(), 0, 1.0, 1.0, 0xFFFFFFFF);
-        GRRLIB_Screen2Texture(CopiedImg);
+        GRRLIB_Screen2Texture(0, 0, CopiedImg, false);
         Copied = true;
     }
     else
@@ -277,7 +277,7 @@ void Game::GameScreen(bool CopyScreen)
         GRRLIB_DrawImg(0, 0, GRRLIB_GetTexture(), 0, 1.0, 1.0, 0xFFFFFFFF);
         if(CopyScreen)
         {
-            GRRLIB_Screen2Texture(CopiedImg);
+            GRRLIB_Screen2Texture(0, 0, CopiedImg, false);
             Copied = true;
         }
     }
@@ -354,7 +354,7 @@ void Game::ExitScreen()
         GRRLIB_Rectangle(0, 383, ScreenWidth, 2, 0x848284FF, 1);
         GRRLIB_Rectangle(0, 385, ScreenWidth, 95, 0x000000FF, 1);
 
-        GRRLIB_Screen2Texture(CopiedImg);
+        GRRLIB_Screen2Texture(0, 0, CopiedImg, false);
         Copied = true;
     }
     else
@@ -430,7 +430,7 @@ void Game::MenuScreen(bool CopyScreen)
         GRRLIB_DrawImg(0, 0, GRRLIB_GetTexture(), 0, 1.0, 1.0, 0xFFFFFFFF);
         if(CopyScreen)
         {
-            GRRLIB_Screen2Texture(CopiedImg);
+            GRRLIB_Screen2Texture(0, 0, CopiedImg, false);
             Copied = true;
         }
     }
@@ -558,7 +558,7 @@ bool Game::ControllerManager()
                             ExitScreen();
                             Hand[1].Paint();
                             Hand[0].Paint();
-                            GRRLIB_Screen2Texture(CopiedImg);
+                            GRRLIB_Screen2Texture(0, 0, CopiedImg, false);
                             WPAD_Rumble(WPAD_CHAN_0, 0); // Rumble off, just in case
                             WPAD_Rumble(WPAD_CHAN_1, 0); // Rumble off, just in case
                             GRRLIB_DrawImg_FadeOut(CopiedImg, 1, 1, 3);
@@ -614,7 +614,7 @@ void Game::Clear()
     GameGrid->Clear();
     CurrentPlayer = PlayerToStart;
     PlayerToStart = !PlayerToStart; // Next other player will start
-    swprintf(text, TEXT_SIZE, Lang->GetRandomTurnOverMessage(), WTTPlayer[CurrentPlayer].GetName().c_str());
+    swprintf(text, TEXT_SIZE, Lang->GetRandomTurnOverMessage().c_str(), WTTPlayer[CurrentPlayer].GetName().c_str());
     RoundFinished = false;
     Copied = false;
     ChangeCursor();
@@ -631,7 +631,7 @@ void Game::TurnIsOver()
         GameWinner = (GameWinner == WTTPlayer[0].GetSign()) ? 0 : 1;
         WTTPlayer[GameWinner].IncScore();
         wstring TextToCopy;
-        wcsncpy(text, Lang->GetRandomWinningMessage(), TEXT_SIZE);
+        wcsncpy(text, Lang->GetRandomWinningMessage().c_str(), TEXT_SIZE);
         TextToCopy = str_replaceW(text, L"$LOSER$", WTTPlayer[!GameWinner].GetName());
         TextToCopy = str_replaceW(TextToCopy, L"$WINNER$", WTTPlayer[GameWinner].GetName());
         wcsncpy(text, TextToCopy.c_str(), TEXT_SIZE);
@@ -642,13 +642,13 @@ void Game::TurnIsOver()
     else if(GameGrid->IsFilled())
     {   // Tie game
         TieGame++;
-        wcsncpy(text, Lang->GetRandomTieMessage(), TEXT_SIZE);
+        wcsncpy(text, Lang->GetRandomTieMessage().c_str(), TEXT_SIZE);
         RoundFinished = true;
     }
     else
     {
         CurrentPlayer = !CurrentPlayer; // Change player's turn
-        swprintf(text, TEXT_SIZE, Lang->GetRandomTurnOverMessage(), WTTPlayer[CurrentPlayer].GetName().c_str());
+        swprintf(text, TEXT_SIZE, Lang->GetRandomTurnOverMessage().c_str(), WTTPlayer[CurrentPlayer].GetName().c_str());
     }
 
     Copied = false;

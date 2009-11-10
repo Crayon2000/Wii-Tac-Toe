@@ -27,7 +27,7 @@ u8 HWButton = 0;
  */
 void WiiResetPressed()
 {
-	HWButton = SYS_RETURNTOMENU;
+    HWButton = SYS_RETURNTOMENU;
 }
 
 /**
@@ -35,7 +35,7 @@ void WiiResetPressed()
  */
 void WiiPowerPressed()
 {
-	HWButton = SYS_POWEROFF_STANDBY;
+    HWButton = SYS_POWEROFF_STANDBY;
 }
 
 /**
@@ -44,8 +44,8 @@ void WiiPowerPressed()
  */
 void WiimotePowerPressed(s32 chan)
 {
-	HWButton = SYS_POWEROFF_STANDBY;
-	//SYS_POWEROFF
+    HWButton = SYS_POWEROFF_STANDBY;
+    //SYS_POWEROFF
 }
 
 /**
@@ -56,44 +56,44 @@ void WiimotePowerPressed(s32 chan)
  */
 int main(int argc, char **argv)
 {
-	// Video initialization
-	GRRLIB_Init();
-	GRRLIB_InitFreetype();
+    // Video initialization
+    GRRLIB_Init();
+    GRRLIB_InitFreetype();
 
-	// Wiimote initialization
-	WPAD_Init();
-	WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
-	WPAD_SetVRes(WPAD_CHAN_0, rmode->fbWidth, rmode->efbHeight);
-	WPAD_SetDataFormat(WPAD_CHAN_1, WPAD_FMT_BTNS_ACC_IR);
-	WPAD_SetVRes(WPAD_CHAN_1, rmode->fbWidth, rmode->efbHeight);
+    // Wiimote initialization
+    WPAD_Init();
+    WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
+    WPAD_SetVRes(WPAD_CHAN_0, rmode->fbWidth, rmode->efbHeight);
+    WPAD_SetDataFormat(WPAD_CHAN_1, WPAD_FMT_BTNS_ACC_IR);
+    WPAD_SetVRes(WPAD_CHAN_1, rmode->fbWidth, rmode->efbHeight);
 
-	// Game initialization
-	Game *MyGame = new Game(rmode->fbWidth, rmode->efbHeight);
+    // Game initialization
+    Game *MyGame = new Game(rmode->fbWidth, rmode->efbHeight);
 
-	SYS_SetResetCallback(WiiResetPressed);
-	SYS_SetPowerCallback(WiiPowerPressed);
-	WPAD_SetPowerButtonCallback(WiimotePowerPressed);
+    SYS_SetResetCallback(WiiResetPressed);
+    SYS_SetPowerCallback(WiiPowerPressed);
+    WPAD_SetPowerButtonCallback(WiimotePowerPressed);
 
-	while(1)
-	{
-		WPAD_ScanPads();
-		if(MyGame->ControllerManager())
-			break;
-		if(HWButton)
-			break;
+    while(1)
+    {
+        WPAD_ScanPads();
+        if(MyGame->ControllerManager())
+            break;
+        if(HWButton)
+            break;
 
-		MyGame->Paint();
-		GRRLIB_Render();
-	}
+        MyGame->Paint();
+        GRRLIB_Render();
+    }
 
-	delete MyGame;
-	WPAD_Shutdown();
-	GRRLIB_Exit();
+    delete MyGame;
+    WPAD_Shutdown();
+    GRRLIB_Exit();
 
-	if(HWButton && HWButton != SYS_RETURNTOHBMENU)
-	{
-		SYS_ResetSystem(HWButton, 0, 0);
-	}
+    if(HWButton && HWButton != SYS_RETURNTOHBMENU)
+    {
+        SYS_ResetSystem(HWButton, 0, 0);
+    }
 
-	return 0;
+    return 0;
 }

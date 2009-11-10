@@ -2,7 +2,7 @@
  * @file cursor.h
  * Contains the Cursor class.
  */
- 
+
 #ifndef CursorH
 #define CursorH
 //---------------------------------------------------------------------------

@@ -118,34 +118,34 @@ unsigned int Language::ChildCount(mxml_node_t *Up_Node, const char *Name)
 /**
  * Get a random message.
  */
-const wchar_t *Language::GetRandomMessage(const char *Type, int Count)
+wstring Language::GetRandomMessage(const char *Type, int Count)
 {
     char RandNum[4] = "";
 
     sprintf(RandNum, "%d", rand() % Count + 1);
     mxml_node_t *Up_Node = mxmlFindElement(First_Node, First_Node, Type, NULL, NULL, MXML_DESCEND);
     mxml_node_t *Text_Node = mxmlFindElement(Up_Node, Up_Node, "message", "id", RandNum, MXML_DESCEND);
-    return Utf82Unicode(mxmlElementGetAttr(Text_Node, "text")).c_str();
+    return Utf82Unicode(mxmlElementGetAttr(Text_Node, "text"));
 }
 
 /**
  * Get a random winning message.
  */
-const wchar_t *Language::GetRandomWinningMessage()
+wstring Language::GetRandomWinningMessage()
 {
     return GetRandomMessage("winning_game", WinningCount);
 }
 /**
  * Get a random tie message.
  */
-const wchar_t *Language::GetRandomTieMessage()
+wstring Language::GetRandomTieMessage()
 {
     return GetRandomMessage("tie_game", TieCount);
 }
 /**
  * Get a random turn over message.
  */
-const wchar_t *Language::GetRandomTurnOverMessage()
+wstring Language::GetRandomTurnOverMessage()
 {
     return GetRandomMessage("turn_over", TurnOverCount);
 }

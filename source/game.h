@@ -2,7 +2,7 @@
  * @file game.h
  * Contains the Game class.
  */
- 
+
 #ifndef GameH
 #define GameH
 //---------------------------------------------------------------------------
@@ -90,7 +90,7 @@ private:
     u8 SymbolAlpha;
     bool AlphaDirection;
 
-    MODPlay ModTrack; 
+    MODPlay ModTrack;
 };
 //---------------------------------------------------------------------------
 #endif

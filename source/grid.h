@@ -2,7 +2,7 @@
  * @file grid.h
  * Contains the Grid class.
  */
- 
+
 #ifndef GridH
 #define GridH
 //---------------------------------------------------------------------------

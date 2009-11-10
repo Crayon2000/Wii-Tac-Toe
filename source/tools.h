@@ -2,7 +2,7 @@
  * @file tools.h
  * Contains different tools.
  */
- 
+
 #ifndef ToolsH
 #define ToolsH
 //---------------------------------------------------------------------------

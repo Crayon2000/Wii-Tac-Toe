@@ -2,7 +2,7 @@
  * @file object.h
  * Contains the Object class.
  */
- 
+
 #ifndef ObjectH
 #define ObjectH
 //---------------------------------------------------------------------------

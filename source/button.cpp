@@ -90,7 +90,7 @@ void Button::SetTextHeight(unsigned int NewHeight)
 void Button::SetCaption(const char *NewCaption)
 {
     size_t length = strlen(NewCaption);
-    wchar_t *utf32 = (wchar_t*)malloc(length * sizeof(wchar_t)); 
+    wchar_t *utf32 = (wchar_t*)malloc(length * sizeof(wchar_t));
     mbstowcs(utf32, NewCaption, length);
     SetCaption(utf32);
 }

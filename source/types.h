@@ -2,7 +2,7 @@
  * @file types.h
  * Contains the Point class.
  */
- 
+
 #ifndef TypesH
 #define TypesH
 //---------------------------------------------------------------------------
