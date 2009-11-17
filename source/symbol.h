@@ -20,10 +20,10 @@ public:
     Symbol();
     ~Symbol();
     void Paint();
-    void SetPlayer(unsigned char);
+    void SetPlayer(u8);
     void SetLocation(Point);
 private:
-    unsigned char Player;
+    u8 Player;
     GRRLIB_texImg *ImgX;
     GRRLIB_texImg *ImgO;
 };

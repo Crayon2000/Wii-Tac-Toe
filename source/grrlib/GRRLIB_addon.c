@@ -99,7 +99,7 @@ extern void GRRLIB_InitFreetype(void)
 
 extern void GRRLIB_initTexture(void)
 {
-    memset(fontTempLayer->data, 1, fontTempLayer->w * fontTempLayer->h * 4);
+    GRRLIB_ClearTex(fontTempLayer);
 }
 
 /**

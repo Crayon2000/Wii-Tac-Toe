@@ -31,7 +31,7 @@ wstring Player::GetName()
  * Set the player sign.
  * @param[in] ASign Give a sign to the player.
  */
-void Player::SetSign(unsigned char ASign)
+void Player::SetSign(u8 ASign)
 {
     Sign = ASign;
 }
@@ -40,7 +40,7 @@ void Player::SetSign(unsigned char ASign)
  * Get the player sign.
  * @return Player sign.
  */
-unsigned char Player::GetSign()
+u8 Player::GetSign()
 {
     return Sign;
 }
@@ -74,7 +74,7 @@ void Player::ResetScore()
  * Set the player type.
  * @param[in] AType Give the type of player.
  */
-void Player::SetType(unsigned char AType)
+void Player::SetType(u8 AType)
 {
     Type = AType;
 }
@@ -83,7 +83,7 @@ void Player::SetType(unsigned char AType)
  * Get the player type.
  * @return Player type.
  */
-unsigned char Player::GetType()
+u8 Player::GetType()
 {
     return Type;
 }

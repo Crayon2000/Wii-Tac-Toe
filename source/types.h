@@ -7,7 +7,7 @@
 #define TypesH
 //---------------------------------------------------------------------------
 
-#include <gccore.h>
+#include <gctypes.h>
 
 /**
  * Class used to defines a pixel location onscreen.

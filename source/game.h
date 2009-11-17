@@ -54,14 +54,14 @@ private:
     void ChangeCursor();
 
     Cursor *Hand;
-    signed char HandX, HandY;
+    s8 HandX, HandY;
 
     bool CurrentPlayer;
     bool PlayerToStart;
     Player *WTTPlayer;
     u8 CurrentScreen;
     u8 LastScreen;
-    signed char SelectedButton;
+    s8 SelectedButton;
     wchar_t text[TEXT_SIZE];
 
     u16 TieGame;

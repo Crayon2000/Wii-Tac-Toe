@@ -1,4 +1,3 @@
-#include <gccore.h>
 #include "symbol.h"
 
 // Fonts
@@ -47,7 +46,7 @@ void Symbol::Paint()
  * Set the current player to draw on the screen.
  * @param[in] APlayer Player sign, either X or O.
  */
-void Symbol::SetPlayer(unsigned char APlayer)
+void Symbol::SetPlayer(u8 APlayer)
 {
     Player = APlayer;
 }

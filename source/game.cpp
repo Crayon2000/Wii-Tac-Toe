@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <gccore.h>
 #include <wiiuse/wpad.h>
 #include <ogc/conf.h>
 #include <asndlib.h>

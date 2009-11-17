@@ -7,7 +7,7 @@
 #define GridH
 //---------------------------------------------------------------------------
 
-#include <gccore.h>
+#include <gctypes.h>
 
 /**
  * Tic-Tac-Toe grid.

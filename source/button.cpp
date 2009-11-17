@@ -1,5 +1,4 @@
 #include <string.h>
-#include <gccore.h>
 #include "../gfx/button_on.h"
 #include "../gfx/button_off.h"
 #include "../gfx/home_button.h"

@@ -1,4 +1,3 @@
-#include <gccore.h>
 #include "../gfx/hand_x.h"
 #include "../gfx/hand_o.h"
 #include "../gfx/player1_point.h"

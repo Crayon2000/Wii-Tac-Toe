@@ -7,6 +7,7 @@
 #define PlayerH
 //---------------------------------------------------------------------------
 
+#include <gctypes.h>
 #include <string>
 using namespace std;
 
@@ -24,18 +25,18 @@ public:
     virtual ~Player() {};
     void SetName(wstring);
     wstring GetName();
-    void SetSign(unsigned char);
-    unsigned char GetSign();
+    void SetSign(u8);
+    u8 GetSign();
     unsigned int GetScore();
     void IncScore();
     void ResetScore();
-    void SetType(unsigned char);
-    unsigned char GetType();
+    void SetType(u8);
+    u8 GetType();
 private:
     unsigned int Score;
     wstring Name;
-    unsigned char Sign;
-    unsigned char Type;
+    u8 Sign;
+    u8 Type;
 };
 //---------------------------------------------------------------------------
 #endif

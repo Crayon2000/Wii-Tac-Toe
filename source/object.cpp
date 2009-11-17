@@ -1,6 +1,4 @@
-#include <gccore.h>
 #include "object.h"
-#include "grrlib/GRRLIB.h"
 
 /**
  * Constructor for the Object class.
