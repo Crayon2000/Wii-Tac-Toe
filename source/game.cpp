@@ -62,34 +62,34 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight)
     Hand[0].SetVisible(false);
     Hand[1].SetVisible(false);
 
-    ExitButton1 = new Button(btnHome);
-    ExitButton1->SetLeft(430);
-    ExitButton1->SetTop(20);
-    ExitButton1->SetTextHeight(20);
-    ExitButton1->SetCaption(Lang->String("Close"));
+    ExitButton.push_back(new Button(btnHome));
+    ExitButton[0]->SetLeft(430);
+    ExitButton[0]->SetTop(20);
+    ExitButton[0]->SetTextHeight(20);
+    ExitButton[0]->SetCaption(Lang->String("Close"));
 
-    ExitButton2 = new Button(btnHomeMenu);
-    ExitButton2->SetLeft((ScreenWidth / 2) + 20);
-    ExitButton2->SetTop(165);
-    ExitButton2->SetCaption(Lang->String("Reset"));
+    ExitButton.push_back(new Button(btnHomeMenu));
+    ExitButton[1]->SetLeft((ScreenWidth / 2) + 20);
+    ExitButton[1]->SetTop(165);
+    ExitButton[1]->SetCaption(Lang->String("Reset"));
 
-    ExitButton3 = new Button(btnHomeMenu);
-    ExitButton3->SetLeft((ScreenWidth / 2) - ExitButton2->GetWidth() - 20);
-    ExitButton3->SetTop(165);
+    ExitButton.push_back(new Button(btnHomeMenu));
+    ExitButton[2]->SetLeft((ScreenWidth / 2) - ExitButton[1]->GetWidth() - 20);
+    ExitButton[2]->SetTop(165);
     //if(!!*(u32 *)0x80001800) // that returns true for hbc, false for load-from-trucha-signed-disc. think it also returns false for tp hack
-    //    ExitButton3->SetCaption("Return to HBC");
+    //    ExitButton[2]->SetCaption("Return to HBC");
     //else
-        ExitButton3->SetCaption(Lang->String("Return to Loader"));
+        ExitButton[2]->SetCaption(Lang->String("Return to Loader"));
 
-    MenuButton = new Button[2];
+    MenuButton.push_back(new Button());
+    MenuButton[0]->SetLeft((ScreenWidth / 2) - (MenuButton[0]->GetWidth() / 2));
+    MenuButton[0]->SetTop(150);
+    MenuButton[0]->SetCaption(Lang->String("2 Players (1 Wiimote)"));
 
-    MenuButton[0].SetLeft((ScreenWidth / 2) - (MenuButton[0].GetWidth() / 2));
-    MenuButton[0].SetTop(150);
-    MenuButton[0].SetCaption(Lang->String("2 Players (1 Wiimote)"));
-
-    MenuButton[1].SetLeft((ScreenWidth / 2) - (MenuButton[1].GetWidth() / 2));
-    MenuButton[1].SetTop(250);
-    MenuButton[1].SetCaption(Lang->String("1 Player (Vs AI)"));
+    MenuButton.push_back(new Button());
+    MenuButton[1]->SetLeft((ScreenWidth / 2) - (MenuButton[1]->GetWidth() / 2));
+    MenuButton[1]->SetTop(250);
+    MenuButton[1]->SetCaption(Lang->String("1 Player (Vs AI)"));
 
     WTTPlayer = new Player[2];
     WTTPlayer[0].SetSign('X');
@@ -106,6 +106,21 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight)
     ASND_Init();
     ASND_Pause(0);
     NewGame();
+
+    // Build Start Screen background
+    GRRLIB_initTexture();   // Init text layer
+
+    wchar_t TempText[TEXT_SIZE];
+    swprintf(TempText, TEXT_SIZE, Lang->String("Programmer: %ls").c_str(), L"Crayon");
+    GRRLIB_Printf2W(50, 310, TempText, 11, 0xFFFFFF);
+    swprintf(TempText, TEXT_SIZE, Lang->String("Graphics: %ls").c_str(), L"Mr_Nick666");
+    GRRLIB_Printf2W(50, 330, TempText, 11, 0xFFFFFF);
+
+    wcsncpy(TempText, Lang->String("Press The A Button").c_str(), TEXT_SIZE);
+    int TextLeft = 320 - (GRRLIB_TextWidthW(TempText, 20) / 2);
+    GRRLIB_Printf2W(TextLeft, 400, TempText, 20, 0x000000);
+
+    GRRLIB_Compose(0, 0, GRRLIB_GetTexture(), SplashImg, GRRLIB_COMPOSE_NORMAL);
 }
 
 /**
@@ -121,10 +136,19 @@ Game::~Game()
     delete GameGrid;
     delete[] Hand;
     delete Lang;
-    delete ExitButton1;
-    delete ExitButton2;
-    delete ExitButton3;
     delete[] WTTPlayer;
+
+    for(u8 i=0; i<ExitButton.size(); i++)
+    {
+        delete ExitButton[i];
+    }
+    ExitButton.clear();
+
+    for(u8 i=0; i<MenuButton.size(); i++)
+    {
+        delete MenuButton[i];
+    }
+    MenuButton.clear();
 
     for(u8 i = 0; i < 3; i++)
     {
@@ -191,29 +215,7 @@ void Game::Paint()
  */
 void Game::StartSreen()
 {
-    if(!Copied)
-    {   // Copy static element
-        GRRLIB_initTexture();   // Init text layer
-        GRRLIB_DrawImg(0, 0, SplashImg, 0, 1, 1, 0xFFFFFFFF);
-
-        wchar_t TempText[TEXT_SIZE];
-        swprintf(TempText, TEXT_SIZE, Lang->String("Programmer: %ls").c_str(), L"Crayon");
-        GRRLIB_Printf2W(50, 310, TempText, 11, 0xFFFFFF);
-        swprintf(TempText, TEXT_SIZE, Lang->String("Graphics: %ls").c_str(), L"Mr_Nick666");
-        GRRLIB_Printf2W(50, 330, TempText, 11, 0xFFFFFF);
-
-        wcsncpy(TempText, Lang->String("Press The A Button").c_str(), TEXT_SIZE);
-        int TextLeft = 320 - (GRRLIB_TextWidthW(TempText, 20) / 2);
-        GRRLIB_Printf2W(TextLeft, 400, TempText, 20, 0x000000);
-
-        GRRLIB_DrawImg(0, 0, GRRLIB_GetTexture(), 0, 1.0, 1.0, 0xFFFFFFFF);
-        GRRLIB_Screen2Texture(0, 0, CopiedImg, false);
-        Copied = true;
-    }
-    else
-    {
-        GRRLIB_DrawImg(0, 0, CopiedImg, 0, 1, 1, 0xFFFFFFFF);
-    }
+    GRRLIB_DrawImg(0, 0, SplashImg, 0, 1, 1, 0xFFFFFFFF);
 }
 
 /**
@@ -370,24 +372,24 @@ void Game::ExitScreen()
 
     GRRLIB_Printf2W(30, 20, Lang->String("HOME Menu").c_str(), 30, 0xFFFFFF);
 
-    ExitButton1->SetSelected(false);
-    ExitButton2->SetSelected(false);
-    ExitButton3->SetSelected(false);
+    ExitButton[0]->SetSelected(false);
+    ExitButton[1]->SetSelected(false);
+    ExitButton[2]->SetSelected(false);
     if(GRRLIB_PtInRect(0, 0, ScreenWidth, 78, Hand[0].GetLeft(), Hand[0].GetTop()))
     {
-        ExitButton1->SetSelected(true);
+        ExitButton[0]->SetSelected(true);
         ButtonOn(0);
         SelectedButton = 0;
     }
-    else if(ExitButton2->IsInside(Hand[0].GetLeft(), Hand[0].GetTop()))
+    else if(ExitButton[1]->IsInside(Hand[0].GetLeft(), Hand[0].GetTop()))
     {
-        ExitButton2->SetSelected(true);
+        ExitButton[1]->SetSelected(true);
         ButtonOn(1);
         SelectedButton = 1;
     }
-    else if(ExitButton3->IsInside(Hand[0].GetLeft(), Hand[0].GetTop()))
+    else if(ExitButton[2]->IsInside(Hand[0].GetLeft(), Hand[0].GetTop()))
     {
-        ExitButton3->SetSelected(true);
+        ExitButton[2]->SetSelected(true);
         ButtonOn(2);
         SelectedButton = 2;
     }
@@ -395,9 +397,9 @@ void Game::ExitScreen()
     {
         SelectedButton = -1;
     }
-    ExitButton1->Paint();
-    ExitButton2->Paint();
-    ExitButton3->Paint();
+    ExitButton[0]->Paint();
+    ExitButton[1]->Paint();
+    ExitButton[2]->Paint();
     GRRLIB_DrawImg(0, 0, GRRLIB_GetTexture(), 0, 1.0, 1.0, 0xFFFFFFFF);
 }
 
@@ -440,17 +442,17 @@ void Game::MenuScreen(bool CopyScreen)
 
     GRRLIB_initTexture();   // Init text layer
 
-    MenuButton[0].SetSelected(false);
-    MenuButton[1].SetSelected(false);
-    if(MenuButton[0].IsInside(Hand[0].GetLeft(), Hand[0].GetTop()))
+    MenuButton[0]->SetSelected(false);
+    MenuButton[1]->SetSelected(false);
+    if(MenuButton[0]->IsInside(Hand[0].GetLeft(), Hand[0].GetTop()))
     {
-        MenuButton[0].SetSelected(true);
+        MenuButton[0]->SetSelected(true);
         ButtonOn(0);
         SelectedButton = 0;
     }
-    else if(MenuButton[1].IsInside(Hand[0].GetLeft(), Hand[0].GetTop()))
+    else if(MenuButton[1]->IsInside(Hand[0].GetLeft(), Hand[0].GetTop()))
     {
-        MenuButton[1].SetSelected(true);
+        MenuButton[1]->SetSelected(true);
         ButtonOn(1);
         SelectedButton = 1;
     }
@@ -458,8 +460,8 @@ void Game::MenuScreen(bool CopyScreen)
     {
         SelectedButton = -1;
     }
-    MenuButton[0].Paint();
-    MenuButton[1].Paint();
+    MenuButton[0]->Paint();
+    MenuButton[1]->Paint();
     GRRLIB_DrawImg(0, 0, GRRLIB_GetTexture(), 0, 1.0, 1.0, 0xFFFFFFFF);
 }
 

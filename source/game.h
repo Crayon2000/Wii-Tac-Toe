@@ -16,6 +16,7 @@
 #include "types.h"
 #include "grrlib/GRRLIB.h"
 #include <gcmodplay.h>
+#include <vector>
 
 #define TEXT_SIZE 100   /**< Maximum length of the text. */
 
@@ -67,10 +68,8 @@ private:
     u16 TieGame;
     bool RoundFinished;
 
-    Button *ExitButton1;
-    Button *ExitButton2;
-    Button *ExitButton3;
-    Button *MenuButton;
+    std::vector<Button *> ExitButton;
+    std::vector<Button *> MenuButton;
     Grid *GameGrid;
     Language *Lang;
     Symbol **GridSign;
