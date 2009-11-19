@@ -88,6 +88,7 @@ int main(int argc, char **argv)
 
     delete MyGame;
     WPAD_Shutdown();
+    GRRLIB_ExitFreetype();
     GRRLIB_Exit();
 
     if(HWButton && HWButton != SYS_RETURNTOHBMENU)

@@ -5,6 +5,7 @@
 
 /**** FREETYPE START ****/
 extern void GRRLIB_InitFreetype();
+extern void GRRLIB_ExitFreetype();
 extern void GRRLIB_initTexture(void);
 extern void GRRLIB_Printf2(int x, int y, const char *string, unsigned int fontSize, int color);
 extern void GRRLIB_Printf2W(int x, int y, const wchar_t *string, unsigned int fontSize, int color);

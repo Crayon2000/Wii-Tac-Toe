@@ -97,6 +97,12 @@ extern void GRRLIB_InitFreetype(void)
     }
 }
 
+extern void GRRLIB_ExitFreetype(void)
+{
+    FT_Done_FreeType(ftLibrary);
+    FT_Done_Face(ftFace);
+}
+
 extern void GRRLIB_initTexture(void)
 {
     GRRLIB_ClearTex(fontTempLayer);
@@ -107,7 +113,6 @@ extern void GRRLIB_initTexture(void)
  */
 extern void GRRLIB_Printf2(int x, int y, const char *string, unsigned int fontSize, int color)
 {
-    unsigned int error = 0;
     int penX = 0;
     int penY = fontSize;
     FT_GlyphSlot slot = ftFace->glyph;
@@ -115,8 +120,7 @@ extern void GRRLIB_Printf2(int x, int y, const char *string, unsigned int fontSi
     FT_UInt previousGlyph = 0;
     FT_Bool hasKerning = FT_HAS_KERNING(ftFace);
 
-    error = FT_Set_Pixel_Sizes(ftFace, 0, fontSize);
-    if (error)
+    if (FT_Set_Pixel_Sizes(ftFace, 0, fontSize))
     {
         /* Failed to set the font size to the requested size.
          * You probably should set a default size or something.
@@ -146,8 +150,7 @@ extern void GRRLIB_Printf2(int x, int y, const char *string, unsigned int fontSi
             penX += delta.x >> 6;
         }
 
-        error = FT_Load_Glyph(ftFace, glyphIndex, FT_LOAD_RENDER);
-        if (error)
+        if (FT_Load_Glyph(ftFace, glyphIndex, FT_LOAD_RENDER))
         {
             /* Whoops, something went wrong trying to load the glyph
              * for this character... you should handle this better */
@@ -176,7 +179,6 @@ extern void GRRLIB_Printf2(int x, int y, const char *string, unsigned int fontSi
  */
 extern void GRRLIB_Printf2W(int x, int y, const wchar_t *utf32, unsigned int fontSize, int color)
 {
-    unsigned int error = 0;
     int penX = 0;
     int penY = fontSize;
     FT_GlyphSlot slot = ftFace->glyph;
@@ -184,8 +186,7 @@ extern void GRRLIB_Printf2W(int x, int y, const wchar_t *utf32, unsigned int fon
     FT_UInt previousGlyph = 0;
     FT_Bool hasKerning = FT_HAS_KERNING(ftFace);
 
-    error = FT_Set_Pixel_Sizes(ftFace, 0, fontSize);
-    if (error)
+    if (FT_Set_Pixel_Sizes(ftFace, 0, fontSize))
     {
         /* Failed to set the font size to the requested size.
          * You probably should set a default size or something.
@@ -212,8 +213,7 @@ extern void GRRLIB_Printf2W(int x, int y, const wchar_t *utf32, unsigned int fon
             penX += delta.x >> 6;
         }
 
-        error = FT_Load_Glyph(ftFace, glyphIndex, FT_LOAD_RENDER);
-        if (error)
+        if (FT_Load_Glyph(ftFace, glyphIndex, FT_LOAD_RENDER))
         {
             /* Whoops, something went wrong trying to load the glyph
              * for this character... you should handle this better */
@@ -244,12 +244,12 @@ static bool BlitGlyph(FT_Bitmap *bitmap, int offset, int top, int color)
 
     if (offset + bitmapWidth > 640)
     {
-        /* Drawing this character would over run the buffer, so don't draw it */
+        // Drawing this character would over run the buffer, so don't draw it
         return false;
     }
 
-    /* Draw the glyph onto the buffer, blitting from the bottom up */
-    /* CREDIT: Derived from a function by DragonMinded */
+    // Draw the glyph onto the buffer, blitting from the bottom up
+    // CREDIT: Derived from a function by DragonMinded
     unsigned char *p = fontTempLayer->data;
     unsigned int y = 0;
     int sywidth, dywidth;
@@ -264,7 +264,7 @@ static bool BlitGlyph(FT_Bitmap *bitmap, int offset, int top, int color)
         {
             dstloc = ((column + offset) + dywidth) << 2;
 
-            /* Copy the alpha value for this pixel into the texture buffer */
+            // Copy the alpha value for this pixel into the texture buffer
             p[ dstloc + 2 ] = (color & 0xFF);
             p[ dstloc + 1 ] = ((color >> 8) & 0xFF);
             p[ dstloc + 0 ] = ((color >> 16) & 0xFF);

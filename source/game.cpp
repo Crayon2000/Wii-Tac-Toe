@@ -120,7 +120,9 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight)
     int TextLeft = 320 - (GRRLIB_TextWidthW(TempText, 20) / 2);
     GRRLIB_Printf2W(TextLeft, 400, TempText, 20, 0x000000);
 
-    GRRLIB_Compose(0, 0, GRRLIB_GetTexture(), SplashImg, GRRLIB_COMPOSE_NORMAL);
+    GRRLIB_DrawImg(0, 0, SplashImg, 0, 1.0, 1.0, 0xFFFFFFFF);
+    GRRLIB_DrawImg(0, 0, GRRLIB_GetTexture(), 0, 1.0, 1.0, 0xFFFFFFFF);
+    GRRLIB_Screen2Texture(0, 0, SplashImg, true);
 }
 
 /**
