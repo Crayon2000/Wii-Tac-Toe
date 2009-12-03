@@ -22,7 +22,7 @@ THE SOFTWARE.
 
 #include <stdlib.h>
 
-#include <grrlib.h>
+#include "grrlib.h"
 
 /**
  * Flip texture horizontal.

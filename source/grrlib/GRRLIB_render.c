@@ -177,10 +177,10 @@ void  GRRLIB_DrawTile (const f32 xpos, const f32 ypos, const GRRLIB_texImg *tex,
     if (tex == NULL || tex->data == NULL)  return ;
 
     // The 0.001f/x is the frame correction formula by spiffen
-    s1 = ((     (frame %tex->nbtilew)   ) /(f32)tex->nbtilew) +(0.001f /tex->w);
-    s2 = ((     (frame %tex->nbtilew) +1) /(f32)tex->nbtilew) -(0.001f /tex->w);
-    t1 = (((int)(frame /tex->nbtilew)   ) /(f32)tex->nbtileh) +(0.001f /tex->h);
-    t2 = (((int)(frame /tex->nbtilew) +1) /(f32)tex->nbtileh) -(0.001f /tex->h);
+    s1 = (frame % tex->nbtilew) * tex->ofnormaltexx;
+    s2 = s1 + tex->ofnormaltexx;
+    t1 = (int)(frame/tex->nbtilew) * tex->ofnormaltexy;
+    t2 = t1 + tex->ofnormaltexy;
 
     GX_InitTexObj(&texObj, tex->data,
                   tex->tilew * tex->nbtilew, tex->tileh * tex->nbtileh,
@@ -238,21 +238,21 @@ void  GRRLIB_DrawTile (const f32 xpos, const f32 ypos, const GRRLIB_texImg *tex,
 }
 
 /**
- * Draw a part of a texture
+ * Draw a part of a texture.
  * @param xpos Specifies the x-coordinate of the upper-left corner.
  * @param ypos Specifies the y-coordinate of the upper-left corner.
- * @param partx Specifies the x-coordinate of the upper-left corner in the Texture.
- * @param party Specifies the y-coordinate of the upper-left corner in the Texture.
- * @param partw Specifies the width in the Texture.
- * @param parth Specifies the height in the Texture.
+ * @param partx Specifies the x-coordinate of the upper-left corner in the texture.
+ * @param party Specifies the y-coordinate of the upper-left corner in the texture.
+ * @param partw Specifies the width in the texture.
+ * @param parth Specifies the height in the texture.
  * @param tex The texture containing the tile to draw.
  * @param degrees Angle of rotation.
  * @param scaleX Specifies the x-coordinate scale. -1 could be used for flipping the texture horizontally.
  * @param scaleY Specifies the y-coordinate scale. -1 could be used for flipping the texture vertically.
  * @param color Color in RGBA format.
- * @param frame Specifies the frame to draw.
  */
-void  GRRLIB_DrawPart (const f32 xpos, const f32 ypos, const f32 partx, const f32 party, const f32 partw, const f32 parth, const GRRLIB_texImg *tex,
+void  GRRLIB_DrawPart (const f32 xpos, const f32 ypos, const f32 partx, const f32 party,
+                       const f32 partw, const f32 parth, const GRRLIB_texImg *tex,
                        const f32 degrees, const f32 scaleX, const f32 scaleY,
                        const u32 color) {
     GXTexObj  texObj;
