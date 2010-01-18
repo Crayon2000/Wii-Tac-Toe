@@ -120,12 +120,12 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight)
     // Build Start Screen background
     GRRLIB_DrawImg(0, 0, SplashImg, 0, 1.0, 1.0, 0xFFFFFFFF);
     swprintf(text, TEXT_SIZE, Lang->String("Programmer: %ls").c_str(), L"Crayon");
-    GRRLIB_PrintfTTFW(50, 310, DefaultFont, text, 11, 0xFFFFFF);
+    GRRLIB_PrintfTTFW(50, 310, DefaultFont, text, 11, 0xFFFFFFFF);
     swprintf(text, TEXT_SIZE, Lang->String("Graphics: %ls").c_str(), L"Mr_Nick666");
-    GRRLIB_PrintfTTFW(50, 330, DefaultFont, text, 11, 0xFFFFFF);
+    GRRLIB_PrintfTTFW(50, 330, DefaultFont, text, 11, 0xFFFFFFFF);
     wcsncpy(text, Lang->String("Press The A Button").c_str(), TEXT_SIZE);
     GRRLIB_PrintfTTFW((ScreenWidth / 2) - (GRRLIB_WidthTTFW(DefaultFont, text, 20) / 2),
-                    400, DefaultFont, text, 20, 0x000000);
+                    400, DefaultFont, text, 20, 0x000000FF);
     GRRLIB_Screen2Texture(0, 0, SplashImg, true);
 }
 
@@ -251,23 +251,23 @@ void Game::GameScreen(bool CopyScreen)
         wchar_t ScoreText[5];
         swprintf(ScoreText, 5, L"%d", WTTPlayer[0].GetScore());
         TextLeft = 104 - GRRLIB_WidthTTFW(DefaultFont, ScoreText, 35) / 2;
-        GRRLIB_PrintfTTFW(TextLeft, 77, DefaultFont, ScoreText, 35, 0x6BB6DE);
+        GRRLIB_PrintfTTFW(TextLeft, 77, DefaultFont, ScoreText, 35, 0x6BB6DEFF);
         swprintf(ScoreText, 5, L"%d", WTTPlayer[1].GetScore());
         TextLeft = 104 - GRRLIB_WidthTTFW(DefaultFont, ScoreText, 35) / 2;
-        GRRLIB_PrintfTTFW(TextLeft, 177, DefaultFont, ScoreText, 35, 0xE6313A);
+        GRRLIB_PrintfTTFW(TextLeft, 177, DefaultFont, ScoreText, 35, 0xE6313AFF);
         swprintf(ScoreText, 5, L"%d", TieGame);
         TextLeft = 104 - GRRLIB_WidthTTFW(DefaultFont, ScoreText, 35) / 2;
-        GRRLIB_PrintfTTFW(TextLeft, 282, DefaultFont, ScoreText, 35, 0x109642);
+        GRRLIB_PrintfTTFW(TextLeft, 282, DefaultFont, ScoreText, 35, 0x109642FF);
         // Draw score
         swprintf(ScoreText, 5, L"%d", WTTPlayer[0].GetScore());
         TextLeft = 106 - GRRLIB_WidthTTFW(DefaultFont, ScoreText, 35) / 2;
-        GRRLIB_PrintfTTFW(TextLeft, 75, DefaultFont, ScoreText, 35, 0xFFFFFF);
+        GRRLIB_PrintfTTFW(TextLeft, 75, DefaultFont, ScoreText, 35, 0xFFFFFFFF);
         swprintf(ScoreText, 5, L"%d", WTTPlayer[1].GetScore());
         TextLeft = 106 - GRRLIB_WidthTTFW(DefaultFont, ScoreText, 35) / 2;
-        GRRLIB_PrintfTTFW(TextLeft, 175, DefaultFont, ScoreText, 35, 0xFFFFFF);
+        GRRLIB_PrintfTTFW(TextLeft, 175, DefaultFont, ScoreText, 35, 0xFFFFFFFF);
         swprintf(ScoreText, 5, L"%d", TieGame);
         TextLeft = 106 - GRRLIB_WidthTTFW(DefaultFont, ScoreText, 35) / 2;
-        GRRLIB_PrintfTTFW(TextLeft, 280, DefaultFont, ScoreText, 35, 0xFFFFFF);
+        GRRLIB_PrintfTTFW(TextLeft, 280, DefaultFont, ScoreText, 35, 0xFFFFFFFF);
 
         // Draw text at the bottom: Offet 1, 1
         PrintWrapText(131, 421, 390, text, 0x111111, 15);
@@ -366,7 +366,7 @@ void Game::ExitScreen()
     else
         GRRLIB_Rectangle(0, 0, ScreenWidth, 78, 0x000000FF, 1);
 
-    GRRLIB_PrintfTTFW(30, 20, DefaultFont, Lang->String("HOME Menu").c_str(), 30, 0xFFFFFF);
+    GRRLIB_PrintfTTFW(30, 20, DefaultFont, Lang->String("HOME Menu").c_str(), 30, 0xFFFFFFFF);
 
     ExitButton[0]->SetSelected(false);
     ExitButton[1]->SetSelected(false);
@@ -420,7 +420,7 @@ void Game::MenuScreen(bool CopyScreen)
 
         wchar_t VersionText[TEXT_SIZE] = L"";
         swprintf(VersionText, TEXT_SIZE, Lang->String("Ver. %ls").c_str(), L"0.8");
-        GRRLIB_PrintfTTFW(500, 40, DefaultFont, VersionText, 12, 0xFFFFFF);
+        GRRLIB_PrintfTTFW(500, 40, DefaultFont, VersionText, 12, 0xFFFFFFFF);
 
         if(CopyScreen)
         {

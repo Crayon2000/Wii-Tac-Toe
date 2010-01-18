@@ -11,7 +11,7 @@ More info : http://frontier-dev.net
 #include <malloc.h>
 #include <ogc/gx.h>
 #include "pngu.h"
-#include "../png.h"
+#include "png.h"
 
 
 // Constants

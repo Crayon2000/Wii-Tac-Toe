@@ -71,7 +71,7 @@ void  GRRLIB_FlushTex (GRRLIB_texImg *tex) {
 INLINE
 void  GRRLIB_FreeTexture (GRRLIB_texImg *tex) {
     if(tex != NULL) {
-        if (tex->data != NULL)  free(tex->data) ;
+        if (tex->data != NULL)  free(tex->data);
         free(tex);
         tex = NULL;
     }
@@ -82,8 +82,7 @@ void  GRRLIB_FreeTexture (GRRLIB_texImg *tex) {
  * @param tex Texture to clear.
  */
 INLINE
-void  GRRLIB_ClearTex(GRRLIB_texImg* tex)
-{
+void  GRRLIB_ClearTex(GRRLIB_texImg* tex) {
     bzero(tex->data, (tex->h * tex->w) << 2);
     GRRLIB_FlushTex(tex);
 }

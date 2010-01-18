@@ -139,7 +139,7 @@ wstring str_replaceW(const wstring &txt, const wstring &Before, const wstring &A
 
 /**
  * Fade in, than fade out.
- * @param data   Texture.
+ * @param tex    Texture.
  * @param scaleX Texture X scale.
  * @param scaleY Texture Y scale.
  * @param speed  Fade speed (1 is the normal speed, 2 is two time the normal speed, etc).
@@ -152,7 +152,7 @@ void GRRLIB_DrawImg_FadeInOut(struct GRRLIB_texImg *tex, float scaleX, f32 scale
 
 /**
  * Fade in.
- * @param data   Texture.
+ * @param tex    Texture.
  * @param scaleX Texture X scale.
  * @param scaleY Texture Y scale.
  * @param speed  Fade speed (1 is the normal speed, 2 is two time the normal speed, etc).
@@ -172,7 +172,7 @@ void GRRLIB_DrawImg_FadeIn(struct GRRLIB_texImg *tex, float scaleX, f32 scaleY, 
 
 /**
  * Fade out.
- * @param data   Texture.
+ * @param tex    Texture.
  * @param scaleX Texture X scale.
  * @param scaleY Texture Y scale.
  * @param speed  Fade speed (1 is the normal speed, 2 is two time the normal speed, etc).
