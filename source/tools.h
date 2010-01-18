@@ -19,5 +19,9 @@ void WIILIGHT_TurnOff();
 
 string str_replace(const string &, const string &, const string &);
 wstring str_replaceW(const wstring &, const wstring &, const wstring &);
+
+void GRRLIB_DrawImg_FadeInOut(struct GRRLIB_texImg *tex, float scaleX, f32 scaleY, u16 speed);
+void GRRLIB_DrawImg_FadeIn(struct GRRLIB_texImg *tex, float scaleX, f32 scaleY, u16 speed);
+void GRRLIB_DrawImg_FadeOut(struct GRRLIB_texImg *tex, float scaleX, f32 scaleY, u16 speed);
 //---------------------------------------------------------------------------
 #endif

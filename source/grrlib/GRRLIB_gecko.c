@@ -20,27 +20,40 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ------------------------------------------------------------------------------*/
 
-/**
- * @file GRRLIB_fbGX.h
- * Inline functions for interfacing directly to the GX Engine.
- */
+#include <gccore.h>
+#include <stdarg.h>
+#include <stdio.h>
+
+static bool geckoinit = false;
 
 /**
- * Draws a vector.
- * @param v The vector to draw.
- * @param color The color of the vector in RGBA format.
- * @param n Number of points in the vector.
- * @param fmt Type of primitive.
+ * Initialize USB Gecko.
  */
-INLINE
-void  GRRLIB_GXEngine (const guVector v[], const u32 color[], const long n,
-                       const u8 fmt) {
-    int i;
-
-    GX_Begin(fmt, GX_VTXFMT0, n);
-    for (i = 0; i < n; i++) {
-        GX_Position3f32(v[i].x, v[i].y,  v[i].z);
-        GX_Color1u32(color[i]);
+bool GRRLIB_GeckoInit() {
+    u32 geckoattached = usb_isgeckoalive(EXI_CHANNEL_1);
+    if (geckoattached) {
+        usb_flush(EXI_CHANNEL_1);
+        geckoinit = true;
+        return true;
     }
-    GX_End();
+    else return false;
+}
+
+/**
+ * Print Gecko.
+ * @param text Text to print.
+ * @param ... Optional arguments.
+ */
+void  GRRLIB_GeckoPrintf (const char *text, ...) {
+    int size;
+    char tmp[1024];
+
+    if (!geckoinit) return;
+
+    va_list argp;
+    va_start(argp, text);
+    size = vsprintf(tmp, text, argp);
+    va_end(argp);
+
+    usb_sendbuffer_safe(1, tmp, size);
 }

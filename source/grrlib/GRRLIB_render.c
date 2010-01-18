@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-Copyright (c) 2009 The GRRLIB Team
+Copyright (c) 2010 The GRRLIB Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -39,9 +39,7 @@ static  guVector  axis = (guVector){0, 0, 1};
  * @param scaleY Specifies the y-coordinate scale. -1 could be used for flipping the texture vertically.
  * @param color Color in RGBA format.
  */
-void  GRRLIB_DrawImg (const f32 xpos, const f32 ypos, const GRRLIB_texImg *tex,
-                      const f32 degrees, const f32 scaleX, const f32 scaleY,
-                      const u32 color) {
+void  GRRLIB_DrawImg (const f32 xpos, const f32 ypos, const GRRLIB_texImg *tex, const f32 degrees, const f32 scaleX, const f32 scaleY,const u32 color) {
     GXTexObj  texObj;
     u16       width, height;
     Mtx       m, m1, m2, mv;
@@ -51,9 +49,14 @@ void  GRRLIB_DrawImg (const f32 xpos, const f32 ypos, const GRRLIB_texImg *tex,
     GX_InitTexObj(&texObj, tex->data, tex->w, tex->h,
                   GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
 
-    if (GRRLIB_Settings.antialias == false)
+    if (GRRLIB_Settings.antialias == false) {
         GX_InitTexObjLOD(&texObj, GX_NEAR, GX_NEAR,
                          0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1);
+        GX_SetCopyFilter(GX_FALSE, rmode->sample_pattern, GX_FALSE, rmode->vfilter);
+    }
+    else {
+        GX_SetCopyFilter(rmode->aa, rmode->sample_pattern, GX_TRUE, rmode->vfilter);
+    }
 
     GX_LoadTexObj(&texObj,      GX_TEXMAP0);
     GX_SetTevOp  (GX_TEVSTAGE0, GX_MODULATE);
@@ -107,8 +110,7 @@ void  GRRLIB_DrawImg (const f32 xpos, const f32 ypos, const GRRLIB_texImg *tex,
  * @param tex The texture to draw.
  * @param color Color in RGBA format.
  */
-void  GRRLIB_DrawImgQuad (const guVector pos[4], GRRLIB_texImg *tex,
-                          const u32 color) {
+void  GRRLIB_DrawImgQuad (const guVector pos[4], GRRLIB_texImg *tex, const u32 color) {
     GXTexObj  texObj;
     Mtx       m, m1, m2, mv;
 
@@ -117,9 +119,14 @@ void  GRRLIB_DrawImgQuad (const guVector pos[4], GRRLIB_texImg *tex,
     GX_InitTexObj(&texObj, tex->data, tex->w, tex->h,
                   GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
 
-    if (GRRLIB_Settings.antialias == false)
+    if (GRRLIB_Settings.antialias == false) {
         GX_InitTexObjLOD(&texObj, GX_NEAR, GX_NEAR,
                          0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1);
+        GX_SetCopyFilter(GX_FALSE, rmode->sample_pattern, GX_FALSE, rmode->vfilter);
+    }
+    else {
+        GX_SetCopyFilter(rmode->aa, rmode->sample_pattern, GX_TRUE, rmode->vfilter);
+    }
 
     GX_LoadTexObj(&texObj,      GX_TEXMAP0);
     GX_SetTevOp  (GX_TEVSTAGE0, GX_MODULATE);
@@ -160,15 +167,13 @@ void  GRRLIB_DrawImgQuad (const guVector pos[4], GRRLIB_texImg *tex,
  * @param xpos Specifies the x-coordinate of the upper-left corner.
  * @param ypos Specifies the y-coordinate of the upper-left corner.
  * @param tex The texture containing the tile to draw.
+ * @param frame Specifies the frame to draw.
  * @param degrees Angle of rotation.
  * @param scaleX Specifies the x-coordinate scale. -1 could be used for flipping the texture horizontally.
  * @param scaleY Specifies the y-coordinate scale. -1 could be used for flipping the texture vertically.
  * @param color Color in RGBA format.
- * @param frame Specifies the frame to draw.
  */
-void  GRRLIB_DrawTile (const f32 xpos, const f32 ypos, const GRRLIB_texImg *tex,
-                       const f32 degrees, const f32 scaleX, const f32 scaleY,
-                       const u32 color, const int frame) {
+void  GRRLIB_DrawTile (const f32 xpos, const f32 ypos, const GRRLIB_texImg *tex, const f32 degrees, const f32 scaleX, const f32 scaleY, const u32 color, const int frame) {
     GXTexObj  texObj;
     f32       width, height;
     Mtx       m, m1, m2, mv;
@@ -186,9 +191,14 @@ void  GRRLIB_DrawTile (const f32 xpos, const f32 ypos, const GRRLIB_texImg *tex,
                   tex->tilew * tex->nbtilew, tex->tileh * tex->nbtileh,
                   GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
 
-    if (GRRLIB_Settings.antialias == false)
+    if (GRRLIB_Settings.antialias == false) {
         GX_InitTexObjLOD(&texObj, GX_NEAR, GX_NEAR,
                          0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1);
+        GX_SetCopyFilter(GX_FALSE, rmode->sample_pattern, GX_FALSE, rmode->vfilter);
+    }
+    else {
+        GX_SetCopyFilter(rmode->aa, rmode->sample_pattern, GX_TRUE, rmode->vfilter);
+    }
 
     GX_LoadTexObj(&texObj,      GX_TEXMAP0);
     GX_SetTevOp  (GX_TEVSTAGE0, GX_MODULATE);
@@ -251,10 +261,7 @@ void  GRRLIB_DrawTile (const f32 xpos, const f32 ypos, const GRRLIB_texImg *tex,
  * @param scaleY Specifies the y-coordinate scale. -1 could be used for flipping the texture vertically.
  * @param color Color in RGBA format.
  */
-void  GRRLIB_DrawPart (const f32 xpos, const f32 ypos, const f32 partx, const f32 party,
-                       const f32 partw, const f32 parth, const GRRLIB_texImg *tex,
-                       const f32 degrees, const f32 scaleX, const f32 scaleY,
-                       const u32 color) {
+void  GRRLIB_DrawPart (const f32 xpos, const f32 ypos, const f32 partx, const f32 party, const f32 partw, const f32 parth, const GRRLIB_texImg *tex, const f32 degrees, const f32 scaleX, const f32 scaleY, const u32 color) {
     GXTexObj  texObj;
     f32       width, height;
     Mtx       m, m1, m2, mv;
@@ -272,9 +279,14 @@ void  GRRLIB_DrawPart (const f32 xpos, const f32 ypos, const f32 partx, const f3
                   tex->w, tex->h,
                   GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
 
-    if (GRRLIB_Settings.antialias == false)
+    if (GRRLIB_Settings.antialias == false) {
         GX_InitTexObjLOD(&texObj, GX_NEAR, GX_NEAR,
                          0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1);
+        GX_SetCopyFilter(GX_FALSE, rmode->sample_pattern, GX_FALSE, rmode->vfilter);
+    }
+    else {
+        GX_SetCopyFilter(rmode->aa, rmode->sample_pattern, GX_TRUE, rmode->vfilter);
+    }
 
     GX_LoadTexObj(&texObj,      GX_TEXMAP0);
     GX_SetTevOp  (GX_TEVSTAGE0, GX_MODULATE);
@@ -330,8 +342,7 @@ void  GRRLIB_DrawPart (const f32 xpos, const f32 ypos, const f32 partx, const f3
  * @param color Color in RGBA format.
  * @param frame Specifies the frame to draw.
  */
-void  GRRLIB_DrawTileQuad (const guVector pos[4], GRRLIB_texImg *tex,
-                           const u32 color, const int frame) {
+void  GRRLIB_DrawTileQuad (const guVector pos[4], GRRLIB_texImg *tex, const u32 color, const int frame) {
     GXTexObj  texObj;
     Mtx       m, m1, m2, mv;
     f32       s1, s2, t1, t2;
@@ -348,9 +359,14 @@ void  GRRLIB_DrawTileQuad (const guVector pos[4], GRRLIB_texImg *tex,
                   tex->tilew * tex->nbtilew, tex->tileh * tex->nbtileh,
                   GX_TF_RGBA8, GX_CLAMP, GX_CLAMP, GX_FALSE);
 
-    if (GRRLIB_Settings.antialias == false)
+    if (GRRLIB_Settings.antialias == false) {
         GX_InitTexObjLOD(&texObj, GX_NEAR, GX_NEAR,
                          0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1);
+        GX_SetCopyFilter(GX_FALSE, rmode->sample_pattern, GX_FALSE, rmode->vfilter);
+    }
+    else {
+        GX_SetCopyFilter(rmode->aa, rmode->sample_pattern, GX_TRUE, rmode->vfilter);
+    }
 
     GX_LoadTexObj(&texObj,      GX_TEXMAP0);
     GX_SetTevOp  (GX_TEVSTAGE0, GX_MODULATE);

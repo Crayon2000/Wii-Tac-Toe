@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-Copyright (c) 2009 The GRRLIB Team
+Copyright (c) 2010 The GRRLIB Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,6 +28,7 @@ THE SOFTWARE.
 
 #define __GRRLIB_CORE__
 #include "grrlib.h"
+#include "grrlib/GRRLIB_ttf.h"
 
 #define DEFAULT_FIFO_SIZE (256 * 1024) /**< GX fifo buffer size. */
 
@@ -96,7 +97,10 @@ int  GRRLIB_Init (void) {
     GX_Init(gp_fifo, DEFAULT_FIFO_SIZE);
 
     // Clear the background to opaque black and clears the z-buffer
-    GX_SetCopyClear((GXColor){ 0, 0, 0, 0xff }, GX_MAX_Z24);
+    GX_SetCopyClear((GXColor){ 0, 0, 0, 0 }, GX_MAX_Z24);
+
+    if (rmode->aa)  GX_SetPixelFmt(GX_PF_RGB565_Z16, GX_ZC_LINEAR) ;  // Set 16 bit RGB565
+    else            GX_SetPixelFmt(GX_PF_RGB8_Z24  , GX_ZC_LINEAR) ;  // Set 24 bit Z24
 
     // Other GX setup
     yscale    = GX_GetYScaleFactor(rmode->efbHeight, rmode->xfbHeight);
@@ -106,10 +110,9 @@ int  GRRLIB_Init (void) {
     GX_SetCopyFilter(rmode->aa, rmode->sample_pattern, GX_TRUE, rmode->vfilter);
     GX_SetFieldMode(rmode->field_rendering, ((rmode->viHeight == 2 * rmode->xfbHeight) ? GX_ENABLE : GX_DISABLE));
 
-    if (rmode->aa)  GX_SetPixelFmt(GX_PF_RGB565_Z16, GX_ZC_LINEAR) ;  // Set 16 bit RGB565
-    else            GX_SetPixelFmt(GX_PF_RGB8_Z24  , GX_ZC_LINEAR) ;  // Set 24 bit Z24
-
     GX_SetDispCopyGamma(GX_GM_1_0);
+
+    if(rmode->fbWidth <= 0){ printf("GRRLIB " GRRLIB_VER_STRING); }
 
     // Setup the vertex descriptor
     GX_ClearVtxDesc();      // clear all the vertex descriptors
@@ -159,17 +162,19 @@ int  GRRLIB_Init (void) {
     // Initialise the filing system
     if (!fatInitDefault())  error_code = -2;
 
+    // Initialise TTF
+    if (GRRLIB_InitTTF())  error_code = -3;
+
     VIDEO_SetBlack(false);  // Enable video output
     return error_code;
 }
 
 /**
  * Call this before exiting your application.
+ * Ensure this function is only ever called once
+ * and only if the setup function has been called.
  */
 void  GRRLIB_Exit (void) {
-
-    // Ensure this function is only ever called once
-    // ...and only if the setup function has been called
     static  bool  done = false;
     if (done || !is_setup)  return ;
     else                    done = true ;
@@ -191,4 +196,7 @@ void  GRRLIB_Exit (void) {
     if (xfb[0]  != NULL) {  free(MEM_K1_TO_K0(xfb[0]));  xfb[0]  = NULL;  }
     if (xfb[1]  != NULL) {  free(MEM_K1_TO_K0(xfb[1]));  xfb[1]  = NULL;  }
     if (gp_fifo != NULL) {  free(gp_fifo);               gp_fifo = NULL;  }
+
+    // Done with TTF
+    GRRLIB_ExitTTF();
 }

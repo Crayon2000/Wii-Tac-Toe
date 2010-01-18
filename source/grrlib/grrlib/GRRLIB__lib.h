@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-Copyright (c) 2009 The GRRLIB Team
+Copyright (c) 2010 The GRRLIB Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,7 @@ THE SOFTWARE.
  */
 
 #ifndef __GRRLIB_H__
-#  error Do not include GRRLIB_fnLib.h directly, include only GRRLIB.h
+#  error Do not include GRRLIB__lib.h directly, include only GRRLIB.h
 #endif
 
 #ifndef __GRRLIB_FNLIB_H__
@@ -89,14 +89,14 @@ GRRLIB_texImg*  GRRLIB_LoadTextureFromFile (const char* filename) ;
 bool            GRRLIB_ScrShot             (const char* filename) ;
 
 //------------------------------------------------------------------------------
-//! GRRLIB_print.c - Will someome please tell me what these are :)
+// GRRLIB_print.c - Will someome please tell me what these are :)
 void  GRRLIB_Printf   (const f32 xpos, const f32 ypos,
                        const GRRLIB_texImg *tex, const u32 color,
                        const f32 zoom, const char *text, ...) ;
 
 void  GRRLIB_PrintBMF (const f32 xpos, const f32 ypos,
                        const GRRLIB_bytemapFont *bmf,
-                       const f32 zoom, const char *text, ...) ;
+                       const char *text, ...) ;
 
 //------------------------------------------------------------------------------
 // GRRLIB_render.c - Rendering functions
@@ -111,28 +111,50 @@ void  GRRLIB_DrawTile (const f32 xpos, const f32 ypos, const GRRLIB_texImg *tex,
                        const f32 degrees, const f32 scaleX, const f32 scaleY,
                        const u32 color, const int frame) ;
 
-void  GRRLIB_DrawPart (const f32 xpos, const f32 ypos, const f32 partx, const f32 party, const f32 partw, const f32 parth, const GRRLIB_texImg *tex,
+void  GRRLIB_DrawPart (const f32 xpos, const f32 ypos, const f32 partx, const f32 party,
+                       const f32 partw, const f32 parth, const GRRLIB_texImg *tex,
                        const f32 degrees, const f32 scaleX, const f32 scaleY,
-                       const u32 color);
+                       const u32 color) ;
 
-void  GRRLIB_DrawTileQuad (const guVector pos[4], GRRLIB_texImg *tex,
-                           const u32 color, const int frame) ;
+void  GRRLIB_DrawTileQuad (const guVector pos[4], GRRLIB_texImg *tex, const u32 color, const int frame) ;
 
-void  GRRLIB_Render   (void) ;
+void  GRRLIB_Render  (void) ;
 
 //------------------------------------------------------------------------------
 // GRRLIB_snapshot.c - Create a texture containing a snapshot of a part of the framebuffer
 void  GRRLIB_Screen2Texture (int posx, int posy, GRRLIB_texImg *tex, bool clear) ;
+void GRRLIB_CompoStart (void);
+void GRRLIB_CompoEnd(int posx, int posy, GRRLIB_texImg *tex);
 
 //------------------------------------------------------------------------------
 // GRRLIB_texEdit.c - Modifying the content of a texture
-
 GRRLIB_texImg*  GRRLIB_LoadTexture    (const u8 *my_img) ;
 GRRLIB_texImg*  GRRLIB_LoadTexturePNG (const u8 *my_png) ;
 GRRLIB_texImg*  GRRLIB_LoadTextureJPG (const u8 *my_jpg) ;
+GRRLIB_texImg*  GRRLIB_LoadTextureJPGEx (const u8 *my_jpg, const int) ;
 GRRLIB_texImg*  GRRLIB_LoadTextureBMP (const u8 *my_bmp) ;
-void            GRRLIB_Compose        (int xoff, int yoff, GRRLIB_texImg* layer,
-                                       GRRLIB_texImg* canvas,
-                                       GRRLIB_ComposeMode mode) ;
+
+//------------------------------------------------------------------------------
+// GRRLIB_gecko.c - USB_Gecko output facilities
+bool GRRLIB_GeckoInit();
+void GRRLIB_GeckoPrintf (const char *text, ...);
+
+//------------------------------------------------------------------------------
+// GRRLIB_3D.c - 3D functions for GRRLIB
+void GRRLIB_SetBackgroundColour(u8 r, u8 g, u8 b, u8 a);
+void GRRLIB_Camera3dSettings(f32 posx, f32 posy, f32 posz, f32 upx, f32 upy, f32 upz, f32 lookx, f32 looky, f32 lookz);
+void GRRLIB_3dMode(f32 minDist, f32 maxDist, f32 fov, bool texturemode);
+void GRRLIB_2dMode();
+void GRRLIB_ObjectView(f32 posx, f32 posy, f32 posz, f32 angx, f32 angy, f32 angz);
+void GRRLIB_SetTexture(GRRLIB_texImg *tex, bool rep);
+
+//------------------------------------------------------------------------------
+// GRRLIB_Freetype.c - FreeType function for GRRLIB
+GRRLIB_ttfFont* GRRLIB_LoadTTF(const u8* file_base, s32 file_size);
+void GRRLIB_FreeTTF(GRRLIB_ttfFont *myFont);
+void GRRLIB_PrintfTTF(int x, int y, GRRLIB_ttfFont *myFont, const char *string, unsigned int fontSize, const u32 color);
+void GRRLIB_PrintfTTFW(int x, int y, GRRLIB_ttfFont *myFont, const wchar_t *string, unsigned int fontSize, const u32 color);
+unsigned int GRRLIB_WidthTTF(GRRLIB_ttfFont *myFont, const char *, unsigned int);
+unsigned int GRRLIB_WidthTTFW(GRRLIB_ttfFont *myFont, const wchar_t *, unsigned int);
 
 #endif // __GRRLIB_FNLIB_H__

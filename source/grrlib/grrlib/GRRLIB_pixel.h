@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-Copyright (c) 2009 The GRRLIB Team
+Copyright (c) 2010 The GRRLIB Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -63,19 +63,6 @@ void  GRRLIB_SetPixelTotexImg (const int x, const int y,
 
     *((u16*)(bp+offs   )) = (u16)((color <<8) | (color >>24));
     *((u16*)(bp+offs+32)) = (u16) (color >>8);
-}
-
-/**
- * Converts RGBA values to u32 color.
- * @param r Amount of red (0 - 255).
- * @param g Amount of green (0 - 255).
- * @param b Amount of blue (0 - 255).
- * @param a Amount of alpha (0 - 255).
- * @return Returns the color in u32 format.
- */
-INLINE
-u32  GRRLIB_GetColor (const u8 r, const u8 g, const u8 b, const u8 a) {
-    return (r << 24) | (g << 16) | (b << 8) | a;
 }
 
 /**

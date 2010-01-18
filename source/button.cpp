@@ -39,6 +39,7 @@ Button::Button(buttonType NewType) : Object()
     TextHeight = 14;
     TextWidth = 100; // random value
     Caption = L"";
+    Font = NULL;
 }
 
 /**
@@ -62,7 +63,7 @@ void Button::Paint()
         GRRLIB_DrawImg(Left + 4, Top + 5, ButtonImgOff, 0, 1.0, 1.0, 0x00000055);
     }
     GRRLIB_DrawImg(Left, Top, ButtonImgOff, 0, 1.0, 1.0, 0xFFFFFFFF);
-    GRRLIB_Printf2W(TextLeft, TextTop, Caption.c_str(), TextHeight, TextColor);
+    GRRLIB_PrintfTTFW(TextLeft, TextTop, Font, Caption.c_str(), TextHeight, TextColor);
     if(Type == btnStdMenu && Selected)
     {   // Hover color
         GRRLIB_DrawImg(Left, Top, ButtonImgOn, 0, 1.0, 1.0, 0xFFFFFFFF);
@@ -101,13 +102,22 @@ void Button::SetCaption(const char *NewCaption)
 void Button::SetCaption(const wstring &NewCaption)
 {
     Caption = NewCaption;
-    TextWidth = GRRLIB_TextWidthW(Caption.c_str(), TextHeight);
+    TextWidth = GRRLIB_WidthTTFW(Font, Caption.c_str(), TextHeight);
     TextTop = Top + (Height / 2) - (TextHeight / 2);
     TextLeft = Left + (Width / 2) - (TextWidth / 2);
     if(Type == btnHome)
     {
         TextLeft += 20;
     }
+}
+
+/**
+ * Set the font to use for the text on the button.
+ * @param[in] AFont Font to use for the text on the button.
+ */
+void Button::SetFont(GRRLIB_ttfFont *AFont)
+{
+    Font = AFont;
 }
 
 /**

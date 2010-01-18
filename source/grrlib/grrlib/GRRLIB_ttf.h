@@ -20,27 +20,5 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ------------------------------------------------------------------------------*/
 
-/**
- * @file GRRLIB_fbGX.h
- * Inline functions for interfacing directly to the GX Engine.
- */
-
-/**
- * Draws a vector.
- * @param v The vector to draw.
- * @param color The color of the vector in RGBA format.
- * @param n Number of points in the vector.
- * @param fmt Type of primitive.
- */
-INLINE
-void  GRRLIB_GXEngine (const guVector v[], const u32 color[], const long n,
-                       const u8 fmt) {
-    int i;
-
-    GX_Begin(fmt, GX_VTXFMT0, n);
-    for (i = 0; i < n; i++) {
-        GX_Position3f32(v[i].x, v[i].y,  v[i].z);
-        GX_Color1u32(color[i]);
-    }
-    GX_End();
-}
+int GRRLIB_InitTTF();
+void GRRLIB_ExitTTF();

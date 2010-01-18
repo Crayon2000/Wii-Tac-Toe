@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-Copyright (c) 2009 The GRRLIB Team
+Copyright (c) 2010 The GRRLIB Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -81,3 +81,4 @@ INLINE
 bool  GRRLIB_GetAntiAliasing (void) {
     return GRRLIB_Settings.antialias;
 }
+

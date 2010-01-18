@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-Copyright (c) 2009 The GRRLIB Team
+Copyright (c) 2010 The GRRLIB Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,10 +28,17 @@ THE SOFTWARE.
 #ifndef __GRRLIB_H__
 #define __GRRLIB_H__
 
+/**
+ * Version information for GRRLIB.
+ */
+#define GRRLIB_VER_STRING "4.2.1 BETA"
+
 //==============================================================================
 // Includes
 //==============================================================================
 #include <gccore.h>
+#include "ft2build.h"
+#include FT_FREETYPE_H
 //==============================================================================
 
 //==============================================================================
@@ -65,14 +72,6 @@ typedef  unsigned int  uint;
 //==============================================================================
 // typedefs, enumerators & structs
 //==============================================================================
-/**
- * Compositions Modes.
- */
-typedef  enum Composition_Modes {
-    GRRLIB_COMPOSE_NORMAL,      /**< NORMAL : a-over-b alpha composition (normal) */
-} GRRLIB_ComposeMode;
-
-//------------------------------------------------------------------------------
 /**
  * GRRLIB Blending Modes.
  */
@@ -140,15 +139,23 @@ typedef  struct GRRLIB_bytemapChar {
  * Structure to hold the bytemap font information.
  */
 typedef  struct GRRLIB_bytemapFont {
-        char  *name;                /**< Font name.                      */
-        u32   *palette;             /**< Font palette.                   */
-        u16   nbChar;               /**< Number of characters in font.   */
-        u8    version;              /**< Version.                        */
-        s8    tracking;             /**< Tracking (Add-space after each char) (-128 to 127). */
+    char  *name;                /**< Font name.                      */
+    u32   *palette;             /**< Font palette.                   */
+    u16   nbChar;               /**< Number of characters in font.   */
+    u8    version;              /**< Version.                        */
+    s8    tracking;             /**< Tracking (Add-space after each char) (-128 to 127). */
 
-        GRRLIB_bytemapChar  *charDef;   /**< Array of bitmap characters. */
-    }
-GRRLIB_bytemapFont;
+    GRRLIB_bytemapChar  *charDef;   /**< Array of bitmap characters. */
+} GRRLIB_bytemapFont;
+
+//------------------------------------------------------------------------------
+/**
+ * Structure to hold the TTF information.
+ */
+typedef struct GRRLIB_Font {
+    FT_Face face;       /**< A TTF face object. */
+    FT_Bool kerning;    /**< true whenever a face object contains kerning data that can be accessed with FT_Get_Kerning. */
+} GRRLIB_ttfFont;
 
 //------------------------------------------------------------------------------
 /**
@@ -205,14 +212,11 @@ typedef struct tagRGBQUAD {
 GRR_EXTERN  GXRModeObj  *rmode;
 GRR_EXTERN  void        *xfb[2]  GRR_INITS(NULL, NULL);
 GRR_EXTERN  u32         fb       GRR_INIT(0);
-
 //==============================================================================
 // procedure and function prototypes
 // Inline function handling - http://www.greenend.org.uk/rjk/2003/03/inline.html
 //==============================================================================
 #include "grrlib/GRRLIB__lib.h"
-
-#include "grrlib/GRRLIB_addon.h"
 
 #if defined __GRRLIB_CORE__
 #  define INLINE
@@ -240,8 +244,13 @@ GRR_EXTERN  u32         fb       GRR_INIT(0);
  * Welcome to the GRRLIB documentation.
  *
  * @section Introduction
- * GRRLIB is a C/C++ 2D Graphics library for Wii application developers.
+ * GRRLIB is a C/C++ 2D/3D graphics library for Wii application developers.
  * It is essentially a wrapper which presents a friendly interface to the Nintendo GX core.
+ *
+ * @section Links
+ * Forum: http://grrlib.santo.fr/forum\n
+ * Code: http://code.google.com/p/grrlib\n
+ * IRC: <a href="irc://irc.efnet.net/grrlib">##GRRLIB</a> on EFnet
  *
  * @section Credits
  * Project Leader : NoNameNo\n
@@ -251,7 +260,7 @@ GRR_EXTERN  u32         fb       GRR_INIT(0);
  * Advisors       : RedShade, Jespa\n
  *
  * @section Licence
- * Copyright (c) 2009 The GRRLIB Team
+ * Copyright (c) 2010 The GRRLIB Team
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -271,7 +280,7 @@ GRR_EXTERN  u32         fb       GRR_INIT(0);
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
- * @example template/main.c
+ * @example template/source/main.c
  * This example shows the minimum code required to use GRRLIB.
  * It could be used as a template to start a new project.
  * More elaborate examples can be found inside the \e examples folder.

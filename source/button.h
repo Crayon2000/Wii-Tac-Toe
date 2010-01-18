@@ -33,12 +33,14 @@ public:
     void Paint();
     void SetCaption(const char *);
     void SetCaption(const wstring &);
+    void SetFont(GRRLIB_ttfFont *);
     void SetSelected(bool);
     void SetTextColor(u32);
     void SetTextHeight(unsigned int);
 private:
     bool Selected;
     wstring Caption;
+    GRRLIB_ttfFont *Font;
     unsigned int TextWidth;
     unsigned int TextHeight;
     unsigned int TextTop;

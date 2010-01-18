@@ -2,6 +2,7 @@
 #include <ogcsys.h>             // nanosleep
 #include <ogc/lwp_watchdog.h>   // gettime
 
+#include "grrlib.h"
 #include "tools.h"
 
 /**
@@ -134,4 +135,57 @@ wstring str_replaceW(const wstring &txt, const wstring &Before, const wstring &A
         pos += AfterSize;
     }
     return str;
+}
+
+/**
+ * Fade in, than fade out.
+ * @param data   Texture.
+ * @param scaleX Texture X scale.
+ * @param scaleY Texture Y scale.
+ * @param speed  Fade speed (1 is the normal speed, 2 is two time the normal speed, etc).
+ */
+void GRRLIB_DrawImg_FadeInOut(struct GRRLIB_texImg *tex, float scaleX, f32 scaleY, u16 speed)
+{
+    GRRLIB_DrawImg_FadeIn(tex, scaleX, scaleY, speed);
+    GRRLIB_DrawImg_FadeOut(tex, scaleX, scaleY, speed);
+}
+
+/**
+ * Fade in.
+ * @param data   Texture.
+ * @param scaleX Texture X scale.
+ * @param scaleY Texture Y scale.
+ * @param speed  Fade speed (1 is the normal speed, 2 is two time the normal speed, etc).
+ */
+void GRRLIB_DrawImg_FadeIn(struct GRRLIB_texImg *tex, float scaleX, f32 scaleY, u16 speed)
+{
+    s16 alpha;
+    f32 xpos = (rmode->fbWidth - tex->w) / 2;
+    f32 ypos = (rmode->efbHeight - tex->h) / 2;
+
+    for(alpha = 0; alpha < 255; alpha += speed) {
+        if(alpha > 255) alpha = 255;
+        GRRLIB_DrawImg(xpos, ypos, tex, 0, scaleX, scaleY, 0xFFFFFF00 | alpha);
+        GRRLIB_Render();
+    }
+}
+
+/**
+ * Fade out.
+ * @param data   Texture.
+ * @param scaleX Texture X scale.
+ * @param scaleY Texture Y scale.
+ * @param speed  Fade speed (1 is the normal speed, 2 is two time the normal speed, etc).
+ */
+void GRRLIB_DrawImg_FadeOut(struct GRRLIB_texImg *tex, float scaleX, f32 scaleY, u16 speed)
+{
+    s16 alpha;
+    f32 xpos = (rmode->fbWidth - tex->w) / 2;
+    f32 ypos = (rmode->efbHeight - tex->h) / 2;
+
+    for(alpha = 255; alpha > 0; alpha -= speed) {
+        if(alpha < 0) alpha = 0;
+        GRRLIB_DrawImg(xpos, ypos, tex, 0, scaleX, scaleY, 0xFFFFFF00 | alpha);
+        GRRLIB_Render();
+    }
 }

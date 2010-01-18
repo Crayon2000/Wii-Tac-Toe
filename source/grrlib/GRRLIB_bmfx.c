@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-Copyright (c) 2009 The GRRLIB Team
+Copyright (c) 2010 The GRRLIB Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -105,7 +105,7 @@ void  GRRLIB_BMFX_Sepia (const GRRLIB_texImg *texsrc, GRRLIB_texImg *texdest) {
             sb = R(color)*0.272 + G(color)*0.534 + B(color)*0.131;
             if (sr>255) sr=255;  if (sg>255) sg=255;  if (sb>255) sb=255;
             GRRLIB_SetPixelTotexImg(x, y, texdest,
-                                    GRRLIB_GetColor(sr,sg,sb,A(color)));
+                                    RGBA(sr,sg,sb,A(color)));
         }
     }
     GRRLIB_SetHandle(texdest, 0, 0);
@@ -141,7 +141,7 @@ void  GRRLIB_BMFX_Blur (const GRRLIB_texImg *texsrc,
     int numba = (1+(factor<<1))*(1+(factor<<1));
     u32 x, y;
     s32 k, l;
-    int tmp = 0;
+    int tmp;
     int newr, newg, newb, newa;
     u32 colours[numba];
     u32 thiscol;

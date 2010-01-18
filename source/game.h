@@ -90,6 +90,8 @@ private:
     bool AlphaDirection;
 
     MODPlay ModTrack;
+
+    GRRLIB_ttfFont *DefaultFont;
 };
 //---------------------------------------------------------------------------
 #endif

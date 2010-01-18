@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-Copyright (c) 2009 The GRRLIB Team
+Copyright (c) 2010 The GRRLIB Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -94,9 +94,9 @@ bool  GRRLIB_ScrShot(const char* filename) {
     int     ret = -1;
 
     if ( (pngContext = PNGU_SelectImageFromDevice(filename)) ) {
-        ret = PNGU_EncodeFromYCbYCr( pngContext,
-                                     rmode->fbWidth, rmode->efbHeight,
-                                     xfb[fb], 0 );
+        ret = PNGU_EncodeFromEFB( pngContext,
+                                  rmode->fbWidth, rmode->efbHeight,
+                                  0 );
         PNGU_ReleaseImageContext(pngContext);
     }
     return !ret;

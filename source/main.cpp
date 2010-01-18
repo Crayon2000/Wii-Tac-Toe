@@ -58,7 +58,6 @@ int main(int argc, char **argv)
 {
     // Video initialization
     GRRLIB_Init();
-    GRRLIB_InitFreetype();
 
     // Wiimote initialization
     WPAD_Init();
@@ -76,19 +75,18 @@ int main(int argc, char **argv)
 
     while(1)
     {
+        MyGame->Paint();
+        GRRLIB_Render();
+
         WPAD_ScanPads();
         if(MyGame->ControllerManager())
             break;
         if(HWButton)
             break;
-
-        MyGame->Paint();
-        GRRLIB_Render();
     }
 
     delete MyGame;
     WPAD_Shutdown();
-    GRRLIB_ExitFreetype();
     GRRLIB_Exit();
 
     if(HWButton && HWButton != SYS_RETURNTOHBMENU)
