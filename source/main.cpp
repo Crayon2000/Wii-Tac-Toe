@@ -76,13 +76,14 @@ int main(int argc, char **argv)
     while(1)
     {
         MyGame->Paint();
-        GRRLIB_Render();
 
         WPAD_ScanPads();
         if(MyGame->ControllerManager())
             break;
         if(HWButton)
             break;
+
+        GRRLIB_Render();
     }
 
     delete MyGame;

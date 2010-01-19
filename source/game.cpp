@@ -239,13 +239,13 @@ void Game::GameScreen(bool CopyScreen)
         GRRLIB_DrawImg(0, 0, GameImg, 0, 1, 1, 0xFFFFFFFF);
 
         // Player name: Offset -2, 2
-        PrintWrapText(42, 50, 125, WTTPlayer[0].GetName(), 0x6BB6DE, 15);
-        PrintWrapText(42, 145, 125, WTTPlayer[1].GetName(), 0xE6313A, 15);
-        PrintWrapText(42, 250, 125, Lang->String("TIE GAME"), 0x109642, 15);
+        PrintWrapText(42, 50, 125, WTTPlayer[0].GetName(), 0x6BB6DEFF, 15);
+        PrintWrapText(42, 145, 125, WTTPlayer[1].GetName(), 0xE6313AFF, 15);
+        PrintWrapText(42, 250, 125, Lang->String("TIE GAME"), 0x109642FF, 15);
         // Player name
-        PrintWrapText(44, 48, 125, WTTPlayer[0].GetName(), 0xFFFFFF, 15);
-        PrintWrapText(44, 143, 125, WTTPlayer[1].GetName(), 0xFFFFFF, 15);
-        PrintWrapText(44, 248, 125, Lang->String("TIE GAME"), 0xFFFFFF, 15);
+        PrintWrapText(44, 48, 125, WTTPlayer[0].GetName(), 0xFFFFFFFF, 15);
+        PrintWrapText(44, 143, 125, WTTPlayer[1].GetName(), 0xFFFFFFFF, 15);
+        PrintWrapText(44, 248, 125, Lang->String("TIE GAME"), 0xFFFFFFFF, 15);
 
         // Draw score: Offset -2, 2
         wchar_t ScoreText[5];
@@ -270,9 +270,9 @@ void Game::GameScreen(bool CopyScreen)
         GRRLIB_PrintfTTFW(TextLeft, 280, DefaultFont, ScoreText, 35, 0xFFFFFFFF);
 
         // Draw text at the bottom: Offet 1, 1
-        PrintWrapText(131, 421, 390, text, 0x111111, 15);
+        PrintWrapText(131, 421, 390, text, 0x111111FF, 15);
         // Draw text at the bottom
-        PrintWrapText(130, 420, 390, text, 0x8C8A8C, 15);
+        PrintWrapText(130, 420, 390, text, 0x8C8A8CFF, 15);
 
         if(CopyScreen)
         {
