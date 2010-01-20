@@ -19,7 +19,7 @@ TARGET		:=	Wii-Tac-Toe
 BUILD		:=	build
 SOURCES		:=	source source/grrlib source/libpng source/pngu
 DATA		:=	data
-INCLUDES	:=  source/freetype source/libjpeg source/libpng source/pngu source/grrlib
+INCLUDES	:=  source source/freetype source/libjpeg source/libpng source/pngu source/grrlib
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -80,7 +80,7 @@ export OFILES	:=	$(addsuffix .o,$(BINFILES)) \
 #---------------------------------------------------------------------------------
 # build a list of include paths
 #---------------------------------------------------------------------------------
-export INCLUDE	:=	$(foreach dir,$(INCLUDES), -iquote $(CURDIR)/$(dir)) \
+export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
 					$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
 					-I$(CURDIR)/$(BUILD) \
 					-I$(LIBOGC_INC)

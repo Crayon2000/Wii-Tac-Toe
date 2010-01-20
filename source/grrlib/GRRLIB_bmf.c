@@ -23,7 +23,7 @@ THE SOFTWARE.
 #include <malloc.h>
 #include <string.h>
 
-#include "grrlib.h"
+#include <grrlib.h>
 
 /**
  * Load a ByteMap font structure from a buffer.

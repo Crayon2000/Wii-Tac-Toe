@@ -120,15 +120,15 @@ INLINE  void            GRRLIB_FreeTexture        (GRRLIB_texImg *tex);
 //==============================================================================
 // Definitions of inlined functions
 //==============================================================================
-#include "grrlib/GRRLIB_cExtn.h"      // C extensions (helper functions)
-#include "grrlib/GRRLIB_clipping.h"   // Clipping control
-#include "grrlib/GRRLIB_collision.h"  // Collision detection
-#include "grrlib/GRRLIB_fbComplex.h"  // Render to framebuffer: Complex primitives
-#include "grrlib/GRRLIB_fbGX.h"       // Render to framebuffer: Simple GX wrapper
-#include "grrlib/GRRLIB_fbSimple.h"   // Render to framebuffer: Simple primitives
-#include "grrlib/GRRLIB_handle.h"     // Texture handle manipulation
-#include "grrlib/GRRLIB_pixel.h"      // Pixel manipulation
-#include "grrlib/GRRLIB_settings.h"   // GRRLIB Settings
-#include "grrlib/GRRLIB_texSetup.h"   // Setup for textures
+#include <grrlib/GRRLIB_cExtn.h>      // C extensions (helper functions)
+#include <grrlib/GRRLIB_clipping.h>   // Clipping control
+#include <grrlib/GRRLIB_collision.h>  // Collision detection
+#include <grrlib/GRRLIB_fbComplex.h>  // Render to framebuffer: Complex primitives
+#include <grrlib/GRRLIB_fbGX.h>       // Render to framebuffer: Simple GX wrapper
+#include <grrlib/GRRLIB_fbSimple.h>   // Render to framebuffer: Simple primitives
+#include <grrlib/GRRLIB_handle.h>     // Texture handle manipulation
+#include <grrlib/GRRLIB_pixel.h>      // Pixel manipulation
+#include <grrlib/GRRLIB_settings.h>   // GRRLIB Settings
+#include <grrlib/GRRLIB_texSetup.h>   // Setup for textures
 
 #endif // __GRRLIB_FNINLINE_H__

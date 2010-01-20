@@ -20,7 +20,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ------------------------------------------------------------------------------*/
 
-#include "grrlib.h"
+#include <grrlib.h>
 #include "grrlib/GRRLIB_ttf.h"
 #include <wchar.h>
 

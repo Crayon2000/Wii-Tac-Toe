@@ -24,7 +24,7 @@ THE SOFTWARE.
 #include <stdarg.h>
 #include <stdio.h>
 
-#include "grrlib.h"
+#include <grrlib.h>
 
 /**
  * Print formatted output.

@@ -22,7 +22,7 @@ THE SOFTWARE.
 
 #include <math.h>
 
-#include "grrlib.h"
+#include <grrlib.h>
 
 // User should not directly modify these
 Mtx       _GRR_view;  // Should be static as soon as all light functions needing this var will be in this file ;)
@@ -294,8 +294,7 @@ void GRRLIB_DrawSphere(f32 r, int lats, int longs, bool filled) {
  * @param size Size of the cube edge.
  * @param filled Wired or not.
 */
-void GRRLIB_DrawCube(f32 size, bool filled)
-{
+void GRRLIB_DrawCube(f32 size, bool filled) {
     static f32 n[6][3] =
     {
         {-1.0, 0.0, 0.0},
