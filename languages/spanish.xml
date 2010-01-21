@@ -19,29 +19,29 @@
 
     <!-- Variable $WINNER$ and $LOSER$ could be used -->
     <winning_game>
-        <message id="1" text="$WINNER$ ganó esta ronda." />
-        <message id="2" text="¿Es $WINNER$ el mejor?" />
-        <message id="3" text="El juego es tuyo, $WINNER$." />
-        <message id="4" text="$WINNER$ mola." />
-        <message id="5" text="Demasiado malo para $LOSER$." />
-        <message id="6" text="Suerte para la siguiente vez, $LOSER$!" />
-        <message id="7" text="$LOSER$ de verdad que apestas." />
-        <message id="8" text="$LOSER$ debería practicar un poco más." />
+        <message text="$WINNER$ ganó esta ronda." />
+        <message text="¿Es $WINNER$ el mejor?" />
+        <message text="El juego es tuyo, $WINNER$." />
+        <message text="$WINNER$ mola." />
+        <message text="Demasiado malo para $LOSER$." />
+        <message text="Suerte para la siguiente vez, $LOSER$!" />
+        <message text="$LOSER$ de verdad que apestas." />
+        <message text="$LOSER$ debería practicar un poco más." />
     </winning_game>
 
     <tie_game>
-        <message id="1" text="Juego empatado, eso mola." />
-        <message id="2" text="Los dos perdéis esta partida." />
-        <message id="3" text="Nadie gana, nadie pierde." />
-        <message id="4" text="Los dos habéis gastado el tiempo, es un empate." />
+        <message text="Juego empatado, eso mola." />
+        <message text="Los dos perdéis esta partida." />
+        <message text="Nadie gana, nadie pierde." />
+        <message text="Los dos habéis gastado el tiempo, es un empate." />
     </tie_game>
 
     <turn_over>
-        <message id="1" text="%ls, es tu turno." />
-        <message id="2" text="Esperando a %ls." />
-        <message id="3" text="%ls está pensando en el siguiente movimiento." />
-        <message id="4" text="%ls debería coger el Wii Remote y jugar." />
-        <message id="5" text="%ls, vamos a jugar." />
-        <message id="6" text="%ls debería jugar ya." />
+        <message text="%ls, es tu turno." />
+        <message text="Esperando a %ls." />
+        <message text="%ls está pensando en el siguiente movimiento." />
+        <message text="%ls debería coger el Wii Remote y jugar." />
+        <message text="%ls, vamos a jugar." />
+        <message text="%ls debería jugar ya." />
     </turn_over>
 </language>

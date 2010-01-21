@@ -19,29 +19,29 @@
 
     <!-- Variable $WINNER$ and $LOSER$ could be used -->
     <winning_game>
-        <message id="1" text="$WINNER$ gewinnt diese Runde." />
-        <message id="2" text="Ist $WINNER$ der Beste?" />
-        <message id="3" text="Es ist dein Spiel, $WINNER$." />
-        <message id="4" text="$WINNER$ hat's drauf." />
-        <message id="5" text="Wie schade $LOSER$." />
-        <message id="6" text="Viel Glück beim nächsten Mal, $LOSER$!" />
-        <message id="7" text="$LOSER$, du bist richtig schlecht." />
-        <message id="8" text="$LOSER$, du solltest mehr üben." />
+        <message text="$WINNER$ gewinnt diese Runde." />
+        <message text="Ist $WINNER$ der Beste?" />
+        <message text="Es ist dein Spiel, $WINNER$." />
+        <message text="$WINNER$ hat's drauf." />
+        <message text="Wie schade $LOSER$." />
+        <message text="Viel Glück beim nächsten Mal, $LOSER$!" />
+        <message text="$LOSER$, du bist richtig schlecht." />
+        <message text="$LOSER$, du solltest mehr üben." />
     </winning_game>
 
     <tie_game>
-        <message id="1" text="Unentschieden, so ein Mist." />
-        <message id="2" text="Diesmal habt ihr beide verloren." />
-        <message id="3" text="Kein Sieger, kein Verlierer." />
-        <message id="4" text="Ihr habt beide eure Zeit verschwendet, unentschieden." />
+        <message text="Unentschieden, so ein Mist." />
+        <message text="Diesmal habt ihr beide verloren." />
+        <message text="Kein Sieger, kein Verlierer." />
+        <message text="Ihr habt beide eure Zeit verschwendet, unentschieden." />
     </tie_game>
 
     <turn_over>
-        <message id="1" text="%ls, du bist dran." />
-        <message id="2" text="Ich warte auf dich %ls." />
-        <message id="3" text="%ls denkt gerade an seinen nächsten Schritt." />
-        <message id="4" text="%ls nimm die Wiimote und spiel." />
-        <message id="5" text="%ls, lass uns spielen." />
-        <message id="6" text="%ls spiel endlich." />
+        <message text="%ls, du bist dran." />
+        <message text="Ich warte auf dich %ls." />
+        <message text="%ls denkt gerade an seinen nächsten Schritt." />
+        <message text="%ls nimm die Wiimote und spiel." />
+        <message text="%ls, lass uns spielen." />
+        <message text="%ls spiel endlich." />
     </turn_over>
 </language>

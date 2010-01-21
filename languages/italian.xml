@@ -19,29 +19,29 @@
 
     <!-- Variable $WINNER$ and $LOSER$ could be used -->
     <winning_game>
-        <message id="1" text="$WINNER$ ha vinto il round." />
-        <message id="2" text="$WINNER$ e' il migliore?" />
-        <message id="3" text="Stai dominando, $WINNER$." />
-        <message id="4" text="$WINNER$ domina." />
-        <message id="5" text="Spiacente $LOSER$." />
-        <message id="6" text="Andra' meglio la prossima volta, $LOSER$!" />
-        <message id="7" text="$LOSER$ stai andando malissimo." />
-        <message id="8" text="$LOSER$ dovresti fare piu' pratica." />
+        <message text="$WINNER$ ha vinto il round." />
+        <message text="$WINNER$ e' il migliore?" />
+        <message text="Stai dominando, $WINNER$." />
+        <message text="$WINNER$ domina." />
+        <message text="Spiacente $LOSER$." />
+        <message text="Andra' meglio la prossima volta, $LOSER$!" />
+        <message text="$LOSER$ stai andando malissimo." />
+        <message text="$LOSER$ dovresti fare piu' pratica." />
     </winning_game>
 
     <tie_game>
-        <message id="1" text="Pareggio, che sfiga." />
-        <message id="2" text="Avete perso entrambi." />
-        <message id="3" text="Ne vincitori, ne vinti." />
-        <message id="4" text="Avete perso il vostro tempo, e' un pareggio." />
+        <message text="Pareggio, che sfiga." />
+        <message text="Avete perso entrambi." />
+        <message text="Ne vincitori, ne vinti." />
+        <message text="Avete perso il vostro tempo, e' un pareggio." />
     </tie_game>
 
     <turn_over>
-        <message id="1" text="%ls, e' il tuo turno." />
-        <message id="2" text="Sto aspettando %ls." />
-        <message id="3" text="%ls sta pensando la sua prossima mossa." />
-        <message id="4" text="%ls dovrebbe prendere il Wiimote e giocare." />
-        <message id="5" text="%ls, giochiamo." />
-        <message id="6" text="%ls dovrebbe giocare." />
+        <message text="%ls, e' il tuo turno." />
+        <message text="Sto aspettando %ls." />
+        <message text="%ls sta pensando la sua prossima mossa." />
+        <message text="%ls dovrebbe prendere il Wiimote e giocare." />
+        <message text="%ls, giochiamo." />
+        <message text="%ls dovrebbe giocare." />
     </turn_over>
 </language>

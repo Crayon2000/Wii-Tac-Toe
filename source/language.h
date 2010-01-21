@@ -32,9 +32,12 @@ private:
     int WinningCount;
     int TurnOverCount;
 
+    wstring *WinningMessage;
+    wstring *TieMessage;
+    wstring *TurnOverMessage;
+
     void SetLanguage(s32);
     unsigned int ChildCount(mxml_node_t *, const char *);
-    wstring GetRandomMessage(const char *, int);
     wstring Utf82Unicode(const string &);
 };
 //---------------------------------------------------------------------------

@@ -53,6 +53,7 @@ private:
     void ButtonOn(s8);
     bool SelectZone();
     void ChangeCursor();
+    void CalculateFrameRate();
 
     Cursor *Hand;
     s8 HandX, HandY;
@@ -67,6 +68,8 @@ private:
 
     u16 TieGame;
     bool RoundFinished;
+    u8 FPS;
+    bool ShowFPS;
 
     std::vector<Button *> ExitButton;
     std::vector<Button *> MenuButton;

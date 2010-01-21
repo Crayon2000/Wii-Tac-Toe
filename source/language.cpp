@@ -18,9 +18,39 @@ Language::Language()
 {
     SetLanguage(CONF_GetLanguage());
 
-    TieCount = ChildCount(mxmlFindElement(First_Node, First_Node, "tie_game", NULL, NULL, MXML_DESCEND), "message");
-    WinningCount = ChildCount(mxmlFindElement(First_Node, First_Node, "winning_game", NULL, NULL, MXML_DESCEND), "message");
-    TurnOverCount = ChildCount(mxmlFindElement(First_Node, First_Node, "turn_over", NULL, NULL, MXML_DESCEND), "message");
+    u8 i;
+    mxml_node_t *Message_Node;
+    mxml_node_t *Up_Node;
+
+    Up_Node = mxmlFindElement(First_Node, First_Node, "tie_game", NULL, NULL, MXML_DESCEND);
+    TieCount = ChildCount(Up_Node, "message");
+    TieMessage = new wstring[TieCount];
+    for(Message_Node = mxmlFindElement(Up_Node, Up_Node,"message", NULL, NULL, MXML_DESCEND), i = 0;
+        Message_Node != NULL;
+        Message_Node = mxmlFindElement(Message_Node, Up_Node, "message", NULL, NULL, MXML_DESCEND))
+    {
+        TieMessage[i++] = Utf82Unicode(mxmlElementGetAttr(Message_Node, "text"));
+    }
+
+    Up_Node = mxmlFindElement(First_Node, First_Node, "winning_game", NULL, NULL, MXML_DESCEND);
+    WinningCount = ChildCount(Up_Node, "message");
+    WinningMessage = new wstring[WinningCount];
+    for(Message_Node = mxmlFindElement(Up_Node, Up_Node,"message", NULL, NULL, MXML_DESCEND), i = 0;
+        Message_Node != NULL;
+        Message_Node = mxmlFindElement(Message_Node, Up_Node, "message", NULL, NULL, MXML_DESCEND))
+    {
+        WinningMessage[i++] = Utf82Unicode(mxmlElementGetAttr(Message_Node, "text"));
+    }
+
+    Up_Node = mxmlFindElement(First_Node, First_Node, "turn_over", NULL, NULL, MXML_DESCEND);
+    TurnOverCount = ChildCount(Up_Node, "message");
+    TurnOverMessage = new wstring[TurnOverCount];
+    for(Message_Node = mxmlFindElement(Up_Node, Up_Node,"message", NULL, NULL, MXML_DESCEND), i = 0;
+        Message_Node != NULL;
+        Message_Node = mxmlFindElement(Message_Node, Up_Node, "message", NULL, NULL, MXML_DESCEND))
+    {
+        TurnOverMessage[i++] = Utf82Unicode(mxmlElementGetAttr(Message_Node, "text"));
+    }
 }
 
 /**
@@ -30,6 +60,10 @@ Language::~Language()
 {
     if(First_Node)
         mxmlDelete(First_Node);
+
+    delete[] WinningMessage;
+    delete[] TieMessage;
+    delete[] TurnOverMessage;
 }
 
 /**
@@ -116,38 +150,25 @@ unsigned int Language::ChildCount(mxml_node_t *Up_Node, const char *Name)
 }
 
 /**
- * Get a random message.
- */
-wstring Language::GetRandomMessage(const char *Type, int Count)
-{
-    char RandNum[4] = "";
-
-    sprintf(RandNum, "%d", rand() % Count + 1);
-    mxml_node_t *Up_Node = mxmlFindElement(First_Node, First_Node, Type, NULL, NULL, MXML_DESCEND);
-    mxml_node_t *Text_Node = mxmlFindElement(Up_Node, Up_Node, "message", "id", RandNum, MXML_DESCEND);
-    return Utf82Unicode(mxmlElementGetAttr(Text_Node, "text"));
-}
-
-/**
  * Get a random winning message.
  */
 wstring Language::GetRandomWinningMessage()
 {
-    return GetRandomMessage("winning_game", WinningCount);
+    return WinningMessage[rand() % WinningCount];
 }
 /**
  * Get a random tie message.
  */
 wstring Language::GetRandomTieMessage()
 {
-    return GetRandomMessage("tie_game", TieCount);
+    return TieMessage[rand() % TieCount];
 }
 /**
  * Get a random turn over message.
  */
 wstring Language::GetRandomTurnOverMessage()
 {
-    return GetRandomMessage("turn_over", TurnOverCount);
+    return TurnOverMessage[rand() % TurnOverCount];
 }
 
 /**

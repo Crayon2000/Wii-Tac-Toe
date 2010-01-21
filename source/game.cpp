@@ -4,6 +4,7 @@
 #include <wiiuse/wpad.h>
 #include <ogc/conf.h>
 #include <asndlib.h>
+#include <ogc/lwp_watchdog.h>
 #include "tools.h"
 #include "game.h"
 
@@ -46,6 +47,9 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight)
 
     ScreenWidth = GameScreenWidth;
     ScreenHeight = GameScreenHeight;
+
+    FPS = 0;
+    ShowFPS = false;
 
     GameGrid = new Grid();
     Hand = new Cursor[2];
@@ -214,6 +218,15 @@ void Game::Paint()
     {
         Hand[1].Paint();
         Hand[0].Paint();
+    }
+    if(ShowFPS)
+    {
+        CalculateFrameRate();
+        char strFPS[10];
+        snprintf(strFPS, 10, "FPS: %d", FPS);
+        GRRLIB_PrintfTTF(14, 444, DefaultFont, strFPS, 17, 0xFFFFFFFF);
+        GRRLIB_PrintfTTF(16, 446, DefaultFont, strFPS, 17, 0x808080FF);
+        GRRLIB_PrintfTTF(15, 445, DefaultFont, strFPS, 17, 0x000000FF);
     }
 }
 
@@ -602,6 +615,10 @@ bool Game::ControllerManager()
         WPAD_Rumble(WPAD_CHAN_1, 0); // Rumble off
         Copied = false;
     }
+    if((Buttons0 & WPAD_BUTTON_PLUS) || (Buttons1 & WPAD_BUTTON_PLUS))
+    {
+        ShowFPS = !ShowFPS;
+    }
     return false;
 }
 
@@ -850,4 +867,20 @@ void Game::ChangeCursor()
         Hand[1].SetAlpha(0xFF);
     }
     Hand[1].SetAlpha(0x55);
+}
+
+/**
+ * This function calculates the number of frames we render each second.
+ */
+void Game::CalculateFrameRate() {
+    static u8 frameCount = 0;
+    static u32 lastTime;
+    u32 currentTime = ticks_to_millisecs(gettime());
+
+    frameCount++;
+    if(currentTime - lastTime > 1000) {
+        lastTime = currentTime;
+        FPS = frameCount;
+        frameCount = 0;
+    }
 }

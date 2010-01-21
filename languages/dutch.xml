@@ -19,29 +19,29 @@
 
     <!-- Variable $WINNER$ and $LOSER$ could be used -->
     <winning_game>
-        <message id="1" text="$WINNER$ won deze ronde." />
-        <message id="2" text="Is $WINNER$ de beste?" />
-        <message id="3" text="Dit is jouw spel, $WINNER$." />
-        <message id="4" text="$WINNER$ rules." />
-        <message id="5" text="Jammer voor $LOSER$." />
-        <message id="6" text="Volgende keer beter, $LOSER$!" />
-        <message id="7" text="$LOSER$ jij bent echt slecht." />
-        <message id="8" text="$LOSER$ je zou meer moeten oefenen." />
+        <message text="$WINNER$ won deze ronde." />
+        <message text="Is $WINNER$ de beste?" />
+        <message text="Dit is jouw spel, $WINNER$." />
+        <message text="$WINNER$ rules." />
+        <message text="Jammer voor $LOSER$." />
+        <message text="Volgende keer beter, $LOSER$!" />
+        <message text="$LOSER$ jij bent echt slecht." />
+        <message text="$LOSER$ je zou meer moeten oefenen." />
     </winning_game>
 
     <tie_game>
-        <message id="1" text="Gelijk spel, dat zuigt." />
-        <message id="2" text="Beide hebben deze keer verloren." />
-        <message id="3" text="Geen winnaar, geen verliezer." />
-        <message id="4" text="Jullie hebben beide jullie tijd verspild, het is gelijk spel." />
+        <message text="Gelijk spel, dat zuigt." />
+        <message text="Beide hebben deze keer verloren." />
+        <message text="Geen winnaar, geen verliezer." />
+        <message text="Jullie hebben beide jullie tijd verspild, het is gelijk spel." />
     </tie_game>
 
     <turn_over>
-        <message id="1" text="%ls, het is jouw beurt." />
-        <message id="2" text="Wachten op %ls." />
-        <message id="3" text="%ls denkt aan de volgende zet." />
-        <message id="4" text="%ls zou de Wiimote moeten pakken en spelen." />
-        <message id="5" text="%ls, laten we spelen." />
-        <message id="6" text="%ls moet nu spelen." />
+        <message text="%ls, het is jouw beurt." />
+        <message text="Wachten op %ls." />
+        <message text="%ls denkt aan de volgende zet." />
+        <message text="%ls zou de Wiimote moeten pakken en spelen." />
+        <message text="%ls, laten we spelen." />
+        <message text="%ls moet nu spelen." />
     </turn_over>
 </language>
