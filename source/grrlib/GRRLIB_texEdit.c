@@ -20,10 +20,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ------------------------------------------------------------------------------*/
 
-#include <jpeglib.h>
 #include <malloc.h>
 #include <pngu.h>
 #include <stdio.h>
+#include <jpeglib.h>
 #include <string.h>
 
 #include <grrlib.h>
@@ -41,35 +41,34 @@ void  RawTo4x4RGBA (const u8 *src, void *dst,
                     const uint width, const uint height) {
     uint  block;
     uint  i;
-    uint  c;
-    uint  ar;
-    uint  gb;
+    u8    c;
+    u8    argb;
 
     u8    *p = (u8*)dst;
 
     for (block = 0; block < height; block += 4) {
         for (i = 0; i < width; i += 4) {
-            /* Alpha and Red */
+            // Alpha and Red
             for (c = 0; c < 4; ++c) {
-                for (ar = 0; ar < 4; ++ar) {
-                    /* Alpha pixels */
+                for (argb = 0; argb < 4; ++argb) {
+                    // Alpha pixels
                     *p++ = 255;
-                    /* Red pixels */
-                    *p++ = src[((i + ar) + ((block + c) * width)) * 3];
+                    // Red pixels
+                    *p++ = src[((i + argb) + ((block + c) * width)) * 3];
                 }
             }
 
-            /* Green and Blue */
+            // Green and Blue
             for (c = 0; c < 4; ++c) {
-                for (gb = 0; gb < 4; ++gb) {
-                    /* Green pixels */
-                    *p++ = src[(((i + gb) + ((block + c) * width)) * 3) + 1];
-                    /* Blue pixels */
-                    *p++ = src[(((i + gb) + ((block + c) * width)) * 3) + 2];
+                for (argb = 0; argb < 4; ++argb) {
+                    // Green pixels
+                    *p++ = src[(((i + argb) + ((block + c) * width)) * 3) + 1];
+                    // Blue pixels
+                    *p++ = src[(((i + argb) + ((block + c) * width)) * 3) + 2];
                 }
             }
-        } /* i */
-    } /* block */
+        }
+    }
 }
 
 /**
@@ -316,16 +315,19 @@ GRRLIB_texImg*  GRRLIB_LoadTextureJPGEx (const u8 *my_jpg, const int my_size) {
     jpeg_create_decompress(&cinfo);
     cinfo.err = jpeg_std_error(&jerr);
     cinfo.progress = NULL;
-    jpeg_memory_src(&cinfo, my_jpg, my_size);
+    jpeg_mem_src(&cinfo, (unsigned char *)my_jpg, my_size);
     jpeg_read_header(&cinfo, TRUE);
+    if(cinfo.jpeg_color_space == JCS_GRAYSCALE) {
+        cinfo.out_color_space = JCS_RGB;
+    }
     jpeg_start_decompress(&cinfo);
-    unsigned char *tempBuffer = malloc(cinfo.output_width * cinfo.output_height * cinfo.num_components);
+    unsigned char *tempBuffer = malloc(cinfo.output_width * cinfo.output_height * cinfo.output_components);
     JSAMPROW row_pointer[1];
-    row_pointer[0] = malloc(cinfo.output_width * cinfo.num_components);
+    row_pointer[0] = malloc(cinfo.output_width * cinfo.output_components);
     size_t location = 0;
     while (cinfo.output_scanline < cinfo.output_height) {
         jpeg_read_scanlines(&cinfo, row_pointer, 1);
-        for (i = 0; i < cinfo.image_width * cinfo.num_components; i++) {
+        for (i = 0; i < cinfo.image_width * cinfo.output_components; i++) {
             /* Put the decoded scanline into the tempBuffer */
             tempBuffer[ location++ ] = row_pointer[0][i];
         }

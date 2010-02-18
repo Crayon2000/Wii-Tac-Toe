@@ -1,15 +1,16 @@
-/* jconfig.h.  Generated automatically by configure.  */
+/* jconfig.h.  Generated from jconfig.cfg by configure.  */
 /* jconfig.cfg --- source file edited by configure script */
-/* see jconfig.doc for explanations */
+/* see jconfig.txt for explanations */
 
-#define HAVE_PROTOTYPES 
-#define HAVE_UNSIGNED_CHAR 
-#define HAVE_UNSIGNED_SHORT 
+#define HAVE_PROTOTYPES 1
+#define HAVE_UNSIGNED_CHAR 1
+#define HAVE_UNSIGNED_SHORT 1
 #undef void
 #undef const
 #undef CHAR_IS_UNSIGNED
-#define HAVE_STDDEF_H 
-#define HAVE_STDLIB_H 
+#define HAVE_STDDEF_H 1
+#define HAVE_STDLIB_H 1
+#define HAVE_LOCALE_H 1
 #undef NEED_BSD_STRINGS
 #undef NEED_SYS_TYPES_H
 #undef NEED_FAR_POINTERS
@@ -29,11 +30,11 @@
 
 #ifdef JPEG_CJPEG_DJPEG
 
-#define BMP_SUPPORTED		/* BMP image file format */
-#define GIF_SUPPORTED		/* GIF image file format */
-#define PPM_SUPPORTED		/* PBMPLUS PPM/PGM image file format */
-#undef RLE_SUPPORTED		/* Utah RLE image file format */
-#define TARGA_SUPPORTED		/* Targa image file format */
+#undef BMP_SUPPORTED		/* BMP image file format */
+#undef GIF_SUPPORTED		/* GIF image file format */
+#undef PPM_SUPPORTED		/* PBMPLUS PPM/PGM image file format */
+#undef RLE_SUPPORTED
+#undef TARGA_SUPPORTED		/* Targa image file format */
 
 #undef TWO_FILE_COMMANDLINE
 #undef NEED_SIGNAL_CATCHER

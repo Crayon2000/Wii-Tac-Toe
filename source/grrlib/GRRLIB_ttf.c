@@ -27,7 +27,7 @@ THE SOFTWARE.
 static FT_Library ftLibrary;        /**< A handle to a FreeType library instance. */
 
 // Static function prototypes
-static void DrawBitmap(FT_Bitmap *bitmap, int offset, int top, const u32 color);
+static void DrawBitmap(FT_Bitmap *bitmap, int offset, int top, const u8 cR, const u8 cG, const u8 cB);
 
 
 /**
@@ -124,6 +124,7 @@ void GRRLIB_PrintfTTFW(int x, int y, GRRLIB_ttfFont *myFont, const wchar_t *utf3
     FT_GlyphSlot slot = myFont->face->glyph;
     FT_UInt glyphIndex = 0;
     FT_UInt previousGlyph = 0;
+    u8 cR = R(color), cG = G(color), cB = B(color);
 
     if (FT_Set_Pixel_Sizes(myFont->face, 0, fontSize)) {
         FT_Set_Pixel_Sizes(myFont->face, 0, 12);
@@ -136,8 +137,6 @@ void GRRLIB_PrintfTTFW(int x, int y, GRRLIB_ttfFont *myFont, const wchar_t *utf3
     for (loop = 0; loop < length; ++loop) {
         glyphIndex = FT_Get_Char_Index(myFont->face, utf32[ loop ]);
 
-        /* To the best of my knowledge, none of the other freetype
-         * implementations use kerning */
         if (myFont->kerning && previousGlyph && glyphIndex) {
             FT_Vector delta;
             FT_Get_Kerning(myFont->face, previousGlyph, glyphIndex, FT_KERNING_DEFAULT, &delta);
@@ -150,7 +149,7 @@ void GRRLIB_PrintfTTFW(int x, int y, GRRLIB_ttfFont *myFont, const wchar_t *utf3
         DrawBitmap(&slot->bitmap,
                    penX + slot->bitmap_left + x,
                    penY - slot->bitmap_top + y,
-                   color);
+                   cR, cG, cB);
         penX += slot->advance.x >> 6;
         previousGlyph = glyphIndex;
     }
@@ -163,18 +162,18 @@ void GRRLIB_PrintfTTFW(int x, int y, GRRLIB_ttfFont *myFont, const wchar_t *utf3
  * @param top y-coordinate.
  * @param color character color in RGBA format.
  */
-static void DrawBitmap(FT_Bitmap *bitmap, int offset, int top, const u32 color) {
+static void DrawBitmap(FT_Bitmap *bitmap, int offset, int top, const u8 cR, const u8 cG, const u8 cB) {
     FT_Int i, j, p, q;
     FT_Int x_max = offset + bitmap->width;
     FT_Int y_max = top + bitmap->rows;
 
     for ( i = offset, p = 0; i < x_max; i++, p++ ) {
         for ( j = top, q = 0; j < y_max; j++, q++ ) {
-            GRRLIB_Plot( i, j,
-                         RGBA(R(color),
-                              G(color),
-                              B(color),
-                              bitmap->buffer[ q * bitmap->width + p ]) );
+            GX_Begin(GX_POINTS, GX_VTXFMT0, 1);
+                GX_Position3f32(i, j, 0);
+                GX_Color4u8(cR, cG, cB,
+                            bitmap->buffer[ q * bitmap->width + p ]);
+            GX_End();
         }
     }
 }
