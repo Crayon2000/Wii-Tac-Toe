@@ -17,9 +17,9 @@ include $(DEVKITPPC)/wii_rules
 #---------------------------------------------------------------------------------
 TARGET		:=	Wii-Tac-Toe
 BUILD		:=	build
-SOURCES		:=	source fonts source/grrlib source/libpng source/pngu
+SOURCES		:=	source fonts source/grrlib
 DATA		:=	data
-INCLUDES	:=  source source/freetype source/libjpeg source/zlib source/libpng source/pngu source/grrlib
+INCLUDES	:=  source source/freetype source/libjpeg source/pngu source/grrlib
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -33,7 +33,7 @@ LDFLAGS	=	-g $(MACHDEP) -Wl,-Map,$(notdir $@).map
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project
 #---------------------------------------------------------------------------------
-LIBS	:=	-ljpeg -lz -lmxml -lfat -lwiiuse -lbte -lmodplay -lasnd -logc -lm -lfreetype
+LIBS	:=	-ljpeg -lpngu -lmxml -lfat -lwiiuse -lbte -lmodplay -lasnd -logc -lm -lfreetype
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
