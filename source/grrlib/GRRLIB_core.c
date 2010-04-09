@@ -40,8 +40,12 @@ static void  *gp_fifo = NULL;
 static bool  is_setup = false;  // To control entry and exit
 
 /**
- * Initialize GRRLIB. Call this at the beginning your code.
- * @return int 0=OK; -1=NoMemory; -2=NoFilingSystem
+ * Initialize GRRLIB. Call this once at the beginning your code.
+ * @return A integer representating a code:
+ *         -     0 : The operation completed successfully.
+ *         -    -1 : Not enough memory is available to initialize GRRLIB.
+ *         -    -2 : Failed to add the fat device driver to the devoptab.
+ *         -    -3 : Failed to initialize the font engine.
  * @see GRRLIB_Exit
  */
 int  GRRLIB_Init (void) {
@@ -154,6 +158,7 @@ int  GRRLIB_Init (void) {
     // Default settings
     GRRLIB_Settings.antialias = true;
     GRRLIB_Settings.blend     = GRRLIB_BLEND_ALPHA;
+    GRRLIB_Settings.lights    = 0;
 
     // Schedule cleanup for when program exits
     is_setup = true;
