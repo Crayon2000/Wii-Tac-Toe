@@ -26,17 +26,24 @@ THE SOFTWARE.
 /**
  * Load a file to memory.
  * @param filename Name of the file to be loaded.
- * @param data Pointer-to-your-pointer. Ie. { u8 *data; load("file", &data); }.
+ * @param data Pointer-to-your-pointer.
+ * Ie. { u8 *data; GRRLIB_LoadFile("file", &data); }.
  * It is your responsibility to free the memory allocated by this function.
- * @return int 0:EmptyFile, -1:FileNotFound, -2:OutOfMemory, -3:FileReadError,
- *             >0 -> FileLength.
+ * @return A integer representating a code:
+ *         -     0 : EmptyFile.
+ *         -    -1 : FileNotFound.
+ *         -    -2 : OutOfMemory.
+ *         -    -3 : FileReadError.
+ *         -    >0 : FileLength.
  */
 int  GRRLIB_LoadFile(const char* filename, unsigned char* *data) {
     int   len;
     FILE  *fd;
 
     // Open the file
-    if ( !(fd = fopen(filename, "rb")) )  return -1;
+    if ( !(fd = fopen(filename, "rb")) ) {
+        return -1;
+    }
 
     // Get file length
     fseek(fd, 0, SEEK_END);
@@ -66,6 +73,7 @@ int  GRRLIB_LoadFile(const char* filename, unsigned char* *data) {
  * Load a texture from a file.
  * @param filename The JPEG, PNG or Bitmap filename to load.
  * @return A GRRLIB_texImg structure filled with image information.
+ *         If an error occurs NULL will be returned.
  */
 GRRLIB_texImg*  GRRLIB_LoadTextureFromFile(const char *filename) {
     GRRLIB_texImg  *tex;

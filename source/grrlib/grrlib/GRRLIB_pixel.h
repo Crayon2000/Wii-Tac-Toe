@@ -25,6 +25,11 @@ THE SOFTWARE.
  * Inline functions for manipulating pixels in textures.
  */
 
+#define _SHIFTL(v, s, w)	\
+    ((u32) (((u32)(v) & ((0x01 << (w)) - 1)) << (s)))
+#define _SHIFTR(v, s, w)	\
+    ((u32)(((u32)(v) >> (s)) & ((0x01 << (w)) - 1)))
+
 /**
  * Return the color value of a pixel from a GRRLIB_texImg.
  * @param x Specifies the x-coordinate of the pixel in the texture.
@@ -67,44 +72,32 @@ void  GRRLIB_SetPixelTotexImg (const int x, const int y,
 
 /**
  * Reads a pixel directly from the FrontBuffer.
- * Since the FB is stored in YCbCr,
  * @param x The x-coordinate within the FB.
  * @param y The y-coordinate within the FB.
- * @param R1 A pointer to a variable receiving the first Red value.
- * @param G1 A pointer to a variable receiving the first Green value.
- * @param B1 A pointer to a variable receiving the first Blue value.
- * @param R2 A pointer to a variable receiving the second Red value.
- * @param G2 A pointer to a variable receiving the second Green value.
- * @param B2 A pointer to a variable receiving the second Blue value.
+ * @return The color of a pixel in RGBA format.
  */
 INLINE
-void  GRRLIB_GetPixelFromFB (int x, int y,
-                             u8 *R1,  u8 *G1,  u8 *B1,
-                             u8 *R2,  u8 *G2,  u8 *B2) {
-    u32  Buffer;
-    u8   *Colors;
+u32 GRRLIB_GetPixelFromFB (int x, int y) {
+	u32 regval,val;
 
-    // Position Correction
-    if (x > (rmode->fbWidth/2)) { x = (rmode->fbWidth/2); }
-    if (x < 0) { x = 0; }
-    if (y > rmode->efbHeight) { y = rmode->efbHeight; }
-    if (y < 0) { y = 0; }
+	regval = 0xc8000000|(_SHIFTL(x,2,10));
+	regval = (regval&~0x3FF000)|(_SHIFTL(y,12,10));
+	val = *(u32*)regval;
 
-    // Preparing FB for reading
-    Buffer = ((u32 *)xfb[fb])[y*(rmode->fbWidth/2)+x];
-    Colors = (u8 *) &Buffer;
+    return RGBA(_SHIFTR(val,16,8), _SHIFTR(val,8,8), val&0xff, _SHIFTR(val,24,8));
+}
 
-    /** Color channel:
-    Colors[0] = Y1
-    Colors[1] = Cb
-    Colors[2] = Y2
-    Colors[3] = Cr */
+/**
+ * Writes a pixel directly from the FrontBuffer.
+ * @param x The x-coordinate within the FB.
+ * @param y The y-coordinate within the FB.
+ * @param pokeColor The color of the pixel in RGBA format.
+ */
+INLINE
+void GRRLIB_SetPixelToFB (int x, int y, u32 pokeColor) {
+	u32 regval;
 
-    *R1 = GRRLIB_ClampVar8( 1.164 * (Colors[0] - 16) + 1.596 * (Colors[3] - 128) );
-    *G1 = GRRLIB_ClampVar8( 1.164 * (Colors[0] - 16) - 0.813 * (Colors[3] - 128) - 0.392 * (Colors[1] - 128) );
-    *B1 = GRRLIB_ClampVar8( 1.164 * (Colors[0] - 16) + 2.017 * (Colors[1] - 128) );
-
-    *R2 = GRRLIB_ClampVar8( 1.164 * (Colors[2] - 16) + 1.596 * (Colors[3] - 128) );
-    *G2 = GRRLIB_ClampVar8( 1.164 * (Colors[2] - 16) - 0.813 * (Colors[3] - 128) - 0.392 * (Colors[1] - 128) );
-    *B2 = GRRLIB_ClampVar8( 1.164 * (Colors[2] - 16) + 2.017 * (Colors[1] - 128) );
+	regval = 0xc8000000|(_SHIFTL(x,2,10));
+	regval = (regval&~0x3FF000)|(_SHIFTL(y,12,10));
+	*(u32*)regval = _SHIFTL(A(pokeColor),24,8) | _SHIFTL(R(pokeColor),16,8) | _SHIFTL(G(pokeColor),8,8) | (B(pokeColor)&0xff);
 }
