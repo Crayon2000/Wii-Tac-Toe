@@ -251,41 +251,30 @@ void Game::GameScreen(bool CopyScreen)
         // Background image
         GRRLIB_DrawImg(0, 0, GameImg, 0, 1, 1, 0xFFFFFFFF);
 
-        // Player name: Offset -2, 2
-        PrintWrapText(42, 50, 125, WTTPlayer[0].GetName(), 0x6BB6DEFF, 15);
-        PrintWrapText(42, 145, 125, WTTPlayer[1].GetName(), 0xE6313AFF, 15);
-        PrintWrapText(42, 250, 125, Lang->String("TIE GAME"), 0x109642FF, 15);
-        // Player name
-        PrintWrapText(44, 48, 125, WTTPlayer[0].GetName(), 0xFFFFFFFF, 15);
-        PrintWrapText(44, 143, 125, WTTPlayer[1].GetName(), 0xFFFFFFFF, 15);
-        PrintWrapText(44, 248, 125, Lang->String("TIE GAME"), 0xFFFFFFFF, 15);
+        // Player name with a shadow offset of -2, 2
+        PrintWrapText(44, 48, 125, WTTPlayer[0].GetName(), 15, 0xFFFFFFFF, 0x6BB6DEFF, -2, 2);
+        PrintWrapText(44, 143, 125, WTTPlayer[1].GetName(), 15, 0xFFFFFFFF, 0xE6313AFF, -2, 2);
+        PrintWrapText(44, 248, 125, Lang->String("TIE GAME"), 15, 0xFFFFFFFF, 0x109642FF, -2, 2);
 
-        // Draw score: Offset -2, 2
+        // Draw score with a shadow offset of -2, 2
         wchar_t ScoreText[5];
         swprintf(ScoreText, 5, L"%d", WTTPlayer[0].GetScore());
         TextLeft = 104 - GRRLIB_WidthTTFW(DefaultFont, ScoreText, 35) / 2;
         GRRLIB_PrintfTTFW(TextLeft, 77, DefaultFont, ScoreText, 35, 0x6BB6DEFF);
+        GRRLIB_PrintfTTFW(TextLeft - 2, 75, DefaultFont, ScoreText, 35, 0xFFFFFFFF);
+
         swprintf(ScoreText, 5, L"%d", WTTPlayer[1].GetScore());
         TextLeft = 104 - GRRLIB_WidthTTFW(DefaultFont, ScoreText, 35) / 2;
         GRRLIB_PrintfTTFW(TextLeft, 177, DefaultFont, ScoreText, 35, 0xE6313AFF);
+        GRRLIB_PrintfTTFW(TextLeft - 2, 175, DefaultFont, ScoreText, 35, 0xFFFFFFFF);
+
         swprintf(ScoreText, 5, L"%d", TieGame);
         TextLeft = 104 - GRRLIB_WidthTTFW(DefaultFont, ScoreText, 35) / 2;
         GRRLIB_PrintfTTFW(TextLeft, 282, DefaultFont, ScoreText, 35, 0x109642FF);
-        // Draw score
-        swprintf(ScoreText, 5, L"%d", WTTPlayer[0].GetScore());
-        TextLeft = 106 - GRRLIB_WidthTTFW(DefaultFont, ScoreText, 35) / 2;
-        GRRLIB_PrintfTTFW(TextLeft, 75, DefaultFont, ScoreText, 35, 0xFFFFFFFF);
-        swprintf(ScoreText, 5, L"%d", WTTPlayer[1].GetScore());
-        TextLeft = 106 - GRRLIB_WidthTTFW(DefaultFont, ScoreText, 35) / 2;
-        GRRLIB_PrintfTTFW(TextLeft, 175, DefaultFont, ScoreText, 35, 0xFFFFFFFF);
-        swprintf(ScoreText, 5, L"%d", TieGame);
-        TextLeft = 106 - GRRLIB_WidthTTFW(DefaultFont, ScoreText, 35) / 2;
-        GRRLIB_PrintfTTFW(TextLeft, 280, DefaultFont, ScoreText, 35, 0xFFFFFFFF);
+        GRRLIB_PrintfTTFW(TextLeft - 2, 280, DefaultFont, ScoreText, 35, 0xFFFFFFFF);
 
-        // Draw text at the bottom: Offet 1, 1
-        PrintWrapText(131, 421, 390, text, 0x111111FF, 15);
-        // Draw text at the bottom
-        PrintWrapText(130, 420, 390, text, 0x8C8A8CFF, 15);
+        // Draw text at the bottom with a shadow offset of 1, 1
+        PrintWrapText(130, 420, 390, text, 15, 0x8C8A8CFF, 0x111111FF, 1, 1);
 
         if(CopyScreen)
         {
@@ -701,11 +690,15 @@ void Game::NewGame()
  * @param[in] y Specifies the y-coordinate of the upper-left corner of the text.
  * @param[in] maxLineWidth Maximum width of the string.
  * @param[in] input Text to draw.
- * @param[in] TextColor Text color in RGBA format. The alpha channel is used to change the opacity of the text.
  * @param[in] fontSize Size of the text.
+ * @param[in] TextColor Text color in RGBA format. The alpha channel is used to change the opacity of the text.
+ * @param[in] ShadowColor Shadow color in RGBA format. The alpha channel is used to change the opacity of the text.
+ * @param[in] OffsetX Shadow offset for the x-coordinate.
+ * @param[in] OffsetY Shadow offset for the y-coordinate.
  */
 void Game::PrintWrapText(u16 x, u16 y, u16 maxLineWidth,
-    const wstring &input, unsigned int TextColor, unsigned int fontSize)
+    const wstring &input, unsigned int fontSize, unsigned int TextColor,
+    unsigned int ShadowColor, s8 OffsetX, s8 OffsetY)
 {
     wstring tmp = input + L" ", // Make local copy
             tmp2;
@@ -729,6 +722,8 @@ void Game::PrintWrapText(u16 x, u16 y, u16 maxLineWidth,
                 *lastSpace = 0;
                 textLeft = x + (maxLineWidth / 2.0) -
                     (GRRLIB_WidthTTFW(DefaultFont, &(*startIndex), fontSize) / 2.0);
+                GRRLIB_PrintfTTFW(textLeft + OffsetX, ypos + OffsetY, DefaultFont, &(*startIndex),
+                    fontSize, ShadowColor);
                 GRRLIB_PrintfTTFW(textLeft, ypos, DefaultFont, &(*startIndex),
                     fontSize, TextColor);
                 startIndex = lastSpace + 1;
@@ -743,6 +738,8 @@ void Game::PrintWrapText(u16 x, u16 y, u16 maxLineWidth,
     {
         textLeft = x + (maxLineWidth / 2.0) -
             (GRRLIB_WidthTTFW(DefaultFont, &(*startIndex), fontSize) / 2.0);
+        GRRLIB_PrintfTTFW(textLeft + OffsetX, ypos + OffsetY, DefaultFont, &(*startIndex),
+            fontSize, ShadowColor);
         GRRLIB_PrintfTTFW(textLeft, ypos, DefaultFont, &(*startIndex),
             fontSize, TextColor);
     }

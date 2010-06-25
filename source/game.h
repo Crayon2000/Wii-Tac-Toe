@@ -48,7 +48,7 @@ private:
     void Clear();
     void TurnIsOver();
     void NewGame();
-    void PrintWrapText(u16, u16, u16, const wstring &, unsigned int, unsigned int);
+    void PrintWrapText(u16, u16, u16, const wstring &, unsigned int, unsigned int, unsigned int, s8, s8);
     void ChangeScreen(u8 NewScreen, bool = true);
     void ButtonOn(s8);
     bool SelectZone();
