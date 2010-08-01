@@ -10,24 +10,20 @@
 Cursor::Cursor() : Object()
 {
     // Load textures
-    CursorImgO = GRRLIB_LoadTexture(hand_o);
-    CursorImgX = GRRLIB_LoadTexture(hand_x);
-    CursorMenu1 = GRRLIB_LoadTexture(player1_point);
-    CursorMenu2 = GRRLIB_LoadTexture(player2_point);
+    CursorImgO = new Texture(hand_o);
+    CursorImgX = new Texture(hand_x);
+    CursorMenu1 = new Texture(player1_point);
+    CursorMenu2 = new Texture(player2_point);
 
     // Set hotspot
-    CursorImgO->offsetx = 48;
-    CursorImgO->offsety = 45;
-    GRRLIB_SetHandle(CursorImgO, CursorImgO->offsetx, CursorImgO->offsety);
-    CursorImgX->offsetx = 48;
-    CursorImgX->offsety = 45;
-    GRRLIB_SetHandle(CursorImgX, CursorImgX->offsetx, CursorImgX->offsety);
-    CursorMenu1->offsetx = 48;
-    CursorMenu1->offsety = 48;
-    GRRLIB_SetHandle(CursorMenu1, CursorMenu1->offsetx, CursorMenu1->offsety);
-    CursorMenu2->offsetx = 48;
-    CursorMenu2->offsety = 48;
-    GRRLIB_SetHandle(CursorMenu2, CursorMenu2->offsetx, CursorMenu2->offsety);
+    CursorImgO->SetOffset(48, 45);
+    CursorImgO->SetHandle(CursorImgO->GetOffsetX(), CursorImgO->GetOffsetY());
+    CursorImgX->SetOffset(48, 45);
+    CursorImgX->SetHandle(CursorImgX->GetOffsetX(), CursorImgX->GetOffsetY());
+    CursorMenu1->SetOffset(48, 48);
+    CursorMenu1->SetHandle(CursorMenu1->GetOffsetX(), CursorMenu1->GetOffsetY());
+    CursorMenu2->SetOffset(48, 48);
+    CursorMenu2->SetHandle(CursorMenu2->GetOffsetX(), CursorMenu2->GetOffsetY());
 
     // Default values
     Left = 0;
@@ -40,10 +36,10 @@ Cursor::Cursor() : Object()
  */
 Cursor::~Cursor()
 {
-    GRRLIB_FreeTexture(CursorImgX);
-    GRRLIB_FreeTexture(CursorImgO);
-    GRRLIB_FreeTexture(CursorMenu1);
-    GRRLIB_FreeTexture(CursorMenu2);
+    delete CursorImgX;
+    delete CursorImgO;
+    delete CursorMenu1;
+    delete CursorMenu2;
 }
 
 /**
@@ -54,9 +50,9 @@ void Cursor::Paint()
     if(Visible)
     {
         // Draw the shadow
-        GRRLIB_DrawImg(Left + 3, Top + 3, CurrentCursor, Angle, 1, 1, 0x00000000 | ((A(Color) == 0xFF) ? 0x44 : 0x11));
+        CurrentCursor->Draw(Left + 3, Top + 3, Angle, 1, 1, 0x00000000 | ((A(Color) == 0xFF) ? 0x44 : 0x11));
         // Draw the cursor
-        GRRLIB_DrawImg(Left, Top, CurrentCursor, Angle, 1, 1, Color);
+        CurrentCursor->Draw(Left, Top, Angle, 1, 1, Color);
     }
 }
 
@@ -84,8 +80,8 @@ cursorType Cursor::SetPlayer(cursorType NewCType)
             CurrentCursor = CursorMenu2;
             break;
     }
-    Width = CurrentCursor->w;
-    Height = CurrentCursor->h;
+    Width = CurrentCursor->GetWidth();
+    Height = CurrentCursor->GetHeight();
     return PreviousType;
 }
 

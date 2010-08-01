@@ -9,6 +9,7 @@
 
 #include <string>
 #include "object.h"
+#include "grrlib_class.h"
 
 using namespace std;
 
@@ -22,7 +23,7 @@ enum buttonType {
 };
 
 /**
- * This a class to make a button on the screen with two states (selected or not).
+ * This is a class to make a button on the screen with two states (selected or not).
  * @author Crayon
  */
 class Button : public Object
@@ -47,8 +48,8 @@ private:
     unsigned int TextLeft;
     u32 TextColor;
     buttonType Type;
-    GRRLIB_texImg *ButtonImgOn;
-    GRRLIB_texImg *ButtonImgOff;
+    Texture *ButtonImgOn;
+    Texture *ButtonImgOff;
 };
 //---------------------------------------------------------------------------
 #endif

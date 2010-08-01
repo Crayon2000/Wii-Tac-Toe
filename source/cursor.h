@@ -8,6 +8,7 @@
 //---------------------------------------------------------------------------
 
 #include "object.h"
+#include "grrlib_class.h"
 
 /**
  * Types of cursor that could be used.
@@ -32,11 +33,11 @@ public:
     cursorType SetPlayer(cursorType);
 private:
     cursorType Type;
-    GRRLIB_texImg *CursorImgX;
-    GRRLIB_texImg *CursorImgO;
-    GRRLIB_texImg *CursorMenu1;
-    GRRLIB_texImg *CursorMenu2;
-    GRRLIB_texImg *CurrentCursor;
+    Texture *CursorImgX;
+    Texture *CursorImgO;
+    Texture *CursorMenu1;
+    Texture *CursorMenu2;
+    Texture *CurrentCursor;
 };
 //---------------------------------------------------------------------------
 #endif

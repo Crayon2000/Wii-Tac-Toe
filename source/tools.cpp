@@ -144,7 +144,7 @@ wstring str_replaceW(const wstring &txt, const wstring &Before, const wstring &A
  * @param scaleY Texture Y scale.
  * @param speed  Fade speed (1 is the normal speed, 2 is two time the normal speed, etc).
  */
-void GRRLIB_DrawImg_FadeInOut(struct GRRLIB_texImg *tex, float scaleX, f32 scaleY, u16 speed)
+void GRRLIB_DrawImg_FadeInOut(struct GRRLIB_texImg *tex, f32 scaleX, f32 scaleY, u16 speed)
 {
     GRRLIB_DrawImg_FadeIn(tex, scaleX, scaleY, speed);
     GRRLIB_DrawImg_FadeOut(tex, scaleX, scaleY, speed);
@@ -157,7 +157,7 @@ void GRRLIB_DrawImg_FadeInOut(struct GRRLIB_texImg *tex, float scaleX, f32 scale
  * @param scaleY Texture Y scale.
  * @param speed  Fade speed (1 is the normal speed, 2 is two time the normal speed, etc).
  */
-void GRRLIB_DrawImg_FadeIn(struct GRRLIB_texImg *tex, float scaleX, f32 scaleY, u16 speed)
+void GRRLIB_DrawImg_FadeIn(struct GRRLIB_texImg *tex, f32 scaleX, f32 scaleY, u16 speed)
 {
     s16 alpha;
     f32 xpos = (rmode->fbWidth - tex->w) / 2;
@@ -177,7 +177,7 @@ void GRRLIB_DrawImg_FadeIn(struct GRRLIB_texImg *tex, float scaleX, f32 scaleY, 
  * @param scaleY Texture Y scale.
  * @param speed  Fade speed (1 is the normal speed, 2 is two time the normal speed, etc).
  */
-void GRRLIB_DrawImg_FadeOut(struct GRRLIB_texImg *tex, float scaleX, f32 scaleY, u16 speed)
+void GRRLIB_DrawImg_FadeOut(struct GRRLIB_texImg *tex, f32 scaleX, f32 scaleY, u16 speed)
 {
     s16 alpha;
     f32 xpos = (rmode->fbWidth - tex->w) / 2;
@@ -186,6 +186,59 @@ void GRRLIB_DrawImg_FadeOut(struct GRRLIB_texImg *tex, float scaleX, f32 scaleY,
     for(alpha = 255; alpha > 0; alpha -= speed) {
         if(alpha < 0) alpha = 0;
         GRRLIB_DrawImg(xpos, ypos, tex, 0, scaleX, scaleY, 0xFFFFFF00 | alpha);
+        GRRLIB_Render();
+    }
+}
+
+/**
+ * Fade in, than fade out.
+ * @param tex    Texture.
+ * @param scaleX Texture X scale.
+ * @param scaleY Texture Y scale.
+ * @param speed  Fade speed (1 is the normal speed, 2 is two time the normal speed, etc).
+ */
+void Draw_FadeInOut(Texture *tex, f32 scaleX, f32 scaleY, u16 speed)
+{
+    Draw_FadeIn(tex, scaleX, scaleY, speed);
+    Draw_FadeOut(tex, scaleX, scaleY, speed);
+}
+
+/**
+ * Fade in.
+ * @param tex    Texture.
+ * @param scaleX Texture X scale.
+ * @param scaleY Texture Y scale.
+ * @param speed  Fade speed (1 is the normal speed, 2 is two time the normal speed, etc).
+ */
+void Draw_FadeIn(Texture *tex, f32 scaleX, f32 scaleY, u16 speed)
+{
+    s16 alpha;
+    f32 xpos = (Screen::GetWidth() - tex->GetWidth()) / 2;
+    f32 ypos = (Screen::GetHeight() - tex->GetHeight()) / 2;
+
+    for(alpha = 0; alpha < 255; alpha += speed) {
+        if(alpha > 255) alpha = 255;
+        tex->Draw(xpos, ypos, 0, scaleX, scaleY, 0xFFFFFF00 | alpha);
+        GRRLIB_Render();
+    }
+}
+
+/**
+ * Fade out.
+ * @param tex    Texture.
+ * @param scaleX Texture X scale.
+ * @param scaleY Texture Y scale.
+ * @param speed  Fade speed (1 is the normal speed, 2 is two time the normal speed, etc).
+ */
+void Draw_FadeOut(Texture *tex, f32 scaleX, f32 scaleY, u16 speed)
+{
+    s16 alpha;
+    f32 xpos = (Screen::GetWidth() - tex->GetWidth()) / 2;
+    f32 ypos = (Screen::GetHeight() - tex->GetHeight()) / 2;
+
+    for(alpha = 255; alpha > 0; alpha -= speed) {
+        if(alpha < 0) alpha = 0;
+        tex->Draw(xpos, ypos, 0, scaleX, scaleY, 0xFFFFFF00 | alpha);
         GRRLIB_Render();
     }
 }

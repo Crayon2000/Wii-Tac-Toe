@@ -17,23 +17,23 @@ Button::Button(buttonType NewType) : Object()
     {
         case btnHomeMenu:
             ButtonImgOn = NULL;
-            ButtonImgOff = GRRLIB_LoadTexture(button_home);
+            ButtonImgOff = new Texture(button_home);
             break;
         case btnHome:
             ButtonImgOn = NULL;
-            ButtonImgOff = GRRLIB_LoadTexture(home_button);
+            ButtonImgOff = new Texture(home_button);
             break;
         default:
-            ButtonImgOn = GRRLIB_LoadTexture(button_on);
-            ButtonImgOff = GRRLIB_LoadTexture(button_off);
+            ButtonImgOn = new Texture(button_on);
+            ButtonImgOff = new Texture(button_off);
     }
 
     Selected = false;
 
     Left = 0;
     Top = 0;
-    Width = ButtonImgOff->w;
-    Height = ButtonImgOff->h;
+    Width = ButtonImgOff->GetWidth();
+    Height = ButtonImgOff->GetHeight();
 
     TextColor = 0x000000;
     TextHeight = 14;
@@ -47,10 +47,8 @@ Button::Button(buttonType NewType) : Object()
  */
 Button::~Button()
 {
-    if(ButtonImgOn)
-        GRRLIB_FreeTexture(ButtonImgOn);
-    if(ButtonImgOff)
-        GRRLIB_FreeTexture(ButtonImgOff);
+    delete ButtonImgOn;
+    delete ButtonImgOff;
 }
 
 /**
@@ -60,17 +58,17 @@ void Button::Paint()
 {
     if(Type == btnHomeMenu)
     {   // Draw shadow
-        GRRLIB_DrawImg(Left + 4, Top + 5, ButtonImgOff, 0, 1.0, 1.0, 0x00000055);
+        ButtonImgOff->Draw(Left + 4, Top + 5, 0, 1.0, 1.0, 0x00000055);
     }
-    GRRLIB_DrawImg(Left, Top, ButtonImgOff, 0, 1.0, 1.0, 0xFFFFFFFF);
+    ButtonImgOff->Draw(Left, Top, 0, 1.0, 1.0, 0xFFFFFFFF);
     GRRLIB_PrintfTTFW(TextLeft, TextTop, Font, Caption.c_str(), TextHeight, TextColor);
     if(Type == btnStdMenu && Selected)
     {   // Hover color
-        GRRLIB_DrawImg(Left, Top, ButtonImgOn, 0, 1.0, 1.0, 0xFFFFFFFF);
+        ButtonImgOn->Draw(Left, Top, 0, 1.0, 1.0, 0xFFFFFFFF);
     }
     else if(Type == btnHomeMenu && Selected)
     {   // Hover color
-        GRRLIB_DrawImg(Left, Top, ButtonImgOff, 0, 1.0, 1.0, 0x0000FF33);
+        ButtonImgOff->Draw(Left, Top, 0, 1.0, 1.0, 0x0000FF33);
     }
 }
 

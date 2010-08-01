@@ -7,6 +7,7 @@
 #define ToolsH
 //---------------------------------------------------------------------------
 
+#include "grrlib_class.h"
 #include <string>
 using namespace std;
 
@@ -20,8 +21,11 @@ void WIILIGHT_TurnOff();
 string str_replace(const string &, const string &, const string &);
 wstring str_replaceW(const wstring &, const wstring &, const wstring &);
 
-void GRRLIB_DrawImg_FadeInOut(struct GRRLIB_texImg *tex, float scaleX, f32 scaleY, u16 speed);
-void GRRLIB_DrawImg_FadeIn(struct GRRLIB_texImg *tex, float scaleX, f32 scaleY, u16 speed);
-void GRRLIB_DrawImg_FadeOut(struct GRRLIB_texImg *tex, float scaleX, f32 scaleY, u16 speed);
+void GRRLIB_DrawImg_FadeInOut(struct GRRLIB_texImg *tex, f32 scaleX, f32 scaleY, u16 speed);
+void GRRLIB_DrawImg_FadeIn(struct GRRLIB_texImg *tex, f32 scaleX, f32 scaleY, u16 speed);
+void GRRLIB_DrawImg_FadeOut(struct GRRLIB_texImg *tex, f32 scaleX, f32 scaleY, u16 speed);
+void Draw_FadeInOut(Texture *tex, f32 scaleX, f32 scaleY, u16 speed);
+void Draw_FadeIn(Texture *tex, f32 scaleX, f32 scaleY, u16 speed);
+void Draw_FadeOut(Texture *tex, f32 scaleX, f32 scaleY, u16 speed);
 //---------------------------------------------------------------------------
 #endif

@@ -14,6 +14,7 @@
 #include "player.h"
 #include "language.h"
 #include "types.h"
+#include "grrlib_class.h"
 #include "grrlib/GRRLIB.h"
 #include <gcmodplay.h>
 #include <vector>
@@ -77,10 +78,10 @@ private:
     Language *Lang;
     Symbol **GridSign;
 
-    GRRLIB_texImg *GameImg;     /**< Background texture for the game. */
-    GRRLIB_texImg *SplashImg;   /**< Splash screen texture. */
-    GRRLIB_texImg *HoverImg;    /**< Texture to put over a symbol when selected. */
-    GRRLIB_texImg *CopiedImg;   /**< Texture to store a temporary copy of the screen. */
+    Texture *GameImg;     /**< Background texture for the game. */
+    Texture *SplashImg;   /**< Splash screen texture. */
+    Texture *HoverImg;    /**< Texture to put over a symbol when selected. */
+    Texture *CopiedImg;   /**< Texture to store a temporary copy of the screen. */
 
     bool Copied;
 

@@ -9,6 +9,7 @@
 
 #include "object.h"
 #include "types.h"
+#include "grrlib_class.h"
 
 /**
  * This class is used to draw X or O on the screen.
@@ -23,9 +24,9 @@ public:
     void SetPlayer(u8);
     void SetLocation(Point);
 private:
-    u8 Player;
-    GRRLIB_texImg *ImgX;
-    GRRLIB_texImg *ImgO;
+    Texture *Current;
+    Texture *ImgX;
+    Texture *ImgO;
 };
 //---------------------------------------------------------------------------
 #endif

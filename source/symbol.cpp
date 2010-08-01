@@ -9,10 +9,9 @@
  */
 Symbol::Symbol() : Object()
 {
-    Player = ' ';
-
-    ImgO = GRRLIB_LoadTexture(o);
-    ImgX = GRRLIB_LoadTexture(x);
+    ImgO = new Texture(o);
+    ImgX = new Texture(x);
+    Current = NULL;
 
     Width = 136;
     Height = 100;
@@ -23,8 +22,8 @@ Symbol::Symbol() : Object()
  */
 Symbol::~Symbol()
 {
-    GRRLIB_FreeTexture(ImgO);
-    GRRLIB_FreeTexture(ImgX);
+    delete ImgO;
+    delete ImgX;
 }
 
 /**
@@ -32,13 +31,9 @@ Symbol::~Symbol()
  */
 void Symbol::Paint()
 {
-    if(Player == 'X' || Player == 'x')
+    if(Current)
     {
-        GRRLIB_DrawImg(Left, Top, ImgX, Angle, 1, 1, Color);
-    }
-    else if(Player == 'O' || Player == 'o')
-    {
-        GRRLIB_DrawImg(Left, Top, ImgO, Angle, 1, 1, Color);
+        Current->Draw(Left, Top, Angle, 1, 1, Color);
     }
 }
 
@@ -48,7 +43,18 @@ void Symbol::Paint()
  */
 void Symbol::SetPlayer(u8 APlayer)
 {
-    Player = APlayer;
+    if(APlayer == 'X' || APlayer == 'x')
+    {
+        Current = ImgX;
+    }
+    else if(APlayer == 'O' || APlayer == 'o')
+    {
+        Current = ImgO;
+    }
+    else
+    {
+        Current = NULL;
+    }
 }
 
 /**

@@ -111,10 +111,10 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight)
     WTTPlayer[1].SetSign('O');
     WTTPlayer[1].SetName(Lang->String("PLAYER 2"));
 
-    GameImg = GRRLIB_LoadTexture(backg);
-    SplashImg = GRRLIB_LoadTexture(splash);
-    HoverImg = GRRLIB_LoadTexture(hover);
-    CopiedImg = GRRLIB_CreateEmptyTexture(ScreenWidth, ScreenHeight);
+    GameImg = new Texture(backg);
+    SplashImg = new Texture(splash);
+    HoverImg = new Texture(hover);
+    CopiedImg = new Texture(ScreenWidth, ScreenHeight);
 
     RUMBLE_Init();
     ASND_Init();
@@ -122,7 +122,7 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight)
     NewGame();
 
     // Build Start Screen background
-    GRRLIB_DrawImg(0, 0, SplashImg, 0, 1.0, 1.0, 0xFFFFFFFF);
+    SplashImg->Draw(0, 0);
     swprintf(text, TEXT_SIZE, Lang->String("Programmer: %ls").c_str(), L"Crayon");
     GRRLIB_PrintfTTFW(50, 310, DefaultFont, text, 11, 0xFFFFFFFF);
     swprintf(text, TEXT_SIZE, Lang->String("Graphics: %ls").c_str(), L"Mr_Nick666");
@@ -130,7 +130,7 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight)
     wcsncpy(text, Lang->String("Press The A Button").c_str(), TEXT_SIZE);
     GRRLIB_PrintfTTFW((ScreenWidth / 2) - (GRRLIB_WidthTTFW(DefaultFont, text, 20) / 2),
                     400, DefaultFont, text, 20, 0x000000FF);
-    GRRLIB_Screen2Texture(0, 0, SplashImg, true);
+    SplashImg->CopyScreen(0, 0, true);
 }
 
 /**
@@ -138,10 +138,10 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight)
  */
 Game::~Game()
 {
-    GRRLIB_FreeTexture(GameImg);
-    GRRLIB_FreeTexture(SplashImg);
-    GRRLIB_FreeTexture(HoverImg);
-    GRRLIB_FreeTexture(CopiedImg);
+    delete GameImg;
+    delete SplashImg;
+    delete HoverImg;
+    delete CopiedImg;
     GRRLIB_FreeTTF(DefaultFont);
 
     delete GameGrid;
@@ -235,7 +235,7 @@ void Game::Paint()
  */
 void Game::StartSreen()
 {
-    GRRLIB_DrawImg(0, 0, SplashImg, 0, 1, 1, 0xFFFFFFFF);
+    SplashImg->Draw(0, 0);
 }
 
 /**
@@ -249,7 +249,7 @@ void Game::GameScreen(bool CopyScreen)
     if(!Copied)
     {   // Copy static element
         // Background image
-        GRRLIB_DrawImg(0, 0, GameImg, 0, 1, 1, 0xFFFFFFFF);
+        GameImg->Draw(0, 0);
 
         // Player name with a shadow offset of -2, 2
         PrintWrapText(44, 48, 125, WTTPlayer[0].GetName(), 15, 0xFFFFFFFF, 0x6BB6DEFF, -2, 2);
@@ -278,13 +278,13 @@ void Game::GameScreen(bool CopyScreen)
 
         if(CopyScreen)
         {
-            GRRLIB_Screen2Texture(0, 0, CopiedImg, false);
+            CopiedImg->CopyScreen();
             Copied = true;
         }
     }
     if(CopyScreen)
     {
-        GRRLIB_DrawImg(0, 0, CopiedImg, 0, 1, 1, 0xFFFFFFFF);
+        CopiedImg->Draw(0, 0);
     }
 
     u32 HoverColor = (WTTPlayer[CurrentPlayer].GetSign() == 'X') ? 0x0093DDFF : 0xDA251DFF;
@@ -325,8 +325,8 @@ void Game::GameScreen(bool CopyScreen)
     // Draw selection box
     if(SelectZone() && GameGrid->GetPlayerAtPos(HandX, HandY) == ' ')
     {
-        GRRLIB_DrawImg(Table[HandX][HandY].GetX(), Table[HandX][HandY].GetY(),
-            HoverImg, 0, 1, 1, HoverColor);
+        HoverImg->Draw(Table[HandX][HandY].GetX(), Table[HandX][HandY].GetY(),
+            0, 1, 1, HoverColor);
     }
 }
 
@@ -355,12 +355,12 @@ void Game::ExitScreen()
         GRRLIB_Rectangle(0, 383, ScreenWidth, 2, 0x848284FF, 1);
         GRRLIB_Rectangle(0, 385, ScreenWidth, 95, 0x000000FF, 1);
 
-        GRRLIB_Screen2Texture(0, 0, CopiedImg, false);
+        CopiedImg->CopyScreen();
         Copied = true;
     }
     else
     {
-        GRRLIB_DrawImg(0, 0, CopiedImg, 0, 1, 1, 0xFFFFFFFF);
+        CopiedImg->Draw(0, 0);
     }
 
     if(GRRLIB_PtInRect(0, 0, ScreenWidth, 78, Hand[0].GetLeft(), Hand[0].GetTop()))
@@ -426,13 +426,13 @@ void Game::MenuScreen(bool CopyScreen)
 
         if(CopyScreen)
         {
-            GRRLIB_Screen2Texture(0, 0, CopiedImg, false);
+            CopiedImg->CopyScreen();
             Copied = true;
         }
     }
     else
     {
-        GRRLIB_DrawImg(0, 0, CopiedImg, 0, 1, 1, 0xFFFFFFFF);
+        CopiedImg->Draw(0, 0);
     }
 
     MenuButton[0]->SetSelected(false);
@@ -551,10 +551,10 @@ bool Game::ControllerManager()
                             ExitScreen();
                             Hand[1].Paint();
                             Hand[0].Paint();
-                            GRRLIB_Screen2Texture(0, 0, CopiedImg, false);
+                            CopiedImg->CopyScreen();
                             WPAD_Rumble(WPAD_CHAN_0, 0); // Rumble off, just in case
                             WPAD_Rumble(WPAD_CHAN_1, 0); // Rumble off, just in case
-                            GRRLIB_DrawImg_FadeOut(CopiedImg, 1, 1, 3);
+                            Draw_FadeOut(CopiedImg, 1, 1, 3);
                             return true; // Exit to loader
                     }
                 }
@@ -594,7 +594,7 @@ bool Game::ControllerManager()
         sprintf(path, "sd:/Screenshot %d-%02d-%02d %02d%02d%02d.png",
             ti->tm_year + 1900, ti->tm_mon + 1, ti->tm_mday, ti->tm_hour, ti->tm_min, ti->tm_sec);
 
-        if(GRRLIB_ScrShot(path))
+        if(ScreenShot(path))
             wcsncpy(text, L"A screenshot was taken!!!", TEXT_SIZE);
         else
             wcsncpy(text, L"Screenshot did not work!!!", TEXT_SIZE);
