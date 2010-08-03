@@ -466,8 +466,8 @@ bool Game::ControllerManager()
     RUMBLE_Verify();
     WPADData *WPadData0 = WPAD_Data(WPAD_CHAN_0);
     WPADData *WPadData1 = WPAD_Data(WPAD_CHAN_1);
-    unsigned int Buttons0 = WPAD_ButtonsDown(WPAD_CHAN_0);
-    unsigned int Buttons1 = WPAD_ButtonsDown(WPAD_CHAN_1);
+    u32 Buttons0 = WPadData0->btns_d;
+    u32 Buttons1 = WPadData1->btns_d;
 
     if(WPadData0->ir.valid)
     {
