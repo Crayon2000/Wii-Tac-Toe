@@ -3,12 +3,12 @@
 /**
  * Constructor for the Object class.
  */
-Object::Object()
+Object::Object() :
+    Left(0),
+    Top(0),
+    Angle(0.0),
+    Color(0xFFFFFFFF)
 {
-    Left = 0;
-    Top = 0;
-    Angle = 0.0;
-    Color = 0xFFFFFFFF;
 }
 
 /**

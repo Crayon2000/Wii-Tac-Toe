@@ -19,7 +19,7 @@ TARGET		:=	Wii-Tac-Toe
 BUILD		:=	build
 SOURCES		:=	source fonts source/grrlib
 DATA		:=	data
-INCLUDES	:=  source source/freetype source/libjpeg source/pngu source/grrlib
+INCLUDES	:=  source source/freetype source/libjpeg source/pngu source/grrlib source/utfcpp
 
 #---------------------------------------------------------------------------------
 # options for code generation

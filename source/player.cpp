@@ -3,10 +3,10 @@
 /**
  * Constructor for the Player class.
  */
-Player::Player()
+Player::Player() :
+    Score(0),
+    Type(PLAYER_HUMAN)
 {
-    Score = 0;
-    Type = PLAYER_HUMAN;
 }
 
 /**

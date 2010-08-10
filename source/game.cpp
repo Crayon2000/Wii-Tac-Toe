@@ -6,6 +6,13 @@
 #include <asndlib.h>
 #include <ogc/lwp_watchdog.h>
 #include "tools.h"
+#include "grid.h"
+#include "symbol.h"
+#include "button.h"
+#include "cursor.h"
+#include "player.h"
+#include "language.h"
+#include "types.h"
 #include "game.h"
 
 // Graphics
@@ -41,15 +48,14 @@ static Point Table[3][3] = {
 /**
  * Constructor for the Game class.
  */
-Game::Game(u16 GameScreenWidth, u16 GameScreenHeight)
+Game::Game(u16 GameScreenWidth, u16 GameScreenHeight) :
+    FPS(0),
+    ShowFPS(false)
 {
     srand(time(NULL));
 
     ScreenWidth = GameScreenWidth;
     ScreenHeight = GameScreenHeight;
-
-    FPS = 0;
-    ShowFPS = false;
 
     GameGrid = new Grid();
     Hand = new Cursor[2];

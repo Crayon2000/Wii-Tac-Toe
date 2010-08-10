@@ -9,7 +9,10 @@
  * Constructor for the Button class.
   * @param[in] NewType Button type.
  */
-Button::Button(buttonType NewType) : Object()
+Button::Button(buttonType NewType) : Object(),
+    Selected(false),
+    Caption(L""),
+    Font(NULL)
 {
     Type = NewType;
 
@@ -28,18 +31,12 @@ Button::Button(buttonType NewType) : Object()
             ButtonImgOff = new Texture(button_off);
     }
 
-    Selected = false;
-
-    Left = 0;
-    Top = 0;
     Width = ButtonImgOff->GetWidth();
     Height = ButtonImgOff->GetHeight();
 
     TextColor = 0x000000;
     TextHeight = 14;
     TextWidth = 100; // random value
-    Caption = L"";
-    Font = NULL;
 }
 
 /**

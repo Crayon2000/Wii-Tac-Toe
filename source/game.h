@@ -7,19 +7,20 @@
 #define GameH
 //---------------------------------------------------------------------------
 
-#include "grid.h"
-#include "symbol.h"
-#include "button.h"
-#include "cursor.h"
-#include "player.h"
-#include "language.h"
-#include "types.h"
 #include "grrlib_class.h"
 #include "grrlib/GRRLIB.h"
 #include <gcmodplay.h>
 #include <vector>
 
 #define TEXT_SIZE 100   /**< Maximum length of the text. */
+
+// Forward declarations
+class Grid;
+class Symbol;
+class Button;
+class Cursor;
+class Player;
+class Language;
 
 /**
  * This is the main class of this project. This is where the magic happens.
@@ -49,7 +50,7 @@ private:
     void Clear();
     void TurnIsOver();
     void NewGame();
-    void PrintWrapText(u16, u16, u16, const wstring &, unsigned int, unsigned int, unsigned int, s8, s8);
+    void PrintWrapText(u16, u16, u16, const std::wstring &, unsigned int, unsigned int, unsigned int, s8, s8);
     void ChangeScreen(u8 NewScreen, bool = true);
     void ButtonOn(s8);
     bool SelectZone();

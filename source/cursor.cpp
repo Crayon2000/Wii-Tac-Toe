@@ -26,8 +26,6 @@ Cursor::Cursor() : Object()
     CursorMenu2->SetHandle(CursorMenu2->GetOffsetX(), CursorMenu2->GetOffsetY());
 
     // Default values
-    Left = 0;
-    Top = 0;
     SetPlayer(curX);
 }
 

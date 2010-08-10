@@ -1,4 +1,5 @@
 #include <ogc/conf.h>
+#include <utf8.h>
 #include "language.h"
 
 // Languages
@@ -172,57 +173,12 @@ wstring Language::GetRandomTurnOverMessage()
 }
 
 /**
- * Convert a utf-8 to Unicode.
+ * Convert a utf-8 string to utf-16.
  * @param[in] text utf-8 string.
- * @return A Unicode string.
+ * @return A utf-16 string.
  */
 wstring Language::Utf82Unicode(const string &text) {
-    const char *inpos = text.c_str();
-    int incharsleft = text.size() + 1;
-
-    wstring result;
-    wchar_t outbuf[ICONV_BUFSIZE];
-    outbuf[ICONV_BUFSIZE - 1] = 0;
-
-    while (incharsleft)
-    {
-        wchar_t *outpos = outbuf;
-        int outcharsleft = ICONV_BUFSIZE - 1;
-
-        while (incharsleft && outcharsleft)
-        {
-            wchar_t wc = (unsigned char) *inpos++;
-
-            if (wc <= 0x7F)
-            {
-                incharsleft -= 1;
-            }
-            else if (wc <= 0xDF)
-            {
-                wc = (wc & 0x3F) << 6;
-                wc |= (*inpos++ & 0x3F);
-                incharsleft -= 2;
-            }
-            else if (wc <= 0xEF)
-            {
-                wc = (wc & 0x3F) << 12;
-                wc |= (*inpos++ & 0x3F) << 6;
-                wc |= (*inpos++ & 0x3F);
-                incharsleft -= 3;
-            }
-            else if (wc <= 0xF7)
-            {
-                wc = (wc & 0x07) << 18;
-                wc |= (*inpos++ & 0x3F) << 12;
-                wc |= (*inpos++ & 0x3F) << 6;
-                wc |= (*inpos++ & 0x3F);
-                incharsleft -= 4;
-            }
-            *outpos++ = wc;
-            --outcharsleft;
-        }
-        result += outbuf;
-    }
-
-    return result;
+    wstring ret;
+    utf8::utf8to16(text.begin(), text.end(), back_inserter(ret));
+    return ret;
 }
