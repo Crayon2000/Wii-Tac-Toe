@@ -14,7 +14,7 @@
  * This class is a wrapper for GRRLIB_texImg.
  * @author Crayon
  */
-class Texture
+class Texture : protected GRRLIB_texImg
 {
 public:
     Texture();
@@ -54,7 +54,7 @@ public:
     void SetAlpha(u8);
     u8 GetAlpha(void);
 private:
-    GRRLIB_texImg *_TextStruct; /**< Structure to hold the texture information. */
+    void Assign(GRRLIB_texImg *other);
     u32 _Color;     /**< The color used to draw the texture. By default it is set to 0xFFFFFFFF. */
     f32 _ScaleX;    /**< The X scale used to draw the texture. By default it is set to 1.0. */
     f32 _ScaleY;    /**< The Y scale used to draw the texture. By default it is set to 1.0. */
@@ -67,6 +67,10 @@ private:
  */
 namespace Screen
 {
+    s8 Initialize(void);
+    void Exit(void);
+    void Render(void);
+
     void FillScreen(const u32 color);
     void SetPixel(const f32 x, const f32 y, const u32 color);
     void Line(const f32 x1, const f32 y1, const f32 x2, const f32 y2, const u32 color);
@@ -80,5 +84,22 @@ namespace Screen
     bool ScreenShot(const std::string &filename);
 }   /* namespace Screen */
 using namespace Screen;
+
+/**
+ * Namespace containing FX functions.
+ * @author Crayon
+ */
+namespace FX
+{
+    void FlipH(const Texture *texsrc, Texture *texdest);
+    void FlipV(const Texture *texsrc, Texture *texdest);
+    void Grayscale(const Texture *texsrc, Texture *texdest);
+    void Sepia(const Texture *texsrc, Texture *texdest);
+    void Invert(const Texture *texsrc, Texture *texdest);
+    void Blur(const Texture *texsrc, Texture *texdest, const u32 factor);
+    void Scatter(const Texture *texsrc, Texture *texdest, const u32 factor);
+    void Pixelate(const Texture *texsrc, Texture *texdest, const u32 factor);
+}   /* namespace FX */
+using namespace FX;
 //---------------------------------------------------------------------------
 #endif

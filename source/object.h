@@ -8,7 +8,7 @@
 //---------------------------------------------------------------------------
 
 #include <stdlib.h>
-#include "grrlib/GRRLIB.h"
+#include <gccore.h>
 
 /**
  * The Object class is a the basis for every thing you need to draw on the screen.

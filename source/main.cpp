@@ -11,7 +11,7 @@
 //------------------------------------------------------------------------------
 #include <stdlib.h>
 #include <wiiuse/wpad.h>
-#include "grrlib/GRRLIB.h"
+#include "grrlib_class.h"
 #include "game.h"
 
 #define SYS_RETURNTOHBMENU   7
@@ -57,17 +57,17 @@ void WiimotePowerPressed(s32 chan)
 int main(int argc, char **argv)
 {
     // Video initialization
-    GRRLIB_Init();
+    Initialize();
 
     // Wiimote initialization
     WPAD_Init();
     WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
-    WPAD_SetVRes(WPAD_CHAN_0, rmode->fbWidth, rmode->efbHeight);
+    WPAD_SetVRes(WPAD_CHAN_0, Screen::GetWidth(), Screen::GetHeight());
     WPAD_SetDataFormat(WPAD_CHAN_1, WPAD_FMT_BTNS_ACC_IR);
-    WPAD_SetVRes(WPAD_CHAN_1, rmode->fbWidth, rmode->efbHeight);
+    WPAD_SetVRes(WPAD_CHAN_1, Screen::GetWidth(), Screen::GetHeight());
 
     // Game initialization
-    Game *MyGame = new Game(rmode->fbWidth, rmode->efbHeight);
+    Game *MyGame = new Game(Screen::GetWidth(), Screen::GetHeight());
 
     SYS_SetResetCallback(WiiResetPressed);
     SYS_SetPowerCallback(WiiPowerPressed);
@@ -83,12 +83,12 @@ int main(int argc, char **argv)
         if(HWButton)
             break;
 
-        GRRLIB_Render();
+        Render();
     }
 
     delete MyGame;
     WPAD_Shutdown();
-    GRRLIB_Exit();
+    Exit();
 
     if(HWButton && HWButton != SYS_RETURNTOHBMENU)
     {

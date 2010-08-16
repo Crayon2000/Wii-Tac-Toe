@@ -59,7 +59,8 @@ Texture::Texture(const u32 w, const u32 h)
  */
 void Texture::Initialize(void)
 {
-    _TextStruct = NULL;
+    data = NULL;
+
     _Color = 0xFFFFFFFF;
     _ScaleX = 1.0;
     _ScaleY = 1.0;
@@ -71,10 +72,44 @@ void Texture::Initialize(void)
  */
 Texture::~Texture()
 {
-    if(_TextStruct)
+    free(data);
+}
+
+/**
+ * Assign a GRRLIB texture to this object.
+ * The GRRLIB texture will be destroy.
+ */
+void Texture::Assign(GRRLIB_texImg *other)
+{
+    if(other == NULL)
     {
-        GRRLIB_FreeTexture(_TextStruct);
+        return;
     }
+
+    w = other->w;
+    h = other->h;
+    handlex = other->handlex;
+    handley = other->handley;
+    offsetx = other->offsetx;
+    offsety = other->offsety;
+
+    tiledtex = other->tiledtex;
+    tilew = other->tilew;
+    tileh = other->tileh;
+    nbtilew = other->nbtilew;
+    nbtileh = other->nbtileh;
+    tilestart = other->tilestart;
+    ofnormaltexx = other->ofnormaltexx;
+    ofnormaltexy = other->ofnormaltexy;
+
+    if(data)
+    {
+        free(data);
+    }
+    data = other->data;
+
+    free(other);
+    other = NULL;
 }
 
 /**
@@ -84,28 +119,24 @@ Texture::~Texture()
  */
 void Texture::Load(const u8 *Buffer, const u32 Size)
 {
-    if(_TextStruct)
-    {   // Delete texture if already filled
-        GRRLIB_FreeTexture(_TextStruct);
-    }
     if(Buffer[0]==0xFF && Buffer[1]==0xD8 && Buffer[2]==0xFF)
     {   // JPEG image
         if(Size)
         {
-            _TextStruct = GRRLIB_LoadTextureJPGEx(Buffer, Size);
+            Assign(GRRLIB_LoadTextureJPGEx(Buffer, Size));
         }
         else
         {
-            _TextStruct = GRRLIB_LoadTextureJPG(Buffer);
+            Assign(GRRLIB_LoadTextureJPG(Buffer));
         }
     }
     else if(Buffer[0]=='B' && Buffer[1]=='M')
     {   // Bitmap image
-        _TextStruct = GRRLIB_LoadTextureBMP(Buffer);
+        Assign(GRRLIB_LoadTextureBMP(Buffer));
     }
     else
     {   // PNG image
-        _TextStruct = GRRLIB_LoadTexturePNG(Buffer);
+        Assign(GRRLIB_LoadTexturePNG(Buffer));
     }
 }
 
@@ -115,18 +146,18 @@ void Texture::Load(const u8 *Buffer, const u32 Size)
  */
 void Texture::Load(const char *filename)
 {
-    u8 *data;
+    u8 *mydata;
 
-    int FileLength = GRRLIB_LoadFile(filename, &data);
+    int FileLength = GRRLIB_LoadFile(filename, &mydata);
     if(FileLength <= 0)
     {   // Loading the file failed
         return;
     }
 
-    Load(data, FileLength);
+    Load(mydata, FileLength);
 
     // Free up the buffer
-    free(data);
+    free(mydata);
 }
 
 /**
@@ -142,39 +173,48 @@ void Texture::Load(const std::string &filename)
  * Create an empty texture.
  * @param w Width of the new texture to create.
  * @param h Height of the new texture to create.
- * @param Color A color in RGBA format to set the empty texture. The default color is transparent;
+ * @param Color A color in RGBA format to set the empty texture. The default color is transparent.
  */
 void Texture::Create(const u32 w, const u32 h, const u32 Color)
 {
-    if(_TextStruct)
-    {   // Delete texture if already filled
-        GRRLIB_FreeTexture(_TextStruct);
-    }
-
-    // Code taken from GRRLIB_CreateEmptyTexture
-    _TextStruct = (struct GRRLIB_texImg *)calloc(1, sizeof(GRRLIB_texImg));
-    if(_TextStruct != NULL)
+    // Delete texture if already filled
+    if(data)
     {
-        _TextStruct->data = memalign(32, h * w * 4);
-        _TextStruct->w = w;
-        _TextStruct->h = h;
-
-        // Initialize the texture with a color
-        u32 x, y, offs;
-        u8*  bp = (u8*)_TextStruct->data;
-        for(y = 0; y < h; y++)
-        {
-            for(x = 0; x < w; x++)
-            {   // Code taken from GRRLIB_SetPixelTotexImg
-                offs = (((y&(~3))<<2)*w) + ((x&(~3))<<4) + ((((y&3)<<2) + (x&3)) <<1);
-                *((u16*)(bp+offs   )) = (u16)((Color <<8) | (Color >>24));
-                *((u16*)(bp+offs+32)) = (u16) (Color >>8);
-            }
-        }
-
-        GRRLIB_SetHandle(_TextStruct, 0, 0);
-        GRRLIB_FlushTex(_TextStruct);
+        free(data);
     }
+
+    data = memalign(32, h * w * 4);
+    this->w = w;
+    this->h = h;
+    handlex = 0;
+    handley = 0;
+    offsetx = 0;
+    offsety = 0;
+
+    tiledtex = 0;
+    tilew = 0;
+    tileh = 0;
+    nbtilew = 0;
+    nbtileh = 0;
+    tilestart = 0;
+    ofnormaltexx = 0;
+    ofnormaltexy = 0;
+
+    // Initialize the texture with a color
+    u32 x, y, offs;
+    u8*  bp = (u8*)data;
+    for(y = 0; y < h; y++)
+    {
+        for(x = 0; x < w; x++)
+        {   // Code taken from GRRLIB_SetPixelTotexImg
+            offs = (((y&(~3))<<2)*w) + ((x&(~3))<<4) + ((((y&3)<<2) + (x&3)) <<1);
+            *((u16*)(bp+offs   )) = (u16)((Color <<8) | (Color >>24));
+            *((u16*)(bp+offs+32)) = (u16) (Color >>8);
+        }
+    }
+
+    GRRLIB_SetHandle(this, 0, 0);
+    GRRLIB_FlushTex(this);
 }
 
 /**
@@ -183,11 +223,7 @@ void Texture::Create(const u32 w, const u32 h, const u32 Color)
  */
 u32 Texture::GetWidth()
 {
-    if(_TextStruct)
-    {
-        return _TextStruct->w;
-    }
-    return 0;
+    return w;
 }
 
 /**
@@ -196,11 +232,7 @@ u32 Texture::GetWidth()
  */
 u32 Texture::GetHeight()
 {
-    if(_TextStruct)
-    {
-        return _TextStruct->h;
-    }
-    return 0;
+    return h;
 }
 
 /**
@@ -209,11 +241,7 @@ u32 Texture::GetHeight()
  */
 u32 Texture::GetOffsetX()
 {
-    if(_TextStruct)
-    {
-        return _TextStruct->offsetx;
-    }
-    return 0;
+    return offsetx;
 }
 
 /**
@@ -222,11 +250,7 @@ u32 Texture::GetOffsetX()
  */
 u32 Texture::GetOffsetY()
 {
-    if(_TextStruct)
-    {
-        return _TextStruct->offsety;
-    }
-    return 0;
+    return offsety;
 }
 
 /**
@@ -236,11 +260,8 @@ u32 Texture::GetOffsetY()
  */
 void Texture::SetOffset(u32 X, u32 Y)
 {
-    if(_TextStruct)
-    {
-        _TextStruct->offsetx = X;
-        _TextStruct->offsety = Y;
-    }
+    offsetx = X;
+    offsety = Y;
 }
 
 /**
@@ -249,10 +270,7 @@ void Texture::SetOffset(u32 X, u32 Y)
  */
 void Texture::SetOffsetX(u32 X)
 {
-    if(_TextStruct)
-    {
-        _TextStruct->offsetx = X;
-    }
+    offsetx = X;
 }
 
 /**
@@ -261,10 +279,7 @@ void Texture::SetOffsetX(u32 X)
  */
 void Texture::SetOffsetY(u32 Y)
 {
-    if(_TextStruct)
-    {
-        _TextStruct->offsety = Y;
-    }
+    offsety = Y;
 }
 
 /**
@@ -273,11 +288,7 @@ void Texture::SetOffsetY(u32 Y)
  */
 u32 Texture::GetHandleX()
 {
-    if(_TextStruct)
-    {
-        return _TextStruct->handlex;
-    }
-    return 0;
+    return handlex;
 }
 
 /**
@@ -286,11 +297,7 @@ u32 Texture::GetHandleX()
  */
 u32 Texture::GetHandleY()
 {
-    if(_TextStruct)
-    {
-        return _TextStruct->handley;
-    }
-    return 0;
+    return handley;
 }
 
 /**
@@ -301,10 +308,7 @@ u32 Texture::GetHandleY()
  */
 void Texture::SetHandle(u32 X, u32 Y)
 {
-    if(_TextStruct)
-    {
-        GRRLIB_SetHandle(_TextStruct, X, Y);
-    }
+    GRRLIB_SetHandle(this, X, Y);
 }
 
 /**
@@ -315,7 +319,7 @@ void Texture::SetHandle(u32 X, u32 Y)
  */
 u32 Texture::GetPixel(const s32 x, const s32 y)
 {
-    return GRRLIB_GetPixelFromtexImg(x, y, _TextStruct);
+    return GRRLIB_GetPixelFromtexImg(x, y, this);
 }
 
 /**
@@ -327,10 +331,7 @@ u32 Texture::GetPixel(const s32 x, const s32 y)
  */
 void Texture::SetPixel(const s32 x, const s32 y, const u32 color)
 {
-    if(_TextStruct)
-    {
-        GRRLIB_SetPixelTotexImg(x, y, _TextStruct, color);
-    }
+    GRRLIB_SetPixelTotexImg(x, y, this, color);
 }
 
 /**
@@ -339,10 +340,7 @@ void Texture::SetPixel(const s32 x, const s32 y, const u32 color)
  */
 void Texture::Refresh()
 {
-    if(_TextStruct)
-    {
-        DCFlushRange(_TextStruct->data, _TextStruct->w * _TextStruct->h * 4);
-    }
+    DCFlushRange(data, w * h * 4);
 }
 
 /**
@@ -357,10 +355,7 @@ void Texture::Refresh()
 void Texture::Draw(const f32 xpos, const f32 ypos, const f32 degrees,
                    const f32 scaleX, const f32 scaleY, const u32 color)
 {
-    if(_TextStruct)
-    {
-        GRRLIB_DrawImg(xpos, ypos, _TextStruct, degrees, scaleX, scaleY, color);
-    }
+    GRRLIB_DrawImg(xpos, ypos, this, degrees, scaleX, scaleY, color);
 }
 
 /**
@@ -409,10 +404,7 @@ void Texture::Draw(const f32 xpos, const f32 ypos)
  */
 void Texture::CopyScreen(s32 posx, s32 posy, bool clear)
 {
-    if(_TextStruct)
-    {
-        GRRLIB_Screen2Texture(posx, posy, _TextStruct, clear);
-    }
+    GRRLIB_Screen2Texture(posx, posy, this, clear);
 }
 
 /**
@@ -454,12 +446,44 @@ u8 Texture::GetAlpha(void)
 
 
 /**
+ * Initialize video library. Call this once at the beginning your code.
+ * @return A integer representating a code:
+ *         -     0 : The operation completed successfully.
+ *         -    -1 : Not enough memory is available to initialize video library.
+ *         -    -2 : Failed to add the fat device driver to the devoptab.
+ *         -    -3 : Failed to initialize the font engine.
+ * @see Exit
+ */
+s8 Screen::Initialize(void)
+{
+    return GRRLIB_Init();
+}
+
+/**
+ * Call this before exiting your application.
+ * Ensure this function is only ever called once
+ * and only if the setup function has been called.
+ */
+void Screen::Exit(void)
+{
+    GRRLIB_Exit();
+}
+
+/**
  * Clear screen with a specific color.
  * @param color The color to use to fill the screen.
  */
 void Screen::FillScreen(const u32 color)
 {
     GRRLIB_FillScreen(color);
+}
+
+/**
+ * Call this function after drawing.
+ */
+void Screen::Render(void)
+{
+    GRRLIB_Render();
 }
 
 /**
@@ -553,4 +577,90 @@ u32 Screen::GetWidth(void)
 u32 Screen::GetHeight(void)
 {
     return rmode->efbHeight;
+}
+
+
+
+/**
+ * Flip texture horizontal.
+ * @see Texture::Refresh()
+ * @param texsrc The texture source.
+ * @param texdest The texture destination.
+ */
+void FX::FlipH(const Texture *texsrc, Texture *texdest)
+{
+    GRRLIB_BMFX_FlipH((GRRLIB_texImg *)texsrc, (GRRLIB_texImg *)texdest);
+}
+/**
+ * Flip texture vertical.
+ * @see Texture::Refresh()
+ * @param texsrc The texture source.
+ * @param texdest The texture destination.
+ */
+void FX::FlipV(const Texture *texsrc, Texture *texdest)
+{
+    GRRLIB_BMFX_FlipV((GRRLIB_texImg *)texsrc, (GRRLIB_texImg *)texdest);
+}
+/**
+ * Change a texture to gray scale.
+ * @see Texture::Refresh()
+ * @param texsrc The texture source.
+ * @param texdest The texture grayscaled destination.
+ */
+void FX::Grayscale(const Texture *texsrc, Texture *texdest)
+{
+    GRRLIB_BMFX_Grayscale((GRRLIB_texImg *)texsrc, (GRRLIB_texImg *)texdest);
+}
+/**
+ * Change a texture to sepia (old photo style).
+ * @see Texture::Refresh()
+ * @param texsrc The texture source.
+ * @param texdest The texture destination.
+ */
+void FX::Sepia(const Texture *texsrc, Texture *texdest)
+{
+    GRRLIB_BMFX_Sepia((GRRLIB_texImg *)texsrc, (GRRLIB_texImg *)texdest);
+}
+/**
+ * Invert colors of the texture.
+ * @see Texture::Refresh()
+ * @param texsrc The texture source.
+ * @param texdest The texture destination.
+ */
+void FX::Invert(const Texture *texsrc, Texture *texdest)
+{
+    GRRLIB_BMFX_Invert((GRRLIB_texImg *)texsrc, (GRRLIB_texImg *)texdest);
+}
+/**
+ * A texture effect (Blur).
+ * @see Texture::Refresh()
+ * @param texsrc The texture source.
+ * @param texdest The texture destination.
+ * @param factor The blur factor.
+ */
+void FX::Blur(const Texture *texsrc, Texture *texdest, const u32 factor)
+{
+    GRRLIB_BMFX_Blur((GRRLIB_texImg *)texsrc, (GRRLIB_texImg *)texdest, factor);
+}
+/**
+ * A texture effect (Scatter).
+ * @see Texture::Refresh()
+ * @param texsrc The texture source.
+ * @param texdest The texture destination.
+ * @param factor The factor level of the effect.
+ */
+void FX::Scatter(const Texture *texsrc, Texture *texdest, const u32 factor)
+{
+    GRRLIB_BMFX_Scatter((GRRLIB_texImg *)texsrc, (GRRLIB_texImg *)texdest, factor);
+}
+/**
+ * A texture effect (Pixelate).
+ * @see Texture::Refresh()
+ * @param texsrc The texture source.
+ * @param texdest The texture destination.
+ * @param factor The factor level of the effect.
+ */
+void FX::Pixelate(const Texture *texsrc, Texture *texdest, const u32 factor)
+{
+    GRRLIB_BMFX_Pixelate((GRRLIB_texImg *)texsrc, (GRRLIB_texImg *)texdest, factor);
 }

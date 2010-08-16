@@ -61,6 +61,24 @@ public:
         this->x = x;
         this->y = y;
     }
+    /**
+     * Compare two Point object.
+     * @param[in] pt The Point to evaluate.
+     * @return If the Point meet the comparison condition, the operators return a true value. Otherwise, false is returned.
+     */
+    bool operator ==(const Point& pt) const
+    {
+        return (x == pt.x) && (y == pt.y);
+    }
+    /**
+     * Compare two Point object.
+     * @param[in] pt The Point to evaluate.
+     * @return If the Point meet the comparison condition, the operators return a true value. Otherwise, false is returned.
+     */
+    bool operator !=(const Point& pt) const
+    {
+        return !(pt == *this);
+    }
 };
 //---------------------------------------------------------------------------
 #endif

@@ -181,7 +181,7 @@ void Object::SetAngle(float Angle)
  */
 u8 Object::GetAlpha()
 {
-    return A(Color);
+    return (Color & 0xFF);
 }
 
 /**

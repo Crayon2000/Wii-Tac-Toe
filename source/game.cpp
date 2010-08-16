@@ -218,7 +218,7 @@ void Game::Paint()
     if(CurrentScreen != START_SCREEN &&
         WPAD_Probe(WPAD_CHAN_0, NULL) == WPAD_ERR_NO_CONTROLLER)
     {   // Controller is disconnected
-        GRRLIB_Rectangle(0, 0, ScreenWidth, ScreenHeight, 0x000000B2, 1);
+        Rectangle(0, 0, ScreenWidth, ScreenHeight, 0x000000B2, 1);
     }
     else
     {
@@ -354,12 +354,12 @@ void Game::ExitScreen()
                 break;
         }
 
-        GRRLIB_Rectangle(0, 0, ScreenWidth, ScreenHeight, 0x000000CC, 1); // Draw a black rectangle over it
+        Rectangle(0, 0, ScreenWidth, ScreenHeight, 0x000000CC, 1); // Draw a black rectangle over it
 
-        GRRLIB_Rectangle(0, 78, ScreenWidth, 2, 0x848284FF, 1);
+        Rectangle(0, 78, ScreenWidth, 2, 0x848284FF, 1);
 
-        GRRLIB_Rectangle(0, 383, ScreenWidth, 2, 0x848284FF, 1);
-        GRRLIB_Rectangle(0, 385, ScreenWidth, 95, 0x000000FF, 1);
+        Rectangle(0, 383, ScreenWidth, 2, 0x848284FF, 1);
+        Rectangle(0, 385, ScreenWidth, 95, 0x000000FF, 1);
 
         CopiedImg->CopyScreen();
         Copied = true;
@@ -370,9 +370,9 @@ void Game::ExitScreen()
     }
 
     if(GRRLIB_PtInRect(0, 0, ScreenWidth, 78, Hand[0].GetLeft(), Hand[0].GetTop()))
-        GRRLIB_Rectangle(0, 0, ScreenWidth, 78, 0x30B6EBFF, 1);
+        Rectangle(0, 0, ScreenWidth, 78, 0x30B6EBFF, 1);
     else
-        GRRLIB_Rectangle(0, 0, ScreenWidth, 78, 0x000000FF, 1);
+        Rectangle(0, 0, ScreenWidth, 78, 0x000000FF, 1);
 
     GRRLIB_PrintfTTFW(30, 20, DefaultFont, Lang->String("HOME Menu").c_str(), 30, 0xFFFFFFFF);
 
@@ -414,17 +414,17 @@ void Game::MenuScreen(bool CopyScreen)
 {
     if(!Copied)
     {   // Copy static element
-        GRRLIB_FillScreen(0x000000FF);  // Clear screen
+        FillScreen(0x000000FF);  // Clear screen
         for(int y = 0; y <=ScreenHeight; y+=8)
         {
-            GRRLIB_Rectangle(0, y, ScreenWidth, 2, 0xB0B0B030, 1);
+            Rectangle(0, y, ScreenWidth, 2, 0xB0B0B030, 1);
         }
 
-        GRRLIB_Rectangle(0, 0, ScreenWidth, 63, 0x000000FF, 1);
-        GRRLIB_Rectangle(0, 63, ScreenWidth, 2, 0xFFFFFFFF, 1);
+        Rectangle(0, 0, ScreenWidth, 63, 0x000000FF, 1);
+        Rectangle(0, 63, ScreenWidth, 2, 0xFFFFFFFF, 1);
 
-        GRRLIB_Rectangle(0, 383, ScreenWidth, 2, 0xFFFFFFFF, 1);
-        GRRLIB_Rectangle(0, 385, ScreenWidth, 95, 0x000000FF, 1);
+        Rectangle(0, 383, ScreenWidth, 2, 0xFFFFFFFF, 1);
+        Rectangle(0, 385, ScreenWidth, 95, 0x000000FF, 1);
 
         wchar_t VersionText[TEXT_SIZE] = L"";
         swprintf(VersionText, TEXT_SIZE, Lang->String("Ver. %ls").c_str(), L"0.8");
@@ -703,8 +703,8 @@ void Game::NewGame()
  * @param[in] OffsetY Shadow offset for the y-coordinate.
  */
 void Game::PrintWrapText(u16 x, u16 y, u16 maxLineWidth,
-    const wstring &input, unsigned int fontSize, unsigned int TextColor,
-    unsigned int ShadowColor, s8 OffsetX, s8 OffsetY)
+    const std::wstring &input, u32 fontSize, u32 TextColor,
+    u32 ShadowColor, s8 OffsetX, s8 OffsetY)
 {
     wstring tmp = input + L" ", // Make local copy
             tmp2;
