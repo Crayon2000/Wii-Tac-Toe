@@ -65,10 +65,10 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight) :
 
     u8 x, y;
     GridSign = new Symbol*[3];
-    for(x = 0; x < 3; x++)
+    for(x = 0; x < 3; ++x)
     {
         GridSign[x] = new Symbol[3];
-        for(y = 0; y < 3; y++)
+        for(y = 0; y < 3; ++y)
         {
             GridSign[x][y].SetLocation(Table[x][y]);
         }
@@ -155,19 +155,19 @@ Game::~Game()
     delete Lang;
     delete[] WTTPlayer;
 
-    for(u8 i=0; i<ExitButton.size(); i++)
+    for(u8 i=0; i<ExitButton.size(); ++i)
     {
         delete ExitButton[i];
     }
     ExitButton.clear();
 
-    for(u8 i=0; i<MenuButton.size(); i++)
+    for(u8 i=0; i<MenuButton.size(); ++i)
     {
         delete MenuButton[i];
     }
     MenuButton.clear();
 
-    for(u8 i = 0; i < 3; i++)
+    for(u8 i = 0; i < 3; ++i)
     {
         delete[] GridSign[i];
     }
@@ -207,7 +207,7 @@ void Game::Paint()
                 }
                 else
                 {
-                    AIThinkLoop++;
+                    ++AIThinkLoop;
                 }
             }
             break;
@@ -312,9 +312,9 @@ void Game::GameScreen(bool CopyScreen)
         }
     }
     u8 x, y;
-    for(x = 0; x < 3; x++)
+    for(x = 0; x < 3; ++x)
     {
-        for(y = 0; y < 3; y++)
+        for(y = 0; y < 3; ++y)
         {
             GridSign[x][y].SetPlayer(GameGrid->GetPlayerAtPos(x, y));
             GridSign[x][y].SetColor(0xFFFFFFFF);
@@ -652,7 +652,7 @@ void Game::TurnIsOver()
     }
     else if(GameGrid->IsFilled())
     {   // Tie game
-        TieGame++;
+        ++TieGame;
         wcsncpy(text, Lang->GetRandomTieMessage().c_str(), TEXT_SIZE);
         RoundFinished = true;
     }
@@ -794,9 +794,9 @@ bool Game::SelectZone()
 {
     if(!RoundFinished && AIThinkLoop == 0)
     {
-        for(int x = 0; x < 3; x++)
+        for(int x = 0; x < 3; ++x)
         {
-            for(int y = 0; y < 3; y++)
+            for(int y = 0; y < 3; ++y)
             {
                 if (Hand[0].GetLeft() > Table[x][y].GetX() &&
                     Hand[0].GetLeft() < (Table[x][y].GetX() + 136) &&
@@ -880,7 +880,7 @@ void Game::CalculateFrameRate() {
     static u32 lastTime;
     u32 currentTime = ticks_to_millisecs(gettime());
 
-    frameCount++;
+    ++frameCount;
     if(currentTime - lastTime > 1000) {
         lastTime = currentTime;
         FPS = frameCount;

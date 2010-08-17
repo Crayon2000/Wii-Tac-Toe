@@ -203,9 +203,9 @@ void Texture::Create(const u32 w, const u32 h, const u32 Color)
     // Initialize the texture with a color
     u32 x, y, offs;
     u8*  bp = (u8*)data;
-    for(y = 0; y < h; y++)
+    for(y = 0; y < h; ++y)
     {
-        for(x = 0; x < w; x++)
+        for(x = 0; x < w; ++x)
         {   // Code taken from GRRLIB_SetPixelTotexImg
             offs = (((y&(~3))<<2)*w) + ((x&(~3))<<4) + ((((y&3)<<2) + (x&3)) <<1);
             *((u16*)(bp+offs   )) = (u16)((Color <<8) | (Color >>24));

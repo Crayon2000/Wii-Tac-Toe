@@ -59,7 +59,7 @@ unsigned int Player::GetScore()
  */
 void Player::IncScore()
 {
-    Score++;
+    ++Score;
 }
 
 /**

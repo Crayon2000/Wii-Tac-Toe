@@ -34,7 +34,7 @@ void RUMBLE_Wiimote(s32 chan, int rumble_time)
 void RUMBLE_Init()
 {
     int i;
-    for(i = 0; i < WPAD_MAX_WIIMOTES; i++)
+    for(i = 0; i < WPAD_MAX_WIIMOTES; ++i)
     {
         Rumble_Info[i].rumbeling = false;
         Rumble_Info[i].time2rumble = 0;
@@ -159,11 +159,10 @@ void Draw_FadeInOut(Texture *tex, f32 scaleX, f32 scaleY, u16 speed)
  */
 void Draw_FadeIn(Texture *tex, f32 scaleX, f32 scaleY, u16 speed)
 {
-    s16 alpha;
     f32 xpos = (Screen::GetWidth() - tex->GetWidth()) / 2;
     f32 ypos = (Screen::GetHeight() - tex->GetHeight()) / 2;
 
-    for(alpha = 0; alpha < 255; alpha += speed) {
+    for(s16 alpha = 0; alpha < 255; alpha += speed) {
         if(alpha > 255) alpha = 255;
         tex->Draw(xpos, ypos, 0, scaleX, scaleY, 0xFFFFFF00 | alpha);
         GRRLIB_Render();
@@ -179,11 +178,10 @@ void Draw_FadeIn(Texture *tex, f32 scaleX, f32 scaleY, u16 speed)
  */
 void Draw_FadeOut(Texture *tex, f32 scaleX, f32 scaleY, u16 speed)
 {
-    s16 alpha;
     f32 xpos = (Screen::GetWidth() - tex->GetWidth()) / 2;
     f32 ypos = (Screen::GetHeight() - tex->GetHeight()) / 2;
 
-    for(alpha = 255; alpha > 0; alpha -= speed) {
+    for(s16 alpha = 255; alpha > 0; alpha -= speed) {
         if(alpha < 0) alpha = 0;
         tex->Draw(xpos, ypos, 0, scaleX, scaleY, 0xFFFFFF00 | alpha);
         GRRLIB_Render();

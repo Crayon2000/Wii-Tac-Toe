@@ -50,9 +50,9 @@ void Grid::SetPlayerAI(u8 Player)
     u8 x, y;
 
     // Test win
-    for(x = 0; x < 3; x++)
+    for(x = 0; x < 3; ++x)
     {
-        for(y = 0; y < 3; y++)
+        for(y = 0; y < 3; ++y)
         {
             memcpy(TestBoard, Board, sizeof(TestBoard));
             if(TestBoard[x][y] == ' ')
@@ -69,9 +69,9 @@ void Grid::SetPlayerAI(u8 Player)
 
     // Test block
     u8 Opponent = (Player == 'X') ? 'O' : 'X';
-    for(x = 0; x < 3; x++)
+    for(x = 0; x < 3; ++x)
     {
-        for(y = 0; y < 3; y++)
+        for(y = 0; y < 3; ++y)
         {
             memcpy(TestBoard, Board, sizeof(TestBoard));
             if(TestBoard[x][y] == ' ')
@@ -189,9 +189,9 @@ bool Grid::IsPlayerWinning(u8 Player)
 bool Grid::IsFilled()
 {
     u8 x, y;
-    for(x = 0; x < 3; x++)
+    for(x = 0; x < 3; ++x)
     {
-        for(y = 0; y < 3; y++)
+        for(y = 0; y < 3; ++y)
         {
             if(Board[x][y] == ' ')
                 return false;

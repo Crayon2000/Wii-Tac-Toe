@@ -10,8 +10,6 @@
 #include "../languages/spanish.h"
 #include "../languages/italian.h"
 
-#define ICONV_BUFSIZE 1024
-
 /**
  * Constructor for the Language class.
  */
@@ -144,7 +142,7 @@ unsigned int Language::ChildCount(mxml_node_t *Up_Node, const char *Name)
             Message_Node != NULL;
             Message_Node = mxmlFindElement(Message_Node, Up_Node, Name, NULL, NULL, MXML_DESCEND))
         {
-            Count++;
+            ++Count;
         }
     }
     return Count;
