@@ -9,7 +9,6 @@
 
 #include <gctypes.h>
 #include <string>
-using namespace std;
 
 #define PLAYER_HUMAN    0   /**< Indentify a human player. */
 #define PLAYER_CPU      1   /**< Indentify a computer player. */
@@ -23,8 +22,8 @@ class Player
 public:
     Player();
     virtual ~Player() {};
-    void SetName(wstring);
-    wstring GetName();
+    void SetName(std::wstring);
+    std::wstring GetName();
     void SetSign(u8);
     u8 GetSign();
     unsigned int GetScore();
@@ -34,7 +33,7 @@ public:
     u8 GetType();
 private:
     unsigned int Score;
-    wstring Name;
+    std::wstring Name;
     u8 Sign;
     u8 Type;
 };

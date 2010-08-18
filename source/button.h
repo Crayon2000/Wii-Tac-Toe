@@ -11,8 +11,6 @@
 #include "object.h"
 #include "grrlib_class.h"
 
-using namespace std;
-
 /**
  * Types of button that could be used.
  */
@@ -33,14 +31,14 @@ public:
     ~Button();
     void Paint();
     void SetCaption(const char *);
-    void SetCaption(const wstring &);
+    void SetCaption(const std::wstring &);
     void SetFont(GRRLIB_ttfFont *);
     void SetSelected(bool);
     void SetTextColor(u32);
     void SetTextHeight(unsigned int);
 private:
     bool Selected;
-    wstring Caption;
+    std::wstring Caption;
     GRRLIB_ttfFont *Font;
     unsigned int TextWidth;
     unsigned int TextHeight;

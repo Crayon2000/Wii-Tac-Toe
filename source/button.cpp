@@ -94,7 +94,7 @@ void Button::SetCaption(const char *NewCaption)
  * Set caption on the button.
  * @param[in] NewCaption Text to put on the button.
  */
-void Button::SetCaption(const wstring &NewCaption)
+void Button::SetCaption(const std::wstring &NewCaption)
 {
     Caption = NewCaption;
     TextWidth = GRRLIB_WidthTTFW(Font, Caption.c_str(), TextHeight);

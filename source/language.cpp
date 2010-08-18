@@ -23,7 +23,7 @@ Language::Language()
 
     Up_Node = mxmlFindElement(First_Node, First_Node, "tie_game", NULL, NULL, MXML_DESCEND);
     TieCount = ChildCount(Up_Node, "message");
-    TieMessage = new wstring[TieCount];
+    TieMessage = new std::wstring[TieCount];
     for(Message_Node = mxmlFindElement(Up_Node, Up_Node,"message", NULL, NULL, MXML_DESCEND), i = 0;
         Message_Node != NULL;
         Message_Node = mxmlFindElement(Message_Node, Up_Node, "message", NULL, NULL, MXML_DESCEND))
@@ -33,7 +33,7 @@ Language::Language()
 
     Up_Node = mxmlFindElement(First_Node, First_Node, "winning_game", NULL, NULL, MXML_DESCEND);
     WinningCount = ChildCount(Up_Node, "message");
-    WinningMessage = new wstring[WinningCount];
+    WinningMessage = new std::wstring[WinningCount];
     for(Message_Node = mxmlFindElement(Up_Node, Up_Node,"message", NULL, NULL, MXML_DESCEND), i = 0;
         Message_Node != NULL;
         Message_Node = mxmlFindElement(Message_Node, Up_Node, "message", NULL, NULL, MXML_DESCEND))
@@ -43,7 +43,7 @@ Language::Language()
 
     Up_Node = mxmlFindElement(First_Node, First_Node, "turn_over", NULL, NULL, MXML_DESCEND);
     TurnOverCount = ChildCount(Up_Node, "message");
-    TurnOverMessage = new wstring[TurnOverCount];
+    TurnOverMessage = new std::wstring[TurnOverCount];
     for(Message_Node = mxmlFindElement(Up_Node, Up_Node,"message", NULL, NULL, MXML_DESCEND), i = 0;
         Message_Node != NULL;
         Message_Node = mxmlFindElement(Message_Node, Up_Node, "message", NULL, NULL, MXML_DESCEND))
@@ -89,7 +89,7 @@ const char *Language::Text(const char *From)
 /**
  * Load a text from an XML file in memory.
  */
-wstring Language::String(const char *From)
+std::wstring Language::String(const char *From)
 {
     return Utf82Unicode(Text(From));
 }
@@ -151,21 +151,21 @@ unsigned int Language::ChildCount(mxml_node_t *Up_Node, const char *Name)
 /**
  * Get a random winning message.
  */
-wstring Language::GetRandomWinningMessage()
+std::wstring Language::GetRandomWinningMessage()
 {
     return WinningMessage[rand() % WinningCount];
 }
 /**
  * Get a random tie message.
  */
-wstring Language::GetRandomTieMessage()
+std::wstring Language::GetRandomTieMessage()
 {
     return TieMessage[rand() % TieCount];
 }
 /**
  * Get a random turn over message.
  */
-wstring Language::GetRandomTurnOverMessage()
+std::wstring Language::GetRandomTurnOverMessage()
 {
     return TurnOverMessage[rand() % TurnOverCount];
 }
@@ -175,8 +175,8 @@ wstring Language::GetRandomTurnOverMessage()
  * @param[in] text utf-8 string.
  * @return A utf-16 string.
  */
-wstring Language::Utf82Unicode(const string &text) {
-    wstring ret;
+std::wstring Language::Utf82Unicode(const std::string &text) {
+    std::wstring ret;
     utf8::utf8to16(text.begin(), text.end(), back_inserter(ret));
     return ret;
 }

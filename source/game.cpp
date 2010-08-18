@@ -250,10 +250,10 @@ void Game::StartSreen()
  */
 void Game::GameScreen(bool CopyScreen)
 {
-    int TextLeft;
-
     if(!Copied)
     {   // Copy static element
+        int TextLeft;
+
         // Background image
         GameImg->Draw(0, 0);
 
@@ -641,7 +641,7 @@ void Game::TurnIsOver()
     {   // A winner is declare
         GameWinner = (GameWinner == WTTPlayer[0].GetSign()) ? 0 : 1;
         WTTPlayer[GameWinner].IncScore();
-        wstring TextToCopy;
+        std::wstring TextToCopy;
         wcsncpy(text, Lang->GetRandomWinningMessage().c_str(), TEXT_SIZE);
         TextToCopy = str_replaceW(text, L"$LOSER$", WTTPlayer[!GameWinner].GetName());
         TextToCopy = str_replaceW(TextToCopy, L"$WINNER$", WTTPlayer[GameWinner].GetName());
@@ -706,11 +706,11 @@ void Game::PrintWrapText(u16 x, u16 y, u16 maxLineWidth,
     const std::wstring &input, u32 fontSize, u32 TextColor,
     u32 ShadowColor, s8 OffsetX, s8 OffsetY)
 {
-    wstring tmp = input + L" ", // Make local copy
-            tmp2;
-    wstring::iterator startIndex = tmp.begin(),
-                      lastSpace = tmp.begin(),
-                      i = tmp.begin();
+    std::wstring tmp = input + L" ", // Make local copy
+                 tmp2;
+    std::wstring::iterator startIndex = tmp.begin(),
+                           lastSpace = tmp.begin(),
+                           i = tmp.begin();
     int ypos = y,
         z = 0,
         textLeft,

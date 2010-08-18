@@ -106,11 +106,11 @@ void WIILIGHT_TurnOn()
  * @param[in] After Replacement string.
  * @return Pointer to the new string with replaced string, must be freed
  */
-string str_replace(const string &txt, const string &Before, const string &After)
+std::string str_replace(const std::string &txt, const std::string &Before, const std::string &After)
 {
-    string str = txt;
+    std::string str = txt;
     size_t pos = 0, AfterSize = After.length(), BeforeSize = Before.length();
-    while((pos = str.find(Before, pos)) != string::npos)
+    while((pos = str.find(Before, pos)) != std::string::npos)
     {
         str.replace(pos, BeforeSize, After, 0, AfterSize);
         pos += AfterSize;
@@ -125,11 +125,11 @@ string str_replace(const string &txt, const string &Before, const string &After)
  * @param[in] After Replacement string.
  * @return Pointer to the new wide string with replaced string, must be freed
  */
-wstring str_replaceW(const wstring &txt, const wstring &Before, const wstring &After)
+std::wstring str_replaceW(const std::wstring &txt, const std::wstring &Before, const std::wstring &After)
 {
-    wstring str = txt;
+    std::wstring str = txt;
     size_t pos = 0, AfterSize = After.length(), BeforeSize = Before.length();
-    while((pos = str.find(Before, pos)) != string::npos)
+    while((pos = str.find(Before, pos)) != std::string::npos)
     {
         str.replace(pos, BeforeSize, After, 0, AfterSize);
         pos += AfterSize;
