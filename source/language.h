@@ -21,9 +21,9 @@ public:
     ~Language();
     const char *Text(const char *);
     std::wstring String(const char *);
-    std::wstring GetRandomWinningMessage();
-    std::wstring GetRandomTieMessage();
-    std::wstring GetRandomTurnOverMessage();
+    std::wstring GetWinningMessage(s8 Index = -1);
+    std::wstring GetTieMessage(s8 Index = -1);
+    std::wstring GetTurnOverMessage(s8 Index = -1);
 private:
     mxml_node_t *First_Node;
     s8 TieCount;

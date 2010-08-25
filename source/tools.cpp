@@ -100,44 +100,6 @@ void WIILIGHT_TurnOn()
 }
 
 /**
- * Replace a string by another string in a string.
- * @param[in] txt String to search.
- * @param[in] Before String to be replaced.
- * @param[in] After Replacement string.
- * @return Pointer to the new string with replaced string, must be freed
- */
-std::string str_replace(const std::string &txt, const std::string &Before, const std::string &After)
-{
-    std::string str = txt;
-    size_t pos = 0, AfterSize = After.length(), BeforeSize = Before.length();
-    while((pos = str.find(Before, pos)) != std::string::npos)
-    {
-        str.replace(pos, BeforeSize, After, 0, AfterSize);
-        pos += AfterSize;
-    }
-    return str;
-}
-
-/**
- * Replace a wide string by another wide string in a wide string.
- * @param[in] txt String to search.
- * @param[in] Before String to be replaced.
- * @param[in] After Replacement string.
- * @return Pointer to the new wide string with replaced string, must be freed
- */
-std::wstring str_replaceW(const std::wstring &txt, const std::wstring &Before, const std::wstring &After)
-{
-    std::wstring str = txt;
-    size_t pos = 0, AfterSize = After.length(), BeforeSize = Before.length();
-    while((pos = str.find(Before, pos)) != std::string::npos)
-    {
-        str.replace(pos, BeforeSize, After, 0, AfterSize);
-        pos += AfterSize;
-    }
-    return str;
-}
-
-/**
  * Fade in, than fade out.
  * @param tex    Texture.
  * @param scaleX Texture X scale.

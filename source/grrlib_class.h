@@ -11,6 +11,13 @@
 #include <string>
 
 /**
+ * Namespace containing all GRRLIB code.
+ * @author Crayon
+ */
+namespace GRRLIBpp
+{
+
+/**
  * This class is a wrapper for GRRLIB_texImg.
  * @author Crayon
  */
@@ -101,5 +108,8 @@ namespace FX
     void Pixelate(const Texture *texsrc, Texture *texdest, const u32 factor);
 }   /* namespace FX */
 using namespace FX;
+
+}   /* namespace GRRLIBpp */
+using namespace GRRLIBpp;
 //---------------------------------------------------------------------------
 #endif

@@ -5,6 +5,8 @@
 #include <ogc/conf.h>
 #include <asndlib.h>
 #include <ogc/lwp_watchdog.h>
+#include <format.hpp>
+#include <algorithm/string/replace.hpp>
 #include "tools.h"
 #include "grid.h"
 #include "symbol.h"
@@ -121,22 +123,33 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight) :
     SplashImg = new Texture(splash);
     HoverImg = new Texture(hover);
     CopiedImg = new Texture(ScreenWidth, ScreenHeight);
+    GameText = new Texture(ScreenWidth, ScreenHeight);
+
+    // Player name with a shadow offset of -2, 2 (includes game background)
+    // GameText should only be modified when player names changed.
+    GameImg->Draw(0, 0);
+    PrintWrapText(44, 48, 125, WTTPlayer[0].GetName(), 15, 0xFFFFFFFF, 0x6BB6DEFF, -2, 2);
+    PrintWrapText(44, 143, 125, WTTPlayer[1].GetName(), 15, 0xFFFFFFFF, 0xE6313AFF, -2, 2);
+    PrintWrapText(44, 248, 125, Lang->String("TIE GAME"), 15, 0xFFFFFFFF, 0x109642FF, -2, 2);
+    GameText->CopyScreen(0, 0, true);
+
+    // Build Start Screen background
+    SplashImg->Draw(0, 0);
+    GRRLIB_PrintfTTFW(50, 310, DefaultFont,
+        boost::str(boost::wformat(Lang->String("Programmer: %ls")) %L"Crayon").c_str(),
+        11, 0xFFFFFFFF);
+    GRRLIB_PrintfTTFW(50, 330, DefaultFont,
+        boost::str(boost::wformat(Lang->String("Graphics: %ls")) %L"Mr_Nick666").c_str(),
+        11, 0xFFFFFFFF);
+    text = Lang->String("Press The A Button");
+    GRRLIB_PrintfTTFW((ScreenWidth / 2) - (GRRLIB_WidthTTFW(DefaultFont, text.c_str(), 20) / 2),
+                    400, DefaultFont, text.c_str(), 20, 0x000000FF);
+    SplashImg->CopyScreen(0, 0, true);
 
     RUMBLE_Init();
     ASND_Init();
     ASND_Pause(0);
     NewGame();
-
-    // Build Start Screen background
-    SplashImg->Draw(0, 0);
-    swprintf(text, TEXT_SIZE, Lang->String("Programmer: %ls").c_str(), L"Crayon");
-    GRRLIB_PrintfTTFW(50, 310, DefaultFont, text, 11, 0xFFFFFFFF);
-    swprintf(text, TEXT_SIZE, Lang->String("Graphics: %ls").c_str(), L"Mr_Nick666");
-    GRRLIB_PrintfTTFW(50, 330, DefaultFont, text, 11, 0xFFFFFFFF);
-    wcsncpy(text, Lang->String("Press The A Button").c_str(), TEXT_SIZE);
-    GRRLIB_PrintfTTFW((ScreenWidth / 2) - (GRRLIB_WidthTTFW(DefaultFont, text, 20) / 2),
-                    400, DefaultFont, text, 20, 0x000000FF);
-    SplashImg->CopyScreen(0, 0, true);
 }
 
 /**
@@ -144,6 +157,7 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight) :
  */
 Game::~Game()
 {
+    delete GameText;
     delete GameImg;
     delete SplashImg;
     delete HoverImg;
@@ -228,11 +242,11 @@ void Game::Paint()
     if(ShowFPS)
     {
         CalculateFrameRate();
-        char strFPS[10];
-        snprintf(strFPS, 10, "FPS: %d", FPS);
-        GRRLIB_PrintfTTF(14, 444, DefaultFont, strFPS, 17, 0xFFFFFFFF);
-        GRRLIB_PrintfTTF(16, 446, DefaultFont, strFPS, 17, 0x808080FF);
-        GRRLIB_PrintfTTF(15, 445, DefaultFont, strFPS, 17, 0x000000FF);
+        wchar_t strFPS[10];
+        swprintf(strFPS, 10, L"FPS: %d", FPS);
+        GRRLIB_PrintfTTFW(14, 444, DefaultFont, strFPS, 17, 0xFFFFFFFF);
+        GRRLIB_PrintfTTFW(16, 446, DefaultFont, strFPS, 17, 0x808080FF);
+        GRRLIB_PrintfTTFW(15, 445, DefaultFont, strFPS, 17, 0x000000FF);
     }
 }
 
@@ -252,20 +266,12 @@ void Game::GameScreen(bool CopyScreen)
 {
     if(!Copied)
     {   // Copy static element
-        int TextLeft;
-
-        // Background image
-        GameImg->Draw(0, 0);
-
-        // Player name with a shadow offset of -2, 2
-        PrintWrapText(44, 48, 125, WTTPlayer[0].GetName(), 15, 0xFFFFFFFF, 0x6BB6DEFF, -2, 2);
-        PrintWrapText(44, 143, 125, WTTPlayer[1].GetName(), 15, 0xFFFFFFFF, 0xE6313AFF, -2, 2);
-        PrintWrapText(44, 248, 125, Lang->String("TIE GAME"), 15, 0xFFFFFFFF, 0x109642FF, -2, 2);
+        GameText->Draw(0, 0); // Background image with some text
 
         // Draw score with a shadow offset of -2, 2
         wchar_t ScoreText[5];
         swprintf(ScoreText, 5, L"%d", WTTPlayer[0].GetScore());
-        TextLeft = 104 - GRRLIB_WidthTTFW(DefaultFont, ScoreText, 35) / 2;
+        int TextLeft = 104 - GRRLIB_WidthTTFW(DefaultFont, ScoreText, 35) / 2;
         GRRLIB_PrintfTTFW(TextLeft, 77, DefaultFont, ScoreText, 35, 0x6BB6DEFF);
         GRRLIB_PrintfTTFW(TextLeft - 2, 75, DefaultFont, ScoreText, 35, 0xFFFFFFFF);
 
@@ -311,8 +317,8 @@ void Game::GameScreen(bool CopyScreen)
                 AlphaDirection = !AlphaDirection;
         }
     }
-    u8 x, y;
-    for(x = 0; x < 3; ++x)
+    u8 y;
+    for(u8 x = 0; x < 3; ++x)
     {
         for(y = 0; y < 3; ++y)
         {
@@ -426,9 +432,9 @@ void Game::MenuScreen(bool CopyScreen)
         Rectangle(0, 383, ScreenWidth, 2, 0xFFFFFFFF, 1);
         Rectangle(0, 385, ScreenWidth, 95, 0x000000FF, 1);
 
-        wchar_t VersionText[TEXT_SIZE] = L"";
-        swprintf(VersionText, TEXT_SIZE, Lang->String("Ver. %ls").c_str(), L"0.8");
-        GRRLIB_PrintfTTFW(500, 40, DefaultFont, VersionText, 12, 0xFFFFFFFF);
+        GRRLIB_PrintfTTFW(500, 40, DefaultFont,
+            boost::str(boost::wformat(Lang->String("Ver. %ls")) %L"0.8").c_str(),
+            12, 0xFFFFFFFF);
 
         if(CopyScreen)
         {
@@ -601,9 +607,9 @@ bool Game::ControllerManager()
             ti->tm_year + 1900, ti->tm_mon + 1, ti->tm_mday, ti->tm_hour, ti->tm_min, ti->tm_sec);
 
         if(ScreenShot(path))
-            wcsncpy(text, L"A screenshot was taken!!!", TEXT_SIZE);
+            text = L"A screenshot was taken!!!";
         else
-            wcsncpy(text, L"Screenshot did not work!!!", TEXT_SIZE);
+            text = L"Screenshot did not work!!!";
 
         WIILIGHT_TurnOff();
         WPAD_Rumble(WPAD_CHAN_0, 0); // Rumble off
@@ -625,7 +631,7 @@ void Game::Clear()
     GameGrid->Clear();
     CurrentPlayer = PlayerToStart;
     PlayerToStart = !PlayerToStart; // Next other player will start
-    swprintf(text, TEXT_SIZE, Lang->GetRandomTurnOverMessage().c_str(), WTTPlayer[CurrentPlayer].GetName().c_str());
+    text = boost::str(boost::wformat(Lang->GetTurnOverMessage()) %WTTPlayer[CurrentPlayer].GetName());
     RoundFinished = false;
     Copied = false;
     ChangeCursor();
@@ -641,11 +647,9 @@ void Game::TurnIsOver()
     {   // A winner is declare
         GameWinner = (GameWinner == WTTPlayer[0].GetSign()) ? 0 : 1;
         WTTPlayer[GameWinner].IncScore();
-        std::wstring TextToCopy;
-        wcsncpy(text, Lang->GetRandomWinningMessage().c_str(), TEXT_SIZE);
-        TextToCopy = str_replaceW(text, L"$LOSER$", WTTPlayer[!GameWinner].GetName());
-        TextToCopy = str_replaceW(TextToCopy, L"$WINNER$", WTTPlayer[GameWinner].GetName());
-        wcsncpy(text, TextToCopy.c_str(), TEXT_SIZE);
+        text = Lang->GetWinningMessage();
+        boost::replace_all(text, L"$LOSER$", WTTPlayer[!GameWinner].GetName());
+        boost::replace_all(text, L"$WINNER$", WTTPlayer[GameWinner].GetName());
         RoundFinished = true;
         SymbolAlpha = 5;
         AlphaDirection = 0;
@@ -653,13 +657,13 @@ void Game::TurnIsOver()
     else if(GameGrid->IsFilled())
     {   // Tie game
         ++TieGame;
-        wcsncpy(text, Lang->GetRandomTieMessage().c_str(), TEXT_SIZE);
+        text = Lang->GetTieMessage();
         RoundFinished = true;
     }
     else
     {
         CurrentPlayer = !CurrentPlayer; // Change player's turn
-        swprintf(text, TEXT_SIZE, Lang->GetRandomTurnOverMessage().c_str(), WTTPlayer[CurrentPlayer].GetName().c_str());
+        text = boost::str(boost::wformat(Lang->GetTurnOverMessage()) %WTTPlayer[CurrentPlayer].GetName());
     }
 
     Copied = false;
@@ -713,15 +717,14 @@ void Game::PrintWrapText(u16 x, u16 y, u16 maxLineWidth,
                            i = tmp.begin();
     int ypos = y,
         z = 0,
-        textLeft,
-        stepSize = (fontSize * 1.2);
+        textLeft;
+    const int stepSize = (fontSize * 1.2);
 
     while(i != tmp.end())
     {
         if(*i == L' ')
         {
-            tmp2.assign(startIndex, i);
-            z = GRRLIB_WidthTTFW(DefaultFont, tmp2.c_str(), fontSize);
+            z = GRRLIB_WidthTTFW(DefaultFont, tmp2.assign(startIndex, i).c_str(), fontSize);
 
             if(z >= maxLineWidth)
             {

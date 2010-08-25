@@ -11,8 +11,7 @@
 #include "grrlib/GRRLIB.h"
 #include <gcmodplay.h>
 #include <vector>
-
-#define TEXT_SIZE 100   /**< Maximum length of the text. */
+#include <string>
 
 // Forward declarations
 class Grid;
@@ -66,7 +65,7 @@ private:
     u8 CurrentScreen;
     u8 LastScreen;
     s8 SelectedButton;
-    wchar_t text[TEXT_SIZE];
+    std::wstring text;
 
     u16 TieGame;
     bool RoundFinished;
@@ -83,6 +82,7 @@ private:
     Texture *SplashImg;   /**< Splash screen texture. */
     Texture *HoverImg;    /**< Texture to put over a symbol when selected. */
     Texture *CopiedImg;   /**< Texture to store a temporary copy of the screen. */
+    Texture *GameText;    /**< Game text that does not chnaged including background. */
 
     bool Copied;
 

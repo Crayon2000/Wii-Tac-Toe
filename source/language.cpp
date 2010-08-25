@@ -70,14 +70,12 @@ Language::~Language()
  */
 const char *Language::Text(const char *From)
 {
-    mxml_node_t *Text_Node;
-
     if(From == NULL)
     {
         return "";
     }
 
-    Text_Node = mxmlFindElement(First_Node, First_Node, "translation", "from", From, MXML_DESCEND);
+    mxml_node_t *Text_Node = mxmlFindElement(First_Node, First_Node, "translation", "from", From, MXML_DESCEND);
     if(Text_Node == NULL)
     {
         return "";
@@ -130,6 +128,7 @@ void Language::SetLanguage(s32 Conf_Lang)
 
 /**
  * Count the number of child in a node.
+ * @return Number of child in a node.
  */
 unsigned int Language::ChildCount(mxml_node_t *Up_Node, const char *Name)
 {
@@ -149,25 +148,58 @@ unsigned int Language::ChildCount(mxml_node_t *Up_Node, const char *Name)
 }
 
 /**
- * Get a random winning message.
+ * Get a winning message.
+ * @param[in] Index The index of the message the get.
+ *            If the value is under 0, a random message will be returned.
+ * @return A winning message.
  */
-std::wstring Language::GetRandomWinningMessage()
+std::wstring Language::GetWinningMessage(s8 Index)
 {
-    return WinningMessage[rand() % WinningCount];
+    if(Index < 0)
+    {
+        Index = rand() % WinningCount;
+    }
+    else if(Index >= WinningCount)
+    {
+        return L"";
+    }
+    return WinningMessage[Index];
 }
 /**
- * Get a random tie message.
+ * Get a tie message.
+ * @param[in] Index The index of the message the get.
+ *            If the value is under 0, a random message will be returned.
+ * @return A tie message.
  */
-std::wstring Language::GetRandomTieMessage()
+std::wstring Language::GetTieMessage(s8 Index)
 {
-    return TieMessage[rand() % TieCount];
+    if(Index < 0)
+    {
+        Index = rand() % TieCount;
+    }
+    else if(Index >= TieCount)
+    {
+        return L"";
+    }
+    return TieMessage[Index];
 }
 /**
- * Get a random turn over message.
+ * Get a turn over message.
+ * @param[in] Index The index of the message the get.
+ *            If the value is under 0, a random message will be returned.
+ * @return A turn over message.
  */
-std::wstring Language::GetRandomTurnOverMessage()
+std::wstring Language::GetTurnOverMessage(s8 Index)
 {
-    return TurnOverMessage[rand() % TurnOverCount];
+    if(Index < 0)
+    {
+        Index = rand() % TurnOverCount;
+    }
+    else if(Index >= TurnOverCount)
+    {
+        return L"";
+    }
+    return TurnOverMessage[Index];
 }
 
 /**
