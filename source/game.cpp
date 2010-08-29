@@ -104,14 +104,20 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight) :
     MenuButton.push_back(new Button());
     MenuButton[0]->SetFont(DefaultFont);
     MenuButton[0]->SetLeft((ScreenWidth / 2) - (MenuButton[0]->GetWidth() / 2));
-    MenuButton[0]->SetTop(150);
+    MenuButton[0]->SetTop(92);
     MenuButton[0]->SetCaption(Lang->String("2 Players (1 Wiimote)"));
 
     MenuButton.push_back(new Button());
     MenuButton[1]->SetFont(DefaultFont);
     MenuButton[1]->SetLeft((ScreenWidth / 2) - (MenuButton[1]->GetWidth() / 2));
-    MenuButton[1]->SetTop(250);
+    MenuButton[1]->SetTop(292);
     MenuButton[1]->SetCaption(Lang->String("1 Player (Vs AI)"));
+
+    MenuButton.push_back(new Button());
+    MenuButton[2]->SetFont(DefaultFont);
+    MenuButton[2]->SetLeft((ScreenWidth / 2) - (MenuButton[2]->GetWidth() / 2));
+    MenuButton[2]->SetTop(192);
+    MenuButton[2]->SetCaption(Lang->String("2 Players (2 Wiimote)"));
 
     WTTPlayer = new Player[2];
     WTTPlayer[0].SetSign('X');
@@ -449,6 +455,7 @@ void Game::MenuScreen(bool CopyScreen)
 
     MenuButton[0]->SetSelected(false);
     MenuButton[1]->SetSelected(false);
+    MenuButton[2]->SetSelected(false);
     if(MenuButton[0]->IsInside(Hand[0].GetLeft(), Hand[0].GetTop()))
     {
         MenuButton[0]->SetSelected(true);
@@ -461,12 +468,19 @@ void Game::MenuScreen(bool CopyScreen)
         ButtonOn(1);
         SelectedButton = 1;
     }
+    else if(MenuButton[2]->IsInside(Hand[0].GetLeft(), Hand[0].GetTop()))
+    {
+        MenuButton[2]->SetSelected(true);
+        ButtonOn(2);
+        SelectedButton = 2;
+    }
     else
     {
         SelectedButton = -1;
     }
     MenuButton[0]->Paint();
     MenuButton[1]->Paint();
+    MenuButton[2]->Paint();
 }
 
 /**
@@ -493,7 +507,9 @@ bool Game::ControllerManager()
     {   // Hide cursor
         Hand[0].SetVisible(false);
     }
-    if(WPadData1->ir.valid && CurrentScreen == HOME_SCREEN)
+    if(WPadData1->ir.valid && (CurrentScreen == HOME_SCREEN ||
+        CurrentScreen == START_SCREEN || CurrentScreen == MENU_SCREEN ||
+        (CurrentScreen == GAME_SCREEN && GameMode == modeVsHuman2) ))
     {
         // I don't understand this calculation but it works
         Hand[1].SetLeft((WPadData1->ir.x / ScreenWidth * (ScreenWidth + Hand[1].GetWidth() * 2)) - Hand[1].GetWidth());
@@ -529,6 +545,11 @@ bool Game::ControllerManager()
                         case 1:
                             WTTPlayer[1].SetType(PLAYER_CPU);
                             GameMode = modeVsAI;
+                            ChangeScreen(GAME_SCREEN);
+                            break;
+                        case 2:
+                            WTTPlayer[1].SetType(PLAYER_HUMAN);
+                            GameMode = modeVsHuman2;
                             ChangeScreen(GAME_SCREEN);
                             break;
                     }
@@ -572,24 +593,58 @@ bool Game::ControllerManager()
                 }
                 break;
             default:
+                if((Buttons0 & WPAD_BUTTON_HOME) || (Buttons1 & WPAD_BUTTON_HOME))
+                {
+                    ChangeScreen(HOME_SCREEN);
+                }
+
                 if((Buttons0 & WPAD_BUTTON_A))
                 {
                     if(RoundFinished)
                     {
                         Clear();
                     }
-                    else if(GameGrid->SetPlayer(WTTPlayer[CurrentPlayer].GetSign(), HandX, HandY))
+                    else if(GameMode == modeVsHuman2 && CurrentPlayer == 0)
                     {
-                        TurnIsOver();
+                        if(GameGrid->SetPlayer(WTTPlayer[0].GetSign(), HandX, HandY))
+                        {
+                            TurnIsOver();
+                        }
+                        else
+                        {   // Position is invalid
+                            RUMBLE_Wiimote(WPAD_CHAN_0, 200);  // 200 ms
+                        }
                     }
                     else
-                    {   // Position is invalid
-                        RUMBLE_Wiimote(WPAD_CHAN_0, 200);  // 200 ms
+                    {
+                        if(GameGrid->SetPlayer(WTTPlayer[CurrentPlayer].GetSign(), HandX, HandY))
+                        {
+                            TurnIsOver();
+                        }
+                        else
+                        {   // Position is invalid
+                            RUMBLE_Wiimote(WPAD_CHAN_0, 200);  // 200 ms
+                        }
                     }
                 }
-                else if((Buttons0 & WPAD_BUTTON_HOME) || (Buttons1 & WPAD_BUTTON_HOME))
+
+                if((Buttons1 & WPAD_BUTTON_A) && GameMode == modeVsHuman2)
                 {
-                    ChangeScreen(HOME_SCREEN);
+                    if(RoundFinished)
+                    {
+                        Clear();
+                    }
+                    else if(CurrentPlayer == 1)
+                    {
+                        if(GameGrid->SetPlayer(WTTPlayer[1].GetSign(), HandX, HandY))
+                        {
+                            TurnIsOver();
+                        }
+                        else
+                        {   // Position is invalid
+                            RUMBLE_Wiimote(WPAD_CHAN_1, 200);  // 200 ms
+                        }
+                    }
                 }
         }
     }
@@ -795,16 +850,21 @@ void Game::ButtonOn(s8 NewSelectedButton)
  */
 bool Game::SelectZone()
 {
+    u8 HandID = 0;
+    if(GameMode == modeVsHuman2 && CurrentPlayer == 1)
+    {
+        HandID = 1;
+    }
     if(!RoundFinished && AIThinkLoop == 0)
     {
         for(int x = 0; x < 3; ++x)
         {
             for(int y = 0; y < 3; ++y)
             {
-                if (Hand[0].GetLeft() > Table[x][y].GetX() &&
-                    Hand[0].GetLeft() < (Table[x][y].GetX() + 136) &&
-                    Hand[0].GetTop() > Table[x][y].GetY() &&
-                    Hand[0].GetTop() < (Table[x][y].GetY() + 100))
+                if (Hand[HandID].GetLeft() > Table[x][y].GetX() &&
+                    Hand[HandID].GetLeft() < (Table[x][y].GetX() + 136) &&
+                    Hand[HandID].GetTop() > Table[x][y].GetY() &&
+                    Hand[HandID].GetTop() < (Table[x][y].GetY() + 100))
                 {
                     if(HandX != x || HandY != y)
                     {
@@ -814,7 +874,7 @@ bool Game::SelectZone()
                         {   // Zone is empty
                             ASND_SetVoice(BUTTON_VOICE, VOICE_MONO_16BIT, 44100, 0,
                                 (void *)button_rollover, button_rollover_size, 90, 90, NULL);
-                            RUMBLE_Wiimote(WPAD_CHAN_0, 30);  // 30 ms
+                            RUMBLE_Wiimote(HandID, 30);  // 30 ms
                         }
                     }
                     return true;
@@ -837,7 +897,7 @@ void Game::ChangeCursor()
         Hand[0].SetPlayer(curP1);
         Hand[0].SetAlpha(0xFF);
         Hand[1].SetPlayer(curP2);
-        Hand[1].SetAlpha(0xFF);
+        Hand[1].SetAlpha(0x55);
     }
     else if(CurrentScreen == GAME_SCREEN)
     {
@@ -848,10 +908,24 @@ void Game::ChangeCursor()
             else if(WTTPlayer[CurrentPlayer].GetSign() == 'X')
                 Hand[0].SetPlayer(curX);
             Hand[0].SetAlpha(0xFF);
-            Hand[1].SetVisible(false);
+        }
+        else if(GameMode == modeVsHuman2)
+        {
+            Hand[0].SetPlayer(curX);
+            Hand[1].SetPlayer(curO);
+            if(RoundFinished)
+            {
+                Hand[0].SetAlpha(0xFF);
+                Hand[1].SetAlpha(0xFF);
+            }
+            else
+            {
+                Hand[CurrentPlayer].SetAlpha(0xFF);
+                Hand[!CurrentPlayer].SetAlpha(0x55);
+            }
         }
         else
-        {
+        {   // modeVsAI
             Hand[0].SetPlayer(curX);
             if(CurrentPlayer == 0 || RoundFinished)
             {
@@ -866,13 +940,12 @@ void Game::ChangeCursor()
         }
     }
     else
-    {
+    {   //START_SCREEN or MENU_SCREEN
         Hand[0].SetPlayer(curX);
         Hand[0].SetAlpha(0xFF);
         Hand[1].SetPlayer(curO);
-        Hand[1].SetAlpha(0xFF);
+        Hand[1].SetAlpha(0x55);
     }
-    Hand[1].SetAlpha(0x55);
 }
 
 /**

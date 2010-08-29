@@ -13,12 +13,10 @@ echo Compressing file...
 if errorlevel 1 goto error
 
 echo Zipping source...
-if errorlevel 1 goto error
 zip -q -r wii-tac-toe-src.zip fonts\*.h fonts\*.cpp gfx\*.h audio\*.h languages\*.h source\* lib\* Makefile *.pnproj
 if errorlevel 1 goto error
 
 echo Zipping program...
-if errorlevel 1 goto error
 zip -q wii-tac-toe.zip Wii-Tac-Toe\*
 if errorlevel 1 goto error
 
