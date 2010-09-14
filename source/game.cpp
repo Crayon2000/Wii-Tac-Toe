@@ -3,12 +3,14 @@
 #include <string.h>
 #include <wiiuse/wpad.h>
 #include <ogc/conf.h>
-#include <asndlib.h>
 #include <ogc/lwp_watchdog.h>
 #include <format.hpp>
 #include <algorithm/string/replace.hpp>
+#include "grrlib/GRRLIB.h"
+#include "grrlib_class.h"
 #include "tools.h"
 #include "grid.h"
+#include "audio.h"
 #include "symbol.h"
 #include "button.h"
 #include "cursor.h"
@@ -22,17 +24,8 @@
 #include "../gfx/backg.h"
 #include "../gfx/hover.h"
 
-// Audio
-#include "../audio/button_rollover.h"
-#include "../audio/screen_change.h"
-#include "../audio/tic-tac.h"
-
 // Font
 #include "../fonts/Swis721_Ex_BT.h"
-
-#define MODPLAYER_VOICE 0
-#define BUTTON_VOICE    1
-#define SCREEN_VOICE    2
 
 #define START_SCREEN    0
 #define GAME_SCREEN     1
@@ -152,9 +145,9 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight) :
                     400, DefaultFont, text.c_str(), 20, 0x000000FF);
     SplashImg->CopyScreen(0, 0, true);
 
+    GameAudio = new Audio();
+
     RUMBLE_Init();
-    ASND_Init();
-    ASND_Pause(0);
     NewGame();
 }
 
@@ -193,9 +186,7 @@ Game::~Game()
     }
     delete[] GridSign;
 
-    MODPlay_Unload(&ModTrack);
-    ASND_Pause(1);
-    ASND_End();
+    delete GameAudio;
 }
 
 /**
@@ -353,7 +344,7 @@ void Game::GameScreen(bool CopyScreen)
  */
 void Game::ExitScreen()
 {
-    MODPlay_Pause(&ModTrack, true);
+    GameAudio->PauseMusic(true);
     if(!Copied)
     {   // Copy static element
         switch(LastScreen)
@@ -566,7 +557,7 @@ bool Game::ControllerManager()
             case HOME_SCREEN:
                 if((Buttons0 & WPAD_BUTTON_HOME) || (Buttons1 & WPAD_BUTTON_HOME))
                 {
-                    MODPlay_Pause(&ModTrack, false);
+                    GameAudio->PauseMusic(false);
                     ChangeScreen(LastScreen);
                 }
                 else if((Buttons0 & WPAD_BUTTON_A))
@@ -574,7 +565,7 @@ bool Game::ControllerManager()
                     switch(SelectedButton)
                     {
                         case 0:
-                            MODPlay_Pause(&ModTrack, false);
+                            GameAudio->PauseMusic(false);
                             ChangeScreen(LastScreen);
                             break;
                         case 1:
@@ -730,11 +721,7 @@ void Game::TurnIsOver()
  */
 void Game::NewGame()
 {
-    MODPlay_Init(&ModTrack);
-    MODPlay_SetMOD(&ModTrack, tic_tac);
-    MODPlay_SetVolume(&ModTrack, 48, 48); // Maximum volume is 64
-    MODPlay_SetStereo(&ModTrack, true);
-    MODPlay_Start(&ModTrack);
+    GameAudio->LoadMusic();
 
     PlayerToStart = rand() & 1; // 0 or 1
 
@@ -818,8 +805,7 @@ void Game::ChangeScreen(u8 NewScreen, bool PlaySound)
 {
     if(PlaySound)
     {
-        ASND_SetVoice(SCREEN_VOICE, VOICE_MONO_16BIT, 44100, 0,
-            (void *)screen_change, screen_change_size, 100, 100, NULL);
+        GameAudio->PlaySoundScreenChange(100);
     }
 
     SelectedButton = -1;
@@ -838,8 +824,7 @@ void Game::ButtonOn(s8 NewSelectedButton)
 {
     if(SelectedButton != NewSelectedButton)
     {
-        ASND_SetVoice(BUTTON_VOICE, VOICE_MONO_16BIT, 44100, 0,
-            (void *)button_rollover, button_rollover_size, 80, 80, NULL);
+        GameAudio->PlaySoundButton(80);
         RUMBLE_Wiimote(WPAD_CHAN_0, 50); // 50 ms
     }
 }
@@ -872,8 +857,7 @@ bool Game::SelectZone()
                         HandY = y;
                         if(GameGrid->GetPlayerAtPos(HandX, HandY) == ' ')
                         {   // Zone is empty
-                            ASND_SetVoice(BUTTON_VOICE, VOICE_MONO_16BIT, 44100, 0,
-                                (void *)button_rollover, button_rollover_size, 90, 90, NULL);
+                            GameAudio->PlaySoundButton(90);
                             RUMBLE_Wiimote(HandID, 30);  // 30 ms
                         }
                     }

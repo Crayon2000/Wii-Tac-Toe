@@ -22,7 +22,7 @@ class Player
 public:
     Player();
     virtual ~Player() {};
-    void SetName(std::wstring);
+    void SetName(const std::wstring &AName);
     std::wstring GetName();
     void SetSign(u8);
     u8 GetSign();

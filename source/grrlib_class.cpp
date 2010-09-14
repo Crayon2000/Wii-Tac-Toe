@@ -102,10 +102,7 @@ void Texture::Assign(GRRLIB_texImg *other)
     ofnormaltexx = other->ofnormaltexx;
     ofnormaltexy = other->ofnormaltexy;
 
-    if(data)
-    {
-        free(data);
-    }
+    free(data);
     data = other->data;
 
     free(other);
@@ -178,10 +175,7 @@ void Texture::Load(const std::string &filename)
 void Texture::Create(const u32 w, const u32 h, const u32 Color)
 {
     // Delete texture if already filled
-    if(data)
-    {
-        free(data);
-    }
+    free(data);
 
     data = memalign(32, h * w * 4);
     this->w = w;

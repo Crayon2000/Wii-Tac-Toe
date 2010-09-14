@@ -7,9 +7,6 @@
 #define GameH
 //---------------------------------------------------------------------------
 
-#include "grrlib_class.h"
-#include "grrlib/GRRLIB.h"
-#include <gcmodplay.h>
 #include <vector>
 #include <string>
 
@@ -20,6 +17,8 @@ class Button;
 class Cursor;
 class Player;
 class Language;
+class Audio;
+struct GRRLIB_Font;
 
 /**
  * This is the main class of this project. This is where the magic happens.
@@ -77,6 +76,7 @@ private:
     Grid *GameGrid;
     Language *Lang;
     Symbol **GridSign;
+    Audio *GameAudio;
 
     Texture *GameImg;     /**< Background texture for the game. */
     Texture *SplashImg;   /**< Splash screen texture. */
@@ -94,9 +94,7 @@ private:
     u8 SymbolAlpha;
     bool AlphaDirection;
 
-    MODPlay ModTrack;
-
-    GRRLIB_ttfFont *DefaultFont;
+    GRRLIB_Font *DefaultFont;
 };
 //---------------------------------------------------------------------------
 #endif

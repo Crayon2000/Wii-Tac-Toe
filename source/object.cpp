@@ -6,7 +6,10 @@
 Object::Object() :
     Left(0),
     Top(0),
+    Width(0),
+    Height(0),
     Angle(0.0),
+    Visible(true),
     Color(0xFFFFFFFF)
 {
 }

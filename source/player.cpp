@@ -13,7 +13,7 @@ Player::Player() :
  * Set the player name.
  * @param[in] AName Give a name to the player.
  */
-void Player::SetName(const std::wstring AName)
+void Player::SetName(const std::wstring &AName)
 {
     Name = AName;
 }

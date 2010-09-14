@@ -7,7 +7,7 @@
 
 /**
  * Constructor for the Button class.
-  * @param[in] NewType Button type.
+ * @param[in] NewType Button type.
  */
 Button::Button(buttonType NewType) : Object(),
     Selected(false),
