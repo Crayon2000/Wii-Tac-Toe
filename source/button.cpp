@@ -12,10 +12,10 @@
 Button::Button(buttonType NewType) : Object(),
     Selected(false),
     Caption(L""),
-    Font(NULL)
+    Font(NULL),
+    TextColor(0x000000),
+    Type(NewType)
 {
-    Type = NewType;
-
     switch(Type)
     {
         case btnHomeMenu:
@@ -34,7 +34,6 @@ Button::Button(buttonType NewType) : Object(),
     Width = ButtonImgOff->GetWidth();
     Height = ButtonImgOff->GetHeight();
 
-    TextColor = 0x000000;
     TextHeight = 14;
     TextWidth = 100; // random value
 }

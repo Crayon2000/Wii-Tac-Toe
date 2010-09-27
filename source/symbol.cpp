@@ -7,11 +7,12 @@
 /**
  * Constructor for the Symbol class.
  */
-Symbol::Symbol() : Object()
+Symbol::Symbol() :
+    Object(),
+    Current(NULL)
 {
     ImgO = new Texture(o);
     ImgX = new Texture(x);
-    Current = NULL;
 
     Width = 136;
     Height = 100;
