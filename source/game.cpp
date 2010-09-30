@@ -118,9 +118,9 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight) :
     WTTPlayer[1].SetSign('O');
     WTTPlayer[1].SetName(Lang->String("PLAYER 2"));
 
-    GameImg = new Texture(backg);
-    SplashImg = new Texture(splash);
-    HoverImg = new Texture(hover);
+    GameImg = new Texture(backg, backg_size);
+    SplashImg = new Texture(splash, splash_size);
+    HoverImg = new Texture(hover, hover_size);
     CopiedImg = new Texture(ScreenWidth, ScreenHeight);
     GameText = new Texture(ScreenWidth, ScreenHeight);
 

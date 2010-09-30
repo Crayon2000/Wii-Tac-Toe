@@ -20,15 +20,15 @@ Button::Button(buttonType NewType) : Object(),
     {
         case btnHomeMenu:
             ButtonImgOn = NULL;
-            ButtonImgOff = new Texture(button_home);
+            ButtonImgOff = new Texture(button_home, button_home_size);
             break;
         case btnHome:
             ButtonImgOn = NULL;
-            ButtonImgOff = new Texture(home_button);
+            ButtonImgOff = new Texture(home_button, home_button_size);
             break;
         default:
-            ButtonImgOn = new Texture(button_on);
-            ButtonImgOff = new Texture(button_off);
+            ButtonImgOn = new Texture(button_on, button_on_size);
+            ButtonImgOff = new Texture(button_off, button_off_size);
     }
 
     Width = ButtonImgOff->GetWidth();

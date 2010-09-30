@@ -10,10 +10,10 @@
 Cursor::Cursor() : Object()
 {
     // Load textures
-    CursorImgO = new Texture(hand_o);
-    CursorImgX = new Texture(hand_x);
-    CursorMenu1 = new Texture(player1_point);
-    CursorMenu2 = new Texture(player2_point);
+    CursorImgO = new Texture(hand_o, hand_o_size);
+    CursorImgX = new Texture(hand_x, hand_x_size);
+    CursorMenu1 = new Texture(player1_point, player1_point_size);
+    CursorMenu2 = new Texture(player2_point, player2_point_size);
 
     // Set hotspot
     CursorImgO->SetOffset(48, 45);

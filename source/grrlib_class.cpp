@@ -116,7 +116,14 @@ void Texture::Assign(GRRLIB_texImg *other)
  */
 void Texture::Load(const u8 *Buffer, const u32 Size)
 {
-    if(Buffer[0]==0xFF && Buffer[1]==0xD8 && Buffer[2]==0xFF)
+    if(Buffer[0]==0x00 && Buffer[1]==0x20 && Buffer[2]==0xAF && Buffer[2]==0x30)
+    {   // TPL file
+        if(Size)
+        {
+            //Assign(GRRLIB_LoadTextureTPL(Buffer, Size));
+        }
+    }
+    else if(Buffer[0]==0xFF && Buffer[1]==0xD8 && Buffer[2]==0xFF)
     {   // JPEG image
         if(Size)
         {
