@@ -62,9 +62,9 @@ void Texture::Initialize(void)
     data = NULL;
 
     _Color = 0xFFFFFFFF;
-    _ScaleX = 1.0;
-    _ScaleY = 1.0;
-    _Angle = 0.0;
+    _ScaleX = 1.0f;
+    _ScaleY = 1.0f;
+    _Angle = 0.0f;
 }
 
 /**
@@ -198,8 +198,8 @@ void Texture::Create(const u32 w, const u32 h, const u32 Color)
     nbtilew = 0;
     nbtileh = 0;
     tilestart = 0;
-    ofnormaltexx = 0;
-    ofnormaltexy = 0;
+    ofnormaltexx = 0.0f;
+    ofnormaltexy = 0.0f;
 
     // Initialize the texture with a color
     u32 x, y, offs;

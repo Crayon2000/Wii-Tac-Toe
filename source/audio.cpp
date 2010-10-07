@@ -1,4 +1,4 @@
-#include <asndlib.h>
+#include <aesndlib.h>
 #include <gcmodplay.h>
 #include "audio.h"
 
@@ -7,18 +7,17 @@
 #include "../audio/screen_change.h"
 #include "../audio/tic-tac.h"
 
-#define MODPLAYER_VOICE 0
-#define BUTTON_VOICE    1
-#define SCREEN_VOICE    2
-
 /**
  * Constructor for the Audio class.
  */
 Audio::Audio()
 {
-    ASND_Init();
-    ASND_Pause(0);
+    AESND_Init();
+    AESND_Pause(false);
     ModTrack = new _modplay;
+
+    ScreenVoice = AESND_AllocateVoice(NULL);
+    ButtonVoice = AESND_AllocateVoice(NULL);
 }
 
 /**
@@ -28,8 +27,11 @@ Audio::~Audio()
 {
     MODPlay_Unload(ModTrack);
     delete ModTrack;
-    ASND_Pause(1);
-    ASND_End();
+    AESND_Pause(true);
+    AESND_Reset;
+
+    AESND_FreeVoice(ScreenVoice);
+    AESND_FreeVoice(ButtonVoice);
 }
 
 /**
@@ -58,18 +60,18 @@ void Audio::LoadMusic(s32 Volume)
  * Play the screen change sound FX.
  * @param[in] Volume The sound volume.
  */
-void Audio::PlaySoundScreenChange(s32 Volume)
+void Audio::PlaySoundScreenChange(u16 Volume)
 {
-    ASND_SetVoice(SCREEN_VOICE, VOICE_MONO_16BIT, 44100, 0,
-        (void *)screen_change, screen_change_size, Volume, Volume, NULL);
+    AESND_SetVoiceVolume(ScreenVoice, Volume, Volume);
+    AESND_PlayVoice(ScreenVoice, VOICE_MONO16, (void *)screen_change, screen_change_size, 44100, 0, false);
 }
 
 /**
  * Play the button sound FX.
  * @param[in] Volume The sound volume.
  */
-void Audio::PlaySoundButton(s32 Volume)
+void Audio::PlaySoundButton(u16 Volume)
 {
-    ASND_SetVoice(BUTTON_VOICE, VOICE_MONO_16BIT, 44100, 0,
-        (void *)button_rollover, button_rollover_size, Volume, Volume, NULL);
+    AESND_SetVoiceVolume(ButtonVoice, Volume, Volume);
+    AESND_PlayVoice(ButtonVoice, VOICE_MONO16, (void *)button_rollover, button_rollover_size, 44100, 0, false);
 }

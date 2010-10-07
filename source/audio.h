@@ -8,6 +8,7 @@
 //---------------------------------------------------------------------------
 // Forward declarations
 struct _modplay;
+struct aesndpb_t;
 
 /**
  * This is a class used for the game audio.
@@ -21,10 +22,12 @@ public:
 
     void PauseMusic(bool Paused);
     void LoadMusic(s32 Volume = 48);
-    void PlaySoundScreenChange(s32 Volume);
-    void PlaySoundButton(s32 Volume);
+    void PlaySoundScreenChange(u16 Volume);
+    void PlaySoundButton(u16 Volume);
 private:
     _modplay *ModTrack;
+    aesndpb_t *ScreenVoice;
+    aesndpb_t *ButtonVoice;
 };
 //---------------------------------------------------------------------------
 #endif
