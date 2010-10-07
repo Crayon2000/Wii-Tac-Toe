@@ -131,7 +131,7 @@ void Language::SetLanguage(s32 Conf_Lang)
  * Count the number of child in a node.
  * @return Number of child in a node.
  */
-unsigned int Language::ChildCount(mxml_node_t *Up_Node, const char *Name)
+unsigned int Language::ChildCount(mxml_node_s *Up_Node, const char *Name)
 {
     int Count = 0;
 

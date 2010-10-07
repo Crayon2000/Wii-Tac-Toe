@@ -28,7 +28,7 @@ Audio::~Audio()
     MODPlay_Unload(ModTrack);
     delete ModTrack;
     AESND_Pause(true);
-    AESND_Reset;
+    AESND_Reset();
 
     AESND_FreeVoice(ScreenVoice);
     AESND_FreeVoice(ButtonVoice);
