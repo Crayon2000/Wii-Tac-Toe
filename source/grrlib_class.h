@@ -78,6 +78,8 @@ namespace Screen
     void Exit(void);
     void Render(void);
 
+    void SetBackgroundColor(u8 r, u8 g, u8 b, u8 a = 0xFF);
+    void SetBackgroundColor(const u32 color);
     void FillScreen(const u32 color);
     void SetPixel(const f32 x, const f32 y, const u32 color);
     void Line(const f32 x1, const f32 y1, const f32 x2, const f32 y2, const u32 color);

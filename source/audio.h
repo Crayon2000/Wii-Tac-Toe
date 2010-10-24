@@ -7,7 +7,6 @@
 #define AudioH
 //---------------------------------------------------------------------------
 // Forward declarations
-struct _modplay;
 struct aesndpb_t;
 
 /**
@@ -25,9 +24,9 @@ public:
     void PlaySoundScreenChange(u16 Volume);
     void PlaySoundButton(u16 Volume);
 private:
-    _modplay *ModTrack;
     aesndpb_t *ScreenVoice;
     aesndpb_t *ButtonVoice;
+    bool Paused;
 };
 //---------------------------------------------------------------------------
 #endif

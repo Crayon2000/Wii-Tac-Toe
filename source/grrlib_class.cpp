@@ -471,6 +471,27 @@ void Screen::Exit(void)
 }
 
 /**
+ * Set the background parameter when screen is cleared.
+ * @param r Red component.
+ * @param g Green component.
+ * @param b Blue component.
+ * @param a Alpha component.
+ */
+void Screen::SetBackgroundColor(u8 r, u8 g, u8 b, u8 a)
+{
+    GRRLIB_SetBackgroundColour(r, g, b, a);
+}
+
+/**
+ * Set the background parameter when screen is cleared.
+ * @param color The color to use to set the background.
+ */
+void Screen::SetBackgroundColor(const u32 color)
+{
+    GRRLIB_SetBackgroundColour(R(color), G(color), B(color), A(color));
+}
+
+/**
  * Clear screen with a specific color.
  * @param color The color to use to fill the screen.
  */
