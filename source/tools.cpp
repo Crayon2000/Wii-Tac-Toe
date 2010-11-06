@@ -11,15 +11,15 @@
 typedef struct _rumble_data
 {
     bool rumbeling;  /**< True if Wii Remote is rumbeling, false otherwise. */
-    u64 time2rumble; /**< Time to rumble in milisecond. */
+    u64 time2rumble; /**< Time to rumble in millisecond. */
 } RUMBLE_DATA;
 
 static RUMBLE_DATA Rumble_Info[WPAD_MAX_WIIMOTES];
 
 /**
  * Set rumbeling time for a specific controller.
- * @param[in] chan Controller ID
- * @param[in] rumble_time Time to rumble in milisecond
+ * @param[in] chan Controller ID.
+ * @param[in] rumble_time Time to rumble in millisecond.
  */
 void RUMBLE_Wiimote(s32 chan, int rumble_time)
 {
@@ -70,15 +70,15 @@ void RUMBLE_Verify()
 
 /**
  * Waits for an amount of time in msec.
- * @param[in] milisec Number of milliseconds to wait.
+ * @param[in] millisec Number of milliseconds to wait.
  */
-void msleep(unsigned long milisec)
+void msleep(unsigned long millisec)
 {
     struct timespec req = {0};
-    time_t sec = (int)(milisec / 1000);
-    milisec -= (sec * 1000);
+    time_t sec = (int)(millisec / 1000);
+    millisec -= (sec * 1000);
     req.tv_sec = sec;
-    req.tv_nsec = milisec * 1000000L;
+    req.tv_nsec = millisec * 1000000L;
     while(nanosleep(&req) == -1)
         continue;
 }

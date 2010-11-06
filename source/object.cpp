@@ -151,7 +151,7 @@ void Object::SetVisible(bool Visible)
  * Check if a position is inside the object.
  * @param[in] x X position in pixel.
  * @param[in] y Y position in pixel.
- * @return Return true if a position is inside the object, false otherwize.
+ * @return Return true if a position is inside the object, false otherwise.
  */
 bool Object::IsInside(float x, float y)
 {

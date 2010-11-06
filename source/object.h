@@ -46,7 +46,7 @@ protected:
     unsigned int Width; /**< The width of the object. */
     unsigned int Height;/**< The height of the object. */
     float Angle;        /**< The angle in degree of the object. */
-    bool Visible;       /**< Control the visibility of the objet. If Visible is true, the objet appears. If Visible is false, the objet is not visible. */
+    bool Visible;       /**< Control the visibility of the object. If Visible is true, the object appears. If Visible is false, the object is not visible. */
     u32 Color;          /**< Color of the object (RGBA). */
     //char *Name;
     //void *Parent;

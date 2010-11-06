@@ -57,7 +57,7 @@ void Audio::LoadMusic(s32 Volume)
 {
     GRRMOD_Stop();
     GRRMOD_Start();
-    GRRMOD_SetVolume(Volume);
+    GRRMOD_SetVolume(Volume, Volume);
     Paused = false;
 }
 

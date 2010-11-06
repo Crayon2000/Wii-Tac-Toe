@@ -10,8 +10,8 @@
 #include <gctypes.h>
 #include <string>
 
-#define PLAYER_HUMAN    0   /**< Indentify a human player. */
-#define PLAYER_CPU      1   /**< Indentify a computer player. */
+#define PLAYER_HUMAN    0   /**< Identify a human player. */
+#define PLAYER_CPU      1   /**< Identify a computer player. */
 
 /**
  * This class is used managed players.

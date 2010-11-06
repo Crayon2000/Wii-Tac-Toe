@@ -82,7 +82,7 @@ private:
     Texture *SplashImg;   /**< Splash screen texture. */
     Texture *HoverImg;    /**< Texture to put over a symbol when selected. */
     Texture *CopiedImg;   /**< Texture to store a temporary copy of the screen. */
-    Texture *GameText;    /**< Game text that does not chnaged including background. */
+    Texture *GameText;    /**< Game text that does not changed including background. */
 
     bool Copied;
 
