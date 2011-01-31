@@ -40,14 +40,14 @@ public:
     /**
      * Get the x position.
      */
-    u16 GetX()
+    u16 GetX() const
     {
         return x;
     }
     /**
      * Get the y position.
      */
-    u16 GetY()
+    u16 GetY() const
     {
         return y;
     }

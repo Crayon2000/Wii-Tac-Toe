@@ -20,8 +20,8 @@ public:
     ~Grid();
     bool SetPlayer(u8, u8, u8);
     void SetPlayerAI(u8);
-    u8 GetPlayerAtPos(u8, u8);
-    u8 GetWinner();
+    u8 GetPlayerAtPos(u8, u8) const;
+    u8 GetWinner() const;
     void Clear();
     bool IsFilled();
     bool WinningBoard[3][3];    /**< A board filled with the winning position. */

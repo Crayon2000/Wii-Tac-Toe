@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-Copyright (c) 2010 The GRRLIB Team
+Copyright (c) 2011 The GRRLIB Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -37,7 +37,7 @@ THE SOFTWARE.
 /**
  * Version information for GRRLIB.
  */
-#define GRRLIB_VER_STRING "4.3.2 alpha"
+#define GRRLIB_VER_STRING "4.3.2 beta"
 
 //==============================================================================
 // Includes
@@ -220,7 +220,7 @@ GRR_EXTERN  u32         fb       GRR_INIT(0);
  * @section Links
  * Forum: http://grrlib.santo.fr/forum\n
  * Code: http://code.google.com/p/grrlib\n
- * IRC: <a href="irc://irc.efnet.net/grrlib">##GRRLIB</a> on EFnet
+ * IRC: <a href="irc://irc.efnet.net/grrlib">#GRRLIB</a> on EFnet
  *
  * @section Credits
  * Project Leader : NoNameNo\n
@@ -230,7 +230,7 @@ GRR_EXTERN  u32         fb       GRR_INIT(0);
  * Advisors       : RedShade, Jespa\n
  *
  * @section Licence
- * Copyright (c) 2010 The GRRLIB Team
+ * Copyright (c) 2011 The GRRLIB Team
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal

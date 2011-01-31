@@ -96,7 +96,7 @@ void Grid::SetPlayerAI(u8 Player)
  * @param[in] Y Y coordinate in the grid.
  * @return Player sign.
  */
-u8 Grid::GetPlayerAtPos(u8 X, u8 Y)
+u8 Grid::GetPlayerAtPos(u8 X, u8 Y) const
 {
     return Board[X][Y];
 }
@@ -114,7 +114,7 @@ void Grid::Clear()
  * Return the winner.
  * @return Winning player.
  */
-u8 Grid::GetWinner()
+u8 Grid::GetWinner() const
 {
     return Winner;
 }

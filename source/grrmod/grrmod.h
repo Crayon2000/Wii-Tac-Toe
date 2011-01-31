@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-Copyright (c) 2010 The GRRLIB Team
+Copyright (c) 2011 The GRRLIB Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -87,14 +87,14 @@ char *GRRMOD_GetModType();
  * @section Links
  * Forum: http://grrlib.santo.fr/forum\n
  * Code: http://code.google.com/p/grrlib\n
- * IRC: <a href="irc://irc.efnet.net/grrlib">##GRRLIB</a> on EFnet
+ * IRC: <a href="irc://irc.efnet.net/grrlib">#GRRLIB</a> on EFnet
  *
  * @section Credits
  * Main Coders : NoNameNo, Crayon\n
  * Documentation  : Crayon, NoNameNo\n
  *
  * @section Licence
- * Copyright (c) 2010 The GRRLIB Team
+ * Copyright (c) 2011 The GRRLIB Team
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
