@@ -19,7 +19,7 @@ TARGET		:=	Wii-Tac-Toe
 BUILD		:=	build
 SOURCES		:=	source fonts source/grrlib
 DATA		:=	data
-INCLUDES	:=  source source/freetype source/libjpeg source/pngu source/grrlib source/grrmod source/utfcpp source/boost
+INCLUDES	:=  source source/freetype source/libjpeg source/pngu source/grrlib source/utfcpp source/boost
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -33,7 +33,7 @@ LDFLAGS	=	-g $(MACHDEP) -Wl,-Map,$(notdir $@).map
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project
 #---------------------------------------------------------------------------------
-LIBS	:=	-ljpeg -lpngu -lmxml -lfat -lwiiuse -lbte -lgrrmod -laesnd -logc -lm -lfreetype
+LIBS	:=	-ljpeg -lpngu -lmxml -lfat -lwiiuse -lbte -lmodplay -laesnd -logc -lm -lfreetype
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing

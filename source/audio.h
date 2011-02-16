@@ -7,7 +7,9 @@
 #define AudioH
 //---------------------------------------------------------------------------
 // Forward declarations
-struct aesndpb_t;
+struct _modplay;
+class Sound;
+class Voice;
 
 /**
  * This is a class used for the game audio.
@@ -20,13 +22,15 @@ public:
     ~Audio();
 
     void PauseMusic(bool Paused);
-    void LoadMusic(s32 Volume = 255);
+    void LoadMusic(s32 Volume = 48);
     void PlaySoundScreenChange(u16 Volume);
     void PlaySoundButton(u16 Volume);
 private:
-    aesndpb_t *ScreenVoice;
-    aesndpb_t *ButtonVoice;
-    bool Paused;
+    _modplay *ModTrack;
+    Voice *ScreenVoice;
+    Voice *ButtonVoice;
+    Sound *ChangeSound;
+    Sound *RollOverSound;
 };
 //---------------------------------------------------------------------------
 #endif

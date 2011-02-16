@@ -1,5 +1,7 @@
 #include <aesndlib.h>
-#include <grrmod.h>
+#include <gcmodplay.h>
+#include "voice.h"
+#include "sound.h"
 #include "audio.h"
 
 // Audio files
@@ -10,17 +12,18 @@
 /**
  * Constructor for the Audio class.
  */
-Audio::Audio() :
-    Paused(false)
+Audio::Audio()
 {
     AESND_Init();
     AESND_Pause(false);
 
-    GRRMOD_Init();
-    GRRMOD_SetMOD(tic_tac, tic_tac_size);
+    ModTrack = new _modplay;
+    ModTrack->soundBuf.usr_data = NULL;
 
-    ScreenVoice = AESND_AllocateVoice(NULL);
-    ButtonVoice = AESND_AllocateVoice(NULL);
+    ScreenVoice = new Voice();
+    ButtonVoice = new Voice();
+    ChangeSound = new Sound(VOICE_MONO16, (void *)screen_change, screen_change_size, 44100);
+    RollOverSound = new Sound(VOICE_MONO16, (void *)button_rollover, button_rollover_size, 44100);
 }
 
 /**
@@ -28,12 +31,17 @@ Audio::Audio() :
  */
 Audio::~Audio()
 {
+    if(ModTrack->soundBuf.usr_data != NULL)
+    {
+        MODPlay_Unload(ModTrack);
+    }
+    delete ModTrack;
     AESND_Pause(true);
-    AESND_FreeVoice(ScreenVoice);
-    AESND_FreeVoice(ButtonVoice);
 
-    GRRMOD_Unload();
-    GRRMOD_End();
+    delete ScreenVoice;
+    delete ButtonVoice;
+    delete ChangeSound;
+    delete RollOverSound;
 }
 
 /**
@@ -42,11 +50,7 @@ Audio::~Audio()
  */
 void Audio::PauseMusic(bool Paused)
 {
-    if(this->Paused != Paused)
-    {
-        this->Paused = Paused;
-        GRRMOD_Pause();
-    }
+    MODPlay_Pause(ModTrack, Paused);
 }
 
 /**
@@ -55,10 +59,16 @@ void Audio::PauseMusic(bool Paused)
  */
 void Audio::LoadMusic(s32 Volume)
 {
-    GRRMOD_Stop();
-    GRRMOD_Start();
-    GRRMOD_SetVolume(Volume, Volume);
-    Paused = false;
+    if(ModTrack->soundBuf.usr_data != NULL)
+    {
+        MODPlay_Unload(ModTrack);
+    }
+
+    MODPlay_Init(ModTrack);
+    MODPlay_SetMOD(ModTrack, tic_tac);
+    MODPlay_SetVolume(ModTrack, Volume, Volume); // Maximum volume is 64
+    MODPlay_SetStereo(ModTrack, true);
+    MODPlay_Start(ModTrack);
 }
 
 /**
@@ -67,8 +77,8 @@ void Audio::LoadMusic(s32 Volume)
  */
 void Audio::PlaySoundScreenChange(u16 Volume)
 {
-    AESND_SetVoiceVolume(ScreenVoice, Volume, Volume);
-    AESND_PlayVoice(ScreenVoice, VOICE_MONO16, (void *)screen_change, screen_change_size, 44100, 0, false);
+    ScreenVoice->SetVolume(Volume);
+    ScreenVoice->Play(ChangeSound);
 }
 
 /**
@@ -77,6 +87,6 @@ void Audio::PlaySoundScreenChange(u16 Volume)
  */
 void Audio::PlaySoundButton(u16 Volume)
 {
-    AESND_SetVoiceVolume(ButtonVoice, Volume, Volume);
-    AESND_PlayVoice(ButtonVoice, VOICE_MONO16, (void *)button_rollover, button_rollover_size, 44100, 0, false);
+    ButtonVoice->SetVolume(Volume);
+    ButtonVoice->Play(RollOverSound);
 }
