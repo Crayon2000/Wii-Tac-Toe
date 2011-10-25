@@ -92,7 +92,7 @@ namespace internal
     template <typename u32>
     inline bool is_code_point_valid(u32 cp)
     {
-        return (cp <= CODE_POINT_MAX && !is_surrogate(cp) && cp != 0xfffe && cp != 0xffff);
+        return (cp <= CODE_POINT_MAX && !is_surrogate(cp));
     }
 
     template <typename octet_iterator>
