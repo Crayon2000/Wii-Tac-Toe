@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-Copyright (c) 2011 The GRRLIB Team
+Copyright (c) 2012 The GRRLIB Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -37,7 +37,7 @@ THE SOFTWARE.
 /**
  * Version information for GRRLIB.
  */
-#define GRRLIB_VER_STRING "4.3.2 beta"
+#define GRRLIB_VER_STRING "4.3.2"
 
 //==============================================================================
 // Includes
@@ -84,10 +84,10 @@ typedef  unsigned int  uint;/**< The uint keyword signifies an integral type. */
  * GRRLIB Blending Modes.
  */
 typedef  enum GRRLIB_blendMode {
-    GRRLIB_BLEND_ALPHA  = 0,    /**< Alpha Blending.        */
-    GRRLIB_BLEND_ADD    = 1,    /**< Additive Blending.     */
-    GRRLIB_BLEND_SCREEN = 2,    /**< Alpha Light Blending.  */
-    GRRLIB_BLEND_MULTI  = 3,    /**< Multiply Blending.     */
+    GRRLIB_BLEND_ALPHA  = 0,    /**< Alpha Blending. */
+    GRRLIB_BLEND_ADD    = 1,    /**< Additive Blending. */
+    GRRLIB_BLEND_SCREEN = 2,    /**< Alpha Light Blending. */
+    GRRLIB_BLEND_MULTI  = 3,    /**< Multiply Blending. */
     GRRLIB_BLEND_INV    = 4,    /**< Invert Color Blending. */
 } GRRLIB_blendMode;
 
@@ -230,7 +230,7 @@ GRR_EXTERN  u32         fb       GRR_INIT(0);
  * Advisors       : RedShade, Jespa\n
  *
  * @section Licence
- * Copyright (c) 2011 The GRRLIB Team
+ * Copyright (c) 2012 The GRRLIB Team
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
