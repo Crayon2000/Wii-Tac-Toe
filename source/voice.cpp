@@ -19,7 +19,7 @@ Voice::~Voice()
 }
 
 /**
- * Set the volume.
+ * Set the volume. Volume must be between 0 and 255.
  * @param[in] Volume The volume of the voice.
  */
 void Voice::SetVolume(u16 Volume)
@@ -28,7 +28,7 @@ void Voice::SetVolume(u16 Volume)
 }
 
 /**
- * Set the volume.
+ * Set the volume. Volume must be between 0 and 255.
  * @param[in] LeftVolume The left volume of the voice.
  * @param[in] RightVolume The right volume of the voice.
  */

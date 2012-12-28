@@ -448,7 +448,7 @@ u8 Texture::GetAlpha(void)
 
 /**
  * Initialize video library. Call this once at the beginning your code.
- * @return A integer representating a code:
+ * @return A integer representing a code:
  *         -     0 : The operation completed successfully.
  *         -    -1 : Not enough memory is available to initialize video library.
  *         -    -2 : Failed to add the fat device driver to the devoptab.

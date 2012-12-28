@@ -935,13 +935,15 @@ void Game::ChangeCursor()
 /**
  * This function calculates the number of frames we render each second.
  */
-void Game::CalculateFrameRate() {
+void Game::CalculateFrameRate()
+{
     static u8 frameCount = 0;
     static u32 lastTime;
     u32 currentTime = ticks_to_millisecs(gettime());
 
     ++frameCount;
-    if(currentTime - lastTime > 1000) {
+    if(currentTime - lastTime > 1000)
+    {
         lastTime = currentTime;
         FPS = frameCount;
         frameCount = 0;

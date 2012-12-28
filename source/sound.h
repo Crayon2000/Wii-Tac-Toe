@@ -15,13 +15,13 @@
 class Sound
 {
 private:
-	u32 _format;
-	const void *_buffer;
-	u32 _len;
-	u32 _freq;
+    u32 _format;
+    const void *_buffer;
+    u32 _len;
+    u32 _freq;
 public:
-	Sound(u32 format, const void *buffer, u32 len, u32 frequency);
-	virtual ~Sound();
+    Sound(u32 format, const void *buffer, u32 len, u32 frequency);
+    virtual ~Sound();
 
     const void *GetBuffer() const;
     u32 GetFormat() const;
