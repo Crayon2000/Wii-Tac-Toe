@@ -305,13 +305,17 @@ void Game::GameScreen(bool CopyScreen)
         {
             SymbolAlpha += 2;
             if(SymbolAlpha > 128)
+            {
                 AlphaDirection = !AlphaDirection;
+            }
         }
         else
         {
             SymbolAlpha -= 2;
             if(SymbolAlpha < 5)
+            {
                 AlphaDirection = !AlphaDirection;
+            }
         }
     }
     u8 y;
@@ -373,9 +377,13 @@ void Game::ExitScreen()
     }
 
     if(GRRLIB_PtInRect(0, 0, ScreenWidth, 78, Hand[0].GetLeft(), Hand[0].GetTop()))
+    {
         Rectangle(0, 0, ScreenWidth, 78, 0x30B6EBFF, 1);
+    }
     else
+    {
         Rectangle(0, 0, ScreenWidth, 78, 0x000000FF, 1);
+    }
 
     GRRLIB_PrintfTTFW(30, 20, DefaultFont, Lang->String("HOME Menu").c_str(), 30, 0xFFFFFFFF);
 
@@ -653,9 +661,13 @@ bool Game::ControllerManager()
             ti->tm_year + 1900, ti->tm_mon + 1, ti->tm_mday, ti->tm_hour, ti->tm_min, ti->tm_sec);
 
         if(ScreenShot(path))
+        {
             text = L"A screenshot was taken!!!";
+        }
         else
+        {
             text = L"Screenshot did not work!!!";
+        }
 
         WIILIGHT_TurnOff();
         WPAD_Rumble(WPAD_CHAN_0, 0); // Rumble off
@@ -888,9 +900,13 @@ void Game::ChangeCursor()
         if(GameMode == modeVsHuman1)
         {
             if(WTTPlayer[CurrentPlayer].GetSign() == 'O')
+            {
                 Hand[0].SetPlayer(curO);
+            }
             else if(WTTPlayer[CurrentPlayer].GetSign() == 'X')
+            {
                 Hand[0].SetPlayer(curX);
+            }
             Hand[0].SetAlpha(0xFF);
         }
         else if(GameMode == modeVsHuman2)

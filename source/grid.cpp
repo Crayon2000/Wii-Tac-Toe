@@ -194,7 +194,9 @@ bool Grid::IsFilled()
         for(y = 0; y < 3; ++y)
         {
             if(Board[x][y] == ' ')
+            {
                 return false;
+            }
         }
     }
     return true;

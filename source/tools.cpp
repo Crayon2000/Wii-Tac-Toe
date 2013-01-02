@@ -80,7 +80,9 @@ void msleep(unsigned long millisec)
     req.tv_sec = sec;
     req.tv_nsec = millisec * 1000000L;
     while(nanosleep(&req) == -1)
+    {
         continue;
+    }
 }
 
 /**
@@ -124,8 +126,12 @@ void Draw_FadeIn(Texture *tex, f32 scaleX, f32 scaleY, u16 speed)
     f32 xpos = (Screen::GetWidth() - tex->GetWidth()) / 2;
     f32 ypos = (Screen::GetHeight() - tex->GetHeight()) / 2;
 
-    for(s16 alpha = 0; alpha < 255; alpha += speed) {
-        if(alpha > 255) alpha = 255;
+    for(s16 alpha = 0; alpha < 255; alpha += speed)
+    {
+        if(alpha > 255)
+        {
+            alpha = 255;
+        }
         tex->Draw(xpos, ypos, 0, scaleX, scaleY, 0xFFFFFF00 | alpha);
         GRRLIB_Render();
     }
@@ -143,8 +149,12 @@ void Draw_FadeOut(Texture *tex, f32 scaleX, f32 scaleY, u16 speed)
     f32 xpos = (Screen::GetWidth() - tex->GetWidth()) / 2;
     f32 ypos = (Screen::GetHeight() - tex->GetHeight()) / 2;
 
-    for(s16 alpha = 255; alpha > 0; alpha -= speed) {
-        if(alpha < 0) alpha = 0;
+    for(s16 alpha = 255; alpha > 0; alpha -= speed)
+    {
+        if(alpha < 0)
+        {
+            alpha = 0;
+        }
         tex->Draw(xpos, ypos, 0, scaleX, scaleY, 0xFFFFFF00 | alpha);
         GRRLIB_Render();
     }
