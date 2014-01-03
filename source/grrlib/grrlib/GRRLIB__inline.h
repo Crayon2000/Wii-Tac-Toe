@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-Copyright (c) 2012 The GRRLIB Team
+Copyright (c) 2014 The GRRLIB Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -112,7 +112,6 @@ INLINE  bool              GRRLIB_GetAntiAliasing (void);
 
 //------------------------------------------------------------------------------
 // GRRLIB_texSetup.h - Create and setup textures
-INLINE  GRRLIB_texImg*  GRRLIB_CreateEmptyTexture (const uint w, const uint h);
 INLINE  void            GRRLIB_ClearTex           (GRRLIB_texImg* tex);
 INLINE  void            GRRLIB_FlushTex           (GRRLIB_texImg *tex);
 INLINE  void            GRRLIB_FreeTexture        (GRRLIB_texImg *tex);

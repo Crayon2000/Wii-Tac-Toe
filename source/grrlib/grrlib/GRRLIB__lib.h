@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-Copyright (c) 2012 The GRRLIB Team
+Copyright (c) 2014 The GRRLIB Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -133,6 +133,7 @@ void  GRRLIB_CompoEnd(int posx, int posy, GRRLIB_texImg *tex);
 
 //------------------------------------------------------------------------------
 // GRRLIB_texEdit.c - Modifying the content of a texture
+GRRLIB_texImg*  GRRLIB_CreateEmptyTexture (const uint w, const uint h);
 GRRLIB_texImg*  GRRLIB_LoadTexture    (const u8 *my_img);
 GRRLIB_texImg*  GRRLIB_LoadTexturePNG (const u8 *my_png);
 GRRLIB_texImg*  GRRLIB_LoadTextureJPG (const u8 *my_jpg);

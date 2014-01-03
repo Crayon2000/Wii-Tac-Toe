@@ -185,6 +185,7 @@ bool Grid::IsPlayerWinning(u8 Player)
 
 /**
  * Check if the grid is completely filled.
+ * @return Return true if the grid is completely filled, false otherwise.
  */
 bool Grid::IsFilled()
 {

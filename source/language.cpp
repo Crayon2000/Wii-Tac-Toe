@@ -59,7 +59,9 @@ Language::Language()
 Language::~Language()
 {
     if(First_Node)
+    {
         mxmlDelete(First_Node);
+    }
 
     delete[] WinningMessage;
     delete[] TieMessage;

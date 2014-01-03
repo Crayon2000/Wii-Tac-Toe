@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-Copyright (c) 2012 The GRRLIB Team
+Copyright (c) 2014 The GRRLIB Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -419,5 +419,7 @@ void  GRRLIB_Render (void) {
     VIDEO_Flush();                      // Flush video buffer to screen
     VIDEO_WaitVSync();                  // Wait for screen to update
     // Interlaced screens require two frames to update
-    if (rmode->viTVMode &VI_NON_INTERLACE)  VIDEO_WaitVSync();
+    if (rmode->viTVMode &VI_NON_INTERLACE) {
+        VIDEO_WaitVSync();
+    }
 }

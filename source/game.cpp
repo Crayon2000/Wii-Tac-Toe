@@ -42,6 +42,8 @@ static Point Table[3][3] = {
 
 /**
  * Constructor for the Game class.
+ * @param[in] GameScreenWidth Screen width.
+ * @param[in] GameScreenHeight Screen height.
  */
 Game::Game(u16 GameScreenWidth, u16 GameScreenHeight) :
     FPS(0),
@@ -168,13 +170,13 @@ Game::~Game()
     delete Lang;
     delete[] WTTPlayer;
 
-    for(u8 i=0; i<ExitButton.size(); ++i)
+    for(u8 i=0; i < ExitButton.size(); ++i)
     {
         delete ExitButton[i];
     }
     ExitButton.clear();
 
-    for(u8 i=0; i<MenuButton.size(); ++i)
+    for(u8 i=0; i < MenuButton.size(); ++i)
     {
         delete MenuButton[i];
     }
@@ -603,15 +605,18 @@ bool Game::ControllerManager()
                     {
                         Clear();
                     }
-                    else if(GameMode == modeVsHuman2 && CurrentPlayer == 0)
+                    else if(GameMode == modeVsHuman2)
                     {
-                        if(GameGrid->SetPlayer(WTTPlayer[0].GetSign(), HandX, HandY))
+                        if(CurrentPlayer == 0)
                         {
-                            TurnIsOver();
-                        }
-                        else
-                        {   // Position is invalid
-                            RUMBLE_Wiimote(WPAD_CHAN_0, 200);  // 200 ms
+                            if(GameGrid->SetPlayer(WTTPlayer[0].GetSign(), HandX, HandY))
+                            {
+                                TurnIsOver();
+                            }
+                            else
+                            {   // Position is invalid
+                                RUMBLE_Wiimote(WPAD_CHAN_0, 200);  // 200 ms
+                            }
                         }
                     }
                     else
