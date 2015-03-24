@@ -1,5 +1,5 @@
 @echo off
-set toolkit=D:\Programmes
+set toolkit=E:\Programmes
 set path=%toolkit%;%path%
 
 echo Compiling code...
