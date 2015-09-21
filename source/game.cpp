@@ -427,7 +427,7 @@ void Game::MenuScreen(bool CopyScreen)
 {
     if(!Copied)
     {   // Copy static element
-        FillScreen(0x000000FF);  // Clear screen
+        FillScreen(0x000000FF); // Clear screen
         for(int y = 0; y <=ScreenHeight; y+=8)
         {
             Rectangle(0, y, ScreenWidth, 2, 0xB0B0B030, 1);
@@ -615,7 +615,7 @@ bool Game::ControllerManager()
                             }
                             else
                             {   // Position is invalid
-                                RUMBLE_Wiimote(WPAD_CHAN_0, 200);  // 200 ms
+                                RUMBLE_Wiimote(WPAD_CHAN_0, 200); // 200 ms
                             }
                         }
                     }
@@ -627,7 +627,7 @@ bool Game::ControllerManager()
                         }
                         else
                         {   // Position is invalid
-                            RUMBLE_Wiimote(WPAD_CHAN_0, 200);  // 200 ms
+                            RUMBLE_Wiimote(WPAD_CHAN_0, 200); // 200 ms
                         }
                     }
                 }
@@ -646,7 +646,7 @@ bool Game::ControllerManager()
                         }
                         else
                         {   // Position is invalid
-                            RUMBLE_Wiimote(WPAD_CHAN_1, 200);  // 200 ms
+                            RUMBLE_Wiimote(WPAD_CHAN_1, 200); // 200 ms
                         }
                     }
                 }
@@ -769,8 +769,8 @@ void Game::PrintWrapText(u16 x, u16 y, u16 maxLineWidth,
     const std::string &input, u32 fontSize, u32 TextColor,
     u32 ShadowColor, s8 OffsetX, s8 OffsetY)
 {
-    std::string tmp = input + " ", // Make local copy
-                 tmp2;
+    std::string tmp = input + " "; // Make local copy
+    std::string tmp2;
     std::string::iterator startIndex = tmp.begin(),
                            lastSpace = tmp.begin(),
                            i = tmp.begin();
@@ -820,7 +820,7 @@ void Game::PrintWrapText(u16 x, u16 y, u16 maxLineWidth,
  */
 void Game::ChangeScreen(u8 NewScreen, bool PlaySound)
 {
-    if(PlaySound)
+    if(PlaySound == true)
     {
         GameAudio->PlaySoundScreenChange(100);
     }
