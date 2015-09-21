@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-Copyright (c) 2014 The GRRLIB Team
+Copyright (c) 2015 The GRRLIB Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -81,7 +81,9 @@ GRRLIB_texImg*  GRRLIB_LoadTextureFromFile(const char *filename) {
     unsigned char  *data;
 
     // return NULL it load fails
-    if (GRRLIB_LoadFile(filename, &data) <= 0)  return NULL;
+    if (GRRLIB_LoadFile(filename, &data) <= 0) {
+        return NULL;
+    }
 
     // Convert to texture
     tex = GRRLIB_LoadTexture(data);

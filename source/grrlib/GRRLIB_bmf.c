@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-Copyright (c) 2014 The GRRLIB Team
+Copyright (c) 2015 The GRRLIB Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -87,7 +87,7 @@ void  GRRLIB_FreeBMF (GRRLIB_bytemapFont *bmf) {
     u16 i;
 
     for (i=0; i<256; i++) {
-        if(bmf->charDef[i].data) {
+        if (bmf->charDef[i].data) {
             free(bmf->charDef[i].data);
         }
     }

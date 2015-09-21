@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-Copyright (c) 2014 The GRRLIB Team
+Copyright (c) 2015 The GRRLIB Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -116,7 +116,7 @@ int  GRRLIB_Init (void) {
 
     GX_SetDispCopyGamma(GX_GM_1_0);
 
-    if(rmode->fbWidth <= 0){ printf("GRRLIB " GRRLIB_VER_STRING); }
+    if (rmode->fbWidth <= 0) { printf("GRRLIB " GRRLIB_VER_STRING); }
 
     // Setup the vertex descriptor
     GX_ClearVtxDesc();      // clear all the vertex descriptors
