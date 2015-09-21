@@ -48,7 +48,7 @@ private:
     void Clear();
     void TurnIsOver();
     void NewGame();
-    void PrintWrapText(u16, u16, u16, const std::wstring &, u32, u32, u32, s8, s8);
+    void PrintWrapText(u16, u16, u16, const std::string &, u32, u32, u32, s8, s8);
     void ChangeScreen(u8 NewScreen, bool = true);
     void ButtonOn(s8);
     bool SelectZone();
@@ -64,7 +64,7 @@ private:
     u8 CurrentScreen;
     u8 LastScreen;
     s8 SelectedButton;
-    std::wstring text;
+    std::string text;
 
     u16 TieGame;
     bool RoundFinished;

@@ -1,6 +1,5 @@
 #include "mxml/mxml.h"
 #include <ogc/conf.h>
-#include <utf8.h>
 #include "language.h"
 
 // Languages
@@ -24,32 +23,32 @@ Language::Language()
 
     Up_Node = mxmlFindElement(First_Node, First_Node, "tie_game", NULL, NULL, MXML_DESCEND);
     TieCount = ChildCount(Up_Node, "message");
-    TieMessage = new std::wstring[TieCount];
+    TieMessage = new std::string[TieCount];
     for(Message_Node = mxmlFindElement(Up_Node, Up_Node,"message", NULL, NULL, MXML_DESCEND), i = 0;
         Message_Node != NULL;
         Message_Node = mxmlFindElement(Message_Node, Up_Node, "message", NULL, NULL, MXML_DESCEND))
     {
-        TieMessage[i++] = Utf82Unicode(mxmlElementGetAttr(Message_Node, "text"));
+        TieMessage[i++] = mxmlElementGetAttr(Message_Node, "text");
     }
 
     Up_Node = mxmlFindElement(First_Node, First_Node, "winning_game", NULL, NULL, MXML_DESCEND);
     WinningCount = ChildCount(Up_Node, "message");
-    WinningMessage = new std::wstring[WinningCount];
+    WinningMessage = new std::string[WinningCount];
     for(Message_Node = mxmlFindElement(Up_Node, Up_Node,"message", NULL, NULL, MXML_DESCEND), i = 0;
         Message_Node != NULL;
         Message_Node = mxmlFindElement(Message_Node, Up_Node, "message", NULL, NULL, MXML_DESCEND))
     {
-        WinningMessage[i++] = Utf82Unicode(mxmlElementGetAttr(Message_Node, "text"));
+        WinningMessage[i++] = mxmlElementGetAttr(Message_Node, "text");
     }
 
     Up_Node = mxmlFindElement(First_Node, First_Node, "turn_over", NULL, NULL, MXML_DESCEND);
     TurnOverCount = ChildCount(Up_Node, "message");
-    TurnOverMessage = new std::wstring[TurnOverCount];
+    TurnOverMessage = new std::string[TurnOverCount];
     for(Message_Node = mxmlFindElement(Up_Node, Up_Node,"message", NULL, NULL, MXML_DESCEND), i = 0;
         Message_Node != NULL;
         Message_Node = mxmlFindElement(Message_Node, Up_Node, "message", NULL, NULL, MXML_DESCEND))
     {
-        TurnOverMessage[i++] = Utf82Unicode(mxmlElementGetAttr(Message_Node, "text"));
+        TurnOverMessage[i++] = mxmlElementGetAttr(Message_Node, "text");
     }
 }
 
@@ -71,7 +70,7 @@ Language::~Language()
 /**
  * Load a text from an XML file in memory.
  */
-const char *Language::Text(const char *From)
+std::string Language::String(const char *From)
 {
     if(From == NULL)
     {
@@ -85,14 +84,6 @@ const char *Language::Text(const char *From)
     }
 
     return mxmlElementGetAttr(Text_Node, "to");
-}
-
-/**
- * Load a text from an XML file in memory.
- */
-std::wstring Language::String(const char *From)
-{
-    return Utf82Unicode(Text(From));
 }
 
 /**
@@ -156,7 +147,7 @@ unsigned int Language::ChildCount(mxml_node_s *Up_Node, const char *Name)
  *            If the value is under 0, a random message will be returned.
  * @return A winning message.
  */
-std::wstring Language::GetWinningMessage(s8 Index)
+std::string Language::GetWinningMessage(s8 Index)
 {
     if(Index < 0)
     {
@@ -164,7 +155,7 @@ std::wstring Language::GetWinningMessage(s8 Index)
     }
     else if(Index >= WinningCount)
     {
-        return L"";
+        return "";
     }
     return WinningMessage[Index];
 }
@@ -174,7 +165,7 @@ std::wstring Language::GetWinningMessage(s8 Index)
  *            If the value is under 0, a random message will be returned.
  * @return A tie message.
  */
-std::wstring Language::GetTieMessage(s8 Index)
+std::string Language::GetTieMessage(s8 Index)
 {
     if(Index < 0)
     {
@@ -182,7 +173,7 @@ std::wstring Language::GetTieMessage(s8 Index)
     }
     else if(Index >= TieCount)
     {
-        return L"";
+        return "";
     }
     return TieMessage[Index];
 }
@@ -192,7 +183,7 @@ std::wstring Language::GetTieMessage(s8 Index)
  *            If the value is under 0, a random message will be returned.
  * @return A turn over message.
  */
-std::wstring Language::GetTurnOverMessage(s8 Index)
+std::string Language::GetTurnOverMessage(s8 Index)
 {
     if(Index < 0)
     {
@@ -200,18 +191,7 @@ std::wstring Language::GetTurnOverMessage(s8 Index)
     }
     else if(Index >= TurnOverCount)
     {
-        return L"";
+        return "";
     }
     return TurnOverMessage[Index];
-}
-
-/**
- * Convert a utf-8 string to utf-16.
- * @param[in] text utf-8 string.
- * @return A utf-16 string.
- */
-std::wstring Language::Utf82Unicode(const std::string &text) {
-    std::wstring ret;
-    utf8::utf8to16(text.begin(), text.end(), back_inserter(ret));
-    return ret;
 }

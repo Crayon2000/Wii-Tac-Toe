@@ -11,7 +11,7 @@
  */
 Button::Button(buttonType NewType) : Object(),
     Selected(false),
-    Caption(L""),
+    Caption(""),
     Font(NULL),
     TextColor(0x000000),
     Type(NewType)
@@ -57,7 +57,7 @@ void Button::Paint()
         ButtonImgOff->Draw(Left + 4, Top + 5, 0, 1.0, 1.0, 0x00000055);
     }
     ButtonImgOff->Draw(Left, Top, 0, 1.0, 1.0, 0xFFFFFFFF);
-    GRRLIB_PrintfTTFW(TextLeft, TextTop, Font, Caption.c_str(), TextHeight, TextColor);
+    GRRLIB_PrintfTTF(TextLeft, TextTop, Font, Caption.c_str(), TextHeight, TextColor);
     if(Type == btnStdMenu && Selected)
     {   // Hover color
         ButtonImgOn->Draw(Left, Top, 0, 1.0, 1.0, 0xFFFFFFFF);
@@ -81,22 +81,10 @@ void Button::SetTextHeight(unsigned int NewHeight)
  * Set caption on the button.
  * @param[in] NewCaption Text to put on the button.
  */
-void Button::SetCaption(const char *NewCaption)
-{
-    size_t length = strlen(NewCaption);
-    wchar_t *utf32 = (wchar_t*)malloc(length * sizeof(wchar_t));
-    mbstowcs(utf32, NewCaption, length);
-    SetCaption(utf32);
-}
-
-/**
- * Set caption on the button.
- * @param[in] NewCaption Text to put on the button.
- */
-void Button::SetCaption(const std::wstring &NewCaption)
+void Button::SetCaption(const std::string &NewCaption)
 {
     Caption = NewCaption;
-    TextWidth = GRRLIB_WidthTTFW(Font, Caption.c_str(), TextHeight);
+    TextWidth = GRRLIB_WidthTTF(Font, Caption.c_str(), TextHeight);
     TextTop = Top + (Height / 2) - (TextHeight / 2);
     TextLeft = Left + (Width / 2) - (TextWidth / 2);
     if(Type == btnHome)
