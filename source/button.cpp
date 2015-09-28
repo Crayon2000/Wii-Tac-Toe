@@ -1,9 +1,11 @@
 #include <string.h>
-#include "../gfx/button_on.h"
-#include "../gfx/button_off.h"
-#include "../gfx/home_button.h"
-#include "../gfx/button_home.h"
 #include "button.h"
+
+// Graphics
+#include "button_on_png.h"
+#include "button_off_png.h"
+#include "home_button_png.h"
+#include "button_home_png.h"
 
 /**
  * Constructor for the Button class.
@@ -20,15 +22,15 @@ Button::Button(buttonType NewType) : Object(),
     {
         case btnHomeMenu:
             ButtonImgOn = NULL;
-            ButtonImgOff = new Texture(button_home, button_home_size);
+            ButtonImgOff = new Texture(button_home_png, button_home_png_size);
             break;
         case btnHome:
             ButtonImgOn = NULL;
-            ButtonImgOff = new Texture(home_button, home_button_size);
+            ButtonImgOff = new Texture(home_button_png, home_button_png_size);
             break;
         default:
-            ButtonImgOn = new Texture(button_on, button_on_size);
-            ButtonImgOff = new Texture(button_off, button_off_size);
+            ButtonImgOn = new Texture(button_on_png, button_on_png_size);
+            ButtonImgOff = new Texture(button_off_png, button_off_png_size);
     }
 
     Width = ButtonImgOff->GetWidth();

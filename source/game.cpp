@@ -20,9 +20,9 @@
 #include "game.h"
 
 // Graphics
-#include "../gfx/splash.h"
-#include "../gfx/backg.h"
-#include "../gfx/hover.h"
+#include "splash_png.h"
+#include "backg_png.h"
+#include "hover_png.h"
 
 // Font
 #include "../fonts/Swis721_Ex_BT.h"
@@ -120,9 +120,9 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight) :
     WTTPlayer[1].SetSign('O');
     WTTPlayer[1].SetName(Lang->String("PLAYER 2"));
 
-    GameImg = new Texture(backg, backg_size);
-    SplashImg = new Texture(splash, splash_size);
-    HoverImg = new Texture(hover, hover_size);
+    GameImg = new Texture(backg_png, backg_png_size);
+    SplashImg = new Texture(splash_png, splash_png_size);
+    HoverImg = new Texture(hover_png, hover_png_size);
     CopiedImg = new Texture(ScreenWidth, ScreenHeight);
     GameText = new Texture(ScreenWidth, ScreenHeight);
 

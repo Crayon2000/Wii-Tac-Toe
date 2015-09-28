@@ -1,8 +1,10 @@
-#include "../gfx/hand_x.h"
-#include "../gfx/hand_o.h"
-#include "../gfx/player1_point.h"
-#include "../gfx/player2_point.h"
 #include "cursor.h"
+
+// Graphics
+#include "hand_x_png.h"
+#include "hand_o_png.h"
+#include "player1_point_png.h"
+#include "player2_point_png.h"
 
 /**
  * Constructor for the Cursor class.
@@ -10,10 +12,10 @@
 Cursor::Cursor() : Object()
 {
     // Load textures
-    CursorImgO = new Texture(hand_o, hand_o_size);
-    CursorImgX = new Texture(hand_x, hand_x_size);
-    CursorMenu1 = new Texture(player1_point, player1_point_size);
-    CursorMenu2 = new Texture(player2_point, player2_point_size);
+    CursorImgO = new Texture(hand_o_png, hand_o_png_size);
+    CursorImgX = new Texture(hand_x_png, hand_x_png_size);
+    CursorMenu1 = new Texture(player1_point_png, player1_point_png_size);
+    CursorMenu2 = new Texture(player2_point_png, player2_point_png_size);
 
     // Set hotspot
     CursorImgO->SetOffset(48, 45);

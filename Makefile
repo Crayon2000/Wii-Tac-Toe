@@ -18,7 +18,7 @@ include $(DEVKITPPC)/wii_rules
 TARGET		:=	Wii-Tac-Toe
 BUILD		:=	build
 SOURCES		:=	source fonts source/grrlib
-DATA		:=	data
+DATA		:=	gfx languages
 INCLUDES	:=  source source/freetype source/libjpeg source/pngu source/grrlib source/boost
 
 #---------------------------------------------------------------------------------
@@ -124,6 +124,22 @@ $(OUTPUT).elf: $(OFILES)
 # This rule links in binary data with the .jpg extension
 #---------------------------------------------------------------------------------
 %.jpg.o	:	%.jpg
+#---------------------------------------------------------------------------------
+	@echo $(notdir $<)
+	$(bin2o)
+
+#---------------------------------------------------------------------------------
+# This rule links in binary data with the .png extension
+#---------------------------------------------------------------------------------
+%.png.o	:	%.png
+#---------------------------------------------------------------------------------
+	@echo $(notdir $<)
+	$(bin2o)
+
+#---------------------------------------------------------------------------------
+# This rule links in binary data with the .xml extension
+#---------------------------------------------------------------------------------
+%.xml.o	:	%.xml
 #---------------------------------------------------------------------------------
 	@echo $(notdir $<)
 	$(bin2o)

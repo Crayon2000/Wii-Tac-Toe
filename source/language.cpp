@@ -3,12 +3,12 @@
 #include "language.h"
 
 // Languages
-#include "../languages/english.h"
-#include "../languages/french.h"
-#include "../languages/german.h"
-#include "../languages/dutch.h"
-#include "../languages/spanish.h"
-#include "../languages/italian.h"
+#include "english_xml.h"
+#include "french_xml.h"
+#include "german_xml.h"
+#include "dutch_xml.h"
+#include "spanish_xml.h"
+#include "italian_xml.h"
 
 /**
  * Constructor for the Language class.
@@ -96,26 +96,26 @@ void Language::SetLanguage(s32 Conf_Lang)
     switch(Conf_Lang)
     {
         case CONF_LANG_FRENCH:
-            Root_Node = mxmlLoadString(NULL, (char*)french, MXML_TEXT_CALLBACK);
+            Root_Node = mxmlLoadString(NULL, (char*)french_xml, MXML_TEXT_CALLBACK);
             break;
         case CONF_LANG_GERMAN:
-            Root_Node = mxmlLoadString(NULL, (char*)german, MXML_TEXT_CALLBACK);
+            Root_Node = mxmlLoadString(NULL, (char*)german_xml, MXML_TEXT_CALLBACK);
             break;
         case CONF_LANG_DUTCH:
-            Root_Node = mxmlLoadString(NULL, (char*)dutch, MXML_TEXT_CALLBACK);
+            Root_Node = mxmlLoadString(NULL, (char*)dutch_xml, MXML_TEXT_CALLBACK);
             break;
         case CONF_LANG_SPANISH:
-            Root_Node = mxmlLoadString(NULL, (char*)spanish, MXML_TEXT_CALLBACK);
+            Root_Node = mxmlLoadString(NULL, (char*)spanish_xml, MXML_TEXT_CALLBACK);
             break;
         case CONF_LANG_ITALIAN:
-            Root_Node = mxmlLoadString(NULL, (char*)italian, MXML_TEXT_CALLBACK);
+            Root_Node = mxmlLoadString(NULL, (char*)italian_xml, MXML_TEXT_CALLBACK);
             break;
         case CONF_LANG_JAPANESE:
         case CONF_LANG_KOREAN:
         case CONF_LANG_SIMP_CHINESE:
         case CONF_LANG_TRAD_CHINESE:
         default:    // CONF_LANG_ENGLISH
-            Root_Node = mxmlLoadString(NULL, (char*)english, MXML_TEXT_CALLBACK);
+            Root_Node = mxmlLoadString(NULL, (char*)english_xml, MXML_TEXT_CALLBACK);
     }
     First_Node = mxmlFindElement(Root_Node, Root_Node, "language", NULL, NULL, MXML_DESCEND);
 }

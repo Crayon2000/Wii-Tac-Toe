@@ -1,8 +1,8 @@
 #include "symbol.h"
 
 // Fonts
-#include "../gfx/x.h"
-#include "../gfx/o.h"
+#include "x_png.h"
+#include "o_png.h"
 
 /**
  * Constructor for the Symbol class.
@@ -11,8 +11,8 @@ Symbol::Symbol() :
     Object(),
     Current(NULL)
 {
-    ImgO = new Texture(o);
-    ImgX = new Texture(x);
+    ImgO = new Texture(o_png);
+    ImgX = new Texture(x_png);
 
     Width = 136;
     Height = 100;
