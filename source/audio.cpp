@@ -5,9 +5,9 @@
 #include "audio.h"
 
 // Audio files
-#include "../audio/button_rollover.h"
-#include "../audio/screen_change.h"
-#include "../audio/tic-tac.h"
+#include "button_rollover_raw.h"
+#include "screen_change_raw.h"
+#include "tic_tac_mod.h"
 
 /**
  * Constructor for the Audio class.
@@ -22,8 +22,8 @@ Audio::Audio()
 
     ScreenVoice = new Voice();
     ButtonVoice = new Voice();
-    ChangeSound = new Sound(VOICE_MONO16, (void *)screen_change, screen_change_size, 44100);
-    RollOverSound = new Sound(VOICE_MONO16, (void *)button_rollover, button_rollover_size, 44100);
+    ChangeSound = new Sound(VOICE_MONO16, (void *)screen_change_raw, screen_change_raw_size, 44100);
+    RollOverSound = new Sound(VOICE_MONO16, (void *)button_rollover_raw, button_rollover_raw_size, 44100);
 }
 
 /**
@@ -65,7 +65,7 @@ void Audio::LoadMusic(s32 Volume)
     }
 
     MODPlay_Init(ModTrack);
-    MODPlay_SetMOD(ModTrack, tic_tac);
+    MODPlay_SetMOD(ModTrack, tic_tac_mod);
     MODPlay_SetVolume(ModTrack, Volume, Volume); // Maximum volume is 64
     MODPlay_SetStereo(ModTrack, true);
     MODPlay_Start(ModTrack);
