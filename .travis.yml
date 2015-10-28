@@ -4,17 +4,12 @@ os:
   - linux
 
 before_install:
-  - wget http://sourceforge.net/projects/devkitpro/files/Automated%20Installer/devkitPPCupdate.pl
   - export DEVKITPRO=/home/travis/devkitPro
   - export DEVKITPPC=${DEVKITPRO}/devkitPPC
-  - export DEVKITARM=${DEVKITPRO}/devkitARM
+  - wget http://sourceforge.net/projects/devkitpro/files/Automated%20Installer/devkitPPCupdate.pl
 
 install:
   - sudo perl devkitPPCupdate.pl
 
 script:
-  - echo "$TRAVIS_BUILD_DIR"
-  - echo "$CURDIR"
-  - echo "$(CURDIR)"
-  - echo "TRAVIS_BUILD_DIR: $TRAVIS_BUILD_DIR"
-  - make
+  - make build
