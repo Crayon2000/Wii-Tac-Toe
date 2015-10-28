@@ -96,6 +96,9 @@ export OUTPUT	:=	$(CURDIR)/$(TARGET)
 
 #---------------------------------------------------------------------------------
 $(BUILD):
+	@echo CURDIR ... $(CURDIR)
+	@echo INCLUDE ... $(INCLUDE)
+	@echo CFLAGS ... $(CFLAGS)
 	@[ -d $@ ] || mkdir -p $@
 	@make --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 

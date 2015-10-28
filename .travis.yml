@@ -4,9 +4,9 @@ os:
   - linux
 
 before_install:
+  - wget http://sourceforge.net/projects/devkitpro/files/Automated%20Installer/devkitPPCupdate.pl
   - export DEVKITPRO=/home/travis/devkitPro
   - export DEVKITPPC=${DEVKITPRO}/devkitPPC
-  - wget http://sourceforge.net/projects/devkitpro/files/Automated%20Installer/devkitPPCupdate.pl
 
 install:
   - sudo perl devkitPPCupdate.pl
