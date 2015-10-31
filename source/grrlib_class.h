@@ -7,7 +7,7 @@
 #define GRRLIB_WrapperH
 //---------------------------------------------------------------------------
 
-#include <grrlib.h>
+#include <GRRLIB.h>
 #include <string>
 
 /**
@@ -62,10 +62,10 @@ public:
     u8 GetAlpha(void);
 private:
     void Assign(GRRLIB_texImg *other);
-    u32 _Color;     /**< The color used to draw the texture. By default it is set to 0xFFFFFFFF. */
-    f32 _ScaleX;    /**< The X scale used to draw the texture. By default it is set to 1.0. */
-    f32 _ScaleY;    /**< The Y scale used to draw the texture. By default it is set to 1.0. */
-    f32 _Angle;     /**< The angle used to draw the texture. By default it is set to 0. */
+    u32 _Color;  /**< The color used to draw the texture. By default it is set to 0xFFFFFFFF. */
+    f32 _ScaleX; /**< The X scale used to draw the texture. By default it is set to 1.0. */
+    f32 _ScaleY; /**< The Y scale used to draw the texture. By default it is set to 1.0. */
+    f32 _Angle;  /**< The angle used to draw the texture. By default it is set to 0. */
 };
 
 /**

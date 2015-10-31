@@ -1,11 +1,11 @@
-language: c
+language: cpp
 
 os:
   - linux
 
 before_install:
   - wget http://sourceforge.net/projects/devkitpro/files/Automated%20Installer/devkitPPCupdate.pl
-  - export DEVKITPRO=/home/travis/devkitPro
+  - export DEVKITPRO=$HOME/devkitPro
   - export DEVKITPPC=${DEVKITPRO}/devkitPPC
 
 install:
