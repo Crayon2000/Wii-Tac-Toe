@@ -238,7 +238,7 @@ void Game::Paint()
         Hand[1].Paint();
         Hand[0].Paint();
     }
-    if(ShowFPS)
+    if(ShowFPS == true)
     {
         CalculateFrameRate();
         char strFPS[10];
@@ -287,13 +287,13 @@ void Game::GameScreen(bool CopyScreen)
         // Draw text at the bottom with a shadow offset of 1, 1
         PrintWrapText(130, 420, 390, text, 15, 0x8C8A8CFF, 0x111111FF, 1, 1);
 
-        if(CopyScreen)
+        if(CopyScreen == true)
         {
             CopiedImg->CopyScreen();
             Copied = true;
         }
     }
-    if(CopyScreen)
+    if(CopyScreen == true)
     {
         CopiedImg->Draw(0, 0);
     }
@@ -301,7 +301,7 @@ void Game::GameScreen(bool CopyScreen)
     u32 HoverColor = (WTTPlayer[CurrentPlayer].GetSign() == 'X') ? 0x0093DDFF : 0xDA251DFF;
 
     // Draw grid content
-    if(RoundFinished)
+    if(RoundFinished == true)
     {
         if(AlphaDirection)
         {
@@ -443,7 +443,7 @@ void Game::MenuScreen(bool CopyScreen)
             boost::str(boost::format(Lang->String("Ver. %s")) %"0.8").c_str(),
             12, 0xFFFFFFFF);
 
-        if(CopyScreen)
+        if(CopyScreen == true)
         {
             CopiedImg->CopyScreen();
             Copied = true;
@@ -601,7 +601,7 @@ bool Game::ControllerManager()
 
                 if((Buttons0 & WPAD_BUTTON_A))
                 {
-                    if(RoundFinished)
+                    if(RoundFinished == true)
                     {
                         Clear();
                     }
@@ -634,7 +634,7 @@ bool Game::ControllerManager()
 
                 if((Buttons1 & WPAD_BUTTON_A) && GameMode == modeVsHuman2)
                 {
-                    if(RoundFinished)
+                    if(RoundFinished == true)
                     {
                         Clear();
                     }
@@ -774,9 +774,9 @@ void Game::PrintWrapText(u16 x, u16 y, u16 maxLineWidth,
     std::string::iterator startIndex = tmp.begin(),
                            lastSpace = tmp.begin(),
                            i = tmp.begin();
-    int ypos = y,
-        z = 0,
-        textLeft;
+    int ypos = y;
+    int z = 0;
+    int textLeft;
     const int stepSize = (fontSize * 1.2);
 
     while(i != tmp.end())
@@ -875,7 +875,7 @@ bool Game::SelectZone()
                         if(GameGrid->GetPlayerAtPos(HandX, HandY) == ' ')
                         {   // Zone is empty
                             GameAudio->PlaySoundButton(90);
-                            RUMBLE_Wiimote(HandID, 30);  // 30 ms
+                            RUMBLE_Wiimote(HandID, 30); // 30 ms
                         }
                     }
                     return true;
@@ -918,7 +918,7 @@ void Game::ChangeCursor()
         {
             Hand[0].SetPlayer(curX);
             Hand[1].SetPlayer(curO);
-            if(RoundFinished)
+            if(RoundFinished == true)
             {
                 Hand[0].SetAlpha(0xFF);
                 Hand[1].SetAlpha(0xFF);
