@@ -1,11 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <regex>
 #include <wiiuse/wpad.h>
 #include <ogc/conf.h>
 #include <ogc/lwp_watchdog.h>
 #include <format.hpp>
-#include <algorithm/string/replace.hpp>
 #include "grrlib/GRRLIB.h"
 #include "grrlib_class.h"
 #include "tools.h"
@@ -711,8 +710,8 @@ void Game::TurnIsOver()
         GameWinner = (GameWinner == WTTPlayer[0].GetSign()) ? 0 : 1;
         WTTPlayer[GameWinner].IncScore();
         text = Lang->GetWinningMessage();
-        boost::replace_all(text, "$LOSER$", WTTPlayer[!GameWinner].GetName());
-        boost::replace_all(text, "$WINNER$", WTTPlayer[GameWinner].GetName());
+        text = std::regex_replace(text, std::regex("\\$LOSER\\$"), WTTPlayer[!GameWinner].GetName());
+        text = std::regex_replace(text, std::regex("\\$WINNER\\$"), WTTPlayer[GameWinner].GetName());
         RoundFinished = true;
         SymbolAlpha = 5;
         AlphaDirection = 0;
