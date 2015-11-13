@@ -510,7 +510,7 @@ bool Game::ControllerManager()
     }
     if(WPadData1->ir.valid && (CurrentScreen == HOME_SCREEN ||
         CurrentScreen == START_SCREEN || CurrentScreen == MENU_SCREEN ||
-        (CurrentScreen == GAME_SCREEN && GameMode == modeVsHuman2) ))
+        (CurrentScreen == GAME_SCREEN && GameMode == gameMode::VsHuman2) ))
     {
         // I don't understand this calculation but it works
         Hand[1].SetLeft((WPadData1->ir.x / ScreenWidth * (ScreenWidth + Hand[1].GetWidth() * 2)) - Hand[1].GetWidth());
@@ -540,17 +540,17 @@ bool Game::ControllerManager()
                     {
                         case 0:
                             WTTPlayer[1].SetType(PLAYER_HUMAN);
-                            GameMode = modeVsHuman1;
+                            GameMode = gameMode::VsHuman1;
                             ChangeScreen(GAME_SCREEN);
                             break;
                         case 1:
                             WTTPlayer[1].SetType(PLAYER_CPU);
-                            GameMode = modeVsAI;
+                            GameMode = gameMode::VsAI;
                             ChangeScreen(GAME_SCREEN);
                             break;
                         case 2:
                             WTTPlayer[1].SetType(PLAYER_HUMAN);
-                            GameMode = modeVsHuman2;
+                            GameMode = gameMode::VsHuman2;
                             ChangeScreen(GAME_SCREEN);
                             break;
                     }
@@ -605,7 +605,7 @@ bool Game::ControllerManager()
                     {
                         Clear();
                     }
-                    else if(GameMode == modeVsHuman2)
+                    else if(GameMode == gameMode::VsHuman2)
                     {
                         if(CurrentPlayer == 0)
                         {
@@ -632,7 +632,7 @@ bool Game::ControllerManager()
                     }
                 }
 
-                if((Buttons1 & WPAD_BUTTON_A) && GameMode == modeVsHuman2)
+                if((Buttons1 & WPAD_BUTTON_A) && GameMode == gameMode::VsHuman2)
                 {
                     if(RoundFinished == true)
                     {
@@ -853,7 +853,7 @@ void Game::ButtonOn(s8 NewSelectedButton)
 bool Game::SelectZone()
 {
     u8 HandID = 0;
-    if(GameMode == modeVsHuman2 && CurrentPlayer == 1)
+    if(GameMode == gameMode::VsHuman2 && CurrentPlayer == 1)
     {
         HandID = 1;
     }
@@ -902,7 +902,7 @@ void Game::ChangeCursor()
     }
     else if(CurrentScreen == GAME_SCREEN)
     {
-        if(GameMode == modeVsHuman1)
+        if(GameMode == gameMode::VsHuman1)
         {
             if(WTTPlayer[CurrentPlayer].GetSign() == 'O')
             {
@@ -914,7 +914,7 @@ void Game::ChangeCursor()
             }
             Hand[0].SetAlpha(0xFF);
         }
-        else if(GameMode == modeVsHuman2)
+        else if(GameMode == gameMode::VsHuman2)
         {
             Hand[0].SetPlayer(curX);
             Hand[1].SetPlayer(curO);
@@ -930,7 +930,7 @@ void Game::ChangeCursor()
             }
         }
         else
-        {   // modeVsAI
+        {   // gameMode::VsAI
             Hand[0].SetPlayer(curX);
             if(CurrentPlayer == 0 || RoundFinished)
             {
