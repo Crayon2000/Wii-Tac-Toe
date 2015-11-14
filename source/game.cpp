@@ -4,9 +4,9 @@
 #include <wiiuse/wpad.h>
 #include <ogc/conf.h>
 #include <ogc/lwp_watchdog.h>
-#include <format.hpp>
 #include "grrlib/GRRLIB.h"
 #include "grrlib_class.h"
+#include "format.h"
 #include "tools.h"
 #include "grid.h"
 #include "audio.h"
@@ -136,10 +136,10 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight) :
     // Build Start Screen background
     SplashImg->Draw(0, 0);
     GRRLIB_PrintfTTF(50, 310, DefaultFont,
-        boost::str(boost::format(Lang->String("Programmer: %s")) %"Crayon").c_str(),
+        fmt::sprintf(Lang->String("Programmer: %s"), "Crayon").c_str(),
         11, 0xFFFFFFFF);
     GRRLIB_PrintfTTF(50, 330, DefaultFont,
-        boost::str(boost::format(Lang->String("Graphics: %s")) %"Mr_Nick666").c_str(),
+        fmt::sprintf(Lang->String("Graphics: %s"), "Mr_Nick666").c_str(),
         11, 0xFFFFFFFF);
     text = Lang->String("Press The A Button");
     GRRLIB_PrintfTTF((ScreenWidth / 2) - (GRRLIB_WidthTTF(DefaultFont, text.c_str(), 20) / 2),
@@ -439,7 +439,7 @@ void Game::MenuScreen(bool CopyScreen)
         Rectangle(0, 385, ScreenWidth, 95, 0x000000FF, 1);
 
         GRRLIB_PrintfTTF(500, 40, DefaultFont,
-            boost::str(boost::format(Lang->String("Ver. %s")) %"0.8").c_str(),
+            fmt::sprintf(Lang->String("Ver. %s"), "0.8").c_str(),
             12, 0xFFFFFFFF);
 
         if(CopyScreen == true)
@@ -693,7 +693,7 @@ void Game::Clear()
     GameGrid->Clear();
     CurrentPlayer = PlayerToStart;
     PlayerToStart = !PlayerToStart; // Next other player will start
-    text = boost::str(boost::format(Lang->GetTurnOverMessage()) %WTTPlayer[CurrentPlayer].GetName());
+    text = fmt::sprintf(Lang->GetTurnOverMessage(), WTTPlayer[CurrentPlayer].GetName());
     RoundFinished = false;
     Copied = false;
     ChangeCursor();
@@ -725,7 +725,7 @@ void Game::TurnIsOver()
     else
     {
         CurrentPlayer = !CurrentPlayer; // Change player's turn
-        text = boost::str(boost::format(Lang->GetTurnOverMessage()) %WTTPlayer[CurrentPlayer].GetName());
+        text = fmt::sprintf(Lang->GetTurnOverMessage(), WTTPlayer[CurrentPlayer].GetName());
     }
 
     Copied = false;
