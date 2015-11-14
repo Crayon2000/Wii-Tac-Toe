@@ -14,10 +14,10 @@
 /**
  * Types of button that could be used.
  */
-enum buttonType {
-    btnHome,     /**< Home button with a small house. */
-    btnHomeMenu, /**< Button to go in the HOME menu. A shadow is always present under the button. */
-    btnStdMenu   /**< Button to go in a menu. Change color when the cursor over the button. */
+enum class buttonType : u8 {
+    Home,     /**< Home button with a small house. */
+    HomeMenu, /**< Button to go in the HOME menu. A shadow is always present under the button. */
+    StdMenu   /**< Button to go in a menu. Change color when the cursor over the button. */
 };
 
 /**
@@ -27,7 +27,7 @@ enum buttonType {
 class Button : public Object
 {
 public:
-    Button(buttonType = btnStdMenu);
+    Button(buttonType = buttonType::StdMenu);
     ~Button();
     void Paint();
     void SetCaption(const std::string &);

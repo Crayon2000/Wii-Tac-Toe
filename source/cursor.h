@@ -13,11 +13,11 @@
 /**
  * Types of cursor that could be used.
  */
-enum cursorType {
-    curO,   /**< O cursor. */
-    curX,   /**< X cursor. */
-    curP1,  /**< Player 1 cursor. */
-    curP2   /**< Player 2 cursor. */
+enum class cursorType : u8 {
+    O,   /**< O cursor. */
+    X,   /**< X cursor. */
+    P1,  /**< Player 1 cursor. */
+    P2   /**< Player 2 cursor. */
 };
 
 /**

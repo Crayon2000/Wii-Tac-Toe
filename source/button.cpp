@@ -20,11 +20,11 @@ Button::Button(buttonType NewType) : Object(),
 {
     switch(Type)
     {
-        case btnHomeMenu:
+        case buttonType::HomeMenu:
             ButtonImgOn = NULL;
             ButtonImgOff = new Texture(button_home_png, button_home_png_size);
             break;
-        case btnHome:
+        case buttonType::Home:
             ButtonImgOn = NULL;
             ButtonImgOff = new Texture(home_button_png, home_button_png_size);
             break;
@@ -54,17 +54,17 @@ Button::~Button()
  */
 void Button::Paint()
 {
-    if(Type == btnHomeMenu)
+    if(Type == buttonType::HomeMenu)
     {   // Draw shadow
         ButtonImgOff->Draw(Left + 4, Top + 5, 0, 1.0, 1.0, 0x00000055);
     }
     ButtonImgOff->Draw(Left, Top, 0, 1.0, 1.0, 0xFFFFFFFF);
     GRRLIB_PrintfTTF(TextLeft, TextTop, Font, Caption.c_str(), TextHeight, TextColor);
-    if(Type == btnStdMenu && Selected)
+    if(Type == buttonType::StdMenu && Selected)
     {   // Hover color
         ButtonImgOn->Draw(Left, Top, 0, 1.0, 1.0, 0xFFFFFFFF);
     }
-    else if(Type == btnHomeMenu && Selected)
+    else if(Type == buttonType::HomeMenu && Selected)
     {   // Hover color
         ButtonImgOff->Draw(Left, Top, 0, 1.0, 1.0, 0x0000FF33);
     }
@@ -89,7 +89,7 @@ void Button::SetCaption(const std::string &NewCaption)
     TextWidth = GRRLIB_WidthTTF(Font, Caption.c_str(), TextHeight);
     TextTop = Top + (Height / 2) - (TextHeight / 2);
     TextLeft = Left + (Width / 2) - (TextWidth / 2);
-    if(Type == btnHome)
+    if(Type == buttonType::Home)
     {
         TextLeft += 20;
     }

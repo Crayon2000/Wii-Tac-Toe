@@ -28,7 +28,7 @@ Cursor::Cursor() : Object()
     CursorMenu2->SetHandle(CursorMenu2->GetOffsetX(), CursorMenu2->GetOffsetY());
 
     // Default values
-    SetPlayer(curX);
+    SetPlayer(cursorType::X);
 }
 
 /**
@@ -67,16 +67,16 @@ cursorType Cursor::SetPlayer(cursorType NewCType)
     Type = NewCType;
     switch(Type)
     {
-        case curO:
+        case cursorType::O:
             CurrentCursor = CursorImgO;
             break;
-        case curX:
+        case cursorType::X:
             CurrentCursor = CursorImgX;
             break;
-        case curP1:
+        case cursorType::P1:
             CurrentCursor = CursorMenu1;
             break;
-        case curP2:
+        case cursorType::P2:
             CurrentCursor = CursorMenu2;
             break;
     }

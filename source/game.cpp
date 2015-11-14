@@ -73,20 +73,20 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight) :
     Hand[0].SetVisible(false);
     Hand[1].SetVisible(false);
 
-    ExitButton.push_back(new Button(btnHome));
+    ExitButton.push_back(new Button(buttonType::Home));
     ExitButton[0]->SetFont(DefaultFont);
     ExitButton[0]->SetLeft(430);
     ExitButton[0]->SetTop(20);
     ExitButton[0]->SetTextHeight(20);
     ExitButton[0]->SetCaption(Lang->String("Close"));
 
-    ExitButton.push_back(new Button(btnHomeMenu));
+    ExitButton.push_back(new Button(buttonType::HomeMenu));
     ExitButton[1]->SetFont(DefaultFont);
     ExitButton[1]->SetLeft((ScreenWidth / 2) + 20);
     ExitButton[1]->SetTop(165);
     ExitButton[1]->SetCaption(Lang->String("Reset"));
 
-    ExitButton.push_back(new Button(btnHomeMenu));
+    ExitButton.push_back(new Button(buttonType::HomeMenu));
     ExitButton[2]->SetFont(DefaultFont);
     ExitButton[2]->SetLeft((ScreenWidth / 2) - ExitButton[1]->GetWidth() - 20);
     ExitButton[2]->SetTop(165);
@@ -894,9 +894,9 @@ void Game::ChangeCursor()
 {
     if(CurrentScreen == HOME_SCREEN)
     {
-        Hand[0].SetPlayer(curP1);
+        Hand[0].SetPlayer(cursorType::P1);
         Hand[0].SetAlpha(0xFF);
-        Hand[1].SetPlayer(curP2);
+        Hand[1].SetPlayer(cursorType::P2);
         Hand[1].SetAlpha(0x55);
     }
     else if(CurrentScreen == GAME_SCREEN)
@@ -905,18 +905,18 @@ void Game::ChangeCursor()
         {
             if(WTTPlayer[CurrentPlayer].GetSign() == 'O')
             {
-                Hand[0].SetPlayer(curO);
+                Hand[0].SetPlayer(cursorType::O);
             }
             else if(WTTPlayer[CurrentPlayer].GetSign() == 'X')
             {
-                Hand[0].SetPlayer(curX);
+                Hand[0].SetPlayer(cursorType::X);
             }
             Hand[0].SetAlpha(0xFF);
         }
         else if(GameMode == gameMode::VsHuman2)
         {
-            Hand[0].SetPlayer(curX);
-            Hand[1].SetPlayer(curO);
+            Hand[0].SetPlayer(cursorType::X);
+            Hand[1].SetPlayer(cursorType::O);
             if(RoundFinished == true)
             {
                 Hand[0].SetAlpha(0xFF);
@@ -930,7 +930,7 @@ void Game::ChangeCursor()
         }
         else
         {   // gameMode::VsAI
-            Hand[0].SetPlayer(curX);
+            Hand[0].SetPlayer(cursorType::X);
             if(CurrentPlayer == 0 || RoundFinished)
             {
                 Hand[0].SetAlpha(0xFF);
@@ -945,9 +945,9 @@ void Game::ChangeCursor()
     }
     else
     {   //START_SCREEN or MENU_SCREEN
-        Hand[0].SetPlayer(curX);
+        Hand[0].SetPlayer(cursorType::X);
         Hand[0].SetAlpha(0xFF);
-        Hand[1].SetPlayer(curO);
+        Hand[1].SetPlayer(cursorType::O);
         Hand[1].SetAlpha(0x55);
     }
 }
