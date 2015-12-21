@@ -13,6 +13,7 @@ before_install:
 
 install:
   - sudo perl devkitPPCupdate.pl
+  - ${DEVKITPPC}/bin/powerpc-eabi-gcc.exe --version
 
 script:
   - make build
