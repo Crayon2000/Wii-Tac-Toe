@@ -7,7 +7,6 @@
 #define AudioH
 //---------------------------------------------------------------------------
 // Forward declarations
-struct _modplay;
 class Sound;
 class Voice;
 
@@ -22,11 +21,11 @@ public:
     ~Audio();
 
     void PauseMusic(bool Paused);
-    void LoadMusic(s32 Volume = 48);
+    void LoadMusic(s32 Volume = 255);
     void PlaySoundScreenChange(u16 Volume);
     void PlaySoundButton(u16 Volume);
 private:
-    _modplay *ModTrack;
+    bool Paused;
     Voice *ScreenVoice;
     Voice *ButtonVoice;
     Sound *ChangeSound;

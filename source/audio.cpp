@@ -1,5 +1,5 @@
 #include <aesndlib.h>
-#include <gcmodplay.h>
+#include <grrmod.h>
 #include "voice.h"
 #include "sound.h"
 #include "audio.h"
@@ -12,13 +12,14 @@
 /**
  * Constructor for the Audio class.
  */
-Audio::Audio()
+Audio::Audio() :
+    Paused(false)
 {
     AESND_Init();
     AESND_Pause(false);
 
-    ModTrack = new _modplay;
-    ModTrack->soundBuf.usr_data = NULL;
+    GRRMOD_Init(true);
+    GRRMOD_SetMOD(tic_tac_mod, tic_tac_mod_size);
 
     ScreenVoice = new Voice();
     ButtonVoice = new Voice();
@@ -31,11 +32,8 @@ Audio::Audio()
  */
 Audio::~Audio()
 {
-    if(ModTrack->soundBuf.usr_data != NULL)
-    {
-        MODPlay_Unload(ModTrack);
-    }
-    delete ModTrack;
+    GRRMOD_Unload();
+    GRRMOD_End();
     AESND_Pause(true);
 
     delete ScreenVoice;
@@ -50,7 +48,11 @@ Audio::~Audio()
  */
 void Audio::PauseMusic(bool Paused)
 {
-    MODPlay_Pause(ModTrack, Paused);
+    if(this->Paused != Paused)
+    {
+        this->Paused = Paused;
+        GRRMOD_Pause();
+    }
 }
 
 /**
@@ -59,16 +61,10 @@ void Audio::PauseMusic(bool Paused)
  */
 void Audio::LoadMusic(s32 Volume)
 {
-    if(ModTrack->soundBuf.usr_data != NULL)
-    {
-        MODPlay_Unload(ModTrack);
-    }
-
-    MODPlay_Init(ModTrack);
-    MODPlay_SetMOD(ModTrack, tic_tac_mod);
-    MODPlay_SetVolume(ModTrack, Volume, Volume); // Maximum volume is 64
-    MODPlay_SetStereo(ModTrack, true);
-    MODPlay_Start(ModTrack);
+    GRRMOD_Stop();
+    GRRMOD_Start();
+    GRRMOD_SetVolume(Volume, Volume); // Maximum volume is 255
+    Paused = false;
 }
 
 /**
