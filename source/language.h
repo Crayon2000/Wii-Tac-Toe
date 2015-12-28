@@ -21,7 +21,7 @@ class Language
 public:
     Language();
     ~Language();
-    std::string String(const char *);
+    std::string String(const char *From);
     std::string GetWinningMessage(s8 Index = -1);
     std::string GetTieMessage(s8 Index = -1);
     std::string GetTurnOverMessage(s8 Index = -1);
@@ -35,8 +35,8 @@ private:
     std::string *TieMessage;
     std::string *TurnOverMessage;
 
-    void SetLanguage(s32);
-    unsigned int ChildCount(mxml_node_s *, const char *);
+    void SetLanguage(s32 Conf_Lang);
+    unsigned int ChildCount(mxml_node_s *Up_Node, const char *Name);
 };
 //---------------------------------------------------------------------------
 #endif

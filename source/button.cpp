@@ -60,11 +60,11 @@ void Button::Paint()
     }
     ButtonImgOff->Draw(Left, Top, 0, 1.0, 1.0, 0xFFFFFFFF);
     GRRLIB_PrintfTTF(TextLeft, TextTop, Font, Caption.c_str(), TextHeight, TextColor);
-    if(Type == buttonType::StdMenu && Selected)
+    if(Type == buttonType::StdMenu && Selected == true)
     {   // Hover color
         ButtonImgOn->Draw(Left, Top, 0, 1.0, 1.0, 0xFFFFFFFF);
     }
-    else if(Type == buttonType::HomeMenu && Selected)
+    else if(Type == buttonType::HomeMenu && Selected == true)
     {   // Hover color
         ButtonImgOff->Draw(Left, Top, 0, 1.0, 1.0, 0x0000FF33);
     }

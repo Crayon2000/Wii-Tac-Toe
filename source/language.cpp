@@ -57,7 +57,7 @@ Language::Language()
  */
 Language::~Language()
 {
-    if(First_Node)
+    if(First_Node != NULL)
     {
         mxmlDelete(First_Node);
     }
@@ -128,7 +128,7 @@ unsigned int Language::ChildCount(mxml_node_s *Up_Node, const char *Name)
 {
     int Count = 0;
 
-    if(Up_Node)
+    if(Up_Node != NULL)
     {
         mxml_node_t *Message_Node = NULL;
         for(Message_Node = mxmlFindElement(Up_Node, Up_Node, Name, NULL, NULL, MXML_DESCEND);

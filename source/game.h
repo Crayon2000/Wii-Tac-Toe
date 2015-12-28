@@ -86,7 +86,8 @@ private:
 
     bool Copied;
 
-    u16 ScreenWidth, ScreenHeight;
+    u16 ScreenWidth;
+    u16 ScreenHeight;
 
     u8 AIThinkLoop;
     gameMode GameMode;

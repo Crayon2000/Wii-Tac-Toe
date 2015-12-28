@@ -262,7 +262,7 @@ void Game::StartSreen()
  */
 void Game::GameScreen(bool CopyScreen)
 {
-    if(!Copied)
+    if(Copied == false)
     {   // Copy static element
         GameText->Draw(0, 0); // Background image with some text
 
@@ -350,7 +350,7 @@ void Game::GameScreen(bool CopyScreen)
 void Game::ExitScreen()
 {
     GameAudio->PauseMusic(true);
-    if(!Copied)
+    if(Copied == false)
     {   // Copy static element
         switch(LastScreen)
         {
@@ -424,7 +424,7 @@ void Game::ExitScreen()
  */
 void Game::MenuScreen(bool CopyScreen)
 {
-    if(!Copied)
+    if(Copied == false)
     {   // Copy static element
         FillScreen(0x000000FF); // Clear screen
         for(int y = 0; y <=ScreenHeight; y+=8)
