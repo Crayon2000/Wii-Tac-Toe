@@ -78,9 +78,13 @@ int main(int argc, char **argv)
 
         WPAD_ScanPads();
         if(MyGame->ControllerManager())
+        {
             break;
+        }
         if(HWButton)
+        {
             break;
+        }
 
         Render();
     }

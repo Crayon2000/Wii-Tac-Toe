@@ -692,7 +692,7 @@ bool Game::ControllerManager()
         sprintf(path, "sd:/Screenshot %d-%02d-%02d %02d%02d%02d.png",
             ti->tm_year + 1900, ti->tm_mon + 1, ti->tm_mday, ti->tm_hour, ti->tm_min, ti->tm_sec);
 
-        if(ScreenShot(path))
+        if(ScreenShot(path) == true)
         {
             text = "A screenshot was taken!!!";
         }

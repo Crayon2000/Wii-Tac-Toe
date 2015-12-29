@@ -189,10 +189,9 @@ bool Grid::IsPlayerWinning(u8 Player)
  */
 bool Grid::IsFilled()
 {
-    u8 x, y;
-    for(x = 0; x < 3; ++x)
+    for(u8 x = 0; x < 3; ++x)
     {
-        for(y = 0; y < 3; ++y)
+        for(u8 y = 0; y < 3; ++y)
         {
             if(Board[x][y] == ' ')
             {

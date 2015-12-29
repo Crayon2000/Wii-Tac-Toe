@@ -47,7 +47,7 @@ Cursor::~Cursor()
  */
 void Cursor::Paint()
 {
-    if(Visible)
+    if(Visible == true)
     {
         // Draw the shadow
         CurrentCursor->Draw(Left + 3, Top + 3, Angle, 1, 1, 0x00000000 | ((A(Color) == 0xFF) ? 0x44 : 0x11));

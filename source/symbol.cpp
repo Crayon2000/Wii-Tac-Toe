@@ -32,7 +32,7 @@ Symbol::~Symbol()
  */
 void Symbol::Paint()
 {
-    if(Current)
+    if(Current != NULL)
     {
         Current->Draw(Left, Top, Angle, 1, 1, Color);
     }
