@@ -20,6 +20,7 @@
 
 // Graphics
 #include "splash_png.h"
+#include "splash_arm_png.h"
 #include "backg_png.h"
 #include "hover_png.h"
 
@@ -59,12 +60,11 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight) :
 
     DefaultFont = GRRLIB_LoadTTF(Swis721_Ex_BT, Swis721_Ex_BT_size);
 
-    u8 x, y;
     GridSign = new Symbol*[3];
-    for(x = 0; x < 3; ++x)
+    for(u8 x = 0; x < 3; ++x)
     {
         GridSign[x] = new Symbol[3];
-        for(y = 0; y < 3; ++y)
+        for(u8 y = 0; y < 3; ++y)
         {
             GridSign[x][y].SetLocation(Table[x][y]);
         }
@@ -121,6 +121,7 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight) :
 
     GameImg = new Texture(backg_png, backg_png_size);
     SplashImg = new Texture(splash_png, splash_png_size);
+    SplashArmImg = new Texture(splash_arm_png, splash_arm_png_size);
     HoverImg = new Texture(hover_png, hover_png_size);
     CopiedImg = new Texture(ScreenWidth, ScreenHeight);
     GameText = new Texture(ScreenWidth, ScreenHeight);
@@ -146,6 +147,9 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight) :
                     400, DefaultFont, text.c_str(), 20, 0x000000FF);
     SplashImg->CopyScreen(0, 0, true);
 
+    // Set handle for arm rotation
+    SplashArmImg->SetHandle(8, 70);
+
     GameAudio = new Audio();
 
     RUMBLE_Init();
@@ -160,6 +164,7 @@ Game::~Game()
     delete GameText;
     delete GameImg;
     delete SplashImg;
+    delete SplashArmImg;
     delete HoverImg;
     delete CopiedImg;
     GRRLIB_FreeTTF(DefaultFont);
@@ -253,7 +258,30 @@ void Game::Paint()
  */
 void Game::StartSreen()
 {
-    SplashImg->Draw(0, 0);
+    static f32 ArmRotation = 0;
+    static bool ArmDirection = 0;
+
+    SplashImg->Draw(0, 0); // Background
+
+    if(ArmDirection == 0)
+    {
+        ArmRotation += 0.5f;
+        if(ArmRotation > 40.0f)
+        {
+            ArmDirection = 1;
+        }
+    }
+    else
+    {
+        ArmRotation -= 0.5;
+        if(ArmRotation < -15.0f)
+        {
+            ArmDirection = 0;
+        }
+    }
+    GRRLIB_ClipDrawing(158, 40, 100, 145);
+    SplashArmImg->Draw(146, 62, ArmRotation); // Arm
+    GRRLIB_ClipReset();
 }
 
 /**
