@@ -214,7 +214,7 @@ void Game::Paint()
         case GAME_SCREEN:
             GameScreen(true);
             // AI
-            if(!RoundFinished && WTTPlayer[CurrentPlayer].GetType() == PLAYER_CPU)
+            if(RoundFinished == false && WTTPlayer[CurrentPlayer].GetType() == PLAYER_CPU)
             {   // AI
                 if(AIThinkLoop > (rand() % 10 + 20))
                 {
@@ -884,7 +884,7 @@ bool Game::SelectZone()
     {
         HandID = 1;
     }
-    if(!RoundFinished && AIThinkLoop == 0)
+    if(RoundFinished == false && AIThinkLoop == 0)
     {
         for(int x = 0; x < 3; ++x)
         {
@@ -959,7 +959,7 @@ void Game::ChangeCursor()
         else
         {   // gameMode::VsAI
             Hand[0].SetPlayer(cursorType::X);
-            if(CurrentPlayer == 0 || RoundFinished)
+            if(CurrentPlayer == 0 || RoundFinished == true)
             {
                 Hand[0].SetAlpha(0xFF);
                 Hand[1].SetAlpha(0x55);
