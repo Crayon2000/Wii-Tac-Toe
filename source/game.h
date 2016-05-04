@@ -79,6 +79,7 @@ private:
     Audio *GameAudio;
 
     Texture *GameImg; /**< Background texture for the game. */
+    Texture *GameHoverImg; /**< Hover texture for the game buttons. */
     Texture *SplashImg; /**< Splash screen texture. */
     Texture *SplashArmImg; /**< Arm texture for splash screen. */
     Texture *HoverImg; /**< Texture to put over a symbol when selected. */

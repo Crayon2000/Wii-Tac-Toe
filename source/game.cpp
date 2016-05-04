@@ -22,6 +22,7 @@
 #include "splash_png.h"
 #include "splash_arm_png.h"
 #include "backg_png.h"
+#include "backg_hover_png.h"
 #include "hover_png.h"
 
 // Font
@@ -120,6 +121,7 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight) :
     WTTPlayer[1].SetName(Lang->String("PLAYER 2"));
 
     GameImg = new Texture(backg_png, backg_png_size);
+    GameHoverImg = new Texture(backg_hover_png, backg_hover_png_size);
     SplashImg = new Texture(splash_png, splash_png_size);
     SplashArmImg = new Texture(splash_arm_png, splash_arm_png_size);
     HoverImg = new Texture(hover_png, hover_png_size);
@@ -163,6 +165,7 @@ Game::~Game()
 {
     delete GameText;
     delete GameImg;
+    delete GameHoverImg;
     delete SplashImg;
     delete SplashArmImg;
     delete HoverImg;
@@ -364,11 +367,35 @@ void Game::GameScreen(bool CopyScreen)
         }
     }
 
-    // Draw selection box
-    if(SelectZone() && GameGrid->GetPlayerAtPos(HandX, HandY) == ' ')
+    if(SelectZone() == true)
     {
-        HoverImg->Draw(Table[HandX][HandY].GetX(), Table[HandX][HandY].GetY(),
-            0, 1, 1, HoverColor);
+        // Draw selection box
+        if(GameGrid->GetPlayerAtPos(HandX, HandY) == ' ')
+        {
+            HoverImg->Draw(Table[HandX][HandY].GetX(), Table[HandX][HandY].GetY(),
+                0, 1, 1, HoverColor);
+        }
+    }
+    else
+    {
+        // 40 = radius
+        // 52 = half of image size
+        if(PtInCircle(65, 409, 40, Hand[0].GetLeft(), Hand[0].GetTop()))
+        {
+            GameHoverImg->Draw(65-52, 409.5-52, 0, 1, 1, 0xFFFFFFFF);
+            ButtonOn(0);
+            SelectedButton = 0;
+        }
+        else if(PtInCircle(571, 409, 40, Hand[0].GetLeft(), Hand[0].GetTop()))
+        {
+            GameHoverImg->Draw(571-52, 409.5-52, 0, 1, 1, 0xFFFFFFFF);
+            ButtonOn(1);
+            SelectedButton = 1;
+        }
+        else
+        {
+            SelectedButton = -1;
+        }
     }
 }
 
@@ -628,7 +655,11 @@ bool Game::ControllerManager()
 
                 if((Buttons0 & WPAD_BUTTON_A))
                 {
-                    if(RoundFinished == true)
+                    if(SelectedButton > -1)
+                    {
+                        ChangeScreen(HOME_SCREEN);
+                    }
+                    else if(RoundFinished == true)
                     {
                         Clear();
                     }

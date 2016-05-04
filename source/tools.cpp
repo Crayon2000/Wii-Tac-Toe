@@ -1,6 +1,7 @@
 #include <wiiuse/wpad.h>        // Wiimote
 #include <ogcsys.h>             // nanosleep
 #include <ogc/lwp_watchdog.h>   // gettime
+#include <stdlib.h>             // abs
 
 #include "tools.h"
 #include "grrlib_class.h"
@@ -158,4 +159,29 @@ void Draw_FadeOut(Texture *tex, f32 scaleX, f32 scaleY, u16 speed)
         tex->Draw(xpos, ypos, 0, scaleX, scaleY, 0xFFFFFF00 | alpha);
         GRRLIB_Render();
     }
+}
+
+/**
+ * Determine whether the specified point lies within the specified circle.
+ * @param xo Specifies the x-coordinate of the circle.
+ * @param yo Specifies the y-coordinate of the circle.
+ * @param radius The radius of the circle.
+ * @param wpadx Specifies the x-coordinate of the point.
+ * @param wpady Specifies the y-coordinate of the point.
+ * @return If the specified point lies within the circle, the return value is true otherwise it's false.
+ */
+bool PtInCircle(const int xo, const int yo, const int radius,
+                const int wpadx, const int wpady) {
+    int dx = abs(wpadx - xo);
+    if (dx >  radius) {
+        return false;
+    }
+    int dy = abs(wpady - yo);
+    if (dy >  radius) {    
+        return false;
+    }
+    if (dx+dy <= radius) {
+        return true;
+    }
+    return (dx*dx + dy*dy <= radius*radius);
 }
