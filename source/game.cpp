@@ -177,13 +177,13 @@ Game::~Game()
     delete Lang;
     delete[] WTTPlayer;
 
-    for(u8 i=0; i < ExitButton.size(); ++i)
+    for(u8 i = 0; i < ExitButton.size(); ++i)
     {
         delete ExitButton[i];
     }
     ExitButton.clear();
 
-    for(u8 i=0; i < MenuButton.size(); ++i)
+    for(u8 i = 0; i < MenuButton.size(); ++i)
     {
         delete MenuButton[i];
     }
@@ -350,10 +350,9 @@ void Game::GameScreen(bool CopyScreen)
             }
         }
     }
-    u8 y;
     for(u8 x = 0; x < 3; ++x)
     {
-        for(y = 0; y < 3; ++y)
+        for(u8 y = 0; y < 3; ++y)
         {
             GridSign[x][y].SetPlayer(GameGrid->GetPlayerAtPos(x, y));
             GridSign[x][y].SetColor(0xFFFFFFFF);
@@ -494,7 +493,7 @@ void Game::MenuScreen(bool CopyScreen)
         Rectangle(0, 385, ScreenWidth, 95, 0x000000FF, 1);
 
         GRRLIB_PrintfTTF(500, 40, DefaultFont,
-            fmt::sprintf(Lang->String("Ver. %s"), "0.8").c_str(),
+            fmt::sprintf(Lang->String("Ver. %s"), "1.0.0").c_str(),
             12, 0xFFFFFFFF);
 
         if(CopyScreen == true)
