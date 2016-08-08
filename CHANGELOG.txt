@@ -1,0 +1,47 @@
+==Changelog==
+=== Version 1.0.0 (Unreleased) ===
+
+=== Version 0.8 ===
+* Could now be played with 2 Wii Remotes
+* View FPS when pressing the + button
+* meta.xml is fixed
+* Library update
+** libogc 1.8.11
+** libfat 1.0.11
+** Mini-XML 2.6
+** UTF-8 CPP 2.3.4
+** Boost 1.52
+** GRRLIB 4.3.2
+** FreeType 2.4.4
+** libpngu (libpng 1.6.8 and zlib 1.2.8)
+=== Version 0.7 ===
+* Music
+* A sound is played when changing screens
+* The winning positions are flashing on the grid
+* Player 1 is now in blue (X) and Player 2 in red (O)
+=== Version 0.6 ===
+* Buttons have a rollover sound
+* New cursors for HOME menu, player 2 cursor is disable
+* Wii Remote two could use the HOME button
+* Opacity of the cursor changes while waiting for AI to play
+=== Version 0.5 ===
+* Italian translation 
+* Hide the cursor when IR is not valid
+* The cursor has a shadow
+* New button in the HOME Menu
+* Widescreen support, cursor hotspot and PAL 576i bug (GRRLIB 4.0.0)
+=== Version 0.4 ===
+* French, German, Dutch, and Spanish translation
+* Improved text quality due to FreeType, thanks to wplaat and DrTwox
+* Console/remote power button support, power off the Wii in standby mode
+* Console reset button support, reset the Wii to Main Menu 
+=== Version 0.3 ===
+* Working with Homebrew Channel beta 9
+=== Version 0.2 ===
+* Wii light is turn on when writing to SD card
+* Wordwrap function
+* A different hover color for player 1
+* Fixed finger weird behaviour on screen edge
+* Fade out when exiting game
+=== Version 0.1 ===
+* Original version
