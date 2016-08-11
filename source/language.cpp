@@ -9,6 +9,7 @@
 #include "dutch_xml.h"
 #include "spanish_xml.h"
 #include "italian_xml.h"
+#include "japanese_xml.h"
 
 /**
  * Constructor for the Language class.
@@ -111,6 +112,10 @@ void Language::SetLanguage(s32 Conf_Lang)
             Root_Node = mxmlLoadString(NULL, (char*)italian_xml, MXML_TEXT_CALLBACK);
             break;
         case CONF_LANG_JAPANESE:
+#ifdef DEBUG
+            Root_Node = mxmlLoadString(NULL, (char*)japanese_xml, MXML_TEXT_CALLBACK);
+            break;
+#endif
         case CONF_LANG_KOREAN:
         case CONF_LANG_SIMP_CHINESE:
         case CONF_LANG_TRAD_CHINESE:

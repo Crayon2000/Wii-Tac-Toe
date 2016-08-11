@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language type="english" translator="Crayon">
+    <translation from="Programmer: %s" to="プログラマー：: %s" />
+    <translation from="Graphics: %s" to="グラフィック: %s" />
+    <translation from="Press The A Button" to="A配列のボタンを押します" />
+
+    <translation from="Ver. %s" to="バージョン %s" />
+    <translation from="2 Players (1 Wiimote)" to="2プレーヤー（1 Wiiリモコン）" />
+    <translation from="2 Players (2 Wiimote)" to="2プレーヤー（2 Wiiリモコン）" />
+    <translation from="1 Player (Vs AI)" to="1プレーヤー（対人工知能）" />
+
+    <translation from="HOME Menu" to="HOMEメニュー" />
+    <translation from="Close" to="閉じる" />
+    <translation from="Reset" to="リセット" />
+    <translation from="Return to Loader" to="ローダに戻ります" />
+
+    <translation from="PLAYER 1" to="プレーヤー1" />
+    <translation from="PLAYER 2" to="プレーヤー2" />
+    <translation from="TIE GAME" to="引き分けの試合" />
+
+    <!-- Variable $WINNER$ and $LOSER$ could be used -->
+    <winning_game>
+        <message text="$WINNER$はこのラウンドを獲得しました。" />
+        <message text="$WINNERは最高$ですか？" />
+        <message text="ゲームはあなたは、$WINNER$です。" />
+        <message text="$WINNERの$ルール。" />
+        <message text="$LOSER$のために残念。" />
+        <message text="より良い運次回、$LOSER$！" />
+        <message text="$LOSER$は、あなたが本当に吸います。" />
+        <message text="$LOSER$はもう少し練習してください。" />
+    </winning_game>
+
+    <tie_game>
+        <message text="ゲームを結ぶ、それは吸います。" />
+        <message text="あなたの両方がこの1を失います。" />
+        <message text="なし勝者なし、敗者。" />
+        <message text="あなたの両方があなたの時間を無駄に、それは引き分けです。" />
+    </tie_game>
+
+    <turn_over>
+        <message text="%sの、それはあなたの番です。" />
+        <message text="%sのを待っています。" />
+        <message text="%sがの次の動きで考えています。" />
+        <message text="%sがWiiリモコン取ると果たすべきです。" />
+        <message text="%sの、遊ぼう。" />
+        <message text="%sが今プレイする必要があります。" />
+    </turn_over>
+</language>
