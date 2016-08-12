@@ -1,6 +1,16 @@
 ==Changelog==
 === Version 1.0.0 (Unreleased) ===
-
+* The arm of the Wii Remote is now moving on the Start screen.
+* The two buttons at the bottom of the Game screen will open the HOME Menu.
+* Library update
+** libogc 1.8.12
+** libfat 1.0.14
+** Mini-XML 2.10
+** fmt 3.0.0
+** GRRMOD (997013aafbe9ee45e76c83cecedf0201ca8036a0)
+** GRRLIB (33d044824bd315d55702b25fac6ff6cbb43fa441)
+** FreeType 2.4.12
+** libpngu (libpng 1.6.23 and zlib 1.2.8)
 === Version 0.8 ===
 * Could now be played with 2 Wii Remotes
 * View FPS when pressing the + button
