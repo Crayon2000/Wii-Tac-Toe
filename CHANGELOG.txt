@@ -1,5 +1,5 @@
 ==Changelog==
-=== Version 1.0.0 (Unreleased) ===
+=== Version 1.0.0 ===
 * The arm of the Wii Remote is now moving on the Start screen.
 * The two buttons at the bottom of the Game screen will open the HOME Menu.
 * Library update
@@ -22,7 +22,7 @@
 ** UTF-8 CPP 2.3.4
 ** Boost 1.52
 ** GRRLIB 4.3.2
-** FreeType 2.4.4
+** FreeType 2.4.3
 ** libpngu (libpng 1.6.8 and zlib 1.2.8)
 === Version 0.7 ===
 * Music
