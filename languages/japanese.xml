@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language type="english" translator="Crayon">
-    <translation from="Programmer: %s" to="プログラマー：: %s" />
+    <translation from="Programmer: %s" to="プログラマー: %s" />
     <translation from="Graphics: %s" to="グラフィック: %s" />
     <translation from="Press The A Button" to="A配列のボタンを押します" />
 
@@ -21,9 +21,9 @@
     <!-- Variable $WINNER$ and $LOSER$ could be used -->
     <winning_game>
         <message text="$WINNER$はこのラウンドを獲得しました。" />
-        <message text="$WINNERは最高$ですか？" />
+        <message text="$WINNER$は最高のですか？" />
         <message text="ゲームはあなたは、$WINNER$です。" />
-        <message text="$WINNERの$ルール。" />
+        <message text="$WINNER$ルール。" />
         <message text="$LOSER$のために残念。" />
         <message text="より良い運次回、$LOSER$！" />
         <message text="$LOSER$は、あなたが本当に吸います。" />
