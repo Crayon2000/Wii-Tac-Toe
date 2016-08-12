@@ -10,8 +10,13 @@
 #include <gctypes.h>
 #include <string>
 
-#define PLAYER_HUMAN    0 /**< Identify a human player. */
-#define PLAYER_CPU      1 /**< Identify a computer player. */
+/**
+ * Types of player.
+ */
+enum class playerType : u8 {
+    Human, /**< Identify a human player. */
+    CPU    /**< Identify a computer player. */
+};
 
 /**
  * This class is used managed players.
@@ -29,13 +34,13 @@ public:
     unsigned int GetScore();
     void IncScore();
     void ResetScore();
-    void SetType(u8);
-    u8 GetType();
+    void SetType(playerType);
+    playerType GetType();
 private:
     unsigned int Score;
     std::string Name;
     u8 Sign;
-    u8 Type;
+    playerType Type;
 };
 //---------------------------------------------------------------------------
 #endif

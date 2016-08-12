@@ -217,7 +217,7 @@ void Game::Paint()
         case GAME_SCREEN:
             GameScreen(true);
             // AI
-            if(RoundFinished == false && WTTPlayer[CurrentPlayer].GetType() == PLAYER_CPU)
+            if(RoundFinished == false && WTTPlayer[CurrentPlayer].GetType() == playerType::CPU)
             {   // AI
                 if(AIThinkLoop > (rand() % 10 + 20))
                 {
@@ -592,17 +592,17 @@ bool Game::ControllerManager()
                     switch(SelectedButton)
                     {
                         case 0:
-                            WTTPlayer[1].SetType(PLAYER_HUMAN);
+                            WTTPlayer[1].SetType(playerType::Human);
                             GameMode = gameMode::VsHuman1;
                             ChangeScreen(GAME_SCREEN);
                             break;
                         case 1:
-                            WTTPlayer[1].SetType(PLAYER_CPU);
+                            WTTPlayer[1].SetType(playerType::CPU);
                             GameMode = gameMode::VsAI;
                             ChangeScreen(GAME_SCREEN);
                             break;
                         case 2:
-                            WTTPlayer[1].SetType(PLAYER_HUMAN);
+                            WTTPlayer[1].SetType(playerType::Human);
                             GameMode = gameMode::VsHuman2;
                             ChangeScreen(GAME_SCREEN);
                             break;
@@ -827,10 +827,9 @@ void Game::PrintWrapText(u16 x, u16 y, u16 maxLineWidth,
     u32 ShadowColor, s8 OffsetX, s8 OffsetY)
 {
     std::string tmp = input + " "; // Make local copy
-    std::string tmp2;
-    std::string::iterator startIndex = tmp.begin(),
-                           lastSpace = tmp.begin(),
-                           i = tmp.begin();
+    std::string::iterator startIndex = tmp.begin();
+    std::string::iterator lastSpace = tmp.begin();
+    std::string::iterator i = tmp.begin();
     int ypos = y;
     int z = 0;
     int textLeft;
@@ -840,6 +839,7 @@ void Game::PrintWrapText(u16 x, u16 y, u16 maxLineWidth,
     {
         if(*i == L' ')
         {
+            std::string tmp2;
             z = GRRLIB_WidthTTF(DefaultFont, tmp2.assign(startIndex, i).c_str(), fontSize);
 
             if(z >= maxLineWidth)

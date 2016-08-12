@@ -5,7 +5,7 @@
  */
 Player::Player() :
     Score(0),
-    Type(PLAYER_HUMAN)
+    Type(playerType::Human)
 {
 }
 
@@ -74,7 +74,7 @@ void Player::ResetScore()
  * Set the player type.
  * @param[in] AType Give the type of player.
  */
-void Player::SetType(u8 AType)
+void Player::SetType(playerType AType)
 {
     Type = AType;
 }
@@ -83,7 +83,7 @@ void Player::SetType(u8 AType)
  * Get the player type.
  * @return Player type.
  */
-u8 Player::GetType()
+playerType Player::GetType()
 {
     return Type;
 }
