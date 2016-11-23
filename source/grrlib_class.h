@@ -7,7 +7,7 @@
 #define GRRLIB_WrapperH
 //---------------------------------------------------------------------------
 
-#include <GRRLIB.h>
+#include <grrlib.h>
 #include <string>
 
 /**
