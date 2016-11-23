@@ -1,5 +1,7 @@
 # Wii-Tac-Toe
 
+[![Build Status](https://travis-ci.org/Crayon2000/Wii-Tac-Toe.svg?branch=master)](https://travis-ci.org/Crayon2000/Wii-Tac-Toe)
+
 Wii-Tac-Toe is a Tic-Tac-Toe game for the Nintendo Wii. It was programmed in C++ using devkitPro along with GRRLIB.
 
 The game can be played alone vs the CPU or with a friend using one Wii Remote controller. The game AI does not always do the same moves, so the fun never stop.
