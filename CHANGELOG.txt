@@ -1,4 +1,10 @@
 ==Changelog==
+=== Unreleased ===
+* Library update
+** libogc 1.8.16
+** libfat 1.1.0
+** fmt 3.0.1
+** GRRLIB (f56f3a74613a54c43c42f1f2fabea637037eccf4)
 === Version 1.0.0 ===
 * The arm of the Wii Remote is now moving on the Start screen.
 * The two buttons at the bottom of the Game screen will open the HOME Menu.
