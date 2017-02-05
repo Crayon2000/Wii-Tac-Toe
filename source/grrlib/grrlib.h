@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-Copyright (c) 2009-2016 The GRRLIB Team
+Copyright (c) 2009-2017 The GRRLIB Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -183,18 +183,14 @@ GRR_EXTERN  void        *xfb[2]  GRR_INITS(NULL, NULL);
 GRR_EXTERN  u32         fb       GRR_INIT(0);
 //==============================================================================
 // procedure and function prototypes
-// Inline function handling - http://www.greenend.org.uk/rjk/2003/03/inline.html
+// Inline function handling
 //==============================================================================
 #include "grrlib/GRRLIB__lib.h"
 
 #if defined __GRRLIB_CORE__
 #  define INLINE
 #else
-# if __GNUC__ && !__GNUC_STDC_INLINE__
 #  define INLINE static inline
-# else
-#  define INLINE inline
-# endif
 #endif
 #include "grrlib/GRRLIB__inline.h"
 
@@ -230,7 +226,7 @@ GRR_EXTERN  u32         fb       GRR_INIT(0);
  * Advisors       : RedShade, Jespa\n
  *
  * @section Licence
- * Copyright (c) 2009-2016 The GRRLIB Team
+ * Copyright (c) 2009-2017 The GRRLIB Team
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
