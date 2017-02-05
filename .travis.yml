@@ -9,7 +9,7 @@ env:
     - DEVKITPPC=${DEVKITPRO}/devkitPPC
 
 before_install:
-  - wget http://raw.githubusercontent.com/devkitPro/installer/master/perl/devkitPPCupdate.pl
+  - wget https://raw.githubusercontent.com/devkitPro/installer/master/perl/devkitPPCupdate.pl
 
 install:
   - sudo perl devkitPPCupdate.pl

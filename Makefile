@@ -26,7 +26,7 @@ INCLUDES	:=	source source/freetype source/libjpeg source/pngu source/grrlib sour
 #---------------------------------------------------------------------------------
 
 CFLAGS	= -g -O2 -Wall $(MACHDEP) $(INCLUDE)
-CXXFLAGS	=	-std=gnu++14 $(CFLAGS)
+CXXFLAGS	=	-std=gnu++17 $(CFLAGS)
 
 LDFLAGS	=	-g $(MACHDEP) -Wl,-Map,$(notdir $@).map
 
