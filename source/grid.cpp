@@ -31,7 +31,7 @@ bool Grid::SetPlayer(u8 Player, u8 X, u8 Y)
     {
         Board[X][Y] = Player;
         memset(WinningBoard, false, sizeof(WinningBoard));
-        if(IsPlayerWinning(Player))
+        if(IsPlayerWinning(Player) == true)
         {
             Winner = Player;
         }
@@ -58,7 +58,7 @@ void Grid::SetPlayerAI(u8 Player)
             if(TestBoard[x][y] == ' ')
             {
                 TestBoard[x][y] = Player;
-                if(IsPlayerWinning(Player, TestBoard))
+                if(IsPlayerWinning(Player, TestBoard) == true)
                 {
                     SetPlayer(Player, x, y);
                     return;
@@ -77,7 +77,7 @@ void Grid::SetPlayerAI(u8 Player)
             if(TestBoard[x][y] == ' ')
             {
                 TestBoard[x][y] = Opponent;
-                if(IsPlayerWinning(Opponent, TestBoard))
+                if(IsPlayerWinning(Opponent, TestBoard) == true)
                 {
                     SetPlayer(Player, x, y);
                     return;

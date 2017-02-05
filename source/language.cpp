@@ -18,38 +18,31 @@ Language::Language()
 {
     SetLanguage(CONF_GetLanguage());
 
-    u8 i;
     mxml_node_t *Message_Node;
     mxml_node_t *Up_Node;
 
     Up_Node = mxmlFindElement(First_Node, First_Node, "tie_game", NULL, NULL, MXML_DESCEND);
-    TieCount = ChildCount(Up_Node, "message");
-    TieMessage = new std::string[TieCount];
-    for(Message_Node = mxmlFindElement(Up_Node, Up_Node,"message", NULL, NULL, MXML_DESCEND), i = 0;
+    for(Message_Node = mxmlFindElement(Up_Node, Up_Node,"message", NULL, NULL, MXML_DESCEND);
         Message_Node != NULL;
         Message_Node = mxmlFindElement(Message_Node, Up_Node, "message", NULL, NULL, MXML_DESCEND))
     {
-        TieMessage[i++] = mxmlElementGetAttr(Message_Node, "text");
+        TieMessage.push_back(mxmlElementGetAttr(Message_Node, "text"));
     }
 
     Up_Node = mxmlFindElement(First_Node, First_Node, "winning_game", NULL, NULL, MXML_DESCEND);
-    WinningCount = ChildCount(Up_Node, "message");
-    WinningMessage = new std::string[WinningCount];
-    for(Message_Node = mxmlFindElement(Up_Node, Up_Node,"message", NULL, NULL, MXML_DESCEND), i = 0;
+    for(Message_Node = mxmlFindElement(Up_Node, Up_Node,"message", NULL, NULL, MXML_DESCEND);
         Message_Node != NULL;
         Message_Node = mxmlFindElement(Message_Node, Up_Node, "message", NULL, NULL, MXML_DESCEND))
     {
-        WinningMessage[i++] = mxmlElementGetAttr(Message_Node, "text");
+        WinningMessage.push_back(mxmlElementGetAttr(Message_Node, "text"));
     }
 
     Up_Node = mxmlFindElement(First_Node, First_Node, "turn_over", NULL, NULL, MXML_DESCEND);
-    TurnOverCount = ChildCount(Up_Node, "message");
-    TurnOverMessage = new std::string[TurnOverCount];
-    for(Message_Node = mxmlFindElement(Up_Node, Up_Node,"message", NULL, NULL, MXML_DESCEND), i = 0;
+    for(Message_Node = mxmlFindElement(Up_Node, Up_Node,"message", NULL, NULL, MXML_DESCEND);
         Message_Node != NULL;
         Message_Node = mxmlFindElement(Message_Node, Up_Node, "message", NULL, NULL, MXML_DESCEND))
     {
-        TurnOverMessage[i++] = mxmlElementGetAttr(Message_Node, "text");
+        TurnOverMessage.push_back(mxmlElementGetAttr(Message_Node, "text"));
     }
 }
 
@@ -62,10 +55,6 @@ Language::~Language()
     {
         mxmlDelete(First_Node);
     }
-
-    delete[] WinningMessage;
-    delete[] TieMessage;
-    delete[] TurnOverMessage;
 }
 
 /**
@@ -126,27 +115,6 @@ void Language::SetLanguage(s32 Conf_Lang)
 }
 
 /**
- * Count the number of child in a node.
- * @return Number of child in a node.
- */
-unsigned int Language::ChildCount(mxml_node_s *Up_Node, const char *Name)
-{
-    int Count = 0;
-
-    if(Up_Node != NULL)
-    {
-        mxml_node_t *Message_Node = NULL;
-        for(Message_Node = mxmlFindElement(Up_Node, Up_Node, Name, NULL, NULL, MXML_DESCEND);
-            Message_Node != NULL;
-            Message_Node = mxmlFindElement(Message_Node, Up_Node, Name, NULL, NULL, MXML_DESCEND))
-        {
-            ++Count;
-        }
-    }
-    return Count;
-}
-
-/**
  * Get a winning message.
  * @param[in] Index The index of the message the get.
  *            If the value is under 0, a random message will be returned.
@@ -154,6 +122,7 @@ unsigned int Language::ChildCount(mxml_node_s *Up_Node, const char *Name)
  */
 std::string Language::GetWinningMessage(s8 Index)
 {
+    const u8 WinningCount = WinningMessage.size();
     if(Index < 0)
     {
         Index = rand() % WinningCount;
@@ -172,6 +141,7 @@ std::string Language::GetWinningMessage(s8 Index)
  */
 std::string Language::GetTieMessage(s8 Index)
 {
+    const u8 TieCount = TieMessage.size();
     if(Index < 0)
     {
         Index = rand() % TieCount;
@@ -190,6 +160,7 @@ std::string Language::GetTieMessage(s8 Index)
  */
 std::string Language::GetTurnOverMessage(s8 Index)
 {
+    const u8 TurnOverCount = TurnOverMessage.size();
     if(Index < 0)
     {
         Index = rand() % TurnOverCount;

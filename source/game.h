@@ -7,15 +7,15 @@
 #define GameH
 //---------------------------------------------------------------------------
 
-#include <vector>
+#include <array>
 #include <string>
+#include "cursor.h"
+#include "player.h"
+#include "button.h"
+#include "symbol.h"
 
 // Forward declarations
 class Grid;
-class Symbol;
-class Button;
-class Cursor;
-class Player;
 class Language;
 class Audio;
 struct GRRLIB_Font;
@@ -55,12 +55,13 @@ private:
     void ChangeCursor();
     void CalculateFrameRate();
 
-    Cursor *Hand;
-    s8 HandX, HandY;
+    std::array<Cursor, 2> Hand;
+    s8 HandX;
+    s8 HandY;
 
     bool CurrentPlayer;
     bool PlayerToStart;
-    Player *WTTPlayer;
+    std::array<Player, 2> WTTPlayer;
     u8 CurrentScreen;
     u8 LastScreen;
     s8 SelectedButton;
@@ -71,11 +72,11 @@ private:
     u8 FPS;
     bool ShowFPS;
 
-    std::vector<Button *> ExitButton;
-    std::vector<Button *> MenuButton;
+    std::array<Button *, 3> ExitButton;
+    std::array<Button *, 3> MenuButton;
     Grid *GameGrid;
     Language *Lang;
-    Symbol **GridSign;
+    std::array<std::array<Symbol, 3>, 3> GridSign;
     Audio *GameAudio;
 
     Texture *GameImg; /**< Background texture for the game. */

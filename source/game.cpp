@@ -56,15 +56,12 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight) :
     ScreenHeight = GameScreenHeight;
 
     GameGrid = new Grid();
-    Hand = new Cursor[2];
     Lang = new Language();
 
     DefaultFont = GRRLIB_LoadTTF(Swis721_Ex_BT, Swis721_Ex_BT_size);
 
-    GridSign = new Symbol*[3];
     for(u8 x = 0; x < 3; ++x)
     {
-        GridSign[x] = new Symbol[3];
         for(u8 y = 0; y < 3; ++y)
         {
             GridSign[x][y].SetLocation(Table[x][y]);
@@ -74,20 +71,20 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight) :
     Hand[0].SetVisible(false);
     Hand[1].SetVisible(false);
 
-    ExitButton.push_back(new Button(buttonType::Home));
+    ExitButton[0] = new Button(buttonType::Home);
     ExitButton[0]->SetFont(DefaultFont);
     ExitButton[0]->SetLeft(430);
     ExitButton[0]->SetTop(20);
     ExitButton[0]->SetTextHeight(20);
     ExitButton[0]->SetCaption(Lang->String("Close"));
 
-    ExitButton.push_back(new Button(buttonType::HomeMenu));
+    ExitButton[1] = new Button(buttonType::HomeMenu);
     ExitButton[1]->SetFont(DefaultFont);
     ExitButton[1]->SetLeft((ScreenWidth / 2) + 20);
     ExitButton[1]->SetTop(165);
     ExitButton[1]->SetCaption(Lang->String("Reset"));
 
-    ExitButton.push_back(new Button(buttonType::HomeMenu));
+    ExitButton[2] = new Button(buttonType::HomeMenu);
     ExitButton[2]->SetFont(DefaultFont);
     ExitButton[2]->SetLeft((ScreenWidth / 2) - ExitButton[1]->GetWidth() - 20);
     ExitButton[2]->SetTop(165);
@@ -96,25 +93,24 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight) :
     //else
         ExitButton[2]->SetCaption(Lang->String("Return to Loader"));
 
-    MenuButton.push_back(new Button());
+    MenuButton[0] = new Button();
     MenuButton[0]->SetFont(DefaultFont);
     MenuButton[0]->SetLeft((ScreenWidth / 2) - (MenuButton[0]->GetWidth() / 2));
     MenuButton[0]->SetTop(92);
     MenuButton[0]->SetCaption(Lang->String("2 Players (1 Wiimote)"));
 
-    MenuButton.push_back(new Button());
+    MenuButton[1] = new Button();
     MenuButton[1]->SetFont(DefaultFont);
     MenuButton[1]->SetLeft((ScreenWidth / 2) - (MenuButton[1]->GetWidth() / 2));
     MenuButton[1]->SetTop(292);
     MenuButton[1]->SetCaption(Lang->String("1 Player (Vs AI)"));
 
-    MenuButton.push_back(new Button());
+    MenuButton[2] = new Button();
     MenuButton[2]->SetFont(DefaultFont);
     MenuButton[2]->SetLeft((ScreenWidth / 2) - (MenuButton[2]->GetWidth() / 2));
     MenuButton[2]->SetTop(192);
     MenuButton[2]->SetCaption(Lang->String("2 Players (2 Wiimote)"));
 
-    WTTPlayer = new Player[2];
     WTTPlayer[0].SetSign('X');
     WTTPlayer[0].SetName(Lang->String("PLAYER 1"));
     WTTPlayer[1].SetSign('O');
@@ -173,27 +169,17 @@ Game::~Game()
     GRRLIB_FreeTTF(DefaultFont);
 
     delete GameGrid;
-    delete[] Hand;
     delete Lang;
-    delete[] WTTPlayer;
 
     for(u8 i = 0; i < ExitButton.size(); ++i)
     {
         delete ExitButton[i];
     }
-    ExitButton.clear();
 
     for(u8 i = 0; i < MenuButton.size(); ++i)
     {
         delete MenuButton[i];
     }
-    MenuButton.clear();
-
-    for(u8 i = 0; i < 3; ++i)
-    {
-        delete[] GridSign[i];
-    }
-    delete[] GridSign;
 
     delete GameAudio;
 }

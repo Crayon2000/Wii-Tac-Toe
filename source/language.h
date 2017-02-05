@@ -8,6 +8,7 @@
 //---------------------------------------------------------------------------
 
 #include <string>
+#include <vector>
 
 // Forward declarations
 struct mxml_node_s;
@@ -27,16 +28,12 @@ public:
     std::string GetTurnOverMessage(s8 Index = -1);
 private:
     mxml_node_s *First_Node;
-    s8 TieCount;
-    s8 WinningCount;
-    s8 TurnOverCount;
 
-    std::string *WinningMessage;
-    std::string *TieMessage;
-    std::string *TurnOverMessage;
+    std::vector<std::string> WinningMessage;
+    std::vector<std::string> TieMessage;
+    std::vector<std::string> TurnOverMessage;
 
     void SetLanguage(s32 Conf_Lang);
-    unsigned int ChildCount(mxml_node_s *Up_Node, const char *Name);
 };
 //---------------------------------------------------------------------------
 #endif
