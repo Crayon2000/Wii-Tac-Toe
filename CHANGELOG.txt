@@ -4,6 +4,7 @@
 ** libogc 1.8.16
 ** libfat 1.1.0
 ** fmt 3.0.1
+** GRRMOD (f6596542903b8ff2bb2552013dd2ce065a8cec15)
 ** GRRLIB (6b7416f6556af9307829b3928462a359df0265cb)
 ** libpngu (libpng 1.6.28 and zlib 1.2.11)
 === Version 1.0.0 ===
