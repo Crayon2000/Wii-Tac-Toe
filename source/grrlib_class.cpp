@@ -59,7 +59,7 @@ Texture::Texture(const u32 w, const u32 h)
  */
 void Texture::Initialize(void)
 {
-    data = NULL;
+    data = nullptr;
 
     _Color = 0xFFFFFFFF;
     _ScaleX = 1.0f;
@@ -81,7 +81,7 @@ Texture::~Texture()
  */
 void Texture::Assign(GRRLIB_texImg *other)
 {
-    if(other == NULL)
+    if(other == nullptr)
     {
         return;
     }
@@ -106,7 +106,7 @@ void Texture::Assign(GRRLIB_texImg *other)
     data = other->data;
 
     free(other);
-    other = NULL;
+    other = nullptr;
 }
 
 /**

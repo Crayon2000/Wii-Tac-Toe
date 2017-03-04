@@ -14,18 +14,18 @@
 Button::Button(buttonType NewType) : Object(),
     Selected(false),
     Caption(""),
-    Font(NULL),
+    Font(nullptr),
     TextColor(0x000000),
     Type(NewType)
 {
     switch(Type)
     {
         case buttonType::HomeMenu:
-            ButtonImgOn = NULL;
+            ButtonImgOn = nullptr;
             ButtonImgOff = new Texture(button_home_png, button_home_png_size);
             break;
         case buttonType::Home:
-            ButtonImgOn = NULL;
+            ButtonImgOn = nullptr;
             ButtonImgOff = new Texture(home_button_png, home_button_png_size);
             break;
         default:

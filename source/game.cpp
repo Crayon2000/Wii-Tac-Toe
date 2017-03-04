@@ -50,7 +50,7 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight) :
     FPS(0),
     ShowFPS(false)
 {
-    srand(time(NULL));
+    srand(time(nullptr));
 
     ScreenWidth = GameScreenWidth;
     ScreenHeight = GameScreenHeight;
@@ -222,7 +222,7 @@ void Game::Paint()
     }
 
     if(CurrentScreen != START_SCREEN &&
-        WPAD_Probe(WPAD_CHAN_0, NULL) == WPAD_ERR_NO_CONTROLLER)
+        WPAD_Probe(WPAD_CHAN_0, nullptr) == WPAD_ERR_NO_CONTROLLER)
     {   // Controller is disconnected
         Rectangle(0, 0, ScreenWidth, ScreenHeight, 0x000000B2, 1);
     }
@@ -703,7 +703,7 @@ bool Game::ControllerManager()
         WIILIGHT_TurnOn();
 
         char path[255];
-        time_t now = time(NULL);
+        time_t now = time(nullptr);
         struct tm *ti = localtime(&now);
         sprintf(path, "sd:/Screenshot %d-%02d-%02d %02d%02d%02d.png",
             ti->tm_year + 1900, ti->tm_mon + 1, ti->tm_mday, ti->tm_hour, ti->tm_min, ti->tm_sec);

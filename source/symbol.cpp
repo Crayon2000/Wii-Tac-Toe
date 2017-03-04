@@ -9,7 +9,7 @@
  */
 Symbol::Symbol() :
     Object(),
-    Current(NULL)
+    Current(nullptr)
 {
     ImgO = new Texture(o_png);
     ImgX = new Texture(x_png);
@@ -32,7 +32,7 @@ Symbol::~Symbol()
  */
 void Symbol::Paint()
 {
-    if(Current != NULL)
+    if(Current != nullptr)
     {
         Current->Draw(Left, Top, Angle, 1, 1, Color);
     }
@@ -54,7 +54,7 @@ void Symbol::SetPlayer(u8 APlayer)
     }
     else
     {
-        Current = NULL;
+        Current = nullptr;
     }
 }
 
