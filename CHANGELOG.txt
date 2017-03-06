@@ -5,7 +5,7 @@
 ** libfat 1.1.0
 ** fmt 3.0.1
 ** GRRMOD (f6596542903b8ff2bb2552013dd2ce065a8cec15)
-** GRRLIB (6b7416f6556af9307829b3928462a359df0265cb)
+** GRRLIB (1a3d233ba0cb9ef87ccb89b4866dfd987a0773b2)
 ** libpngu (libpng 1.6.28 and zlib 1.2.11)
 === Version 1.0.0 ===
 * The arm of the Wii Remote is now moving on the Start screen.
