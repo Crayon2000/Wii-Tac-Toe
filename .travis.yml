@@ -1,6 +1,6 @@
 language: cpp
 dist: trusty
-sudo: required
+sudo: false
 
 os:
   - linux
@@ -18,7 +18,7 @@ before_install:
   - wget https://raw.githubusercontent.com/devkitPro/installer/master/perl/devkitPPCupdate.pl
 
 install:
-  - sudo perl devkitPPCupdate.pl
+  - perl devkitPPCupdate.pl
   - ${DEVKITPPC}/bin/powerpc-eabi-gcc --version
 
 script:
