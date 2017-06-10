@@ -87,7 +87,7 @@ void Grid::SetPlayerAI(u8 Player)
     }
 
     // Play at random position
-    while(!SetPlayer(Player, rand() % 3, rand() % 3)) {}
+    while(SetPlayer(Player, rand() % 3, rand() % 3) == false) {}
 }
 
 /**
