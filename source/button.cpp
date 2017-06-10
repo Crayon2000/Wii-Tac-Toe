@@ -15,6 +15,10 @@ Button::Button(buttonType NewType) : Object(),
     Selected(false),
     Caption(""),
     Font(nullptr),
+    TextWidth(100), // random value
+    TextHeight(14),
+    TextTop(0),
+    TextLeft(0),
     TextColor(0x000000),
     Type(NewType)
 {
@@ -35,9 +39,6 @@ Button::Button(buttonType NewType) : Object(),
 
     Width = ButtonImgOff->GetWidth();
     Height = ButtonImgOff->GetHeight();
-
-    TextHeight = 14;
-    TextWidth = 100; // random value
 }
 
 /**
