@@ -22,7 +22,7 @@ Language::Language()
     mxml_node_t *Up_Node;
 
     Up_Node = mxmlFindElement(First_Node, First_Node, "tie_game", NULL, NULL, MXML_DESCEND);
-    for(Message_Node = mxmlFindElement(Up_Node, Up_Node,"message", NULL, NULL, MXML_DESCEND);
+    for(Message_Node = mxmlFindElement(Up_Node, Up_Node, "message", NULL, NULL, MXML_DESCEND);
         Message_Node != NULL;
         Message_Node = mxmlFindElement(Message_Node, Up_Node, "message", NULL, NULL, MXML_DESCEND))
     {
