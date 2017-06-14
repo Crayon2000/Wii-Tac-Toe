@@ -30,7 +30,7 @@ Language::Language()
     }
 
     Up_Node = mxmlFindElement(First_Node, First_Node, "winning_game", NULL, NULL, MXML_DESCEND);
-    for(Message_Node = mxmlFindElement(Up_Node, Up_Node,"message", NULL, NULL, MXML_DESCEND);
+    for(Message_Node = mxmlFindElement(Up_Node, Up_Node, "message", NULL, NULL, MXML_DESCEND);
         Message_Node != NULL;
         Message_Node = mxmlFindElement(Message_Node, Up_Node, "message", NULL, NULL, MXML_DESCEND))
     {
@@ -38,7 +38,7 @@ Language::Language()
     }
 
     Up_Node = mxmlFindElement(First_Node, First_Node, "turn_over", NULL, NULL, MXML_DESCEND);
-    for(Message_Node = mxmlFindElement(Up_Node, Up_Node,"message", NULL, NULL, MXML_DESCEND);
+    for(Message_Node = mxmlFindElement(Up_Node, Up_Node, "message", NULL, NULL, MXML_DESCEND);
         Message_Node != NULL;
         Message_Node = mxmlFindElement(Message_Node, Up_Node, "message", NULL, NULL, MXML_DESCEND))
     {
@@ -59,6 +59,8 @@ Language::~Language()
 
 /**
  * Load a text from an XML file in memory.
+ * @param[in] From Original string to translate.
+ * @return Translated string.
  */
 std::string Language::String(const char *From)
 {
