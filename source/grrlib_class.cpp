@@ -106,7 +106,6 @@ void Texture::Assign(GRRLIB_texImg *other)
     data = other->data;
 
     free(other);
-    other = nullptr;
 }
 
 /**

@@ -7,6 +7,7 @@
  */
 Grid::Grid()
 {
+    memset(WinningBoard, false, sizeof(WinningBoard));
     Clear();
 }
 

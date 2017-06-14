@@ -49,7 +49,9 @@ static Point Table[3][3] = {
 Game::Game(u16 GameScreenWidth, u16 GameScreenHeight) :
     FPS(0),
     ShowFPS(false),
-    GameMode(gameMode::VsHuman1)
+    GameMode(gameMode::VsHuman1),
+    SymbolAlpha(5),
+    AlphaDirection(false)
 {
     srand(time(nullptr));
 
