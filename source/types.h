@@ -16,7 +16,8 @@
 class Point
 {
 private:
-    u16 x, y;
+    u16 x;
+    u16 y;
 public:
     /**
      * Constructor for the Point class.
