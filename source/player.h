@@ -19,7 +19,7 @@ enum class playerType : u8 {
 };
 
 /**
- * This class is used managed players.
+ * This class is used to managed players.
  * @author Crayon
  */
 class Player

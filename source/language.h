@@ -9,12 +9,13 @@
 
 #include <string>
 #include <vector>
+#include <gctypes.h>
 
 // Forward declarations
 struct mxml_node_s;
 
 /**
- * This a class to manage different languages.
+ * This is a class to manage different languages.
  * @author Crayon
  */
 class Language
