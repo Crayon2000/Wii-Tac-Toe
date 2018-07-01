@@ -24,7 +24,7 @@ u8 HWButton = 0;
 /**
  * Callback for the reset button on the Wii.
  */
-void WiiResetPressed()
+void WiiResetPressed(u32 irq, void* ctx)
 {
     HWButton = SYS_RETURNTOMENU;
 }
