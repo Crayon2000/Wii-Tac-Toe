@@ -287,18 +287,18 @@ void Game::GameScreen(bool CopyScreen)
         GameText->Draw(0, 0); // Background image with some text
 
         // Draw score with a shadow offset of -2, 2
-        char ScoreText[5];
-        snprintf(ScoreText, 5, "%d", WTTPlayer[0].GetScore());
+        char ScoreText[6];
+        snprintf(ScoreText, 6, "%d", WTTPlayer[0].GetScore());
         int TextLeft = 104 - GRRLIB_WidthTTF(DefaultFont, ScoreText, 35) / 2;
         GRRLIB_PrintfTTF(TextLeft, 77, DefaultFont, ScoreText, 35, 0x6BB6DEFF);
         GRRLIB_PrintfTTF(TextLeft - 2, 75, DefaultFont, ScoreText, 35, 0xFFFFFFFF);
 
-        snprintf(ScoreText, 5, "%d", WTTPlayer[1].GetScore());
+        snprintf(ScoreText, 6, "%d", WTTPlayer[1].GetScore());
         TextLeft = 104 - GRRLIB_WidthTTF(DefaultFont, ScoreText, 35) / 2;
         GRRLIB_PrintfTTF(TextLeft, 177, DefaultFont, ScoreText, 35, 0xE6313AFF);
         GRRLIB_PrintfTTF(TextLeft - 2, 175, DefaultFont, ScoreText, 35, 0xFFFFFFFF);
 
-        snprintf(ScoreText, 5, "%d", TieGame);
+        snprintf(ScoreText, 6, "%d", TieGame);
         TextLeft = 104 - GRRLIB_WidthTTF(DefaultFont, ScoreText, 35) / 2;
         GRRLIB_PrintfTTF(TextLeft, 282, DefaultFont, ScoreText, 35, 0x109642FF);
         GRRLIB_PrintfTTF(TextLeft - 2, 280, DefaultFont, ScoreText, 35, 0xFFFFFFFF);
