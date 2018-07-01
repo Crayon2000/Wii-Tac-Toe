@@ -1,5 +1,5 @@
 #include <wiiuse/wpad.h>        // Wiimote
-#include <ogcsys.h>             // nanosleep
+#include <time.h>               // nanosleep
 #include <ogc/lwp_watchdog.h>   // gettime
 #include <stdlib.h>             // abs
 
@@ -34,8 +34,7 @@ void RUMBLE_Wiimote(s32 chan, int rumble_time)
  */
 void RUMBLE_Init()
 {
-    int i;
-    for(i = 0; i < WPAD_MAX_WIIMOTES; ++i)
+    for(u8 i = 0; i < WPAD_MAX_WIIMOTES; ++i)
     {
         Rumble_Info[i].rumbeling = false;
         Rumble_Info[i].time2rumble = 0;
@@ -75,12 +74,12 @@ void RUMBLE_Verify()
  */
 void msleep(unsigned long millisec)
 {
-    struct timespec req = {0};
+    struct timespec req;
     time_t sec = (int)(millisec / 1000);
     millisec -= (sec * 1000);
     req.tv_sec = sec;
     req.tv_nsec = millisec * 1000000L;
-    while(nanosleep(&req) == -1)
+    while(nanosleep(&req, NULL) == -1)
     {
         continue;
     }
