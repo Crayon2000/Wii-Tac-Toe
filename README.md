@@ -14,7 +14,7 @@ To win the game, you have to place three marks (O or X) in a horizontal, vertica
 ## Build
 Prerequisites:
 * devkitPro
-  * devkitPPC (release 28 or later)
+  * devkitPPC (release 31 or later)
   * libogc
   * libfat
 
