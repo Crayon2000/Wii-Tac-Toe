@@ -368,13 +368,13 @@ void Game::GameScreen(bool CopyScreen)
     {
         // 40 = radius
         // 52 = half of image size
-        if(PtInCircle(65, 409, 40, Hand[0].GetLeft(), Hand[0].GetTop()))
+        if(PtInCircle(65, 409, 40, Hand[0].GetLeft(), Hand[0].GetTop()) == true)
         {
             GameHoverImg->Draw(65-52, 409.5-52, 0, 1, 1, 0xFFFFFFFF);
             ButtonOn(0);
             SelectedButton = 0;
         }
-        else if(PtInCircle(571, 409, 40, Hand[0].GetLeft(), Hand[0].GetTop()))
+        else if(PtInCircle(571, 409, 40, Hand[0].GetLeft(), Hand[0].GetTop()) == true)
         {
             GameHoverImg->Draw(571-52, 409.5-52, 0, 1, 1, 0xFFFFFFFF);
             ButtonOn(1);
@@ -420,7 +420,7 @@ void Game::ExitScreen()
         CopiedImg->Draw(0, 0);
     }
 
-    if(GRRLIB_PtInRect(0, 0, ScreenWidth, 78, Hand[0].GetLeft(), Hand[0].GetTop()))
+    if(GRRLIB_PtInRect(0, 0, ScreenWidth, 78, Hand[0].GetLeft(), Hand[0].GetTop()) == true)
     {
         Rectangle(0, 0, ScreenWidth, 78, 0x30B6EBFF, 1);
     }
@@ -434,7 +434,7 @@ void Game::ExitScreen()
     ExitButton[0]->SetSelected(false);
     ExitButton[1]->SetSelected(false);
     ExitButton[2]->SetSelected(false);
-    if(GRRLIB_PtInRect(0, 0, ScreenWidth, 78, Hand[0].GetLeft(), Hand[0].GetTop()))
+    if(GRRLIB_PtInRect(0, 0, ScreenWidth, 78, Hand[0].GetLeft(), Hand[0].GetTop()) == true)
     {
         ExitButton[0]->SetSelected(true);
         ButtonOn(0);

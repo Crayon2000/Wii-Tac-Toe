@@ -1,5 +1,5 @@
 /**
- * @file Voice.h
+ * @file voice.h
  * Contains the Voice class.
  */
 

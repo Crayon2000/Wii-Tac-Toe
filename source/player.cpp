@@ -63,7 +63,7 @@ void Player::IncScore()
 }
 
 /**
- * Set scrore to 0.
+ * Set score to 0.
  */
 void Player::ResetScore()
 {
