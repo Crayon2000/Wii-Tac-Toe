@@ -12,13 +12,16 @@ To win the game, you have to place three marks (O or X) in a horizontal, vertica
 ![http://wiibrew.org/w/images/e/e7/Wii-Tac-Toe-screenshot.png](http://wiibrew.org/w/images/e/e7/Wii-Tac-Toe-screenshot.png)
 
 ## Build
+
 Prerequisites:
+
 * devkitPro
   * devkitPPC (release 31 or later)
   * libogc
   * libfat
 
 To compile:
-```
+
+```text
 > make
 ```

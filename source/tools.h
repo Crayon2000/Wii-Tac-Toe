@@ -8,7 +8,6 @@
 //---------------------------------------------------------------------------
 
 #include "grrlib_class.h"
-#include <string>
 
 void RUMBLE_Wiimote(s32, int);
 void RUMBLE_Verify();

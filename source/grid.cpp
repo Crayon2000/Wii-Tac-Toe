@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include <string.h> // For memcpy
+#include <cstring> // For memcpy
 #include "grid.h"
 
 /**
