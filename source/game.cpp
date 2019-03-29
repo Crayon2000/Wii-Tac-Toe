@@ -6,7 +6,7 @@
 #include <ogc/lwp_watchdog.h>
 #include "grrlib/grrlib.h"
 #include "grrlib_class.h"
-#include "printf.h"
+#include "fmt/printf.h"
 #include "tools.h"
 #include "grid.h"
 #include "audio.h"
