@@ -1,4 +1,4 @@
-#include "mxml/mxml.h"
+#include <mxml.h>
 #include <ogc/conf.h>
 #include "language.h"
 

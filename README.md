@@ -16,12 +16,15 @@ To win the game, you have to place three marks (O or X) in a horizontal, vertica
 Prerequisites:
 
 * devkitPro
-  * devkitPPC (release 31 or later)
+  * devkitPPC (release 34 or later)
   * libogc
   * libfat
+* Port libs
+  * Mini-XML
 
 To compile:
 
 ```text
+> pacman --sync --needed --noconfirm ppc-mxml
 > make
 ```
