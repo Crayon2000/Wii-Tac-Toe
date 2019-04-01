@@ -21,12 +21,16 @@ Prerequisites:
   * libfat
 * Port libs
   * Mini-XML
-  * zlib
   * libpng
+    * zlib
+  * FreeType
+    * libpng
+    * zlib
+    * bzip2
 
 To compile:
 
 ```text
-> pacman --sync --needed --noconfirm ppc-mxml ppc-zlib ppc-libpng
+> pacman --sync --needed --noconfirm ppc-mxml ppc-libpng ppc-freetype
 > make
 ```
