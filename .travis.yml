@@ -18,7 +18,7 @@ before_install:
 
 install:
   - sudo dpkg --install devkitpro-pacman.deb
-  - sudo dkp-pacman --sync --sysupgrade --refresh --needed --noconfirm wii-dev ppc-mxml
+  - sudo dkp-pacman --sync --sysupgrade --refresh --needed --noconfirm wii-dev ppc-mxml ppc-libpng ppc-freetype ppc-libjpeg-turbo
   - ${DEVKITPPC}/bin/powerpc-eabi-gcc --version
 
 script:

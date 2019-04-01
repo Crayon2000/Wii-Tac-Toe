@@ -27,10 +27,11 @@ Prerequisites:
     * libpng
     * zlib
     * bzip2
+  * libjpeg-turbo
 
 To compile:
 
 ```text
-> pacman --sync --needed --noconfirm ppc-mxml ppc-libpng ppc-freetype
+> pacman --sync --needed --noconfirm ppc-mxml ppc-libpng ppc-freetype ppc-libjpeg-turbo
 > make
 ```
