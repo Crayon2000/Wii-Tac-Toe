@@ -83,7 +83,8 @@ export OFILES	:=	$(addsuffix .o,$(BINFILES)) \
 export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
 					$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
 					-I$(CURDIR)/$(BUILD) \
-					-I$(LIBOGC_INC)
+					-I$(LIBOGC_INC) \
+					-I$(DEVKITPRO)/portlibs/ppc/include/freetype2
 
 #---------------------------------------------------------------------------------
 # build a list of library paths
