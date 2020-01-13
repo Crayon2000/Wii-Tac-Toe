@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-Copyright (c) 2009-2017 The GRRLIB Team
+Copyright (c) 2009-2019 The GRRLIB Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -47,8 +47,8 @@ GRRLIB_bytemapFont*  GRRLIB_LoadBMF (const u8 my_bmf[] );
 void                 GRRLIB_FreeBMF (GRRLIB_bytemapFont *bmf);
 
 void  GRRLIB_InitTileSet  (GRRLIB_texImg *tex,
-                           const uint tilew, const uint tileh,
-                           const uint tilestart);
+                           const u32 tilew, const u32 tileh,
+                           const u32 tilestart);
 
 //------------------------------------------------------------------------------
 // GRRLIB_bmfx.c - Bitmap f/x
@@ -88,8 +88,7 @@ void  GRRLIB_Circle (const f32 x, const f32 y, const f32 radius,
 
 //------------------------------------------------------------------------------
 // GRRLIB_fileIO - File I/O (SD Card)
-int             GRRLIB_LoadFile            (const char* filename,
-                                            unsigned char* *data);
+int             GRRLIB_LoadFile            (const char* filename, u8* *data);
 GRRLIB_texImg*  GRRLIB_LoadTextureFromFile (const char* filename);
 bool            GRRLIB_ScrShot             (const char* filename);
 
@@ -133,7 +132,7 @@ void  GRRLIB_CompoEnd(int posx, int posy, GRRLIB_texImg *tex);
 
 //------------------------------------------------------------------------------
 // GRRLIB_texEdit.c - Modifying the content of a texture
-GRRLIB_texImg*  GRRLIB_CreateEmptyTexture (const uint w, const uint h);
+GRRLIB_texImg*  GRRLIB_CreateEmptyTexture (const u32 w, const u32 h);
 GRRLIB_texImg*  GRRLIB_LoadTexture    (const u8 *my_img);
 GRRLIB_texImg*  GRRLIB_LoadTexturePNG (const u8 *my_png);
 GRRLIB_texImg*  GRRLIB_LoadTextureJPG (const u8 *my_jpg);
@@ -177,8 +176,8 @@ GRRLIB_ttfFont* GRRLIB_LoadTTF(const u8* file_base, s32 file_size);
 void GRRLIB_FreeTTF(GRRLIB_ttfFont *myFont);
 void GRRLIB_PrintfTTF(int x, int y, GRRLIB_ttfFont *myFont, const char *string, unsigned int fontSize, const u32 color);
 void GRRLIB_PrintfTTFW(int x, int y, GRRLIB_ttfFont *myFont, const wchar_t *string, unsigned int fontSize, const u32 color);
-unsigned int GRRLIB_WidthTTF(GRRLIB_ttfFont *myFont, const char *, unsigned int);
-unsigned int GRRLIB_WidthTTFW(GRRLIB_ttfFont *myFont, const wchar_t *, unsigned int);
+u32 GRRLIB_WidthTTF(GRRLIB_ttfFont *myFont, const char *, unsigned int);
+u32 GRRLIB_WidthTTFW(GRRLIB_ttfFont *myFont, const wchar_t *, unsigned int);
 
 #endif // __GRRLIB_FNLIB_H__
 /** @} */ // end of group
