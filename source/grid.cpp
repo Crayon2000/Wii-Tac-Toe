@@ -1,4 +1,4 @@
-#include <stdlib.h>
+#include <cstdlib>
 #include <cstring> // For memcpy
 #include "grid.h"
 

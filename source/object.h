@@ -7,7 +7,7 @@
 #define ObjectH
 //---------------------------------------------------------------------------
 
-#include <stdlib.h>
+#include <cstdlib>
 #include <gccore.h>
 
 /**
