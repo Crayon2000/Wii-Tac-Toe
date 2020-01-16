@@ -6,6 +6,8 @@
 #ifndef AudioH
 #define AudioH
 //---------------------------------------------------------------------------
+#include <memory>
+
 // Forward declarations
 class Sound;
 class Voice;
@@ -28,8 +30,8 @@ public:
     void PlaySoundButton(u16 Volume);
 private:
     bool Paused;
-    Voice *ScreenVoice;
-    Voice *ButtonVoice;
+    std::unique_ptr<Voice> ScreenVoice;
+    std::unique_ptr<Voice> ButtonVoice;
     Sound *ChangeSound;
     Sound *RollOverSound;
 };

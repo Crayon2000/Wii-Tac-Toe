@@ -21,8 +21,8 @@ Audio::Audio() :
     GRRMOD_Init(true);
     GRRMOD_SetMOD(tic_tac_mod, tic_tac_mod_size);
 
-    ScreenVoice = new Voice();
-    ButtonVoice = new Voice();
+    ScreenVoice = std::make_unique<Voice>();
+    ButtonVoice = std::make_unique<Voice>();
     ChangeSound = new Sound(VOICE_MONO16, (void *)screen_change_raw, screen_change_raw_size, 44100);
     RollOverSound = new Sound(VOICE_MONO16, (void *)button_rollover_raw, button_rollover_raw_size, 44100);
 }
@@ -36,8 +36,6 @@ Audio::~Audio()
     GRRMOD_End();
     AESND_Pause(true);
 
-    delete ScreenVoice;
-    delete ButtonVoice;
     delete ChangeSound;
     delete RollOverSound;
 }
