@@ -346,7 +346,7 @@ void Game::GameScreen(bool CopyScreen)
             GridSign[x][y].SetPlayer(GameGrid->GetPlayerAtPos(x, y));
             GridSign[x][y].SetColor(0xFFFFFFFF);
             GridSign[x][y].Paint();
-            if(GameGrid->WinningBoard[x][y])
+            if(GameGrid->WinningBoard[x][y] == true)
             {
                 GridSign[x][y].SetColor(HoverColor);
                 GridSign[x][y].SetAlpha(SymbolAlpha);
@@ -470,7 +470,7 @@ void Game::MenuScreen(bool CopyScreen)
     if(Copied == false)
     {   // Copy static element
         FillScreen(0x000000FF); // Clear screen
-        for(int y = 0; y <=ScreenHeight; y+=8)
+        for(int y = 0; y <= ScreenHeight; y+=8)
         {
             Rectangle(0, y, ScreenWidth, 2, 0xB0B0B030, 1);
         }
@@ -655,7 +655,7 @@ bool Game::ControllerManager()
                     {
                         if(CurrentPlayer == 0)
                         {
-                            if(GameGrid->SetPlayer(WTTPlayer[0].GetSign(), HandX, HandY))
+                            if(GameGrid->SetPlayer(WTTPlayer[0].GetSign(), HandX, HandY) == true)
                             {
                                 TurnIsOver();
                             }
@@ -667,7 +667,7 @@ bool Game::ControllerManager()
                     }
                     else
                     {
-                        if(GameGrid->SetPlayer(WTTPlayer[CurrentPlayer].GetSign(), HandX, HandY))
+                        if(GameGrid->SetPlayer(WTTPlayer[CurrentPlayer].GetSign(), HandX, HandY) == true)
                         {
                             TurnIsOver();
                         }
@@ -686,7 +686,7 @@ bool Game::ControllerManager()
                     }
                     else if(CurrentPlayer == 1)
                     {
-                        if(GameGrid->SetPlayer(WTTPlayer[1].GetSign(), HandX, HandY))
+                        if(GameGrid->SetPlayer(WTTPlayer[1].GetSign(), HandX, HandY) == true)
                         {
                             TurnIsOver();
                         }
