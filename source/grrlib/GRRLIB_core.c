@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-Copyright (c) 2009-2019 The GRRLIB Team
+Copyright (c) 2009-2020 The GRRLIB Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -55,14 +55,18 @@ int  GRRLIB_Init (void) {
     s8 error_code = 0;
 
     // Ensure this function is only ever called once
-    if (is_setup)  return 0;
+    if (is_setup == true) {
+        return 0;
+    }
 
     // Initialise the video subsystem
     VIDEO_Init();
     VIDEO_SetBlack(true);  // Disable video output during initialisation
 
     // Grab a pointer to the video mode attributes
-    if ( !(rmode = VIDEO_GetPreferredMode(NULL)) )  return -1;
+    if ( !(rmode = VIDEO_GetPreferredMode(NULL)) ) {
+        return -1;
+    }
 
     // Video Mode Correction
     switch (rmode->viTVMode) {
@@ -76,33 +80,41 @@ int  GRRLIB_Init (void) {
     // 16:9 and 4:3 Screen Adjustment for Wii
     if (CONF_GetAspectRatio() == CONF_ASPECT_16_9) {
         rmode->viWidth = 678;
-        rmode->viXOrigin = (VI_MAX_WIDTH_NTSC - 678)/2;  // This probably needs to consider PAL
+        rmode->viXOrigin = (VI_MAX_WIDTH_NTSC - 678) / 2;  // This probably needs to consider PAL
     } else {    // 4:3
         rmode->viWidth = 672;
-        rmode->viXOrigin = (VI_MAX_WIDTH_NTSC - 672)/2;
+        rmode->viXOrigin = (VI_MAX_WIDTH_NTSC - 672) / 2;
     }
 #else
     // GameCube
     rmode->viWidth = 672;
-    rmode->viXOrigin = (VI_MAX_WIDTH_NTSC - 672)/2;
+    rmode->viXOrigin = (VI_MAX_WIDTH_NTSC - 672) / 2;
 #endif
 
     // --
     VIDEO_Configure(rmode);
 
     // Get some memory to use for a "double buffered" frame buffer
-    if ( !(xfb[0] = MEM_K0_TO_K1(SYS_AllocateFramebuffer(rmode))) )  return -1;
-    if ( !(xfb[1] = MEM_K0_TO_K1(SYS_AllocateFramebuffer(rmode))) )  return -1;
+    if ( !(xfb[0] = MEM_K0_TO_K1(SYS_AllocateFramebuffer(rmode))) ) {
+        return -1;
+    }
+    if ( !(xfb[1] = MEM_K0_TO_K1(SYS_AllocateFramebuffer(rmode))) ) {
+        return -1;
+    }
 
     VIDEO_SetNextFramebuffer(xfb[fb]);  // Choose a frame buffer to start with
 
     VIDEO_Flush();                      // flush the frame to the TV
     VIDEO_WaitVSync();                  // Wait for the TV to finish updating
     // If the TV image is interlaced it takes two passes to display the image
-    if (rmode->viTVMode & VI_NON_INTERLACE)  VIDEO_WaitVSync();
+    if (rmode->viTVMode & VI_NON_INTERLACE) {
+        VIDEO_WaitVSync();
+    }
 
     // The FIFO is the buffer the CPU uses to send commands to the GPU
-    if ( !(gp_fifo = memalign(32, DEFAULT_FIFO_SIZE)) )  return -1;
+    if ( !(gp_fifo = memalign(32, DEFAULT_FIFO_SIZE)) ) {
+        return -1;
+    }
     memset(gp_fifo, 0, DEFAULT_FIFO_SIZE);
     GX_Init(gp_fifo, DEFAULT_FIFO_SIZE);
 
@@ -175,10 +187,14 @@ int  GRRLIB_Init (void) {
     atexit(GRRLIB_Exit);
 
     // Initialise the filing system
-    if (!fatInitDefault())  error_code = -2;
+    if (fatInitDefault() == false) {
+        error_code = -2;
+    }
 
     // Initialise TTF
-    if (GRRLIB_InitTTF())  error_code = -3;
+    if (GRRLIB_InitTTF() != 0) {
+        error_code = -3;
+    }
 
     VIDEO_SetBlack(false);  // Enable video output
     return error_code;
@@ -212,9 +228,18 @@ void  GRRLIB_Exit (void) {
     GX_AbortFrame();
 
     // Free up memory allocated for frame buffers & FIFOs
-    if (xfb[0]  != NULL) {  free(MEM_K1_TO_K0(xfb[0]));  xfb[0]  = NULL;  }
-    if (xfb[1]  != NULL) {  free(MEM_K1_TO_K0(xfb[1]));  xfb[1]  = NULL;  }
-    if (gp_fifo != NULL) {  free(gp_fifo);               gp_fifo = NULL;  }
+    if (xfb[0] != NULL) {
+        free(MEM_K1_TO_K0(xfb[0]));
+        xfb[0] = NULL;
+    }
+    if (xfb[1] != NULL) {
+        free(MEM_K1_TO_K0(xfb[1]));
+        xfb[1] = NULL;
+    }
+    if (gp_fifo != NULL) {
+        free(gp_fifo);
+        gp_fifo = NULL;
+    }
 
     // Done with TTF
     GRRLIB_ExitTTF();

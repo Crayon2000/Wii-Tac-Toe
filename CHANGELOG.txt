@@ -3,7 +3,7 @@
 * Library update
 ** fmt 6.2.0
 ** GRRMOD (92ae3a31637f69cd0a9ed38daa1ab7a12bb311c3)
-** GRRLIB (9bc36644848b5a691f26f77c64193bc82853c581)
+** GRRLIB (2c71ad2cd930ea9c3f3dc978df88b77429851c0d)
 === Version 1.0.0 ===
 * The arm of the Wii Remote is now moving on the Start screen.
 * The two buttons at the bottom of the Game screen will open the HOME Menu.
