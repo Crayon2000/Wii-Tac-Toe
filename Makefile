@@ -73,9 +73,11 @@ else
 	export LD	:=	$(CXX)
 endif
 
-export OFILES	:=	$(addsuffix .o,$(BINFILES)) \
-					$(CPPFILES:.cpp=.o) $(CFILES:.c=.o) \
-					$(sFILES:.s=.o) $(SFILES:.S=.o)
+export OFILES_BIN	:=	$(addsuffix .o,$(BINFILES))
+export OFILES_SOURCES := $(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(sFILES:.s=.o) $(SFILES:.S=.o)
+export OFILES := $(OFILES_BIN) $(OFILES_SOURCES)
+
+export HFILES := $(addsuffix .h,$(subst .,_,$(BINFILES)))
 
 #---------------------------------------------------------------------------------
 # build a list of include paths
@@ -96,7 +98,7 @@ export OUTPUT	:=	$(CURDIR)/$(TARGET)
 #---------------------------------------------------------------------------------
 $(BUILD):
 	@[ -d $@ ] || mkdir -p $@
-	@make --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
+	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 
 #---------------------------------------------------------------------------------
 clean:
@@ -119,10 +121,12 @@ DEPENDS	:=	$(OFILES:.o=.d)
 $(OUTPUT).dol: $(OUTPUT).elf
 $(OUTPUT).elf: $(OFILES)
 
+$(OFILES_SOURCES) : $(HFILES)
+
 #---------------------------------------------------------------------------------
 # This rule links in binary data with the .png extension
 #---------------------------------------------------------------------------------
-%.png.o	:	%.png
+%.png.o	%_png.h :	%.png
 #---------------------------------------------------------------------------------
 	@echo $(notdir $<)
 	$(bin2o)
@@ -130,7 +134,7 @@ $(OUTPUT).elf: $(OFILES)
 #---------------------------------------------------------------------------------
 # This rule links in binary data with the .xml extension
 #---------------------------------------------------------------------------------
-%.xml.o	:	%.xml
+%.xml.o	%_xml.h :	%.xml
 #---------------------------------------------------------------------------------
 	@echo $(notdir $<)
 	$(bin2o)
@@ -138,7 +142,7 @@ $(OUTPUT).elf: $(OFILES)
 #---------------------------------------------------------------------------------
 # This rule links in binary data with the .mod extension
 #---------------------------------------------------------------------------------
-%.mod.o	:	%.mod
+%.mod.o	%_mod.h :	%.mod
 #---------------------------------------------------------------------------------
 	@echo $(notdir $<)
 	$(bin2o)
@@ -146,7 +150,7 @@ $(OUTPUT).elf: $(OFILES)
 #---------------------------------------------------------------------------------
 # This rule links in binary data with the .raw extension
 #---------------------------------------------------------------------------------
-%.raw.o	:	%.raw
+%.raw.o	%raw.h :	%.raw
 #---------------------------------------------------------------------------------
 	@echo $(notdir $<)
 	$(bin2o)
