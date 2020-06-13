@@ -138,10 +138,10 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight) :
     // Build Start Screen background
     SplashImg->Draw(0, 0);
     GRRLIB_PrintfTTF(50, 310, DefaultFont,
-        fmt::sprintf(Lang->String("Programmer: %s"), "Crayon").c_str(),
+        fmt::format(Lang->String("Programmer: {}"), "Crayon").c_str(),
         11, 0xFFFFFFFF);
     GRRLIB_PrintfTTF(50, 330, DefaultFont,
-        fmt::sprintf(Lang->String("Graphics: %s"), "Mr_Nick666").c_str(),
+        fmt::format(Lang->String("Graphics: {}"), "Mr_Nick666").c_str(),
         11, 0xFFFFFFFF);
     text = Lang->String("Press The A Button");
     GRRLIB_PrintfTTF((ScreenWidth / 2) - (GRRLIB_WidthTTF(DefaultFont, text.c_str(), 20) / 2),
@@ -482,7 +482,7 @@ void Game::MenuScreen(bool CopyScreen)
         Rectangle(0, 385, ScreenWidth, 95, 0x000000FF, 1);
 
         GRRLIB_PrintfTTF(500, 40, DefaultFont,
-            fmt::sprintf(Lang->String("Ver. %s"), "1.0.0").c_str(),
+            fmt::format(Lang->String("Ver. {}"), "1.0.0").c_str(),
             12, 0xFFFFFFFF);
 
         if(CopyScreen == true)
@@ -740,7 +740,7 @@ void Game::Clear()
     GameGrid->Clear();
     CurrentPlayer = PlayerToStart;
     PlayerToStart = !PlayerToStart; // Next other player will start
-    text = fmt::sprintf(Lang->GetTurnOverMessage(), WTTPlayer[CurrentPlayer].GetName());
+    text = fmt::format(Lang->GetTurnOverMessage(), WTTPlayer[CurrentPlayer].GetName());
     RoundFinished = false;
     Copied = false;
     ChangeCursor();
@@ -763,7 +763,7 @@ void Game::TurnIsOver()
         SymbolAlpha = 5;
         AlphaDirection = 0;
     }
-    else if(GameGrid->IsFilled())
+    else if(GameGrid->IsFilled() == true)
     {   // Tie game
         ++TieGame;
         text = Lang->GetTieMessage();
@@ -772,7 +772,7 @@ void Game::TurnIsOver()
     else
     {
         CurrentPlayer = !CurrentPlayer; // Change player's turn
-        text = fmt::sprintf(Lang->GetTurnOverMessage(), WTTPlayer[CurrentPlayer].GetName());
+        text = fmt::format(Lang->GetTurnOverMessage(), WTTPlayer[CurrentPlayer].GetName());
     }
 
     Copied = false;

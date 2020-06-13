@@ -77,7 +77,7 @@ int main(int argc, char **argv)
         MyGame->Paint();
 
         WPAD_ScanPads();
-        if(MyGame->ControllerManager())
+        if(MyGame->ControllerManager() == true)
         {
             break;
         }

@@ -1,7 +1,7 @@
 ==Changelog==
 === Unreleased ===
 * Library update
-** fmt 6.2.0
+** fmt 6.2.1
 ** GRRMOD (92ae3a31637f69cd0a9ed38daa1ab7a12bb311c3)
 ** GRRLIB (2c71ad2cd930ea9c3f3dc978df88b77429851c0d)
 === Version 1.0.0 ===

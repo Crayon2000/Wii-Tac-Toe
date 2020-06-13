@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language type="english" translator="Crayon">
-    <translation from="Programmer: %s" to="プログラマー: %s" />
-    <translation from="Graphics: %s" to="グラフィック: %s" />
+    <translation from="Programmer: {}" to="プログラマー: {}" />
+    <translation from="Graphics: {}" to="グラフィック: {}" />
     <translation from="Press The A Button" to="A配列のボタンを押します" />
 
-    <translation from="Ver. %s" to="バージョン %s" />
+    <translation from="Ver. {}" to="バージョン {}" />
     <translation from="2 Players (1 Wiimote)" to="2プレーヤー（1 Wiiリモコン）" />
     <translation from="2 Players (2 Wiimote)" to="2プレーヤー（2 Wiiリモコン）" />
     <translation from="1 Player (Vs AI)" to="1プレーヤー（対人工知能）" />
@@ -38,11 +38,11 @@
     </tie_game>
 
     <turn_over>
-        <message text="%sの、それはあなたの番です。" />
-        <message text="%sのを待っています。" />
-        <message text="%sがの次の動きで考えています。" />
-        <message text="%sがWiiリモコン取ると果たすべきです。" />
-        <message text="%sの、遊ぼう。" />
-        <message text="%sが今プレイする必要があります。" />
+        <message text="{}の、それはあなたの番です。" />
+        <message text="{}のを待っています。" />
+        <message text="{}がの次の動きで考えています。" />
+        <message text="{}がWiiリモコン取ると果たすべきです。" />
+        <message text="{}の、遊ぼう。" />
+        <message text="{}が今プレイする必要があります。" />
     </turn_over>
 </language>
