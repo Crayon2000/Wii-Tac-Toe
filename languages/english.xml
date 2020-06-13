@@ -18,16 +18,16 @@
     <translation from="PLAYER 2" to="PLAYER 2" />
     <translation from="TIE GAME" to="TIE GAME" />
 
-    <!-- Variable $WINNER$ and $LOSER$ could be used -->
+    <!-- Variable {0} is the name of the winner and variable {1} is the name of the looser -->
     <winning_game>
-        <message text="$WINNER$ won this round." />
-        <message text="Is $WINNER$ the best?" />
-        <message text="The game is yours, $WINNER$." />
-        <message text="$WINNER$ rules." />
-        <message text="Too bad for $LOSER$." />
-        <message text="Better luck next time, $LOSER$!" />
-        <message text="$LOSER$ you really suck." />
-        <message text="$LOSER$ should practice a little more." />
+        <message text="{0} won this round." />
+        <message text="Is {0} the best?" />
+        <message text="The game is yours, {0}." />
+        <message text="{0} rules." />
+        <message text="Too bad for {1}." />
+        <message text="Better luck next time, {1}!" />
+        <message text="{1} you really suck." />
+        <message text="{1} should practice a little more." />
     </winning_game>
 
     <tie_game>

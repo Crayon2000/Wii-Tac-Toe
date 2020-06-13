@@ -18,16 +18,16 @@
     <translation from="PLAYER 2" to="SPELER 2" />
     <translation from="TIE GAME" to="GELIJK SPEL" />
 
-    <!-- Variable $WINNER$ and $LOSER$ could be used -->
+    <!-- Variable {0} is the name of the winner and variable {1} is the name of the looser -->
     <winning_game>
-        <message text="$WINNER$ won deze ronde." />
-        <message text="Is $WINNER$ de beste?" />
-        <message text="Dit is jouw spel, $WINNER$." />
-        <message text="$WINNER$ rules." />
-        <message text="Jammer voor $LOSER$." />
-        <message text="Volgende keer beter, $LOSER$!" />
-        <message text="$LOSER$ jij bent echt slecht." />
-        <message text="$LOSER$ je zou meer moeten oefenen." />
+        <message text="{0} won deze ronde." />
+        <message text="Is {0} de beste?" />
+        <message text="Dit is jouw spel, {0}." />
+        <message text="{0} rules." />
+        <message text="Jammer voor {1}." />
+        <message text="Volgende keer beter, {1}!" />
+        <message text="{1} jij bent echt slecht." />
+        <message text="{1} je zou meer moeten oefenen." />
     </winning_game>
 
     <tie_game>

@@ -1,6 +1,5 @@
 #include <cstdio>
 #include <cstdlib>
-#include <regex>
 #include <wiiuse/wpad.h>
 #include <ogc/conf.h>
 #include <ogc/lwp_watchdog.h>
@@ -756,9 +755,8 @@ void Game::TurnIsOver()
     {   // A winner is declare
         GameWinner = (GameWinner == WTTPlayer[0].GetSign()) ? 0 : 1;
         WTTPlayer[GameWinner].IncScore();
-        text = Lang->GetWinningMessage();
-        text = std::regex_replace(text, std::regex("\\$LOSER\\$"), WTTPlayer[!GameWinner].GetName());
-        text = std::regex_replace(text, std::regex("\\$WINNER\\$"), WTTPlayer[GameWinner].GetName());
+        text = fmt::format(Lang->GetWinningMessage(),
+            WTTPlayer[GameWinner].GetName(), WTTPlayer[!GameWinner].GetName());
         RoundFinished = true;
         SymbolAlpha = 5;
         AlphaDirection = 0;
