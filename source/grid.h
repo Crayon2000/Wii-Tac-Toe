@@ -29,8 +29,8 @@ private:
     u8 Board[3][3];
     u8 Winner;
 
-    bool IsPlayerWinning(u8);
-    bool IsPlayerWinning(u8, u8 MyBord[3][3]);
+    bool IsPlayerWinning(u8 Player);
+    bool IsPlayerWinning(u8 Player, u8 MyBoard[3][3]);
 };
 //---------------------------------------------------------------------------
 #endif

@@ -21,8 +21,8 @@ public:
     Symbol();
     ~Symbol();
     void Paint();
-    void SetPlayer(u8);
-    void SetLocation(Point);
+    void SetPlayer(u8 APlayer);
+    void SetLocation(Point APoint);
 private:
     Texture *Current;
     Texture *ImgX;

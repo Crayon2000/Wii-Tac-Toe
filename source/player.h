@@ -29,12 +29,12 @@ public:
     virtual ~Player() {};
     void SetName(const std::string &AName);
     std::string GetName();
-    void SetSign(u8);
+    void SetSign(u8 ASign);
     u8 GetSign();
     unsigned int GetScore();
     void IncScore();
     void ResetScore();
-    void SetType(playerType);
+    void SetType(playerType AType);
     playerType GetType();
 private:
     unsigned int Score;
