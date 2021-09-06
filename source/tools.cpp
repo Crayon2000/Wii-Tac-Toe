@@ -158,7 +158,7 @@ bool PtInCircle(const int xo, const int yo, const int radius,
         return false;
     }
     int dy = abs(wpady - yo);
-    if (dy >  radius) {    
+    if (dy >  radius) {
         return false;
     }
     if (dx+dy <= radius) {

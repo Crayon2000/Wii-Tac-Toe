@@ -27,7 +27,7 @@ struct GRRLIB_Font;
 class Game
 {
 public:
-    Game(u16, u16);
+    Game(u16 GameScreenWidth, u16 GameScreenHeight);
     ~Game();
     void Paint();
     bool ControllerManager();
@@ -42,15 +42,16 @@ private:
     };
 
     void StartSreen();
-    void MenuScreen(bool);
-    void GameScreen(bool);
+    void MenuScreen(bool CopyScreen);
+    void GameScreen(bool CopyScreen);
     void ExitScreen();
     void Clear();
     void TurnIsOver();
     void NewGame();
-    void PrintWrapText(u16, u16, u16, const std::string &, u32, u32, u32, s8, s8);
-    void ChangeScreen(u8 NewScreen, bool = true);
-    void ButtonOn(s8);
+    void PrintWrapText(u16 x, u16 y, u16 maxLineWidth, const std::string &input,
+        u32 fontSize, u32 TextColor, u32 ShadowColor, s8 OffsetX, s8 OffsetY);
+    void ChangeScreen(u8 NewScreen, bool PlaySound = true);
+    void ButtonOn(s8 NewSelectedButton);
     bool SelectZone();
     void ChangeCursor();
     void CalculateFrameRate();

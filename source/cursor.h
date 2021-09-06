@@ -30,7 +30,7 @@ public:
     Cursor();
     ~Cursor();
     void Paint();
-    cursorType SetPlayer(cursorType);
+    cursorType SetPlayer(cursorType NewCType);
 private:
     cursorType Type;
     Texture *CursorImgX;

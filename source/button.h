@@ -30,11 +30,11 @@ public:
     Button(buttonType = buttonType::StdMenu);
     ~Button();
     void Paint();
-    void SetCaption(const std::string &);
-    void SetFont(GRRLIB_ttfFont *);
-    void SetSelected(bool);
-    void SetTextColor(u32);
-    void SetTextHeight(unsigned int);
+    void SetCaption(const std::string &NewCaption);
+    void SetFont(GRRLIB_ttfFont *AFont);
+    void SetSelected(bool IsSelected);
+    void SetTextColor(u32 NewColor);
+    void SetTextHeight(unsigned int NewHeight);
 private:
     bool Selected;
     std::string Caption;

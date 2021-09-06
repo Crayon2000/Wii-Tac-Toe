@@ -39,7 +39,7 @@ void WiiPowerPressed()
 
 /**
  * Callback for the power button on the Wiimote.
- * @param[in] chan The Wiimote that pressed the button
+ * @param[in] chan The Wiimote that pressed the button.
  */
 void WiimotePowerPressed(s32 chan)
 {
@@ -49,9 +49,9 @@ void WiimotePowerPressed(s32 chan)
 
 /**
  * Entry point.
- * @param[in] argc The number of arguments invoked with the program
- * @param[in] argv The array containing the arguments
- * @return 0 on clean exit, an error code otherwise
+ * @param[in] argc The number of arguments invoked with the program.
+ * @param[in] argv The array containing the arguments.
+ * @return 0 on clean exit, an error code otherwise.
  */
 int main(int argc, char **argv)
 {

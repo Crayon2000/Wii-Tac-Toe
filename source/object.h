@@ -27,17 +27,17 @@ public:
     u8 GetAlpha();
     u32 GetColor();
     bool IsVisible();
-    void SetLeft(float);
-    void SetTop(float);
-    void SetLocation(float, float);
-    void SetWidth(unsigned int);
-    void SetHeight(unsigned int);
-    void SetSize(unsigned int, unsigned int);
-    void SetAngle(float);
-    void SetAlpha(u8);
-    void SetColor(u32);
-    void SetVisible(bool);
-    bool IsInside(float, float);
+    void SetLeft(float Left);
+    void SetTop(float Top);
+    void SetLocation(float Left, float Top);
+    void SetWidth(unsigned int Width);
+    void SetHeight(unsigned int Height);
+    void SetSize(unsigned int Width, unsigned int Height);
+    void SetAngle(float Angle);
+    void SetAlpha(u8 Alpha);
+    void SetColor(u32 AColor);
+    void SetVisible(bool Visible);
+    bool IsInside(float x, float y);
 protected:
     virtual void Paint() = 0; /**< Draw an image on screen. */
 
