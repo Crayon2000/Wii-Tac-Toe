@@ -41,6 +41,16 @@ private:
         VsHuman2    /**< Play vs a human with 2 Wii Remote. */
     };
 
+    /**
+     * Types of screen available in the game.
+     */
+    enum class gameScreen : u8 {
+        Start,  /**< Start screen. */
+        Game,   /**< Game screen. */
+        Home,   /**< Home screen. */
+        Menu    /**< Menu screen. */
+    };
+
     void StartSreen();
     void MenuScreen(bool CopyScreen);
     void GameScreen(bool CopyScreen);
@@ -50,7 +60,7 @@ private:
     void NewGame();
     void PrintWrapText(u16 x, u16 y, u16 maxLineWidth, const std::string &input,
         u32 fontSize, u32 TextColor, u32 ShadowColor, s8 OffsetX, s8 OffsetY);
-    void ChangeScreen(u8 NewScreen, bool PlaySound = true);
+    void ChangeScreen(gameScreen NewScreen, bool PlaySound = true);
     void ButtonOn(s8 NewSelectedButton);
     bool SelectZone();
     void ChangeCursor();
@@ -63,8 +73,8 @@ private:
     bool CurrentPlayer;
     bool PlayerToStart;
     std::array<Player, 2> WTTPlayer;
-    u8 CurrentScreen;
-    u8 LastScreen;
+    gameScreen CurrentScreen;
+    gameScreen LastScreen;
     s8 SelectedButton;
     std::string text;
 

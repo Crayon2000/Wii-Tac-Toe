@@ -27,11 +27,6 @@
 // Font
 #include "../fonts/Swis721_Ex_BT.h"
 
-#define START_SCREEN    0
-#define GAME_SCREEN     1
-#define HOME_SCREEN     2
-#define MENU_SCREEN     3
-
 /**
  * Array to hold the position of each zone.
  */
@@ -48,14 +43,13 @@ static Point Table[3][3] = {
 Game::Game(u16 GameScreenWidth, u16 GameScreenHeight) :
     FPS(0),
     ShowFPS(false),
+    ScreenWidth(GameScreenWidth),
+    ScreenHeight(GameScreenHeight),
     GameMode(gameMode::VsHuman1),
     SymbolAlpha(5),
     AlphaDirection(false)
 {
     srand(time(nullptr));
-
-    ScreenWidth = GameScreenWidth;
-    ScreenHeight = GameScreenHeight;
 
     GameGrid = new Grid();
     Lang = new Language();
@@ -193,16 +187,16 @@ void Game::Paint()
 {
     switch(CurrentScreen)
     {
-        case START_SCREEN:
+        case gameScreen::Start:
             StartSreen();
             break;
-        case MENU_SCREEN:
+        case gameScreen::Menu:
             MenuScreen(true);
             break;
-        case HOME_SCREEN:
+        case gameScreen::Home:
             ExitScreen();
             break;
-        case GAME_SCREEN:
+        case gameScreen::Game:
             GameScreen(true);
             // AI
             if(RoundFinished == false && WTTPlayer[CurrentPlayer].GetType() == playerType::CPU)
@@ -223,7 +217,7 @@ void Game::Paint()
             GRRLIB_FillScreen(0x000000FF);
     }
 
-    if(CurrentScreen != START_SCREEN &&
+    if(CurrentScreen != gameScreen::Start &&
         WPAD_Probe(WPAD_CHAN_0, nullptr) == WPAD_ERR_NO_CONTROLLER)
     {   // Controller is disconnected
         Rectangle(0, 0, ScreenWidth, ScreenHeight, 0x000000B2, 1);
@@ -396,11 +390,13 @@ void Game::ExitScreen()
     {   // Copy static element
         switch(LastScreen)
         {
-            case GAME_SCREEN:
+            case gameScreen::Game:
                 GameScreen(false);
                 break;
-            case MENU_SCREEN:
+            case gameScreen::Menu:
                 MenuScreen(false);
+                break;
+            default:
                 break;
         }
 
@@ -549,9 +545,9 @@ bool Game::ControllerManager()
     {   // Hide cursor
         Hand[0].SetVisible(false);
     }
-    if(WPadData1->ir.valid && (CurrentScreen == HOME_SCREEN ||
-        CurrentScreen == START_SCREEN || CurrentScreen == MENU_SCREEN ||
-        (CurrentScreen == GAME_SCREEN && GameMode == gameMode::VsHuman2) ))
+    if(WPadData1->ir.valid && (CurrentScreen == gameScreen::Home ||
+        CurrentScreen == gameScreen::Start || CurrentScreen == gameScreen::Menu ||
+        (CurrentScreen == gameScreen::Game && GameMode == gameMode::VsHuman2) ))
     {
         // I don't understand this calculation but it works
         Hand[1].SetLeft((WPadData1->ir.x / ScreenWidth * (ScreenWidth + Hand[1].GetWidth() * 2)) - Hand[1].GetWidth());
@@ -568,13 +564,13 @@ bool Game::ControllerManager()
     {
         switch(CurrentScreen)
         {
-            case START_SCREEN:
+            case gameScreen::Start:
                 if((Buttons0 & WPAD_BUTTON_A))
                 {
-                    ChangeScreen(MENU_SCREEN);
+                    ChangeScreen(gameScreen::Menu);
                 }
                 break;
-            case MENU_SCREEN:
+            case gameScreen::Menu:
                 if((Buttons0 & WPAD_BUTTON_A))
                 {
                     switch(SelectedButton)
@@ -582,30 +578,32 @@ bool Game::ControllerManager()
                         case 0:
                             WTTPlayer[1].SetType(playerType::Human);
                             GameMode = gameMode::VsHuman1;
-                            ChangeScreen(GAME_SCREEN);
+                            ChangeScreen(gameScreen::Game);
                             break;
                         case 1:
                             WTTPlayer[1].SetType(playerType::CPU);
                             GameMode = gameMode::VsAI;
-                            ChangeScreen(GAME_SCREEN);
+                            ChangeScreen(gameScreen::Game);
                             break;
                         case 2:
                             WTTPlayer[1].SetType(playerType::Human);
                             GameMode = gameMode::VsHuman2;
-                            ChangeScreen(GAME_SCREEN);
+                            ChangeScreen(gameScreen::Game);
+                            break;
+                        default:
                             break;
                     }
                 }
                 else if((Buttons0 & WPAD_BUTTON_B))
                 {
-                    ChangeScreen(START_SCREEN);
+                    ChangeScreen(gameScreen::Start);
                 }
                 else if((Buttons0 & WPAD_BUTTON_HOME) || (Buttons1 & WPAD_BUTTON_HOME))
                 {
-                    ChangeScreen(HOME_SCREEN);
+                    ChangeScreen(gameScreen::Home);
                 }
                 break;
-            case HOME_SCREEN:
+            case gameScreen::Home:
                 if((Buttons0 & WPAD_BUTTON_HOME) || (Buttons1 & WPAD_BUTTON_HOME))
                 {
                     GameAudio->PauseMusic(false);
@@ -631,20 +629,22 @@ bool Game::ControllerManager()
                             WPAD_Rumble(WPAD_CHAN_1, 0); // Rumble off, just in case
                             Draw_FadeOut(CopiedImg, 1, 1, 3);
                             return true; // Exit to loader
+                        default:
+                            break;
                     }
                 }
                 break;
             default:
                 if((Buttons0 & WPAD_BUTTON_HOME) || (Buttons1 & WPAD_BUTTON_HOME))
                 {
-                    ChangeScreen(HOME_SCREEN);
+                    ChangeScreen(gameScreen::Home);
                 }
 
                 if((Buttons0 & WPAD_BUTTON_A))
                 {
                     if(SelectedButton > -1)
                     {
-                        ChangeScreen(HOME_SCREEN);
+                        ChangeScreen(gameScreen::Home);
                     }
                     else if(RoundFinished == true)
                     {
@@ -786,7 +786,7 @@ void Game::NewGame()
 
     PlayerToStart = rand() & 1; // 0 or 1
 
-    ChangeScreen(START_SCREEN, false);
+    ChangeScreen(gameScreen::Start, false);
 
     WTTPlayer[0].ResetScore();
     WTTPlayer[1].ResetScore();
@@ -862,7 +862,7 @@ void Game::PrintWrapText(u16 x, u16 y, u16 maxLineWidth,
  * @param[in] NewScreen New screen to show.
  * @param[in] PlaySound Set to true to play a sound. Default value is true.
  */
-void Game::ChangeScreen(u8 NewScreen, bool PlaySound)
+void Game::ChangeScreen(gameScreen NewScreen, bool PlaySound)
 {
     if(PlaySound == true)
     {
@@ -937,14 +937,14 @@ bool Game::SelectZone()
  */
 void Game::ChangeCursor()
 {
-    if(CurrentScreen == HOME_SCREEN)
+    if(CurrentScreen == gameScreen::Home)
     {
         Hand[0].SetPlayer(cursorType::P1);
         Hand[0].SetAlpha(0xFF);
         Hand[1].SetPlayer(cursorType::P2);
         Hand[1].SetAlpha(0x55);
     }
-    else if(CurrentScreen == GAME_SCREEN)
+    else if(CurrentScreen == gameScreen::Game)
     {
         if(GameMode == gameMode::VsHuman1)
         {

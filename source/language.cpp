@@ -112,6 +112,7 @@ void Language::SetLanguage(s32 Conf_Lang)
         case CONF_LANG_TRAD_CHINESE:
         default:    // CONF_LANG_ENGLISH
             Root_Node = mxmlLoadString(NULL, (char*)english_xml, MXML_TEXT_CALLBACK);
+            break;
     }
     First_Node = mxmlFindElement(Root_Node, Root_Node, "language", NULL, NULL, MXML_DESCEND);
 }
