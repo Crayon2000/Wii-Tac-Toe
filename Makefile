@@ -26,7 +26,7 @@ INCLUDES	:=	source source/pngu source/grrlib source/grrmod source/fmt
 #---------------------------------------------------------------------------------
 
 CFLAGS	= -g -O2 -Wall $(MACHDEP) $(INCLUDE) `freetype-config --cflags`
-CXXFLAGS	=	-std=gnu++17 $(CFLAGS)
+CXXFLAGS	=	-std=gnu++20 $(CFLAGS)
 
 LDFLAGS	=	-g $(MACHDEP) -Wl,-Map,$(notdir $@).map
 

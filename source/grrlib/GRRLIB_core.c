@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-Copyright (c) 2009-2020 The GRRLIB Team
+Copyright (c) 2009-2021 The GRRLIB Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +24,7 @@ THE SOFTWARE.
 #include <malloc.h>
 #include <string.h>
 #include <ogc/conf.h>
+#include <stdio.h>
 #include <ogc/machine/processor.h>
 #include <fat.h>
 
@@ -65,7 +66,8 @@ int  GRRLIB_Init (void) {
     VIDEO_SetBlack(true);  // Disable video output during initialisation
 
     // Grab a pointer to the video mode attributes
-    if ( !(rmode = VIDEO_GetPreferredMode(NULL)) ) {
+    rmode = VIDEO_GetPreferredMode(NULL);
+    if (rmode == NULL) {
         return -1;
     }
 
@@ -75,21 +77,24 @@ int  GRRLIB_Init (void) {
             //rmode = &TVPal574IntDfScale;
             rmode = &TVPal528IntDf; // BC ...this is still wrong, but "less bad" for now
             break;
+        default:
+#ifdef HW_DOL
+            if(VIDEO_HaveComponentCable()) {
+                rmode = &TVNtsc480Prog;
+            }
+#endif
+            break;
     }
 
 #if defined(HW_RVL)
     // 16:9 and 4:3 Screen Adjustment for Wii
     if (CONF_GetAspectRatio() == CONF_ASPECT_16_9) {
         rmode->viWidth = 678;
-        rmode->viXOrigin = (VI_MAX_WIDTH_NTSC - 678) / 2;  // This probably needs to consider PAL
     } else {    // 4:3
         rmode->viWidth = 672;
-        rmode->viXOrigin = (VI_MAX_WIDTH_NTSC - 672) / 2;
     }
-#else
-    // GameCube
-    rmode->viWidth = 672;
-    rmode->viXOrigin = (VI_MAX_WIDTH_NTSC - 672) / 2;
+    // This probably needs to consider PAL
+    rmode->viXOrigin = (VI_MAX_WIDTH_NTSC - rmode->viWidth) / 2;
 #endif
 
 #if defined(HW_RVL)
