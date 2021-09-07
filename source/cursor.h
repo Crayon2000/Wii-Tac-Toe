@@ -29,7 +29,7 @@ class Cursor : public Object
 public:
     Cursor();
     ~Cursor();
-    void Paint();
+    void Paint() override;
     cursorType SetPlayer(cursorType NewCType);
 private:
     cursorType Type;

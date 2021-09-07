@@ -29,7 +29,7 @@ class Button : public Object
 public:
     Button(buttonType = buttonType::StdMenu);
     ~Button();
-    void Paint();
+    void Paint() override;
     void SetCaption(const std::string &NewCaption);
     void SetFont(GRRLIB_ttfFont *AFont);
     void SetSelected(bool IsSelected);

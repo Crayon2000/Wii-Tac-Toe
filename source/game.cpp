@@ -892,7 +892,7 @@ void Game::ButtonOn(s8 NewSelectedButton)
 
 /**
  * Check if a zone is selected.
- * @return true if in a zone, false otherwise
+ * @return true if in a zone, false otherwise.
  */
 bool Game::SelectZone()
 {

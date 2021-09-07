@@ -20,7 +20,7 @@ class Symbol : public Object
 public:
     Symbol();
     ~Symbol();
-    void Paint();
+    void Paint() override;
     void SetPlayer(u8 APlayer);
     void SetLocation(Point APoint);
 private:
