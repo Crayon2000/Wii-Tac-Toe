@@ -28,7 +28,9 @@ class Cursor : public Object
 {
 public:
     Cursor();
+    Cursor(Cursor const&) = delete;
     ~Cursor();
+    Cursor& operator=(Cursor const&) = delete;
     void Paint() override;
     cursorType SetPlayer(cursorType NewCType);
 private:

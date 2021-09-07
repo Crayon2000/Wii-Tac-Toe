@@ -28,7 +28,9 @@ class Game
 {
 public:
     Game(u16 GameScreenWidth, u16 GameScreenHeight);
+    Game(Game const&) = delete;
     ~Game();
+    Game& operator=(Game const&) = delete;
     void Paint();
     bool ControllerManager();
 private:

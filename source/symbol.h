@@ -19,7 +19,9 @@ class Symbol : public Object
 {
 public:
     Symbol();
+    Symbol(Symbol const&) = delete;
     ~Symbol();
+    Symbol& operator=(Symbol const&) = delete;
     void Paint() override;
     void SetPlayer(u8 APlayer);
     void SetLocation(Point APoint);

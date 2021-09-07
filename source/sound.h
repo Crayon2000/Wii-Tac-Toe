@@ -21,7 +21,9 @@ private:
     u32 _freq;
 public:
     Sound(u32 format, const void *buffer, u32 len, u32 frequency);
+    Sound(Sound const&) = delete;
     virtual ~Sound();
+    Sound& operator=(Sound const&) = delete;
 
     const void *GetBuffer() const;
     u32 GetFormat() const;

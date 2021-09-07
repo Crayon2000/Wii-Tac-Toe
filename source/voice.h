@@ -22,7 +22,9 @@ private:
     aesndpb_t *_Voice;
 public:
     Voice();
+    Voice(Voice const&) = delete;
     virtual ~Voice();
+    Voice& operator=(Voice const&) = delete;
 
     void SetVolume(u16 Volume);
     void SetVolume(u16 LeftVolume, u16 RightVolume);

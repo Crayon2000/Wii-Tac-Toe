@@ -17,10 +17,12 @@ class Grid
 {
 public:
     Grid();
+    Grid(Grid const&) = delete;
     ~Grid();
-    bool SetPlayer(u8, u8, u8);
-    void SetPlayerAI(u8);
-    u8 GetPlayerAtPos(u8, u8) const;
+    Grid& operator=(Grid const&) = delete;
+    bool SetPlayer(u8 Player, u8 X, u8 Y);
+    void SetPlayerAI(u8 Player);
+    u8 GetPlayerAtPos(u8 X, u8 Y) const;
     u8 GetWinner() const;
     void Clear();
     bool IsFilled();

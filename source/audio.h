@@ -18,7 +18,9 @@ class Audio
 {
 public:
     Audio();
+    Audio(Audio const&) = delete;
     ~Audio();
+    Audio& operator=(Audio const&) = delete;
 
     void PauseMusic(bool Paused);
     void LoadMusic(s32 Volume = 255);

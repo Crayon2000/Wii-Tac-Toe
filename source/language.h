@@ -22,7 +22,9 @@ class Language
 {
 public:
     Language();
+    Language(Language const&) = delete;
     ~Language();
+    Language& operator=(Language const&) = delete;
     std::string String(const char *From);
     std::string GetWinningMessage(s8 Index = -1);
     std::string GetTieMessage(s8 Index = -1);

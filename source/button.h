@@ -28,7 +28,9 @@ class Button : public Object
 {
 public:
     Button(buttonType = buttonType::StdMenu);
+    Button(Button const&) = delete;
     ~Button();
+    Button& operator=(Button const&) = delete;
     void Paint() override;
     void SetCaption(const std::string &NewCaption);
     void SetFont(GRRLIB_ttfFont *AFont);

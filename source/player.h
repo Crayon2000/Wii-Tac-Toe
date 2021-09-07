@@ -26,7 +26,9 @@ class Player
 {
 public:
     Player();
+    Player(Player const&) = delete;
     virtual ~Player() {};
+    Player& operator=(Player const&) = delete;
     void SetName(const std::string &AName);
     std::string GetName();
     void SetSign(u8 ASign);

@@ -18,7 +18,9 @@ class Object
 {
 public:
     Object();
+    Object(Object const&) = delete;
     virtual ~Object();
+    Object& operator=(Object const&) = delete;
     float GetLeft();
     float GetTop();
     unsigned int GetWidth();
