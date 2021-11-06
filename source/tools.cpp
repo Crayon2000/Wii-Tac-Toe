@@ -1,6 +1,6 @@
 #include <wiiuse/wpad.h>        // Wiimote
 #include <ogc/lwp_watchdog.h>   // gettime
-#include <stdlib.h>             // abs
+#include <cstdlib>              // abs
 
 #include "tools.h"
 #include "grrlib_class.h"
@@ -105,8 +105,8 @@ void Draw_FadeInOut(Texture *tex, f32 scaleX, f32 scaleY, u16 speed)
  */
 void Draw_FadeIn(Texture *tex, f32 scaleX, f32 scaleY, u16 speed)
 {
-    f32 xpos = (Screen::GetWidth() - tex->GetWidth()) / 2;
-    f32 ypos = (Screen::GetHeight() - tex->GetHeight()) / 2;
+    const f32 xpos = (Screen::GetWidth() - tex->GetWidth()) / 2;
+    const f32 ypos = (Screen::GetHeight() - tex->GetHeight()) / 2;
 
     for(s16 alpha = 0; alpha < 255; alpha += speed)
     {
@@ -128,8 +128,8 @@ void Draw_FadeIn(Texture *tex, f32 scaleX, f32 scaleY, u16 speed)
  */
 void Draw_FadeOut(Texture *tex, f32 scaleX, f32 scaleY, u16 speed)
 {
-    f32 xpos = (Screen::GetWidth() - tex->GetWidth()) / 2;
-    f32 ypos = (Screen::GetHeight() - tex->GetHeight()) / 2;
+    const f32 xpos = (Screen::GetWidth() - tex->GetWidth()) / 2;
+    const f32 ypos = (Screen::GetHeight() - tex->GetHeight()) / 2;
 
     for(s16 alpha = 255; alpha > 0; alpha -= speed)
     {
@@ -153,11 +153,11 @@ void Draw_FadeOut(Texture *tex, f32 scaleX, f32 scaleY, u16 speed)
  */
 bool PtInCircle(const int xo, const int yo, const int radius,
                 const int wpadx, const int wpady) {
-    int dx = abs(wpadx - xo);
+    const int dx = std::abs(wpadx - xo);
     if (dx >  radius) {
         return false;
     }
-    int dy = abs(wpady - yo);
+    const int dy = std::abs(wpady - yo);
     if (dy >  radius) {
         return false;
     }

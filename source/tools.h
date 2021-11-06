@@ -9,7 +9,7 @@
 
 #include "grrlib_class.h"
 
-void RUMBLE_Wiimote(s32, int);
+void RUMBLE_Wiimote(s32 chan, int rumble_time);
 void RUMBLE_Verify();
 void RUMBLE_Init();
 
