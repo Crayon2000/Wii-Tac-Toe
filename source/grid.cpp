@@ -202,4 +202,3 @@ bool Grid::IsFilled()
     }
     return true;
 }
-

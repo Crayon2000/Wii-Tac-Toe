@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <cstdlib>
+#include <ctime>
 #include <wiiuse/wpad.h>
 #include <ogc/conf.h>
 #include <ogc/lwp_watchdog.h>
@@ -49,7 +50,7 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight) :
     SymbolAlpha(5),
     AlphaDirection(false)
 {
-    srand(time(nullptr));
+    srand(std::time(nullptr));
 
     GameGrid = new Grid();
     Lang = new Language();
@@ -435,13 +436,13 @@ void Game::ExitScreen()
         ButtonOn(0);
         SelectedButton = 0;
     }
-    else if(ExitButton[1]->IsInside(Hand[0].GetLeft(), Hand[0].GetTop()))
+    else if(ExitButton[1]->IsInside(Hand[0].GetLeft(), Hand[0].GetTop()) == true)
     {
         ExitButton[1]->SetSelected(true);
         ButtonOn(1);
         SelectedButton = 1;
     }
-    else if(ExitButton[2]->IsInside(Hand[0].GetLeft(), Hand[0].GetTop()))
+    else if(ExitButton[2]->IsInside(Hand[0].GetLeft(), Hand[0].GetTop()) == true)
     {
         ExitButton[2]->SetSelected(true);
         ButtonOn(2);
@@ -494,19 +495,19 @@ void Game::MenuScreen(bool CopyScreen)
     MenuButton[0]->SetSelected(false);
     MenuButton[1]->SetSelected(false);
     MenuButton[2]->SetSelected(false);
-    if(MenuButton[0]->IsInside(Hand[0].GetLeft(), Hand[0].GetTop()))
+    if(MenuButton[0]->IsInside(Hand[0].GetLeft(), Hand[0].GetTop()) == true)
     {
         MenuButton[0]->SetSelected(true);
         ButtonOn(0);
         SelectedButton = 0;
     }
-    else if(MenuButton[1]->IsInside(Hand[0].GetLeft(), Hand[0].GetTop()))
+    else if(MenuButton[1]->IsInside(Hand[0].GetLeft(), Hand[0].GetTop()) == true)
     {
         MenuButton[1]->SetSelected(true);
         ButtonOn(1);
         SelectedButton = 1;
     }
-    else if(MenuButton[2]->IsInside(Hand[0].GetLeft(), Hand[0].GetTop()))
+    else if(MenuButton[2]->IsInside(Hand[0].GetLeft(), Hand[0].GetTop()) == true)
     {
         MenuButton[2]->SetSelected(true);
         ButtonOn(2);
@@ -705,8 +706,8 @@ bool Game::ControllerManager()
         WIILIGHT_TurnOn();
 
         char path[255];
-        time_t now = time(nullptr);
-        struct tm *ti = localtime(&now);
+        std::time_t now = std::time(nullptr);
+        struct std::tm *ti = std::localtime(&now);
         sprintf(path, "sd:/Screenshot %d-%02d-%02d %02d%02d%02d.png",
             ti->tm_year + 1900, ti->tm_mon + 1, ti->tm_mday, ti->tm_hour, ti->tm_min, ti->tm_sec);
 
@@ -989,7 +990,7 @@ void Game::ChangeCursor()
         }
     }
     else
-    {   //START_SCREEN or MENU_SCREEN
+    {   // START_SCREEN or MENU_SCREEN
         Hand[0].SetPlayer(cursorType::X);
         Hand[0].SetAlpha(0xFF);
         Hand[1].SetPlayer(cursorType::O);

@@ -84,4 +84,3 @@ cursorType Cursor::SetPlayer(cursorType NewCType)
     Height = CurrentCursor->GetHeight();
     return PreviousType;
 }
-
