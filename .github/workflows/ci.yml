@@ -13,7 +13,7 @@ jobs:
     steps:
 
     - name: Checkout the Git repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Build application
       run: make build
@@ -21,7 +21,7 @@ jobs:
     - name: Move file
       run: mv Wii-Tac-Toe.dol Wii-Tac-Toe/boot.dol
 
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       with:
         name: Wii-Tac-Toe
         path: Wii-Tac-Toe/
