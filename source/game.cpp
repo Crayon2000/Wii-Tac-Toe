@@ -311,7 +311,7 @@ void Game::GameScreen(bool CopyScreen)
         CopiedImg->Draw(0, 0);
     }
 
-    u32 HoverColor = (WTTPlayer[CurrentPlayer].GetSign() == 'X') ? 0x0093DDFF : 0xDA251DFF;
+    const u32 HoverColor = (WTTPlayer[CurrentPlayer].GetSign() == 'X') ? 0x0093DDFF : 0xDA251DFF;
 
     // Draw grid content
     if(RoundFinished == true)
