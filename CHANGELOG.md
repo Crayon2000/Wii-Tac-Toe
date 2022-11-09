@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file.
 - Library update
   - fmt 7.1.3
   - GRRMOD (0707df5da29d3df81a98e83201598bc65825dee8)
-  - GRRLIB (e46d21721e2edeac4b67341ab3ab2d2b94fd68f1)
+  - GRRLIB (45068cade75db331a8511c54da40abf06d642d4a)
 
 ## 1.0.0
 

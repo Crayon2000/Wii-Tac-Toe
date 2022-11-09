@@ -1,5 +1,5 @@
 /*------------------------------------------------------------------------------
-Copyright (c) 2009-2021 The GRRLIB Team
+Copyright (c) 2009-2022 The GRRLIB Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -83,6 +83,8 @@ void  GRRLIB_Exit (void);
 
 //------------------------------------------------------------------------------
 // GRRLIB_fbAdvanced.c - Render to framebuffer: Advanced primitives
+void  GRRLIB_Ellipse (const f32 x, const f32 y, const f32 radiusX,
+                      const f32 radiusY, const u32 color, const u8 filled);
 void  GRRLIB_Circle (const f32 x, const f32 y, const f32 radius,
                      const u32 color, const u8 filled);
 
@@ -133,11 +135,11 @@ void  GRRLIB_CompoEnd(int posx, int posy, GRRLIB_texImg *tex);
 
 //------------------------------------------------------------------------------
 // GRRLIB_texEdit.c - Modifying the content of a texture
-GRRLIB_texImg*  GRRLIB_CreateEmptyTexture (const u32 w, const u32 h);
+GRRLIB_texImg*  GRRLIB_CreateEmptyTexture (const u32 width, const u32 height);
 GRRLIB_texImg*  GRRLIB_LoadTexture    (const u8 *my_img);
 GRRLIB_texImg*  GRRLIB_LoadTexturePNG (const u8 *my_png);
 GRRLIB_texImg*  GRRLIB_LoadTextureJPG (const u8 *my_jpg);
-GRRLIB_texImg*  GRRLIB_LoadTextureJPGEx (const u8 *my_jpg, const int);
+GRRLIB_texImg*  GRRLIB_LoadTextureJPGEx (const u8 *my_jpg, const int my_size);
 GRRLIB_texImg*  GRRLIB_LoadTextureBMP (const u8 *my_bmp);
 
 //------------------------------------------------------------------------------
