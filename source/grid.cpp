@@ -69,7 +69,7 @@ void Grid::SetPlayerAI(u8 Player)
     }
 
     // Test block
-    u8 Opponent = (Player == 'X') ? 'O' : 'X';
+    const u8 Opponent = (Player == 'X') ? 'O' : 'X';
     for(x = 0; x < 3; ++x)
     {
         for(y = 0; y < 3; ++y)

@@ -316,7 +316,7 @@ void Game::GameScreen(bool CopyScreen)
     // Draw grid content
     if(RoundFinished == true)
     {
-        if(AlphaDirection)
+        if(AlphaDirection == true)
         {
             SymbolAlpha += 2;
             if(SymbolAlpha > 128)
@@ -760,7 +760,7 @@ void Game::TurnIsOver()
             WTTPlayer[GameWinner].GetName(), WTTPlayer[!GameWinner].GetName());
         RoundFinished = true;
         SymbolAlpha = 5;
-        AlphaDirection = 0;
+        AlphaDirection = false;
     }
     else if(GameGrid->IsFilled() == true)
     {   // Tie game
