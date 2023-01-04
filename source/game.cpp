@@ -814,25 +814,23 @@ void Game::PrintWrapText(u16 x, u16 y, u16 maxLineWidth,
     u32 ShadowColor, s8 OffsetX, s8 OffsetY)
 {
     std::string tmp = input + " "; // Make local copy
-    std::string::iterator startIndex = tmp.begin();
-    std::string::iterator lastSpace = tmp.begin();
-    std::string::iterator i = tmp.begin();
+    auto startIndex = tmp.begin();
+    auto lastSpace = tmp.begin();
     int ypos = y;
     int z = 0;
-    int textLeft;
     const int stepSize = (fontSize * 1.2);
 
-    while(i != tmp.end())
+    for(auto i = tmp.begin(); i != tmp.end(); ++i)
     {
-        if(*i == L' ')
+        if(*i == ' ')
         {
-            std::string tmp2;
-            z = GRRLIB_WidthTTF(DefaultFont, tmp2.assign(startIndex, i).c_str(), fontSize);
+            const std::string tmp2(startIndex, i);
+            z = GRRLIB_WidthTTF(DefaultFont, tmp2.c_str(), fontSize);
 
             if(z >= maxLineWidth)
             {
                 *lastSpace = 0;
-                textLeft = x + (maxLineWidth / 2.0) -
+                const int textLeft = x + (maxLineWidth / 2.0) -
                     (GRRLIB_WidthTTF(DefaultFont, &(*startIndex), fontSize) / 2.0);
                 GRRLIB_PrintfTTF(textLeft + OffsetX, ypos + OffsetY, DefaultFont, &(*startIndex),
                     fontSize, ShadowColor);
@@ -844,11 +842,10 @@ void Game::PrintWrapText(u16 x, u16 y, u16 maxLineWidth,
             }
             lastSpace = i;
         }
-        ++i;
     }
     if(z <= maxLineWidth)
     {
-        textLeft = x + (maxLineWidth / 2.0) -
+        const int textLeft = x + (maxLineWidth / 2.0) -
             (GRRLIB_WidthTTF(DefaultFont, &(*startIndex), fontSize) / 2.0);
         GRRLIB_PrintfTTF(textLeft + OffsetX, ypos + OffsetY, DefaultFont, &(*startIndex),
             fontSize, ShadowColor);
