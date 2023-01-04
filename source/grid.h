@@ -8,6 +8,7 @@
 //---------------------------------------------------------------------------
 
 #include <gctypes.h>
+#include <random>
 
 /**
  * Tic-Tac-Toe grid.
@@ -30,6 +31,8 @@ public:
 private:
     u8 Board[3][3];
     u8 Winner;
+    std::mt19937 Generator;
+    std::uniform_int_distribution<u8> Distribution;
 
     [[nodiscard]] bool IsPlayerWinning(u8 Player);
     [[nodiscard]] bool IsPlayerWinning(u8 Player, u8 MyBoard[3][3]);

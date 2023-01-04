@@ -7,7 +7,11 @@
  */
 Grid::Grid()
 {
-    memset(WinningBoard, false, sizeof(WinningBoard));
+    std::random_device RandomDevice;
+    Generator = std::mt19937(RandomDevice());
+    Distribution = std::uniform_int_distribution<u8>(0, 2);
+
+    std::memset(WinningBoard, false, sizeof(WinningBoard));
     Clear();
 }
 
@@ -31,7 +35,7 @@ bool Grid::SetPlayer(u8 Player, u8 X, u8 Y)
         (Player == 'X' || Player == 'O'))
     {
         Board[X][Y] = Player;
-        memset(WinningBoard, false, sizeof(WinningBoard));
+        std::memset(WinningBoard, false, sizeof(WinningBoard));
         if(IsPlayerWinning(Player) == true)
         {
             Winner = Player;
@@ -54,7 +58,7 @@ void Grid::SetPlayerAI(u8 Player)
     {
         for(u8 y = 0; y < 3; ++y)
         {
-            memcpy(TestBoard, Board, sizeof(TestBoard));
+            std::memcpy(TestBoard, Board, sizeof(TestBoard));
             if(TestBoard[x][y] == ' ')
             {
                 TestBoard[x][y] = Player;
@@ -73,7 +77,7 @@ void Grid::SetPlayerAI(u8 Player)
     {
         for(u8 y = 0; y < 3; ++y)
         {
-            memcpy(TestBoard, Board, sizeof(TestBoard));
+            std::memcpy(TestBoard, Board, sizeof(TestBoard));
             if(TestBoard[x][y] == ' ')
             {
                 TestBoard[x][y] = Opponent;
@@ -87,7 +91,7 @@ void Grid::SetPlayerAI(u8 Player)
     }
 
     // Play at random position
-    while(SetPlayer(Player, rand() % 3, rand() % 3) == false) {}
+    while(SetPlayer(Player, Distribution(Generator), Distribution(Generator)) == false) {}
 }
 
 /**
@@ -107,7 +111,7 @@ u8 Grid::GetPlayerAtPos(u8 X, u8 Y) const
 void Grid::Clear()
 {
     Winner = ' ';
-    memset(Board, ' ', sizeof(Board));
+    std::memset(Board, ' ', sizeof(Board));
 }
 
 /**

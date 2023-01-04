@@ -904,9 +904,9 @@ bool Game::SelectZone()
     }
     if(RoundFinished == false && AIThinkLoop == 0)
     {
-        for(int x = 0; x < 3; ++x)
+        for(s8 x = 0; x < 3; ++x)
         {
-            for(int y = 0; y < 3; ++y)
+            for(s8 y = 0; y < 3; ++y)
             {
                 if (Hand[HandID].GetLeft() > Table[x][y].GetX() &&
                     Hand[HandID].GetLeft() < (Table[x][y].GetX() + 136) &&
