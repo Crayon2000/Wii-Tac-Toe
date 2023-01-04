@@ -6,7 +6,7 @@
 #include <ogc/lwp_watchdog.h>
 #include "grrlib/grrlib.h"
 #include "grrlib_class.h"
-#include "fmt/printf.h"
+#include "fmt/format.h"
 #include "tools.h"
 #include "grid.h"
 #include "audio.h"
@@ -705,10 +705,9 @@ bool Game::ControllerManager()
         WPAD_Rumble(WPAD_CHAN_1, 1); // Rumble on
         WIILIGHT_TurnOn();
 
-        char path[255];
-        std::time_t now = std::time(nullptr);
-        struct std::tm *ti = std::localtime(&now);
-        sprintf(path, "sd:/Screenshot %d-%02d-%02d %02d%02d%02d.png",
+        const std::time_t now = std::time(nullptr);
+        const struct std::tm *ti = std::localtime(&now);
+        auto path = fmt::format("sd:/Screenshot {}-{:02d}-{:02d} {:02d}{:02d}{:02d}.png",
             ti->tm_year + 1900, ti->tm_mon + 1, ti->tm_mday, ti->tm_hour, ti->tm_min, ti->tm_sec);
 
         if(ScreenShot(path) == true)
