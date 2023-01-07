@@ -26,9 +26,9 @@ public:
     ~Language();
     Language& operator=(Language const&) = delete;
     std::string String(const char *From);
-    std::string GetWinningMessage(s8 Index = -1);
-    std::string GetTieMessage(s8 Index = -1);
-    std::string GetTurnOverMessage(s8 Index = -1);
+    std::string GetWinningMessage(s32 Index = -1);
+    std::string GetTieMessage(s32 Index = -1);
+    std::string GetTurnOverMessage(s32 Index = -1);
 private:
     mxml_node_s *First_Node;
 

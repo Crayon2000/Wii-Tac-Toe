@@ -123,9 +123,9 @@ void Language::SetLanguage(s32 Conf_Lang)
  *            If the value is under 0, a random message will be returned.
  * @return A winning message.
  */
-std::string Language::GetWinningMessage(s8 Index)
+std::string Language::GetWinningMessage(s32 Index)
 {
-    const u8 WinningCount = WinningMessage.size();
+    const s32 WinningCount = WinningMessage.size();
     if(Index < 0)
     {
         Index = rand() % WinningCount;
@@ -142,9 +142,9 @@ std::string Language::GetWinningMessage(s8 Index)
  *            If the value is under 0, a random message will be returned.
  * @return A tie message.
  */
-std::string Language::GetTieMessage(s8 Index)
+std::string Language::GetTieMessage(s32 Index)
 {
-    const u8 TieCount = TieMessage.size();
+    const s32 TieCount = TieMessage.size();
     if(Index < 0)
     {
         Index = rand() % TieCount;
@@ -161,9 +161,9 @@ std::string Language::GetTieMessage(s8 Index)
  *            If the value is under 0, a random message will be returned.
  * @return A turn over message.
  */
-std::string Language::GetTurnOverMessage(s8 Index)
+std::string Language::GetTurnOverMessage(s32 Index)
 {
-    const u8 TurnOverCount = TurnOverMessage.size();
+    const s32 TurnOverCount = TurnOverMessage.size();
     if(Index < 0)
     {
         Index = rand() % TurnOverCount;

@@ -50,7 +50,7 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight) :
     SymbolAlpha(5),
     AlphaDirection(false)
 {
-    srand(std::time(nullptr));
+    std::srand(std::time(nullptr));
 
     GameGrid = new Grid();
     Lang = new Language();
@@ -259,7 +259,7 @@ void Game::StartSreen()
     }
     else
     {
-        ArmRotation -= 0.5;
+        ArmRotation -= 0.5f;
         if(ArmRotation < -15.0f)
         {
             ArmDirection = 0;
