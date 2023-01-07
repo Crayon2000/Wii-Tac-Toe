@@ -401,7 +401,7 @@ void Texture::Draw(const f32 xpos, const f32 ypos)
  * @param posy top left corner of the grabbed part. Default is 0.
  * @param clear When this flag is set to true, the screen is cleared after copy. Set to false by default.
  */
-void Texture::CopyScreen(s32 posx, s32 posy, bool clear)
+void Texture::CopyScreen(u16 posx, u16 posy, bool clear)
 {
     GRRLIB_Screen2Texture(posx, posy, this, clear);
 }
@@ -453,7 +453,7 @@ u8 Texture::GetAlpha(void)
  *         -    -3 : Failed to initialize the font engine.
  * @see Exit
  */
-s8 Screen::Initialize(void)
+s32 Screen::Initialize(void)
 {
     return GRRLIB_Init();
 }
@@ -585,7 +585,7 @@ bool Screen::ScreenShot(const std::string &filename)
  * Return the width of the screen in pixels.
  * @return The width in pixels.
  */
-u32 Screen::GetWidth(void)
+u16 Screen::GetWidth(void)
 {
     return rmode->fbWidth;
 }
@@ -594,7 +594,7 @@ u32 Screen::GetWidth(void)
  * Return the height of the screen in pixels.
  * @return The height in pixels.
  */
-u32 Screen::GetHeight(void)
+u16 Screen::GetHeight(void)
 {
     return rmode->efbHeight;
 }

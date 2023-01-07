@@ -7,7 +7,7 @@
  * @param[in] len The sound buffer length.
  * @param[in] frequency The sound frequency.
  */
-Sound::Sound(u32 format, const void *buffer, u32 len, u32 frequency) :
+Sound::Sound(u32 format, const void *buffer, u32 len, f32 frequency) :
     _format(format), _buffer(buffer), _len(len), _freq(frequency)
 {
 }
@@ -34,7 +34,7 @@ u32 Sound::GetFormat() const
  * Get the sound frequency.
  * @return Return the sound frequency.
  */
-u32 Sound::GetFrequency() const
+f32 Sound::GetFrequency() const
 {
     return _freq;
 }

@@ -6,7 +6,7 @@
 #include <ogc/lwp_watchdog.h>
 #include "grrlib/grrlib.h"
 #include "grrlib_class.h"
-#include "fmt/printf.h"
+#include "fmt/format.h"
 #include "tools.h"
 #include "grid.h"
 #include "audio.h"
@@ -50,7 +50,7 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight) :
     SymbolAlpha(5),
     AlphaDirection(false)
 {
-    srand(std::time(nullptr));
+    std::srand(std::time(nullptr));
 
     GameGrid = new Grid();
     Lang = new Language();
@@ -132,10 +132,10 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight) :
     // Build Start Screen background
     SplashImg->Draw(0, 0);
     GRRLIB_PrintfTTF(50, 310, DefaultFont,
-        fmt::format(Lang->String("Programmer: {}"), "Crayon").c_str(),
+        fmt::format(fmt::runtime(Lang->String("Programmer: {}")), "Crayon").c_str(),
         11, 0xFFFFFFFF);
     GRRLIB_PrintfTTF(50, 330, DefaultFont,
-        fmt::format(Lang->String("Graphics: {}"), "Mr_Nick666").c_str(),
+        fmt::format(fmt::runtime(Lang->String("Graphics: {}")), "Mr_Nick666").c_str(),
         11, 0xFFFFFFFF);
     text = Lang->String("Press The A Button");
     GRRLIB_PrintfTTF((ScreenWidth / 2) - (GRRLIB_WidthTTF(DefaultFont, text.c_str(), 20) / 2),
@@ -259,7 +259,7 @@ void Game::StartSreen()
     }
     else
     {
-        ArmRotation -= 0.5;
+        ArmRotation -= 0.5f;
         if(ArmRotation < -15.0f)
         {
             ArmDirection = 0;
@@ -311,12 +311,12 @@ void Game::GameScreen(bool CopyScreen)
         CopiedImg->Draw(0, 0);
     }
 
-    u32 HoverColor = (WTTPlayer[CurrentPlayer].GetSign() == 'X') ? 0x0093DDFF : 0xDA251DFF;
+    const u32 HoverColor = (WTTPlayer[CurrentPlayer].GetSign() == 'X') ? 0x0093DDFF : 0xDA251DFF;
 
     // Draw grid content
     if(RoundFinished == true)
     {
-        if(AlphaDirection)
+        if(AlphaDirection == true)
         {
             SymbolAlpha += 2;
             if(SymbolAlpha > 128)
@@ -478,7 +478,7 @@ void Game::MenuScreen(bool CopyScreen)
         Rectangle(0, 385, ScreenWidth, 95, 0x000000FF, 1);
 
         GRRLIB_PrintfTTF(500, 40, DefaultFont,
-            fmt::format(Lang->String("Ver. {}"), "1.0.0").c_str(),
+            fmt::format(fmt::runtime(Lang->String("Ver. {}")), "1.0.0").c_str(),
             12, 0xFFFFFFFF);
 
         if(CopyScreen == true)
@@ -705,10 +705,9 @@ bool Game::ControllerManager()
         WPAD_Rumble(WPAD_CHAN_1, 1); // Rumble on
         WIILIGHT_TurnOn();
 
-        char path[255];
-        std::time_t now = std::time(nullptr);
-        struct std::tm *ti = std::localtime(&now);
-        sprintf(path, "sd:/Screenshot %d-%02d-%02d %02d%02d%02d.png",
+        const std::time_t now = std::time(nullptr);
+        const struct std::tm *ti = std::localtime(&now);
+        auto path = fmt::format("sd:/Screenshot {}-{:02d}-{:02d} {:02d}{:02d}{:02d}.png",
             ti->tm_year + 1900, ti->tm_mon + 1, ti->tm_mday, ti->tm_hour, ti->tm_min, ti->tm_sec);
 
         if(ScreenShot(path) == true)
@@ -740,7 +739,7 @@ void Game::Clear()
     GameGrid->Clear();
     CurrentPlayer = PlayerToStart;
     PlayerToStart = !PlayerToStart; // Next other player will start
-    text = fmt::format(Lang->GetTurnOverMessage(), WTTPlayer[CurrentPlayer].GetName());
+    text = fmt::format(fmt::runtime(Lang->GetTurnOverMessage()), WTTPlayer[CurrentPlayer].GetName());
     RoundFinished = false;
     Copied = false;
     ChangeCursor();
@@ -756,11 +755,11 @@ void Game::TurnIsOver()
     {   // A winner is declare
         GameWinner = (GameWinner == WTTPlayer[0].GetSign()) ? 0 : 1;
         WTTPlayer[GameWinner].IncScore();
-        text = fmt::format(Lang->GetWinningMessage(),
+        text = fmt::format(fmt::runtime(Lang->GetWinningMessage()),
             WTTPlayer[GameWinner].GetName(), WTTPlayer[!GameWinner].GetName());
         RoundFinished = true;
         SymbolAlpha = 5;
-        AlphaDirection = 0;
+        AlphaDirection = false;
     }
     else if(GameGrid->IsFilled() == true)
     {   // Tie game
@@ -771,7 +770,7 @@ void Game::TurnIsOver()
     else
     {
         CurrentPlayer = !CurrentPlayer; // Change player's turn
-        text = fmt::format(Lang->GetTurnOverMessage(), WTTPlayer[CurrentPlayer].GetName());
+        text = fmt::format(fmt::runtime(Lang->GetTurnOverMessage()), WTTPlayer[CurrentPlayer].GetName());
     }
 
     Copied = false;
@@ -815,25 +814,23 @@ void Game::PrintWrapText(u16 x, u16 y, u16 maxLineWidth,
     u32 ShadowColor, s8 OffsetX, s8 OffsetY)
 {
     std::string tmp = input + " "; // Make local copy
-    std::string::iterator startIndex = tmp.begin();
-    std::string::iterator lastSpace = tmp.begin();
-    std::string::iterator i = tmp.begin();
+    auto startIndex = tmp.begin();
+    auto lastSpace = tmp.begin();
     int ypos = y;
     int z = 0;
-    int textLeft;
     const int stepSize = (fontSize * 1.2);
 
-    while(i != tmp.end())
+    for(auto i = tmp.begin(); i != tmp.end(); ++i)
     {
-        if(*i == L' ')
+        if(*i == ' ')
         {
-            std::string tmp2;
-            z = GRRLIB_WidthTTF(DefaultFont, tmp2.assign(startIndex, i).c_str(), fontSize);
+            const std::string tmp2(startIndex, i);
+            z = GRRLIB_WidthTTF(DefaultFont, tmp2.c_str(), fontSize);
 
             if(z >= maxLineWidth)
             {
                 *lastSpace = 0;
-                textLeft = x + (maxLineWidth / 2.0) -
+                const int textLeft = x + (maxLineWidth / 2.0) -
                     (GRRLIB_WidthTTF(DefaultFont, &(*startIndex), fontSize) / 2.0);
                 GRRLIB_PrintfTTF(textLeft + OffsetX, ypos + OffsetY, DefaultFont, &(*startIndex),
                     fontSize, ShadowColor);
@@ -845,11 +842,10 @@ void Game::PrintWrapText(u16 x, u16 y, u16 maxLineWidth,
             }
             lastSpace = i;
         }
-        ++i;
     }
     if(z <= maxLineWidth)
     {
-        textLeft = x + (maxLineWidth / 2.0) -
+        const int textLeft = x + (maxLineWidth / 2.0) -
             (GRRLIB_WidthTTF(DefaultFont, &(*startIndex), fontSize) / 2.0);
         GRRLIB_PrintfTTF(textLeft + OffsetX, ypos + OffsetY, DefaultFont, &(*startIndex),
             fontSize, ShadowColor);
@@ -904,9 +900,9 @@ bool Game::SelectZone()
     }
     if(RoundFinished == false && AIThinkLoop == 0)
     {
-        for(int x = 0; x < 3; ++x)
+        for(s8 x = 0; x < 3; ++x)
         {
-            for(int y = 0; y < 3; ++y)
+            for(s8 y = 0; y < 3; ++y)
             {
                 if (Hand[HandID].GetLeft() > Table[x][y].GetX() &&
                     Hand[HandID].GetLeft() < (Table[x][y].GetX() + 136) &&

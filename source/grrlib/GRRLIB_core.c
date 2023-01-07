@@ -34,12 +34,12 @@ THE SOFTWARE.
 
 #define DEFAULT_FIFO_SIZE (256 * 1024) /**< GX fifo buffer size. */
 
-GRRLIB_drawSettings  GRRLIB_Settings;
-Mtx                  GXmodelView2D;
+GRRLIB_drawSettings GRRLIB_Settings;
+Mtx                 GXmodelView2D;
 
-static void  *gp_fifo = NULL;
+static void *gp_fifo = NULL;
 
-static bool  is_setup = false;  // To control entry and exit
+static bool is_setup = false;  // To control entry and exit
 
 /**
  * Initialize GRRLIB. Call this once at the beginning your code.
@@ -51,8 +51,6 @@ static bool  is_setup = false;  // To control entry and exit
  * @see GRRLIB_Exit
  */
 int  GRRLIB_Init (void) {
-    f32 yscale;
-    u32 xfbHeight;
     Mtx44 perspective;
     s8 error_code = 0;
 
@@ -144,8 +142,8 @@ int  GRRLIB_Init (void) {
     }
 
     // Other GX setup
-    yscale    = GX_GetYScaleFactor(rmode->efbHeight, rmode->xfbHeight);
-    xfbHeight = GX_SetDispCopyYScale(yscale);
+    f32 yscale    = GX_GetYScaleFactor(rmode->efbHeight, rmode->xfbHeight);
+    u32 xfbHeight = GX_SetDispCopyYScale(yscale);
     GX_SetDispCopySrc(0, 0, rmode->fbWidth, rmode->efbHeight);
     GX_SetDispCopyDst(rmode->fbWidth, xfbHeight);
     GX_SetCopyFilter(rmode->aa, rmode->sample_pattern, GX_TRUE, rmode->vfilter);
@@ -178,7 +176,7 @@ int  GRRLIB_Init (void) {
     GX_SetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
 
     guMtxIdentity(GXmodelView2D);
-    guMtxTransApply(GXmodelView2D, GXmodelView2D, 0.0F, 0.0F, -100.0F);
+    guMtxTransApply(GXmodelView2D, GXmodelView2D, 0.0f, 0.0f, -100.0f);
     GX_LoadPosMtxImm(GXmodelView2D, GX_PNMTX0);
 
     guOrtho(perspective, 0.0f, rmode->efbHeight, 0.0f, rmode->fbWidth, 0.0f, 1000.0f);
@@ -221,13 +219,11 @@ int  GRRLIB_Init (void) {
  * and only if the setup function has been called.
  */
 void  GRRLIB_Exit (void) {
-    static  bool  done = false;
+    static bool done = false;
     if (done == true || is_setup == false) {
         return;
     }
-    else {
-        done = true;
-    }
+    done = true;
 
     // Allow write access to the full screen
     GX_SetClipMode( GX_CLIP_DISABLE );
@@ -235,8 +231,10 @@ void  GRRLIB_Exit (void) {
 
     // We empty both frame buffers on our way out
     // otherwise dead frames are sometimes seen when starting the next app
-    GRRLIB_FillScreen( 0x000000FF );  GRRLIB_Render();
-    GRRLIB_FillScreen( 0x000000FF );  GRRLIB_Render();
+    GRRLIB_FillScreen( 0x000000FF );
+    GRRLIB_Render();
+    GRRLIB_FillScreen( 0x000000FF );
+    GRRLIB_Render();
 
     // Shut down the GX engine
     GX_DrawDone();

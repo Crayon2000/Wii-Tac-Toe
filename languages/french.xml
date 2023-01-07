@@ -18,7 +18,7 @@
     <translation from="PLAYER 2" to="JOUEUR 2" />
     <translation from="TIE GAME" to="NULLE" />
 
-        <!-- Variable {0} is the name of the winner and variable {1} is the name of the looser -->
+    <!-- Variable {0} is the name of the winner and variable {1} is the name of the looser -->
     <winning_game>
         <message text="{0} a gagné cette partie." />
         <message text="Est-ce que {0} est le meilleur?" />

@@ -23,8 +23,8 @@ Audio::Audio() :
 
     ScreenVoice = new Voice();
     ButtonVoice = new Voice();
-    ChangeSound = new Sound(VOICE_MONO16, (void *)screen_change_raw, screen_change_raw_size, 44100);
-    RollOverSound = new Sound(VOICE_MONO16, (void *)button_rollover_raw, button_rollover_raw_size, 44100);
+    ChangeSound = new Sound(VOICE_MONO16, (void *)screen_change_raw, screen_change_raw_size, 44100.0f);
+    RollOverSound = new Sound(VOICE_MONO16, (void *)button_rollover_raw, button_rollover_raw_size, 44100.0f);
 }
 
 /**
@@ -59,7 +59,7 @@ void Audio::PauseMusic(bool Paused)
  * Load the music.
  * @param[in] Volume The music volume.
  */
-void Audio::LoadMusic(s32 Volume)
+void Audio::LoadMusic(s16 Volume)
 {
     GRRMOD_Stop();
     GRRMOD_Start();

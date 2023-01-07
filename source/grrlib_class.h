@@ -55,7 +55,7 @@ public:
               const f32 scaleX, const f32 scaleY);
     void Draw(const f32 xpos, const f32 ypos, const f32 degrees);
     void Draw(const f32 xpos, const f32 ypos);
-    void CopyScreen(s32 posx = 0, s32 posy = 0, bool clear = false);
+    void CopyScreen(u16 posx = 0, u16 posy = 0, bool clear = false);
     void SetColor(u32);
     u32 GetColor(void);
     void SetAlpha(u8);
@@ -74,7 +74,7 @@ private:
  */
 namespace Screen
 {
-    s8 Initialize(void);
+    s32 Initialize(void);
     void Exit(void);
     void Render(void);
 
@@ -84,10 +84,10 @@ namespace Screen
     void SetPixel(const f32 x, const f32 y, const u32 color);
     void Line(const f32 x1, const f32 y1, const f32 x2, const f32 y2, const u32 color);
     void Rectangle(const f32 x, const f32 y, const f32 width, const f32 height, const u32 color, const u8 filled);
-    void Circle(const f32 x,  const f32 y,  const f32 radius, const u32 color, const u8 filled);
+    void Circle(const f32 x, const f32 y, const f32 radius, const u32 color, const u8 filled);
 
-    u32 GetWidth(void);
-    u32 GetHeight(void);
+    u16 GetWidth(void);
+    u16 GetHeight(void);
 
     bool ScreenShot(const char* filename);
     bool ScreenShot(const std::string &filename);

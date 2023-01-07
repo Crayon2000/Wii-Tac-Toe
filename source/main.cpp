@@ -24,7 +24,7 @@ u8 HWButton = 0;
 /**
  * Callback for the reset button on the Wii.
  */
-void WiiResetPressed(u32 irq, void* ctx)
+void WiiResetPressed([[maybe_unused]] u32 irq, [[maybe_unused]] void* ctx)
 {
     HWButton = SYS_RETURNTOMENU;
 }
@@ -41,7 +41,7 @@ void WiiPowerPressed()
  * Callback for the power button on the Wiimote.
  * @param[in] chan The Wiimote that pressed the button.
  */
-void WiimotePowerPressed(s32 chan)
+void WiimotePowerPressed([[maybe_unused]] s32 chan)
 {
     HWButton = SYS_POWEROFF_STANDBY;
     //SYS_POWEROFF
@@ -53,7 +53,7 @@ void WiimotePowerPressed(s32 chan)
  * @param[in] argv The array containing the arguments.
  * @return 0 on clean exit, an error code otherwise.
  */
-int main(int argc, char **argv)
+int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 {
     // Video initialization
     Initialize();

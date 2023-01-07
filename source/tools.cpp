@@ -105,8 +105,8 @@ void Draw_FadeInOut(Texture *tex, f32 scaleX, f32 scaleY, u16 speed)
  */
 void Draw_FadeIn(Texture *tex, f32 scaleX, f32 scaleY, u16 speed)
 {
-    const f32 xpos = (Screen::GetWidth() - tex->GetWidth()) / 2;
-    const f32 ypos = (Screen::GetHeight() - tex->GetHeight()) / 2;
+    const f32 xpos = (Screen::GetWidth() - tex->GetWidth()) / 2.0f;
+    const f32 ypos = (Screen::GetHeight() - tex->GetHeight()) / 2.0f;
 
     for(s16 alpha = 0; alpha < 255; alpha += speed)
     {
@@ -128,8 +128,8 @@ void Draw_FadeIn(Texture *tex, f32 scaleX, f32 scaleY, u16 speed)
  */
 void Draw_FadeOut(Texture *tex, f32 scaleX, f32 scaleY, u16 speed)
 {
-    const f32 xpos = (Screen::GetWidth() - tex->GetWidth()) / 2;
-    const f32 ypos = (Screen::GetHeight() - tex->GetHeight()) / 2;
+    const f32 xpos = (Screen::GetWidth() - tex->GetWidth()) / 2.0f;
+    const f32 ypos = (Screen::GetHeight() - tex->GetHeight()) / 2.0f;
 
     for(s16 alpha = 255; alpha > 0; alpha -= speed)
     {

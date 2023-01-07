@@ -7,8 +7,7 @@
 #define ObjectH
 //---------------------------------------------------------------------------
 
-#include <cstdlib>
-#include <gccore.h>
+#include <gctypes.h>
 
 /**
  * The Object class is a the basis for every thing you need to draw on the screen.

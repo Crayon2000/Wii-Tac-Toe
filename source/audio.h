@@ -23,7 +23,7 @@ public:
     Audio& operator=(Audio const&) = delete;
 
     void PauseMusic(bool Paused);
-    void LoadMusic(s32 Volume = 255);
+    void LoadMusic(s16 Volume = 255);
     void PlaySoundScreenChange(u16 Volume);
     void PlaySoundButton(u16 Volume);
 private:
