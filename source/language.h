@@ -12,7 +12,7 @@
 #include <gctypes.h>
 
 // Forward declarations
-struct mxml_node_s;
+struct _mxml_node_s;
 
 /**
  * This is a class to manage different languages.
@@ -30,7 +30,7 @@ public:
     std::string GetTieMessage(s32 Index = -1);
     std::string GetTurnOverMessage(s32 Index = -1);
 private:
-    mxml_node_s *First_Node;
+    _mxml_node_s *First_Node;
 
     std::vector<std::string> WinningMessage;
     std::vector<std::string> TieMessage;
