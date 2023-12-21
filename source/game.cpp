@@ -31,7 +31,7 @@
 /**
  * Array to hold the position of each zone.
  */
-static Point Table[3][3] = {
+static const Point Table[3][3] = {
     {Point(180, 28), Point(180, 131), Point(180, 233)},
     {Point(322, 28), Point(322, 131), Point(322, 233)},
     {Point(464, 28), Point(464, 131), Point(464, 233)}};

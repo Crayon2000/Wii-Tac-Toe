@@ -29,7 +29,6 @@ public:
     Texture(const char *filename);
     Texture(const std::string &filename);
     Texture(const u32 w, const u32 h);
-    void Initialize(void);
     ~Texture();
 
     u32 GetWidth();

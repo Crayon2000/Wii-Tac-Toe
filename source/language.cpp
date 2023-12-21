@@ -62,14 +62,14 @@ Language::~Language()
  * @param[in] From Original string to translate.
  * @return Translated string.
  */
-std::string Language::String(const char *From)
+std::string Language::String(std::string_view From)
 {
-    if(From == NULL)
+    if(From.empty() == true)
     {
         return "";
     }
 
-    mxml_node_t *Text_Node = mxmlFindElement(First_Node, First_Node, "translation", "from", From, MXML_DESCEND);
+    mxml_node_t *Text_Node = mxmlFindElement(First_Node, First_Node, "translation", "from", From.data(), MXML_DESCEND);
     if(Text_Node == NULL)
     {
         return "";

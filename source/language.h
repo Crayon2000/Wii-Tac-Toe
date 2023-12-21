@@ -8,6 +8,7 @@
 //---------------------------------------------------------------------------
 
 #include <string>
+#include <string_view>
 #include <vector>
 #include <gctypes.h>
 
@@ -25,7 +26,7 @@ public:
     Language(Language const&) = delete;
     ~Language();
     Language& operator=(Language const&) = delete;
-    std::string String(const char *From);
+    std::string String(std::string_view From);
     std::string GetWinningMessage(s32 Index = -1);
     std::string GetTieMessage(s32 Index = -1);
     std::string GetTurnOverMessage(s32 Index = -1);

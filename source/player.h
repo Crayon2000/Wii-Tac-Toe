@@ -30,14 +30,14 @@ public:
     virtual ~Player() {};
     Player& operator=(Player const&) = delete;
     void SetName(const std::string &AName);
-    std::string GetName();
+    [[nodiscard]] std::string GetName();
     void SetSign(u8 ASign);
-    u8 GetSign();
-    unsigned int GetScore();
+    [[nodiscard]] u8 GetSign();
+    [[nodiscard]] unsigned int GetScore();
     void IncScore();
     void ResetScore();
     void SetType(playerType AType);
-    playerType GetType();
+    [[nodiscard]] playerType GetType();
 private:
     unsigned int Score;
     std::string Name;
