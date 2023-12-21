@@ -28,6 +28,8 @@ Prerequisites:
 To compile:
 
 ```text
-> pacman --sync --needed --noconfirm ppc-mxml ppc-libpng ppc-freetype ppc-libjpeg-turbo
-> make
+pacman --sync --needed --noconfirm ppc-mxml ppc-libpng ppc-freetype ppc-libjpeg-turbo
+mkdir --parents build && cd build
+/opt/devkitpro/portlibs/wii/bin/powerpc-eabi-cmake ..
+cmake --build .
 ```
