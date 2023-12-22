@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.18)
 project(Wii-Tac-Toe)
 
-set(CMAKE_CXX_STANDARD 20)
-
 find_library(AESND aesnd
   PATHS "${OGC_ROOT}/lib/${OGC_SUBDIR}"
   REQUIRED
@@ -46,6 +44,8 @@ file(GLOB_RECURSE BIN_FILES
 )
 
 add_executable(Wii-Tac-Toe)
+
+target_compile_features(Wii-Tac-Toe PRIVATE cxx_std_20)
 
 target_compile_options(Wii-Tac-Toe PRIVATE
   -Werror
