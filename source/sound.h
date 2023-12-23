@@ -7,6 +7,7 @@
 #define SOUND_H_
 
 #include <gctypes.h>
+#include <span>
 
 /**
  * This is a class used for sound.
@@ -16,19 +17,17 @@ class Sound
 {
 private:
     u32 _format;
-    const void *_buffer;
-    u32 _len;
+    const std::span<const u8> _buffer;
     f32 _freq;
 public:
-    Sound(u32 format, const void *buffer, u32 len, f32 frequency);
+    Sound(u32 format, std::span<const u8> buffer, f32 frequency);
     Sound(Sound const&) = delete;
     virtual ~Sound();
     Sound& operator=(Sound const&) = delete;
 
-    [[nodiscard]] const void *GetBuffer() const;
+    [[nodiscard]] const std::span<const u8> GetBuffer() const;
     [[nodiscard]] u32 GetFormat() const;
     [[nodiscard]] f32 GetFrequency() const;
-    [[nodiscard]] u32 GetLen() const;
 };
 
 #endif /* SOUND_H_ */

@@ -4,11 +4,10 @@
  * Constructor for the Sound class.
  * @param[in] format The sound format.
  * @param[in] buffer The sound buffer
- * @param[in] len The sound buffer length.
  * @param[in] frequency The sound frequency.
  */
-Sound::Sound(u32 format, const void *buffer, u32 len, f32 frequency) :
-    _format(format), _buffer(buffer), _len(len), _freq(frequency)
+Sound::Sound(u32 format, std::span<const u8> buffer, f32 frequency) :
+    _format(format), _buffer(buffer), _freq(frequency)
 {
 }
 
@@ -16,7 +15,7 @@ Sound::Sound(u32 format, const void *buffer, u32 len, f32 frequency) :
  * Get the sound buffer.
  * @return Return the sound buffer.
  */
-const void *Sound::GetBuffer() const
+const std::span<const u8> Sound::GetBuffer() const
 {
     return _buffer;
 }
@@ -37,15 +36,6 @@ u32 Sound::GetFormat() const
 f32 Sound::GetFrequency() const
 {
     return _freq;
-}
-
-/**
- * Get the sound buffer length.
- * @return Return the sound buffer length.
- */
-u32 Sound::GetLen() const
-{
-    return _len;
 }
 
 /**

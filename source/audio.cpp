@@ -9,6 +9,12 @@
 #include "screen_change_raw.h"
 #include "tic_tac_mod.h"
 
+static constexpr auto ScreenChangeBuffer = std::span{screen_change_raw, screen_change_raw_size};
+static constexpr auto ButtonRolloverBuffer = std::span{button_rollover_raw, button_rollover_raw_size};
+
+static const Sound ChangeSound = Sound(VOICE_MONO16, ScreenChangeBuffer, 44100.0f);
+static const Sound RollOverSound = Sound(VOICE_MONO16, ButtonRolloverBuffer, 44100.0f);
+
 /**
  * Constructor for the Audio class.
  */
@@ -23,8 +29,6 @@ Audio::Audio() :
 
     ScreenVoice = new Voice();
     ButtonVoice = new Voice();
-    ChangeSound = new Sound(VOICE_MONO16, (void *)screen_change_raw, screen_change_raw_size, 44100.0f);
-    RollOverSound = new Sound(VOICE_MONO16, (void *)button_rollover_raw, button_rollover_raw_size, 44100.0f);
 }
 
 /**
@@ -38,8 +42,6 @@ Audio::~Audio()
 
     delete ScreenVoice;
     delete ButtonVoice;
-    delete ChangeSound;
-    delete RollOverSound;
 }
 
 /**
@@ -74,7 +76,7 @@ void Audio::LoadMusic(s16 Volume)
 void Audio::PlaySoundScreenChange(u16 Volume)
 {
     ScreenVoice->SetVolume(Volume);
-    ScreenVoice->Play(ChangeSound);
+    ScreenVoice->Play(&ChangeSound);
 }
 
 /**
@@ -84,5 +86,5 @@ void Audio::PlaySoundScreenChange(u16 Volume)
 void Audio::PlaySoundButton(u16 Volume)
 {
     ButtonVoice->SetVolume(Volume);
-    ButtonVoice->Play(RollOverSound);
+    ButtonVoice->Play(&RollOverSound);
 }

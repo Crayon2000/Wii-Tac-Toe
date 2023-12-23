@@ -28,7 +28,7 @@ public:
 
     void SetVolume(u16 Volume);
     void SetVolume(u16 LeftVolume, u16 RightVolume);
-    void Play(Sound *sound, u32 delay = 0, bool looped = false);
+    void Play(const Sound *sound, u32 delay = 0, bool looped = false);
     void Mute(bool mute);
 };
 
