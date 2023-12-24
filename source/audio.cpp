@@ -9,11 +9,8 @@
 #include "screen_change_raw.h"
 #include "tic_tac_mod.h"
 
-static constexpr auto ScreenChangeBuffer = std::span{screen_change_raw, screen_change_raw_size};
-static constexpr auto ButtonRolloverBuffer = std::span{button_rollover_raw, button_rollover_raw_size};
-
-static const Sound ChangeSound = Sound(VOICE_MONO16, ScreenChangeBuffer, 44100.0f);
-static const Sound RollOverSound = Sound(VOICE_MONO16, ButtonRolloverBuffer, 44100.0f);
+static constexpr Sound ChangeSound(VOICE_MONO16, std::span{screen_change_raw, screen_change_raw_size}, 44100.0f);
+static constexpr Sound RollOverSound(VOICE_MONO16, std::span{button_rollover_raw, button_rollover_raw_size}, 44100.0f);
 
 /**
  * Constructor for the Audio class.
