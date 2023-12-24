@@ -7,9 +7,9 @@
 #define VOICE_H_
 
 #include <gctypes.h>
+#include "sound.h"
 
 // Forward declarations
-class Sound;
 struct aesndpb_t;
 
 /**
@@ -28,7 +28,7 @@ public:
 
     void SetVolume(u16 Volume);
     void SetVolume(u16 LeftVolume, u16 RightVolume);
-    void Play(const Sound *sound, u32 delay = 0, bool looped = false);
+    void Play(const Sound& sound, u32 delay = 0, bool looped = false);
     void Mute(bool mute);
 };
 

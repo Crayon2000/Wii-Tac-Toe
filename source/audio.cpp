@@ -73,7 +73,7 @@ void Audio::LoadMusic(s16 Volume)
 void Audio::PlaySoundScreenChange(u16 Volume)
 {
     ScreenVoice->SetVolume(Volume);
-    ScreenVoice->Play(&ChangeSound);
+    ScreenVoice->Play(ChangeSound);
 }
 
 /**
@@ -83,5 +83,5 @@ void Audio::PlaySoundScreenChange(u16 Volume)
 void Audio::PlaySoundButton(u16 Volume)
 {
     ButtonVoice->SetVolume(Volume);
-    ButtonVoice->Play(&RollOverSound);
+    ButtonVoice->Play(RollOverSound);
 }

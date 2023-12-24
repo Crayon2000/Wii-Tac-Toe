@@ -43,10 +43,10 @@ void Voice::SetVolume(u16 LeftVolume, u16 RightVolume)
  * @param[in] delay A delay.
  * @param[in] looped Set true to make the sound loop, false otherwise.
  */
-void Voice::Play(const Sound *sound, u32 delay, bool looped)
+void Voice::Play(const Sound& sound, u32 delay, bool looped)
 {
-    AESND_PlayVoice(_Voice, sound->GetFormat(), sound->GetBuffer().data(), sound->GetBuffer().size(),
-            sound->GetFrequency(), delay, looped);
+    AESND_PlayVoice(_Voice, sound.GetFormat(), sound.GetBuffer().data(), sound.GetBuffer().size(),
+            sound.GetFrequency(), delay, looped);
 }
 
 /**
