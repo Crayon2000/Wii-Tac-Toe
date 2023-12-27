@@ -35,7 +35,7 @@ private:
     std::uniform_int_distribution<u8> Distribution;
 
     [[nodiscard]] bool IsPlayerWinning(u8 Player);
-    [[nodiscard]] bool IsPlayerWinning(u8 Player, u8 MyBoard[3][3]);
+    [[nodiscard]] bool IsPlayerWinning(u8 Player, const u8 MyBoard[3][3]);
 };
 //---------------------------------------------------------------------------
 #endif

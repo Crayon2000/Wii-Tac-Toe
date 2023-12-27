@@ -53,7 +53,7 @@ private:
         Menu    /**< Menu screen. */
     };
 
-    void StartSreen();
+    void StartScreen();
     void MenuScreen(bool CopyScreen);
     void GameScreen(bool CopyScreen);
     void ExitScreen();

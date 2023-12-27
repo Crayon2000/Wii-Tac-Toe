@@ -5,12 +5,10 @@
 /**
  * Constructor for the Grid class.
  */
-Grid::Grid()
+Grid::Grid() :
+    Generator(std::random_device{}()),
+    Distribution(std::uniform_int_distribution<u8>(0, 2))
 {
-    std::random_device RandomDevice;
-    Generator = std::mt19937(RandomDevice());
-    Distribution = std::uniform_int_distribution<u8>(0, 2);
-
     std::memset(WinningBoard, false, sizeof(WinningBoard));
     Clear();
 }
@@ -129,7 +127,7 @@ u8 Grid::GetWinner() const
  * @param[in] MyBoard A specific board to test.
  * @return Return true if the player is winning, false otherwise.
  */
-bool Grid::IsPlayerWinning(u8 Player, u8 MyBoard[3][3])
+bool Grid::IsPlayerWinning(u8 Player, const u8 MyBoard[3][3])
 {
     // Check rows
     if((MyBoard[0][0] == Player) & (MyBoard[1][0] == Player) & (MyBoard[2][0] == Player))

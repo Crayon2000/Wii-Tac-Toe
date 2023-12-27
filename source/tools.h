@@ -20,7 +20,7 @@ void Draw_FadeInOut(Texture *tex, f32 scaleX, f32 scaleY, u16 speed);
 void Draw_FadeIn(Texture *tex, f32 scaleX, f32 scaleY, u16 speed);
 void Draw_FadeOut(Texture *tex, f32 scaleX, f32 scaleY, u16 speed);
 
-bool PtInCircle(const int xo, const int yo, const int radius,
+[[nodiscard]] bool PtInCircle(const int xo, const int yo, const int radius,
                 const int wpadx, const int wpady);
 //---------------------------------------------------------------------------
 #endif

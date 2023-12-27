@@ -23,32 +23,28 @@ public:
      * Constructor for the Point class.
      * Initializes a point at the origin (0, 0) of the coordinate space.
      */
-    Point()
+    Point() : x(0), y(0)
     {
-        this->x = 0;
-        this->y = 0;
     }
     /**
      * Constructor for the Point class.
      * @param[in] x Specifies the x-coordinate.
      * @param[in] y Specifies the y-coordinate.
      */
-    Point(u16 x, u16 y)
+    Point(u16 x, u16 y) : x(x), y(y)
     {
-        this->x = x;
-        this->y = y;
     }
     /**
      * Get the x position.
      */
-    u16 GetX() const
+    [[nodiscard]] u16 GetX() const
     {
         return x;
     }
     /**
      * Get the y position.
      */
-    u16 GetY() const
+    [[nodiscard]] u16 GetY() const
     {
         return y;
     }

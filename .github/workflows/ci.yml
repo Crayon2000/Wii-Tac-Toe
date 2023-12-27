@@ -13,15 +13,17 @@ jobs:
     steps:
 
     - name: Checkout the Git repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Build application
-      run: make build
+      run: |
+        /opt/devkitpro/portlibs/wii/bin/powerpc-eabi-cmake -B $GITHUB_WORKSPACE/build
+        cmake --build $GITHUB_WORKSPACE/build -j $(nproc)
 
     - name: Move file
-      run: mv Wii-Tac-Toe.dol Wii-Tac-Toe/boot.dol
+      run: mv build/Wii-Tac-Toe.dol Wii-Tac-Toe/boot.dol
 
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: Wii-Tac-Toe
         path: Wii-Tac-Toe/

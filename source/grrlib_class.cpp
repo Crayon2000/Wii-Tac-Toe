@@ -3,9 +3,13 @@
 /**
  * Constructor for the Texture class.
  */
-Texture::Texture()
+Texture::Texture() :
+    _Color(0xFFFFFFFF),
+    _ScaleX(1.0f),
+    _ScaleY(1.0f),
+    _Angle(0.0f)
 {
-    Initialize();
+    data = nullptr;
 }
 
 /**
@@ -14,9 +18,8 @@ Texture::Texture()
  * @param Size The size of the buffer to load. This parameter is not required.
  * @see Load(const u8 *, const u32)
  */
-Texture::Texture(const u8 *Buffer, const u32 Size)
+Texture::Texture(const u8 *Buffer, const u32 Size) : Texture()
 {
-    Initialize();
     Load(Buffer, Size);
 }
 
@@ -25,9 +28,8 @@ Texture::Texture(const u8 *Buffer, const u32 Size)
  * @param filename The JPEG, PNG or Bitmap file to load.
  * @see Load(const char *)
  */
-Texture::Texture(const char *filename)
+Texture::Texture(const char *filename) : Texture()
 {
-    Initialize();
     Load(filename);
 }
 
@@ -36,9 +38,8 @@ Texture::Texture(const char *filename)
  * @param filename The JPEG, PNG or Bitmap file to load.
  * @see Load(const std::string &)
  */
-Texture::Texture(const std::string &filename)
+Texture::Texture(const std::string &filename) : Texture()
 {
-    Initialize();
     Load(filename);
 }
 
@@ -48,23 +49,9 @@ Texture::Texture(const std::string &filename)
  * @param h Height of the new texture to create.
  * @see Create()
  */
-Texture::Texture(const u32 w, const u32 h)
+Texture::Texture(const u32 w, const u32 h) : Texture()
 {
-    Initialize();
     Create(w, h);
-}
-
-/**
- * Initialize a constructor with default values.
- */
-void Texture::Initialize(void)
-{
-    data = nullptr;
-
-    _Color = 0xFFFFFFFF;
-    _ScaleX = 1.0f;
-    _ScaleY = 1.0f;
-    _Angle = 0.0f;
 }
 
 /**

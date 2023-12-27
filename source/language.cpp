@@ -21,26 +21,26 @@ Language::Language()
     mxml_node_t *Message_Node;
     mxml_node_t *Up_Node;
 
-    Up_Node = mxmlFindElement(First_Node, First_Node, "tie_game", NULL, NULL, MXML_DESCEND);
-    for(Message_Node = mxmlFindElement(Up_Node, Up_Node, "message", NULL, NULL, MXML_DESCEND);
-        Message_Node != NULL;
-        Message_Node = mxmlFindElement(Message_Node, Up_Node, "message", NULL, NULL, MXML_DESCEND))
+    Up_Node = mxmlFindElement(First_Node, First_Node, "tie_game", nullptr, nullptr, MXML_DESCEND);
+    for(Message_Node = mxmlFindElement(Up_Node, Up_Node, "message", nullptr, nullptr, MXML_DESCEND);
+        Message_Node != nullptr;
+        Message_Node = mxmlFindElement(Message_Node, Up_Node, "message", nullptr, nullptr, MXML_DESCEND))
     {
         TieMessage.push_back(mxmlElementGetAttr(Message_Node, "text"));
     }
 
-    Up_Node = mxmlFindElement(First_Node, First_Node, "winning_game", NULL, NULL, MXML_DESCEND);
-    for(Message_Node = mxmlFindElement(Up_Node, Up_Node, "message", NULL, NULL, MXML_DESCEND);
-        Message_Node != NULL;
-        Message_Node = mxmlFindElement(Message_Node, Up_Node, "message", NULL, NULL, MXML_DESCEND))
+    Up_Node = mxmlFindElement(First_Node, First_Node, "winning_game", nullptr, nullptr, MXML_DESCEND);
+    for(Message_Node = mxmlFindElement(Up_Node, Up_Node, "message", nullptr, nullptr, MXML_DESCEND);
+        Message_Node != nullptr;
+        Message_Node = mxmlFindElement(Message_Node, Up_Node, "message", nullptr, nullptr, MXML_DESCEND))
     {
         WinningMessage.push_back(mxmlElementGetAttr(Message_Node, "text"));
     }
 
-    Up_Node = mxmlFindElement(First_Node, First_Node, "turn_over", NULL, NULL, MXML_DESCEND);
-    for(Message_Node = mxmlFindElement(Up_Node, Up_Node, "message", NULL, NULL, MXML_DESCEND);
-        Message_Node != NULL;
-        Message_Node = mxmlFindElement(Message_Node, Up_Node, "message", NULL, NULL, MXML_DESCEND))
+    Up_Node = mxmlFindElement(First_Node, First_Node, "turn_over", nullptr, nullptr, MXML_DESCEND);
+    for(Message_Node = mxmlFindElement(Up_Node, Up_Node, "message", nullptr, nullptr, MXML_DESCEND);
+        Message_Node != nullptr;
+        Message_Node = mxmlFindElement(Message_Node, Up_Node, "message", nullptr, nullptr, MXML_DESCEND))
     {
         TurnOverMessage.push_back(mxmlElementGetAttr(Message_Node, "text"));
     }
@@ -51,7 +51,7 @@ Language::Language()
  */
 Language::~Language()
 {
-    if(First_Node != NULL)
+    if(First_Node != nullptr)
     {
         mxmlDelete(First_Node);
     }
@@ -62,15 +62,15 @@ Language::~Language()
  * @param[in] From Original string to translate.
  * @return Translated string.
  */
-std::string Language::String(const char *From)
+std::string Language::String(std::string_view From)
 {
-    if(From == NULL)
+    if(From.empty() == true)
     {
         return "";
     }
 
-    mxml_node_t *Text_Node = mxmlFindElement(First_Node, First_Node, "translation", "from", From, MXML_DESCEND);
-    if(Text_Node == NULL)
+    mxml_node_t *Text_Node = mxmlFindElement(First_Node, First_Node, "translation", "from", From.data(), MXML_DESCEND);
+    if(Text_Node == nullptr)
     {
         return "";
     }
@@ -88,33 +88,33 @@ void Language::SetLanguage(s32 Conf_Lang)
     switch(Conf_Lang)
     {
         case CONF_LANG_FRENCH:
-            Root_Node = mxmlLoadString(NULL, (char*)french_xml, MXML_TEXT_CALLBACK);
+            Root_Node = mxmlLoadString(nullptr, (char*)french_xml, MXML_TEXT_CALLBACK);
             break;
         case CONF_LANG_GERMAN:
-            Root_Node = mxmlLoadString(NULL, (char*)german_xml, MXML_TEXT_CALLBACK);
+            Root_Node = mxmlLoadString(nullptr, (char*)german_xml, MXML_TEXT_CALLBACK);
             break;
         case CONF_LANG_DUTCH:
-            Root_Node = mxmlLoadString(NULL, (char*)dutch_xml, MXML_TEXT_CALLBACK);
+            Root_Node = mxmlLoadString(nullptr, (char*)dutch_xml, MXML_TEXT_CALLBACK);
             break;
         case CONF_LANG_SPANISH:
-            Root_Node = mxmlLoadString(NULL, (char*)spanish_xml, MXML_TEXT_CALLBACK);
+            Root_Node = mxmlLoadString(nullptr, (char*)spanish_xml, MXML_TEXT_CALLBACK);
             break;
         case CONF_LANG_ITALIAN:
-            Root_Node = mxmlLoadString(NULL, (char*)italian_xml, MXML_TEXT_CALLBACK);
+            Root_Node = mxmlLoadString(nullptr, (char*)italian_xml, MXML_TEXT_CALLBACK);
             break;
         case CONF_LANG_JAPANESE:
 #ifdef DEBUG
-            Root_Node = mxmlLoadString(NULL, (char*)japanese_xml, MXML_TEXT_CALLBACK);
+            Root_Node = mxmlLoadString(nullptr, (char*)japanese_xml, MXML_TEXT_CALLBACK);
             break;
 #endif
         case CONF_LANG_KOREAN:
         case CONF_LANG_SIMP_CHINESE:
         case CONF_LANG_TRAD_CHINESE:
         default:    // CONF_LANG_ENGLISH
-            Root_Node = mxmlLoadString(NULL, (char*)english_xml, MXML_TEXT_CALLBACK);
+            Root_Node = mxmlLoadString(nullptr, (char*)english_xml, MXML_TEXT_CALLBACK);
             break;
     }
-    First_Node = mxmlFindElement(Root_Node, Root_Node, "language", NULL, NULL, MXML_DESCEND);
+    First_Node = mxmlFindElement(Root_Node, Root_Node, "language", nullptr, nullptr, MXML_DESCEND);
 }
 
 /**

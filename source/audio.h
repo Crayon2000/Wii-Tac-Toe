@@ -7,7 +7,6 @@
 #define AudioH
 //---------------------------------------------------------------------------
 // Forward declarations
-class Sound;
 class Voice;
 
 /**
@@ -30,8 +29,6 @@ private:
     bool Paused;
     Voice *ScreenVoice;
     Voice *ButtonVoice;
-    Sound *ChangeSound;
-    Sound *RollOverSound;
 };
 //---------------------------------------------------------------------------
 #endif
