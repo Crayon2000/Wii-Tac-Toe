@@ -16,9 +16,9 @@
 class Sound
 {
 private:
-    u32 _format;
+    const u32 _format;
     const std::span<const u8> _buffer;
-    f32 _freq;
+    const f32 _freq;
 public:
     /**
      * Constructor for the Sound class.

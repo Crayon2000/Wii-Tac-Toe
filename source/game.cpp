@@ -189,7 +189,7 @@ void Game::Paint()
     switch(CurrentScreen)
     {
         case gameScreen::Start:
-            StartSreen();
+            StartScreen();
             break;
         case gameScreen::Menu:
             MenuScreen(true);
@@ -231,18 +231,17 @@ void Game::Paint()
     if(ShowFPS == true)
     {
         CalculateFrameRate();
-        char strFPS[10];
-        snprintf(strFPS, 10, "FPS: %d", FPS);
-        GRRLIB_PrintfTTF(14, 444, DefaultFont, strFPS, 17, 0xFFFFFFFF);
-        GRRLIB_PrintfTTF(16, 446, DefaultFont, strFPS, 17, 0x808080FF);
-        GRRLIB_PrintfTTF(15, 445, DefaultFont, strFPS, 17, 0x000000FF);
+        const auto strFPS = fmt::format("FPS: {}", FPS);
+        GRRLIB_PrintfTTF(14, 444, DefaultFont, strFPS.c_str(), 17, 0xFFFFFFFF);
+        GRRLIB_PrintfTTF(16, 446, DefaultFont, strFPS.c_str(), 17, 0x808080FF);
+        GRRLIB_PrintfTTF(15, 445, DefaultFont, strFPS.c_str(), 17, 0x000000FF);
     }
 }
 
 /**
  * Draw the start screen.
  */
-void Game::StartSreen()
+void Game::StartScreen()
 {
     static f32 ArmRotation = 0;
     static bool ArmDirection = 0;
@@ -281,21 +280,24 @@ void Game::GameScreen(bool CopyScreen)
         GameText->Draw(0, 0); // Background image with some text
 
         // Draw score with a shadow offset of -2, 2
-        char ScoreText[6];
-        snprintf(ScoreText, 6, "%d", WTTPlayer[0].GetScore());
-        int TextLeft = 104 - GRRLIB_WidthTTF(DefaultFont, ScoreText, 35) / 2;
-        GRRLIB_PrintfTTF(TextLeft, 77, DefaultFont, ScoreText, 35, 0x6BB6DEFF);
-        GRRLIB_PrintfTTF(TextLeft - 2, 75, DefaultFont, ScoreText, 35, 0xFFFFFFFF);
-
-        snprintf(ScoreText, 6, "%d", WTTPlayer[1].GetScore());
-        TextLeft = 104 - GRRLIB_WidthTTF(DefaultFont, ScoreText, 35) / 2;
-        GRRLIB_PrintfTTF(TextLeft, 177, DefaultFont, ScoreText, 35, 0xE6313AFF);
-        GRRLIB_PrintfTTF(TextLeft - 2, 175, DefaultFont, ScoreText, 35, 0xFFFFFFFF);
-
-        snprintf(ScoreText, 6, "%d", TieGame);
-        TextLeft = 104 - GRRLIB_WidthTTF(DefaultFont, ScoreText, 35) / 2;
-        GRRLIB_PrintfTTF(TextLeft, 282, DefaultFont, ScoreText, 35, 0x109642FF);
-        GRRLIB_PrintfTTF(TextLeft - 2, 280, DefaultFont, ScoreText, 35, 0xFFFFFFFF);
+        {
+            const auto ScoreText = fmt::format_int(WTTPlayer[0].GetScore());
+            const auto TextLeft = 104 - GRRLIB_WidthTTF(DefaultFont, ScoreText.c_str(), 35) / 2;
+            GRRLIB_PrintfTTF(TextLeft, 77, DefaultFont, ScoreText.c_str(), 35, 0x6BB6DEFF);
+            GRRLIB_PrintfTTF(TextLeft - 2, 75, DefaultFont, ScoreText.c_str(), 35, 0xFFFFFFFF);
+        }
+        {
+            const auto ScoreText = fmt::format_int(WTTPlayer[1].GetScore());
+            const auto TextLeft = 104 - GRRLIB_WidthTTF(DefaultFont, ScoreText.c_str(), 35) / 2;
+            GRRLIB_PrintfTTF(TextLeft, 177, DefaultFont, ScoreText.c_str(), 35, 0xE6313AFF);
+            GRRLIB_PrintfTTF(TextLeft - 2, 175, DefaultFont, ScoreText.c_str(), 35, 0xFFFFFFFF);
+        }
+        {
+            const auto ScoreText = fmt::format_int(TieGame);
+            const auto TextLeft = 104 - GRRLIB_WidthTTF(DefaultFont, ScoreText.c_str(), 35) / 2;
+            GRRLIB_PrintfTTF(TextLeft, 282, DefaultFont, ScoreText.c_str(), 35, 0x109642FF);
+            GRRLIB_PrintfTTF(TextLeft - 2, 280, DefaultFont, ScoreText.c_str(), 35, 0xFFFFFFFF);
+        }
 
         // Draw text at the bottom with a shadow offset of 1, 1
         PrintWrapText(130, 420, 390, text, 15, 0x8C8A8CFF, 0x111111FF, 1, 1);
@@ -531,8 +533,8 @@ bool Game::ControllerManager()
     RUMBLE_Verify();
     WPADData *WPadData0 = WPAD_Data(WPAD_CHAN_0);
     WPADData *WPadData1 = WPAD_Data(WPAD_CHAN_1);
-    u32 Buttons0 = WPadData0->btns_d;
-    u32 Buttons1 = WPadData1->btns_d;
+    const u32 Buttons0 = WPadData0->btns_d;
+    const u32 Buttons1 = WPadData1->btns_d;
 
     if(WPadData0->ir.valid)
     {
@@ -707,7 +709,7 @@ bool Game::ControllerManager()
 
         const std::time_t now = std::time(nullptr);
         const struct std::tm *ti = std::localtime(&now);
-        auto path = fmt::format("sd:/Screenshot {}-{:02d}-{:02d} {:02d}{:02d}{:02d}.png",
+        const auto path = fmt::format("sd:/Screenshot {}-{:02d}-{:02d} {:02d}{:02d}{:02d}.png",
             ti->tm_year + 1900, ti->tm_mon + 1, ti->tm_mday, ti->tm_hour, ti->tm_min, ti->tm_sec);
 
         if(ScreenShot(path) == true)

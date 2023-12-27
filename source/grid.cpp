@@ -5,12 +5,10 @@
 /**
  * Constructor for the Grid class.
  */
-Grid::Grid()
+Grid::Grid() :
+    Generator(std::random_device{}()),
+    Distribution(std::uniform_int_distribution<u8>(0, 2))
 {
-    std::random_device RandomDevice;
-    Generator = std::mt19937(RandomDevice());
-    Distribution = std::uniform_int_distribution<u8>(0, 2);
-
     std::memset(WinningBoard, false, sizeof(WinningBoard));
     Clear();
 }
