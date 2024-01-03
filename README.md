@@ -1,6 +1,6 @@
 # Wii-Tac-Toe
 
-[![Actions Status](https://github.com/Crayon2000/Wii-Tac-Toe/workflows/Continuous%20Integration/badge.svg)](https://github.com/Crayon2000/Wii-Tac-Toe/actions)
+[![Actions Status](https://github.com/Crayon2000/Wii-Tac-Toe/actions/workflows/ci.yml/badge.svg)](https://github.com/Crayon2000/Wii-Tac-Toe/actions)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ab38c1f3adee4d629c72d285efee6a73)](https://www.codacy.com/app/Crayon2000/Wii-Tac-Toe?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Crayon2000/Wii-Tac-Toe&amp;utm_campaign=Badge_Grade)
 
 Wii-Tac-Toe is a Tic-Tac-Toe game for the Nintendo Wii. It was programmed in C++ using devkitPro along with GRRLIB.
