@@ -14,12 +14,13 @@
 #include "grrlib_class.h"
 #include "game.h"
 
+#define SYS_NOTSET          -1
 #define SYS_RETURNTOHBMENU   7
 
-//------------------------------------------------------------------------------
-// Externals
-//------------------------------------------------------------------------------
-u8 HWButton = 0;
+/**
+ * Hardware button state.
+ */
+s32 HWButton = SYS_NOTSET;
 
 /**
  * Callback for the reset button on the Wii.
@@ -72,7 +73,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
     SYS_SetPowerCallback(WiiPowerPressed);
     WPAD_SetPowerButtonCallback(WiimotePowerPressed);
 
-    while(1)
+    while(true)
     {
         MyGame->Paint();
 
@@ -81,7 +82,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
         {
             break;
         }
-        if(HWButton)
+        if(HWButton != SYS_NOTSET)
         {
             break;
         }
@@ -93,7 +94,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
     WPAD_Shutdown();
     Exit();
 
-    if(HWButton && HWButton != SYS_RETURNTOHBMENU)
+    if(HWButton != SYS_NOTSET && HWButton != SYS_RETURNTOHBMENU)
     {
         SYS_ResetSystem(HWButton, 0, 0);
     }

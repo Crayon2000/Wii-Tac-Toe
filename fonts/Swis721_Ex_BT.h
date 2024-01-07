@@ -6,8 +6,10 @@
 #ifndef _Swis721_Ex_BT_h_
 #define _Swis721_Ex_BT_h_
 //---------------------------------------------------------------------------------
+#include <stddef.h>
+
 extern const unsigned char Swis721_Ex_BT[];
-extern const int Swis721_Ex_BT_size;
+static const size_t Swis721_Ex_BT_size = 38672;
 //---------------------------------------------------------------------------------
 #endif //_Swis721_Ex_BT_h_
 //---------------------------------------------------------------------------------
