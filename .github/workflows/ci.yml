@@ -20,10 +20,13 @@ jobs:
         /opt/devkitpro/portlibs/wii/bin/powerpc-eabi-cmake -B $GITHUB_WORKSPACE/build
         cmake --build $GITHUB_WORKSPACE/build -j $(nproc)
 
-    - name: Move file
-      run: mv build/Wii-Tac-Toe.dol Wii-Tac-Toe/boot.dol
+    - name: Prepare artifact
+      run: |
+        mkdir --parents --verbose /tmp/artifact/Wii-Tac-Toe
+        mv --verbose build/Wii-Tac-Toe.dol /tmp/artifact/Wii-Tac-Toe/boot.dol
+        cp --verbose Wii-Tac-Toe/* /tmp/artifact/Wii-Tac-Toe/
 
     - uses: actions/upload-artifact@v4
       with:
         name: Wii-Tac-Toe
-        path: Wii-Tac-Toe/
+        path: /tmp/artifact/
