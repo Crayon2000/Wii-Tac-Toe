@@ -188,7 +188,7 @@ void Texture::Create(const u32 w, const u32 h, const u32 Color)
     ofnormaltexy = 0.0f;
 
     // Initialize the texture with a color
-    u8* bp = (u8*)data;
+    u8* bp = static_cast<u8*>(data);
     for(u32 y = 0; y < h; ++y)
     {
         for(u32 x = 0; x < w; ++x)
@@ -422,7 +422,7 @@ void Texture::SetColor(u32 Color)
  * Get the color of the texture.
  * @return The color of the texture in RGBA format.
  */
-u32 Texture::GetColor(void)
+u32 Texture::GetColor()
 {
     return _Color;
 }
@@ -440,7 +440,7 @@ void Texture::SetAlpha(u8 Alpha)
  * Get the alpha of the texture.
  * @return Alpha color (0-255).
  */
-u8 Texture::GetAlpha(void)
+u8 Texture::GetAlpha()
 {
     return A(_Color);
 }
@@ -456,7 +456,7 @@ u8 Texture::GetAlpha(void)
  *         -    -3 : Failed to initialize the font engine.
  * @see Exit
  */
-s32 Screen::Initialize(void)
+s32 Screen::Initialize()
 {
     return GRRLIB_Init();
 }
@@ -466,7 +466,7 @@ s32 Screen::Initialize(void)
  * Ensure this function is only ever called once
  * and only if the setup function has been called.
  */
-void Screen::Exit(void)
+void Screen::Exit()
 {
     GRRLIB_Exit();
 }
@@ -504,7 +504,7 @@ void Screen::FillScreen(const u32 color)
 /**
  * Call this function after drawing.
  */
-void Screen::Render(void)
+void Screen::Render()
 {
     GRRLIB_Render();
 }
@@ -588,7 +588,7 @@ bool Screen::ScreenShot(const std::string &filename)
  * Return the width of the screen in pixels.
  * @return The width in pixels.
  */
-u16 Screen::GetWidth(void)
+u16 Screen::GetWidth()
 {
     return rmode->fbWidth;
 }
@@ -597,7 +597,7 @@ u16 Screen::GetWidth(void)
  * Return the height of the screen in pixels.
  * @return The height in pixels.
  */
-u16 Screen::GetHeight(void)
+u16 Screen::GetHeight()
 {
     return rmode->efbHeight;
 }

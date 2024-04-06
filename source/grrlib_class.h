@@ -31,17 +31,17 @@ public:
     Texture(const u32 w, const u32 h);
     ~Texture();
 
-    u32 GetWidth();
-    u32 GetHeight();
-    u32 GetOffsetX();
-    u32 GetOffsetY();
+    [[nodiscard]] u32 GetWidth();
+    [[nodiscard]] u32 GetHeight();
+    [[nodiscard]] u32 GetOffsetX();
+    [[nodiscard]] u32 GetOffsetY();
     void SetOffset(u32 X, u32 Y);
     void SetOffsetX(u32 X);
     void SetOffsetY(u32 Y);
-    u32 GetHandleX();
-    u32 GetHandleY();
+    [[nodiscard]] u32 GetHandleX();
+    [[nodiscard]] u32 GetHandleY();
     void SetHandle(u32 X, u32 Y);
-    u32 GetPixel(const s32 x, const s32 y);
+    [[nodiscard]] u32 GetPixel(const s32 x, const s32 y);
     void SetPixel(const s32 x, const s32 y, const u32 color);
     void Refresh();
     void Load(const u8 *Buffer, const u32 Size = 0);
@@ -58,9 +58,9 @@ public:
                   const f32 scaleX, const f32 scaleY, const u32 color, int frame);
     void CopyScreen(u16 posx = 0, u16 posy = 0, bool clear = false);
     void SetColor(u32);
-    u32 GetColor(void);
+    [[nodiscard]] u32 GetColor();
     void SetAlpha(u8);
-    u8 GetAlpha(void);
+    [[nodiscard]] u8 GetAlpha();
 private:
     void Assign(GRRLIB_texImg *other);
     u32 _Color;  /**< The color used to draw the texture. By default it is set to 0xFFFFFFFF. */
@@ -75,9 +75,9 @@ private:
  */
 namespace Screen
 {
-    s32 Initialize(void);
-    void Exit(void);
-    void Render(void);
+    s32 Initialize();
+    void Exit();
+    void Render();
 
     void SetBackgroundColor(u8 r, u8 g, u8 b, u8 a = 0xFF);
     void SetBackgroundColor(const u32 color);
@@ -87,8 +87,8 @@ namespace Screen
     void Rectangle(const f32 x, const f32 y, const f32 width, const f32 height, const u32 color, const u8 filled);
     void Circle(const f32 x, const f32 y, const f32 radius, const u32 color, const u8 filled);
 
-    u16 GetWidth(void);
-    u16 GetHeight(void);
+    [[nodiscard]] u16 GetWidth();
+    [[nodiscard]] u16 GetHeight();
 
     bool ScreenShot(const char* filename);
     bool ScreenShot(const std::string &filename);
