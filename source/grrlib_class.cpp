@@ -383,6 +383,22 @@ void Texture::Draw(const f32 xpos, const f32 ypos)
 }
 
 /**
+ * Draw a tile.
+ * @param xpos Specifies the x-coordinate of the upper-left corner.
+ * @param ypos Specifies the y-coordinate of the upper-left corner.
+ * @param degrees Angle of rotation.
+ * @param scaleX Specifies the x-coordinate scale. -1 could be used for flipping the texture horizontally.
+ * @param scaleY Specifies the y-coordinate scale. -1 could be used for flipping the texture vertically.
+ * @param color Color in RGBA format.
+ * @param frame Specifies the frame to draw.
+ */
+void Texture::DrawTile(const f32 xpos, const f32 ypos, const f32 degrees,
+                   const f32 scaleX, const f32 scaleY, const u32 color, int frame)
+{
+    GRRLIB_DrawTile(xpos, ypos, this, degrees, scaleX, scaleY, color, frame);
+}
+
+/**
  * Make a snapshot of the screen in a texture WITHOUT ALPHA LAYER.
  * @param posx top left corner of the grabbed part. Default is 0.
  * @param posy top left corner of the grabbed part. Default is 0.

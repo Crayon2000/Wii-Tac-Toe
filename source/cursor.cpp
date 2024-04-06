@@ -35,9 +35,9 @@ void Cursor::Paint()
     if(Visible == true)
     {
         // Draw the shadow
-        GRRLIB_DrawTile(Left + 3, Top + 3, (GRRLIB_texImg *)Cursors, Angle, 1, 1, 0x00000000 | ((A(Color) == 0xFF) ? 0x44 : 0x11), Frame);
+        Cursors->DrawTile(Left + 3, Top + 3, Angle, 1, 1, 0x00000000 | ((A(Color) == 0xFF) ? 0x44 : 0x11), Frame);
         // Draw the cursor
-        GRRLIB_DrawTile(Left, Top, (GRRLIB_texImg *)Cursors, Angle, 1, 1, Color, Frame);
+        Cursors->DrawTile(Left, Top, Angle, 1, 1, Color, Frame);
     }
 }
 

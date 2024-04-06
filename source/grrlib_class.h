@@ -54,6 +54,8 @@ public:
               const f32 scaleX, const f32 scaleY);
     void Draw(const f32 xpos, const f32 ypos, const f32 degrees);
     void Draw(const f32 xpos, const f32 ypos);
+    void DrawTile(const f32 xpos, const f32 ypos, const f32 degrees,
+                  const f32 scaleX, const f32 scaleY, const u32 color, int frame);
     void CopyScreen(u16 posx = 0, u16 posy = 0, bool clear = false);
     void SetColor(u32);
     u32 GetColor(void);
