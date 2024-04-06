@@ -13,7 +13,7 @@ Cursor::Cursor() : Object()
 
     // Load textures
     Cursors = new Texture(hands_png, hands_png_size);
-    GRRLIB_InitTileSet((GRRLIB_texImg *)Cursors, Width, Height, 0);
+    GRRLIB_InitTileSet(reinterpret_cast<GRRLIB_texImg *>(Cursors), Width, Height, 0);
 
     // Default values
     SetPlayer(cursorType::X);

@@ -88,30 +88,30 @@ void Language::SetLanguage(s32 Conf_Lang)
     switch(Conf_Lang)
     {
         case CONF_LANG_FRENCH:
-            Root_Node = mxmlLoadString(nullptr, (char*)french_xml, MXML_TEXT_CALLBACK);
+            Root_Node = mxmlLoadString(nullptr, reinterpret_cast<const char *>(french_xml), MXML_TEXT_CALLBACK);
             break;
         case CONF_LANG_GERMAN:
-            Root_Node = mxmlLoadString(nullptr, (char*)german_xml, MXML_TEXT_CALLBACK);
+            Root_Node = mxmlLoadString(nullptr, reinterpret_cast<const char *>(german_xml), MXML_TEXT_CALLBACK);
             break;
         case CONF_LANG_DUTCH:
-            Root_Node = mxmlLoadString(nullptr, (char*)dutch_xml, MXML_TEXT_CALLBACK);
+            Root_Node = mxmlLoadString(nullptr, reinterpret_cast<const char *>(dutch_xml), MXML_TEXT_CALLBACK);
             break;
         case CONF_LANG_SPANISH:
-            Root_Node = mxmlLoadString(nullptr, (char*)spanish_xml, MXML_TEXT_CALLBACK);
+            Root_Node = mxmlLoadString(nullptr, reinterpret_cast<const char *>(spanish_xml), MXML_TEXT_CALLBACK);
             break;
         case CONF_LANG_ITALIAN:
-            Root_Node = mxmlLoadString(nullptr, (char*)italian_xml, MXML_TEXT_CALLBACK);
+            Root_Node = mxmlLoadString(nullptr, reinterpret_cast<const char *>(italian_xml), MXML_TEXT_CALLBACK);
             break;
         case CONF_LANG_JAPANESE:
 #ifdef DEBUG
-            Root_Node = mxmlLoadString(nullptr, (char*)japanese_xml, MXML_TEXT_CALLBACK);
+            Root_Node = mxmlLoadString(nullptr, reinterpret_cast<const char *>(japanese_xml), MXML_TEXT_CALLBACK);
             break;
 #endif
         case CONF_LANG_KOREAN:
         case CONF_LANG_SIMP_CHINESE:
         case CONF_LANG_TRAD_CHINESE:
         default:    // CONF_LANG_ENGLISH
-            Root_Node = mxmlLoadString(nullptr, (char*)english_xml, MXML_TEXT_CALLBACK);
+            Root_Node = mxmlLoadString(nullptr, reinterpret_cast<const char *>(english_xml), MXML_TEXT_CALLBACK);
             break;
     }
     First_Node = mxmlFindElement(Root_Node, Root_Node, "language", nullptr, nullptr, MXML_DESCEND);
