@@ -1,31 +1,19 @@
 #include "cursor.h"
 
 // Graphics
-#include "hand_x_png.h"
-#include "hand_o_png.h"
-#include "player1_point_png.h"
-#include "player2_point_png.h"
+#include "hands_png.h"
 
 /**
  * Constructor for the Cursor class.
  */
 Cursor::Cursor() : Object()
 {
-    // Load textures
-    CursorImgO = new Texture(hand_o_png, hand_o_png_size);
-    CursorImgX = new Texture(hand_x_png, hand_x_png_size);
-    CursorMenu1 = new Texture(player1_point_png, player1_point_png_size);
-    CursorMenu2 = new Texture(player2_point_png, player2_point_png_size);
+    Width = 96;
+    Height = 96;
 
-    // Set hotspot
-    CursorImgO->SetOffset(48, 45);
-    CursorImgO->SetHandle(CursorImgO->GetOffsetX(), CursorImgO->GetOffsetY());
-    CursorImgX->SetOffset(48, 45);
-    CursorImgX->SetHandle(CursorImgX->GetOffsetX(), CursorImgX->GetOffsetY());
-    CursorMenu1->SetOffset(48, 48);
-    CursorMenu1->SetHandle(CursorMenu1->GetOffsetX(), CursorMenu1->GetOffsetY());
-    CursorMenu2->SetOffset(48, 48);
-    CursorMenu2->SetHandle(CursorMenu2->GetOffsetX(), CursorMenu2->GetOffsetY());
+    // Load textures
+    Cursors = new Texture(hands_png, hands_png_size);
+    GRRLIB_InitTileSet((GRRLIB_texImg *)Cursors, Width, Height, 0);
 
     // Default values
     SetPlayer(cursorType::X);
@@ -36,10 +24,7 @@ Cursor::Cursor() : Object()
  */
 Cursor::~Cursor()
 {
-    delete CursorImgX;
-    delete CursorImgO;
-    delete CursorMenu1;
-    delete CursorMenu2;
+    delete Cursors;
 }
 
 /**
@@ -50,9 +35,9 @@ void Cursor::Paint()
     if(Visible == true)
     {
         // Draw the shadow
-        CurrentCursor->Draw(Left + 3, Top + 3, Angle, 1, 1, 0x00000000 | ((A(Color) == 0xFF) ? 0x44 : 0x11));
+        GRRLIB_DrawTile(Left + 3, Top + 3, (GRRLIB_texImg *)Cursors, Angle, 1, 1, 0x00000000 | ((A(Color) == 0xFF) ? 0x44 : 0x11), Frame);
         // Draw the cursor
-        CurrentCursor->Draw(Left, Top, Angle, 1, 1, Color);
+        GRRLIB_DrawTile(Left, Top, (GRRLIB_texImg *)Cursors, Angle, 1, 1, Color, Frame);
     }
 }
 
@@ -67,20 +52,25 @@ cursorType Cursor::SetPlayer(cursorType NewCType)
     Type = NewCType;
     switch(Type)
     {
-        case cursorType::O:
-            CurrentCursor = CursorImgO;
-            break;
-        case cursorType::X:
-            CurrentCursor = CursorImgX;
-            break;
         case cursorType::P1:
-            CurrentCursor = CursorMenu1;
+            Frame = 0;
+            Cursors->SetOffset(48, 48);
             break;
         case cursorType::P2:
-            CurrentCursor = CursorMenu2;
+            Frame = 1;
+            Cursors->SetOffset(48, 48);
+            break;
+        case cursorType::X:
+            Frame = 2;
+            Cursors->SetOffset(48, 45);
+            break;
+        case cursorType::O:
+            Frame = 3;
+            Cursors->SetOffset(48, 45);
+            break;
+        default:
             break;
     }
-    Width = CurrentCursor->GetWidth();
-    Height = CurrentCursor->GetHeight();
+    Cursors->SetHandle(Cursors->GetOffsetX(), Cursors->GetOffsetY());
     return PreviousType;
 }

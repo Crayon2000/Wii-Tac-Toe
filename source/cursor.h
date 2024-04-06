@@ -14,10 +14,10 @@
  * Types of cursor that could be used.
  */
 enum class cursorType : u8 {
-    O,   /**< O cursor. */
-    X,   /**< X cursor. */
     P1,  /**< Player 1 cursor. */
-    P2   /**< Player 2 cursor. */
+    P2,  /**< Player 2 cursor. */
+    X,   /**< X cursor. */
+    O    /**< O cursor. */
 };
 
 /**
@@ -35,11 +35,8 @@ public:
     cursorType SetPlayer(cursorType NewCType);
 private:
     cursorType Type;
-    Texture *CursorImgX;
-    Texture *CursorImgO;
-    Texture *CursorMenu1;
-    Texture *CursorMenu2;
-    Texture *CurrentCursor;
+    int Frame;
+    Texture *Cursors;
 };
 //---------------------------------------------------------------------------
 #endif
