@@ -138,7 +138,7 @@ void Texture::Load(const char *filename)
 {
     u8 *mydata;
 
-    int FileLength = GRRLIB_LoadFile(filename, &mydata);
+    const int FileLength = GRRLIB_LoadFile(filename, &mydata);
     if(FileLength <= 0)
     {   // Loading the file failed
         return;

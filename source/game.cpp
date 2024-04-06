@@ -7,6 +7,7 @@
 #include "grrlib/grrlib.h"
 #include "grrlib_class.h"
 #include "fmt/format.h"
+#include "fmt/chrono.h"
 #include "tools.h"
 #include "grid.h"
 #include "audio.h"
@@ -708,9 +709,7 @@ bool Game::ControllerManager()
         WIILIGHT_TurnOn();
 
         const std::time_t now = std::time(nullptr);
-        const struct std::tm *ti = std::localtime(&now);
-        const auto path = fmt::format("sd:/Screenshot {}-{:02d}-{:02d} {:02d}{:02d}{:02d}.png",
-            ti->tm_year + 1900, ti->tm_mon + 1, ti->tm_mday, ti->tm_hour, ti->tm_min, ti->tm_sec);
+        const auto path = fmt::format("sd:/Screenshot {:%F %H%M%S}.png", fmt::localtime(now));
 
         if(ScreenShot(path) == true)
         {
