@@ -68,6 +68,8 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight) :
 
     Hand[0].SetVisible(false);
     Hand[1].SetVisible(false);
+    Hand[2].SetVisible(false);
+    Hand[3].SetVisible(false);
 
     ExitButton[0] = new Button(buttonType::Home);
     ExitButton[0]->SetFont(DefaultFont);
@@ -226,6 +228,8 @@ void Game::Paint()
     }
     else
     {
+        Hand[3].Paint();
+        Hand[2].Paint();
         Hand[1].Paint();
         Hand[0].Paint();
     }
@@ -534,8 +538,12 @@ bool Game::ControllerManager()
     RUMBLE_Verify();
     WPADData *WPadData0 = WPAD_Data(WPAD_CHAN_0);
     WPADData *WPadData1 = WPAD_Data(WPAD_CHAN_1);
+    WPADData *WPadData2 = WPAD_Data(WPAD_CHAN_2);
+    WPADData *WPadData3 = WPAD_Data(WPAD_CHAN_3);
     const u32 Buttons0 = WPadData0->btns_d;
     const u32 Buttons1 = WPadData1->btns_d;
+    const u32 Buttons2 = WPadData2->btns_d;
+    const u32 Buttons3 = WPadData3->btns_d;
 
     if(WPadData0->ir.valid)
     {
@@ -562,6 +570,30 @@ bool Game::ControllerManager()
     else
     {   // Hide cursor
         Hand[1].SetVisible(false);
+    }
+    if(WPadData2->ir.valid && (CurrentScreen == gameScreen::Home))
+    {
+        // I don't understand this calculation but it works
+        Hand[2].SetLeft((WPadData2->ir.x / ScreenWidth * (ScreenWidth + Hand[2].GetWidth() * 2)) - Hand[2].GetWidth());
+        Hand[2].SetTop((WPadData2->ir.y / ScreenHeight * (ScreenHeight + Hand[2].GetHeight() * 2)) - Hand[2].GetHeight());
+        Hand[2].SetAngle(WPadData2->orient.roll);
+        Hand[2].SetVisible(true);
+    }
+    else
+    {   // Hide cursor
+        Hand[2].SetVisible(false);
+    }
+    if(WPadData3->ir.valid && (CurrentScreen == gameScreen::Home))
+    {
+        // I don't understand this calculation but it works
+        Hand[3].SetLeft((WPadData3->ir.x / ScreenWidth * (ScreenWidth + Hand[3].GetWidth() * 2)) - Hand[3].GetWidth());
+        Hand[3].SetTop((WPadData3->ir.y / ScreenHeight * (ScreenHeight + Hand[3].GetHeight() * 2)) - Hand[3].GetHeight());
+        Hand[3].SetAngle(WPadData3->orient.roll);
+        Hand[3].SetVisible(true);
+    }
+    else
+    {   // Hide cursor
+        Hand[3].SetVisible(false);
     }
 
     if(Buttons0 || Buttons1)
@@ -626,11 +658,15 @@ bool Game::ControllerManager()
                             break;
                         case 2:
                             ExitScreen();
+                            Hand[3].Paint();
+                            Hand[2].Paint();
                             Hand[1].Paint();
                             Hand[0].Paint();
                             CopiedImg->CopyScreen();
                             WPAD_Rumble(WPAD_CHAN_0, 0); // Rumble off, just in case
                             WPAD_Rumble(WPAD_CHAN_1, 0); // Rumble off, just in case
+                            WPAD_Rumble(WPAD_CHAN_2, 0); // Rumble off, just in case
+                            WPAD_Rumble(WPAD_CHAN_3, 0); // Rumble off, just in case
                             Draw_FadeOut(CopiedImg, 1, 1, 3);
                             return true; // Exit to loader
                         default:
@@ -702,10 +738,11 @@ bool Game::ControllerManager()
         }
     }
     if(((WPadData0->btns_h & WPAD_BUTTON_1) && (WPadData0->btns_h & WPAD_BUTTON_2)) ||
-        ((WPadData1->btns_h & WPAD_BUTTON_1) && (WPadData1->btns_h & WPAD_BUTTON_2)))
+        ((WPadData1->btns_h & WPAD_BUTTON_1) && (WPadData1->btns_h & WPAD_BUTTON_2)) ||
+        ((WPadData2->btns_h & WPAD_BUTTON_1) && (WPadData2->btns_h & WPAD_BUTTON_2)) ||
+        ((WPadData3->btns_h & WPAD_BUTTON_1) && (WPadData3->btns_h & WPAD_BUTTON_2)))
     {
-        WPAD_Rumble(WPAD_CHAN_0, 1); // Rumble on
-        WPAD_Rumble(WPAD_CHAN_1, 1); // Rumble on
+        WPAD_Rumble(WPAD_CHAN_ALL, 1); // Rumble on
         WIILIGHT_TurnOn();
 
         const std::time_t now = std::time(nullptr);
@@ -721,11 +758,11 @@ bool Game::ControllerManager()
         }
 
         WIILIGHT_TurnOff();
-        WPAD_Rumble(WPAD_CHAN_0, 0); // Rumble off
-        WPAD_Rumble(WPAD_CHAN_1, 0); // Rumble off
+        WPAD_Rumble(WPAD_CHAN_ALL, 0); // Rumble off
         Copied = false;
     }
-    if((Buttons0 & WPAD_BUTTON_PLUS) || (Buttons1 & WPAD_BUTTON_PLUS))
+    if((Buttons0 & WPAD_BUTTON_PLUS) || (Buttons1 & WPAD_BUTTON_PLUS) ||
+        (Buttons2 & WPAD_BUTTON_PLUS) || (Buttons3 & WPAD_BUTTON_PLUS))
     {
         ShowFPS = !ShowFPS;
     }
@@ -941,6 +978,10 @@ void Game::ChangeCursor()
         Hand[0].SetAlpha(0xFF);
         Hand[1].SetPlayer(cursorType::P2);
         Hand[1].SetAlpha(0x55);
+        Hand[2].SetPlayer(cursorType::P3);
+        Hand[2].SetAlpha(0x55);
+        Hand[3].SetPlayer(cursorType::P4);
+        Hand[3].SetAlpha(0x55);
     }
     else if(CurrentScreen == gameScreen::Game)
     {

@@ -16,6 +16,8 @@
 enum class cursorType : u8 {
     P1,  /**< Player 1 cursor. */
     P2,  /**< Player 2 cursor. */
+    P3,  /**< Player 3 cursor. */
+    P4,  /**< Player 4 cursor. */
     X,   /**< X cursor. */
     O    /**< O cursor. */
 };

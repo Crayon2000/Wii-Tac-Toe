@@ -60,12 +60,20 @@ cursorType Cursor::SetPlayer(cursorType NewCType)
             Frame = 1;
             Cursors->SetOffset(48, 48);
             break;
-        case cursorType::X:
+        case cursorType::P3:
             Frame = 2;
+            Cursors->SetOffset(48, 48);
+            break;
+        case cursorType::P4:
+            Frame = 3;
+            Cursors->SetOffset(48, 48);
+            break;
+        case cursorType::X:
+            Frame = 4;
             Cursors->SetOffset(48, 45);
             break;
         case cursorType::O:
-            Frame = 3;
+            Frame = 5;
             Cursors->SetOffset(48, 45);
             break;
         default:
