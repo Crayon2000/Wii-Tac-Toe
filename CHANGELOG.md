@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## Unreleased
 
+- Add support for Wii Remote 3 and 4 on HOME Menu
 - Use cmake
 - Library update
   - fmt 10.2.1

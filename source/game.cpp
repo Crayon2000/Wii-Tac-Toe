@@ -663,10 +663,7 @@ bool Game::ControllerManager()
                             Hand[1].Paint();
                             Hand[0].Paint();
                             CopiedImg->CopyScreen();
-                            WPAD_Rumble(WPAD_CHAN_0, 0); // Rumble off, just in case
-                            WPAD_Rumble(WPAD_CHAN_1, 0); // Rumble off, just in case
-                            WPAD_Rumble(WPAD_CHAN_2, 0); // Rumble off, just in case
-                            WPAD_Rumble(WPAD_CHAN_3, 0); // Rumble off, just in case
+                            WPAD_Rumble(WPAD_CHAN_ALL, 0); // Rumble off, just in case
                             Draw_FadeOut(CopiedImg, 1, 1, 3);
                             return true; // Exit to loader
                         default:
