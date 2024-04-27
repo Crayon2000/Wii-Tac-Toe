@@ -61,10 +61,8 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
 
     // Wiimote initialization
     WPAD_Init();
-    WPAD_SetDataFormat(WPAD_CHAN_0, WPAD_FMT_BTNS_ACC_IR);
-    WPAD_SetVRes(WPAD_CHAN_0, Screen::GetWidth(), Screen::GetHeight());
-    WPAD_SetDataFormat(WPAD_CHAN_1, WPAD_FMT_BTNS_ACC_IR);
-    WPAD_SetVRes(WPAD_CHAN_1, Screen::GetWidth(), Screen::GetHeight());
+    WPAD_SetDataFormat(WPAD_CHAN_ALL, WPAD_FMT_BTNS_ACC_IR);
+    WPAD_SetVRes(WPAD_CHAN_ALL, Screen::GetWidth(), Screen::GetHeight());
 
     // Game initialization
     Game *MyGame = new Game(Screen::GetWidth(), Screen::GetHeight());

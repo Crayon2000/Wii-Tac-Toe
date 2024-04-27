@@ -732,6 +732,7 @@ bool Game::ControllerManager()
                         }
                     }
                 }
+                break;
         }
     }
     if(((WPadData0->btns_h & WPAD_BUTTON_1) && (WPadData0->btns_h & WPAD_BUTTON_2)) ||
