@@ -68,7 +68,7 @@ private:
     void ChangeCursor();
     void CalculateFrameRate();
 
-    std::array<Cursor, 2> Hand;
+    std::array<Cursor, 4> Hand;
     s8 HandX;
     s8 HandY;
 

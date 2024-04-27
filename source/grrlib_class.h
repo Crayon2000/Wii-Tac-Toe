@@ -84,7 +84,7 @@ namespace Screen
     void FillScreen(const u32 color);
     void SetPixel(const f32 x, const f32 y, const u32 color);
     void Line(const f32 x1, const f32 y1, const f32 x2, const f32 y2, const u32 color);
-    void Rectangle(const f32 x, const f32 y, const f32 width, const f32 height, const u32 color, const u8 filled);
+    void Rectangle(const f32 x, const f32 y, const f32 width, const f32 height, const u32 color, const bool filled);
     void Circle(const f32 x, const f32 y, const f32 radius, const u32 color, const u8 filled);
 
     [[nodiscard]] u16 GetWidth();

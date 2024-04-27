@@ -540,9 +540,9 @@ void Screen::Line(const f32 x1, const f32 y1, const f32 x2, const f32 y2, const 
  * @param width The width of the rectangle.
  * @param height The height of the rectangle.
  * @param color The color of the rectangle in RGBA format.
- * @param filled Set to true to fill the rectangle.
+ * @param filled Set to @c true to fill the rectangle.
  */
-void Screen::Rectangle(const f32 x, const f32 y, const f32 width, const f32 height, const u32 color, const u8 filled)
+void Screen::Rectangle(const f32 x, const f32 y, const f32 width, const f32 height, const u32 color, const bool filled)
 {
     GRRLIB_Rectangle(x, y, width,  height, color, filled);
 }
@@ -553,7 +553,7 @@ void Screen::Rectangle(const f32 x, const f32 y, const f32 width, const f32 heig
  * @param y Specifies the y-coordinate of the circle.
  * @param radius The radius of the circle.
  * @param color The color of the circle in RGBA format.
- * @param filled Set to true to fill the circle.
+ * @param filled Set to @c true to fill the circle.
  */
 void Screen::Circle(const f32 x, const f32 y, const f32 radius, const u32 color, const u8 filled)
 {
