@@ -33,6 +33,7 @@ public:
 
     [[nodiscard]] u32 GetWidth();
     [[nodiscard]] u32 GetHeight();
+    [[nodiscard]] u32 GetFormat();
     [[nodiscard]] u32 GetOffsetX();
     [[nodiscard]] u32 GetOffsetY();
     void SetOffset(u32 X, u32 Y);
