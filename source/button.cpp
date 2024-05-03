@@ -19,7 +19,7 @@ Button::Button(buttonType NewType) : Object(),
     TextHeight(14),
     TextTop(0),
     TextLeft(0),
-    TextColor(0x000000),
+    TextColor(0x000000FF),
     Type(NewType)
 {
     switch(Type)
