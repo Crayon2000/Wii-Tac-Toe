@@ -26,7 +26,7 @@ FetchContent_Declare(fmt
   URL https://github.com/fmtlib/fmt/archive/refs/tags/10.2.1.tar.gz
 )
 FetchContent_Declare(grrmod
-  URL https://codeload.github.com/GRRLIB/GRRMOD/tar.gz/615bfa986977abdbd52c094cf38be816151df53d
+  URL https://codeload.github.com/GRRLIB/GRRMOD/tar.gz/9a6e7d85329b813d633f4b10de31c704167c0054
   SOURCE_SUBDIR "GRRMOD"
 )
 set(GRRMOD_USE_MP3 OFF CACHE BOOL "Don't use MP3" FORCE)

@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file.
 - Use cmake
 - Library update
   - fmt 10.2.1
-  - GRRMOD (615bfa986977abdbd52c094cf38be816151df53d)
+  - GRRMOD (9a6e7d85329b813d633f4b10de31c704167c0054)
   - GRRLIB (3050dba25675452fcf66af8552e2bb4619f1bbf3)
 
 ## 1.0.0
