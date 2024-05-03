@@ -75,6 +75,7 @@ void Texture::Assign(GRRLIB_texImg *other)
 
     w = other->w;
     h = other->h;
+    format = other->format;
     handlex = other->handlex;
     handley = other->handley;
     offsetx = other->offsetx;
@@ -173,6 +174,7 @@ void Texture::Create(const u32 w, const u32 h, const u32 Color)
     data = memalign(32, h * w * 4);
     this->w = w;
     this->h = h;
+    format  = GX_TF_RGBA8;
     handlex = 0;
     handley = 0;
     offsetx = 0;
@@ -219,6 +221,15 @@ u32 Texture::GetWidth()
 u32 Texture::GetHeight()
 {
     return h;
+}
+
+/**
+ * Return the format of the texture.
+ * @return The texture format.
+ */
+u32 Texture::GetFormat()
+{
+    return format;
 }
 
 /**

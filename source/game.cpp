@@ -4,7 +4,7 @@
 #include <wiiuse/wpad.h>
 #include <ogc/conf.h>
 #include <ogc/lwp_watchdog.h>
-#include "grrlib/grrlib.h"
+#include "grrlib.h"
 #include "grrlib_class.h"
 #include "fmt/format.h"
 #include "fmt/chrono.h"

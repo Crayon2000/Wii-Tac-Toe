@@ -9,10 +9,6 @@ find_library(FAT fat
   PATHS "${OGC_ROOT}/lib/${OGC_SUBDIR}"
   REQUIRED
 )
-find_library(PNGU pngu
-  PATHS "${CMAKE_CURRENT_SOURCE_DIR}/lib"
-  REQUIRED
-)
 
 find_package(PkgConfig REQUIRED)
 
@@ -25,17 +21,23 @@ include(FetchContent)
 FetchContent_Declare(fmt
   URL https://github.com/fmtlib/fmt/archive/refs/tags/10.2.1.tar.gz
 )
+FetchContent_Declare(grrlib
+  GIT_REPOSITORY https://github.com/GRRLIB/GRRLIB.git
+  GIT_TAG        d93847e6a3e350bd1157d61cc1315d8bbff76968
+)
 FetchContent_Declare(grrmod
   URL https://codeload.github.com/GRRLIB/GRRMOD/tar.gz/9a6e7d85329b813d633f4b10de31c704167c0054
   SOURCE_SUBDIR "GRRMOD"
 )
 set(GRRMOD_USE_MP3 OFF CACHE BOOL "Don't use MP3" FORCE)
-FetchContent_MakeAvailable(fmt grrmod)
+FetchContent_MakeAvailable(fmt grrlib grrmod)
 
 file(GLOB_RECURSE SRC_FILES
   "${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp"
   "${CMAKE_CURRENT_SOURCE_DIR}/source/*.c"
   "${CMAKE_CURRENT_SOURCE_DIR}/fonts/*.cpp"
+  "${grrlib_SOURCE_DIR}/GRRLIB/GRRLIB/*.c"
+  "${grrlib_SOURCE_DIR}/GRRLIB/lib/pngu/*.c"
 )
 
 file(GLOB_RECURSE BIN_FILES
@@ -60,8 +62,8 @@ target_sources(Wii-Tac-Toe PRIVATE
 
 target_include_directories(Wii-Tac-Toe PRIVATE
   "${CMAKE_CURRENT_SOURCE_DIR}/source"
-  "${CMAKE_CURRENT_SOURCE_DIR}/source/grrlib"
-  "${CMAKE_CURRENT_SOURCE_DIR}/source/pngu"
+  "${grrlib_SOURCE_DIR}/GRRLIB/GRRLIB"
+  "${grrlib_SOURCE_DIR}/GRRLIB/lib/pngu"
   ${PNG_INCLUDE_DIRS}
   ${JPEG_INCLUDE_DIRS}
   ${FREETYPE_INCLUDE_DIRS}
@@ -82,7 +84,6 @@ target_link_libraries(Wii-Tac-Toe PRIVATE
   ${MXML_LIBRARIES}
   ${FAT}
   ${AESND}
-  ${PNGU}
 )
 
 ogc_create_dol(Wii-Tac-Toe)
