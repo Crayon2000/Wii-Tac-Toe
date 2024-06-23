@@ -35,10 +35,12 @@ public:
     void SetCaption(const std::string &NewCaption);
     void SetFont(GRRLIB_ttfFont *AFont);
     void SetFocused(bool IsFocused);
+    void SetSelected(bool IsSelected);
     void SetTextColor(u32 NewColor);
     void SetTextHeight(unsigned int NewHeight);
 private:
     bool Focused;
+    bool Selected;
     std::string Caption;
     GRRLIB_ttfFont *Font;
     unsigned int TextWidth;
@@ -49,6 +51,7 @@ private:
     buttonType Type;
     Texture *ButtonImgOn;
     Texture *ButtonImgOff;
+    Texture *ButtonSelected;
 };
 //---------------------------------------------------------------------------
 #endif
