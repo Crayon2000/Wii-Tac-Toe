@@ -21,7 +21,7 @@ enum class buttonType : u8 {
 };
 
 /**
- * This is a class to make a button on the screen with two states (selected or not).
+ * This is a class to make a button on the screen with two states (focused or not).
  * @author Crayon
  */
 class Button : public Object
@@ -34,11 +34,11 @@ public:
     void Paint() override;
     void SetCaption(const std::string &NewCaption);
     void SetFont(GRRLIB_ttfFont *AFont);
-    void SetSelected(bool IsSelected);
+    void SetFocused(bool IsFocused);
     void SetTextColor(u32 NewColor);
     void SetTextHeight(unsigned int NewHeight);
 private:
-    bool Selected;
+    bool Focused;
     std::string Caption;
     GRRLIB_ttfFont *Font;
     unsigned int TextWidth;

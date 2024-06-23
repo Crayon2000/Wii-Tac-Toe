@@ -63,7 +63,7 @@ private:
     void PrintWrapText(u16 x, u16 y, u16 maxLineWidth, const std::string &input,
         u32 fontSize, u32 TextColor, u32 ShadowColor, s8 OffsetX, s8 OffsetY);
     void ChangeScreen(gameScreen NewScreen, bool PlaySound = true);
-    void ButtonOn(s8 NewSelectedButton);
+    void ButtonOn(s8 NewFocusedButton);
     bool SelectZone();
     void ChangeCursor();
     void CalculateFrameRate();
@@ -77,7 +77,7 @@ private:
     std::array<Player, 2> WTTPlayer;
     gameScreen CurrentScreen;
     gameScreen LastScreen;
-    s8 SelectedButton;
+    s8 FocusedButton;
     std::string text;
 
     u16 TieGame;

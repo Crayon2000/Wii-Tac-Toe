@@ -12,7 +12,7 @@
  * @param[in] NewType Button type.
  */
 Button::Button(buttonType NewType) : Object(),
-    Selected(false),
+    Focused(false),
     Caption(""),
     Font(nullptr),
     TextWidth(100), // random value
@@ -61,11 +61,11 @@ void Button::Paint()
     }
     ButtonImgOff->Draw(Left, Top, 0, 1.0, 1.0, 0xFFFFFFFF);
     GRRLIB_PrintfTTF(TextLeft, TextTop, Font, Caption.c_str(), TextHeight, TextColor);
-    if(Type == buttonType::StdMenu && Selected == true)
+    if(Type == buttonType::StdMenu && Focused == true)
     {   // Hover color
         ButtonImgOn->Draw(Left, Top, 0, 1.0, 1.0, 0xFFFFFFFF);
     }
-    else if(Type == buttonType::HomeMenu && Selected == true)
+    else if(Type == buttonType::HomeMenu && Focused == true)
     {   // Hover color
         ButtonImgOff->Draw(Left, Top, 0, 1.0, 1.0, 0x0000FF33);
     }
@@ -106,17 +106,17 @@ void Button::SetFont(GRRLIB_ttfFont *AFont)
 }
 
 /**
- * Set the button state, selected or not.
- * @param[in] IsSelected Set to true to select the button, false otherwise.
+ * Set the button state, focused or not.
+ * @param[in] IsFocused Set to true to select the button, false otherwise.
  */
-void Button::SetSelected(bool IsSelected)
+void Button::SetFocused(bool IsFocused)
 {
-    Selected = IsSelected;
+    Focused = IsFocused;
 }
 
 /**
  * Set the text color on the button.
- * @param[in] NewColor Color of the text when the button is not selected.
+ * @param[in] NewColor Color of the text when the button is not focused.
  */
 void Button::SetTextColor(u32 NewColor)
 {
