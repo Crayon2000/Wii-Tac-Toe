@@ -54,6 +54,9 @@ target_compile_options(Wii-Tac-Toe PRIVATE
   -Werror
   -Wall
   -Wunused
+  -Wmisleading-indentation
+  -Wduplicated-cond
+  -Wduplicated-branches
 )
 
 target_sources(Wii-Tac-Toe PRIVATE
