@@ -1,5 +1,10 @@
-cmake_minimum_required(VERSION 3.18)
+cmake_minimum_required(VERSION 3.20)
 project(Wii-Tac-Toe)
+
+# Avoid warning about DOWNLOAD_EXTRACT_TIMESTAMP in CMake 3.24
+if(POLICY CMP0135)
+  cmake_policy(SET CMP0135 NEW)
+endif()
 
 find_library(AESND aesnd
   PATHS "${OGC_ROOT}/lib/${OGC_SUBDIR}"
@@ -48,7 +53,7 @@ file(GLOB_RECURSE BIN_FILES
 
 add_executable(Wii-Tac-Toe)
 
-target_compile_features(Wii-Tac-Toe PRIVATE cxx_std_20)
+target_compile_features(Wii-Tac-Toe PRIVATE cxx_std_23)
 
 target_compile_options(Wii-Tac-Toe PRIVATE
   -Werror

@@ -1,6 +1,7 @@
 {
     "name": "devkitPPC",
     "image": "devkitpro/devkitppc:latest",
+    "postCreateCommand": "sh ./.devcontainer/post-create.sh",
     "customizations": {
         "vscode": {
             "extensions": ["ms-vscode.cpptools-extension-pack"]
