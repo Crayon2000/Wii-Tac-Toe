@@ -32,7 +32,7 @@
 /**
  * Array to hold the position of each zone.
  */
-static const Point Table[3][3] = {
+static constexpr Point Table[3][3] = {
     {Point(180, 28), Point(180, 131), Point(180, 233)},
     {Point(322, 28), Point(322, 131), Point(322, 233)},
     {Point(464, 28), Point(464, 131), Point(464, 233)}};
@@ -88,10 +88,7 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight) :
     ExitButton[2]->SetFont(DefaultFont);
     ExitButton[2]->SetLeft((ScreenWidth / 2) - ExitButton[1]->GetWidth() - 20);
     ExitButton[2]->SetTop(165);
-    //if(!!*(u32 *)0x80001800) // that returns true for hbc, false for load-from-trucha-signed-disc. think it also returns false for tp hack
-    //    ExitButton[2]->SetCaption("Return to HBC");
-    //else
-        ExitButton[2]->SetCaption(Lang->String("Return to Loader"));
+    ExitButton[2]->SetCaption(Lang->String("Return to Loader"));
 
     MenuButton[0] = new Button();
     MenuButton[0]->SetFont(DefaultFont);
@@ -1041,7 +1038,7 @@ void Game::CalculateFrameRate()
 {
     static u8 frameCount = 0;
     static u32 lastTime;
-    u32 currentTime = ticks_to_millisecs(gettime());
+    const u32 currentTime = ticks_to_millisecs(gettime());
 
     ++frameCount;
     if(currentTime - lastTime > 1000)

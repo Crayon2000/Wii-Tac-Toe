@@ -23,7 +23,7 @@ public:
      * Constructor for the Point class.
      * Initializes a point at the origin (0, 0) of the coordinate space.
      */
-    Point() : x(0), y(0)
+    constexpr Point() : x(0), y(0)
     {
     }
     /**
@@ -31,20 +31,20 @@ public:
      * @param[in] x Specifies the x-coordinate.
      * @param[in] y Specifies the y-coordinate.
      */
-    Point(u16 x, u16 y) : x(x), y(y)
+    constexpr Point(u16 x, u16 y) : x(x), y(y)
     {
     }
     /**
      * Get the x position.
      */
-    [[nodiscard]] u16 GetX() const
+    [[nodiscard]] constexpr u16 GetX() const
     {
         return x;
     }
     /**
      * Get the y position.
      */
-    [[nodiscard]] u16 GetY() const
+    [[nodiscard]] constexpr u16 GetY() const
     {
         return y;
     }
@@ -53,7 +53,7 @@ public:
      * @param[in] x Specifies the x-coordinate.
      * @param[in] y Specifies the y-coordinate.
      */
-    void SetLocation(u16 x, u16 y)
+    constexpr void SetLocation(u16 x, u16 y)
     {
         this->x = x;
         this->y = y;
@@ -63,7 +63,7 @@ public:
      * @param[in] pt The Point to evaluate.
      * @return If the Point meet the comparison condition, the operators return a true value. Otherwise, false is returned.
      */
-    bool operator ==(const Point& pt) const
+    constexpr bool operator ==(const Point& pt) const
     {
         return (x == pt.x) && (y == pt.y);
     }
@@ -72,7 +72,7 @@ public:
      * @param[in] pt The Point to evaluate.
      * @return If the Point meet the comparison condition, the operators return a true value. Otherwise, false is returned.
      */
-    bool operator !=(const Point& pt) const
+    constexpr bool operator !=(const Point& pt) const
     {
         return !(pt == *this);
     }
