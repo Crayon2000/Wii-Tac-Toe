@@ -1,10 +1,5 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.24)
 project(Wii-Tac-Toe)
-
-# Avoid warning about DOWNLOAD_EXTRACT_TIMESTAMP in CMake 3.24
-if(POLICY CMP0135)
-  cmake_policy(SET CMP0135 NEW)
-endif()
 
 find_library(AESND aesnd
   PATHS "${OGC_ROOT}/lib/${OGC_SUBDIR}"
