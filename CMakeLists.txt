@@ -1,10 +1,5 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.24)
 project(Wii-Tac-Toe)
-
-# Avoid warning about DOWNLOAD_EXTRACT_TIMESTAMP in CMake 3.24
-if(POLICY CMP0135)
-  cmake_policy(SET CMP0135 NEW)
-endif()
 
 find_library(AESND aesnd
   PATHS "${OGC_ROOT}/lib/${OGC_SUBDIR}"
@@ -24,7 +19,7 @@ pkg_check_modules(MXML REQUIRED mxml)
 
 include(FetchContent)
 FetchContent_Declare(fmt
-  URL https://github.com/fmtlib/fmt/archive/refs/tags/10.2.1.tar.gz
+  URL https://github.com/fmtlib/fmt/archive/refs/tags/11.0.1.tar.gz
 )
 FetchContent_Declare(grrlib
   GIT_REPOSITORY https://github.com/GRRLIB/GRRLIB.git

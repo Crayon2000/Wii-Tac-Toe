@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file.
 - Add support for Wii Remote 3 and 4 on HOME Menu
 - Use cmake
 - Library update
-  - fmt 10.2.1
+  - fmt 11.0.1
   - GRRMOD (9a6e7d85329b813d633f4b10de31c704167c0054)
   - GRRLIB (d93847e6a3e350bd1157d61cc1315d8bbff76968)
 
