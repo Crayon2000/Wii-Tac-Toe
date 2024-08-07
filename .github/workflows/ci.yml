@@ -19,7 +19,7 @@ jobs:
       run: |
         sh .devcontainer/post-create.sh
         /opt/devkitpro/portlibs/wii/bin/powerpc-eabi-cmake -B $GITHUB_WORKSPACE/build -G Ninja
-        cmake --build $GITHUB_WORKSPACE/build
+        cmake --build $GITHUB_WORKSPACE/build --verbose
 
     - name: Prepare artifact
       run: |

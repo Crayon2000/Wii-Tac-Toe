@@ -482,7 +482,7 @@ void Game::MenuScreen(bool CopyScreen)
         Rectangle(0, 385, ScreenWidth, 95, 0x000000FF, 1);
 
         GRRLIB_PrintfTTF(500, 40, DefaultFont,
-            fmt::format(fmt::runtime(Lang->String("Ver. {}")), "1.0.0").c_str(),
+            fmt::format(fmt::runtime(Lang->String("Ver. {}")), "1.1.0").c_str(),
             12, 0xFFFFFFFF);
 
         if(CopyScreen == true)
