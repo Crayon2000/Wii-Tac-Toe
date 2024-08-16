@@ -7,11 +7,13 @@
 #define CursorH
 //---------------------------------------------------------------------------
 
+#include <memory>
 #include "object.h"
 #include "grrlib_class.h"
 
 /**
  * Types of cursor that could be used.
+ * Item order must match cursor in hands.png image.
  */
 enum class cursorType : u8 {
     P1,  /**< Player 1 cursor. */
@@ -31,14 +33,13 @@ class Cursor : public Object
 public:
     Cursor();
     Cursor(Cursor const&) = delete;
-    ~Cursor();
+    ~Cursor() = default;
     Cursor& operator=(Cursor const&) = delete;
     void Paint() override;
-    cursorType SetPlayer(cursorType NewCType);
+    void SetPlayer(cursorType NewCType);
 private:
-    cursorType Type;
     int Frame;
-    Texture *Cursors;
+    std::unique_ptr<Texture> Cursors;
 };
 //---------------------------------------------------------------------------
 #endif

@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+- TBD
+
 ## 1.1.0
 
 - Add support for Wii Remote 3 and 4 on HOME Menu

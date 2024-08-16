@@ -27,7 +27,7 @@ class Player
 public:
     Player();
     Player(Player const&) = delete;
-    virtual ~Player() {};
+    ~Player() = default;
     Player& operator=(Player const&) = delete;
     void SetName(const std::string &AName);
     [[nodiscard]] std::string GetName();

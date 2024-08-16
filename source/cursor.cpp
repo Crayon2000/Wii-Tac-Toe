@@ -1,30 +1,28 @@
 #include "cursor.h"
 
+#include <utility>
+
 // Graphics
 #include "hands_png.h"
 
 /**
  * Constructor for the Cursor class.
  */
-Cursor::Cursor() : Object()
+Cursor::Cursor() : Object(),
+    Cursors(std::make_unique<Texture>(hands_png, hands_png_size))
 {
     Width = 96;
     Height = 96;
 
     // Load textures
-    Cursors = new Texture(hands_png, hands_png_size);
-    GRRLIB_InitTileSet(reinterpret_cast<GRRLIB_texImg *>(Cursors), Width, Height, 0);
+    GRRLIB_InitTileSet(reinterpret_cast<GRRLIB_texImg *>(Cursors.get()), Width, Height, 0);
+
+    // Set hotspot
+    Cursors->SetOffset(48, 45);
+    Cursors->SetHandle(Cursors->GetOffsetX(), Cursors->GetOffsetY());
 
     // Default values
     SetPlayer(cursorType::X);
-}
-
-/**
- * Destructor for the Cursor class.
- */
-Cursor::~Cursor()
-{
-    delete Cursors;
 }
 
 /**
@@ -44,41 +42,8 @@ void Cursor::Paint()
 /**
  * Set cursor.
  * @param[in] NewCType New cursor type to use.
- * @return Previous cursor.
  */
-cursorType Cursor::SetPlayer(cursorType NewCType)
+void Cursor::SetPlayer(cursorType NewCType)
 {
-    cursorType PreviousType = Type;
-    Type = NewCType;
-    switch(Type)
-    {
-        case cursorType::P1:
-            Frame = 0;
-            Cursors->SetOffset(48, 48);
-            break;
-        case cursorType::P2:
-            Frame = 1;
-            Cursors->SetOffset(48, 48);
-            break;
-        case cursorType::P3:
-            Frame = 2;
-            Cursors->SetOffset(48, 48);
-            break;
-        case cursorType::P4:
-            Frame = 3;
-            Cursors->SetOffset(48, 48);
-            break;
-        case cursorType::X:
-            Frame = 4;
-            Cursors->SetOffset(48, 45);
-            break;
-        case cursorType::O:
-            Frame = 5;
-            Cursors->SetOffset(48, 45);
-            break;
-        default:
-            break;
-    }
-    Cursors->SetHandle(Cursors->GetOffsetX(), Cursors->GetOffsetY());
-    return PreviousType;
+    Frame = std::to_underlying(NewCType);
 }
