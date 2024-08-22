@@ -9,6 +9,7 @@
 
 #include <array>
 #include <string>
+#include <memory>
 #include "cursor.h"
 #include "player.h"
 #include "button.h"
@@ -92,13 +93,13 @@ private:
     std::array<std::array<Symbol, 3>, 3> GridSign;
     Audio *GameAudio;
 
-    Texture *GameImg; /**< Background texture for the game. */
-    Texture *GameHoverImg; /**< Hover texture for the game buttons. */
-    Texture *SplashImg; /**< Splash screen texture. */
-    Texture *SplashArmImg; /**< Arm texture for splash screen. */
-    Texture *HoverImg; /**< Texture to put over a symbol when selected. */
-    Texture *CopiedImg; /**< Texture to store a temporary copy of the screen. */
-    Texture *GameText; /**< Game text that does not changed including background. */
+    std::unique_ptr<Texture> GameImg; /**< Background texture for the game. */
+    std::unique_ptr<Texture> GameHoverImg; /**< Hover texture for the game buttons. */
+    std::unique_ptr<Texture> SplashImg; /**< Splash screen texture. */
+    std::unique_ptr<Texture> SplashArmImg; /**< Arm texture for splash screen. */
+    std::unique_ptr<Texture> HoverImg; /**< Texture to put over a symbol when selected. */
+    std::unique_ptr<Texture> CopiedImg; /**< Texture to store a temporary copy of the screen. */
+    std::unique_ptr<Texture> GameText; /**< Game text that does not changed including background. */
 
     bool Copied;
 

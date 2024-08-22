@@ -27,33 +27,19 @@ Button::Button(buttonType NewType) : Object(),
     switch(Type)
     {
         case buttonType::HomeMenu:
-            ButtonImgOn = nullptr;
-            ButtonImgOff = new Texture(button_home_png, button_home_png_size);
-            ButtonSelected = nullptr;
+            ButtonImgOff = Texture::CreateFromPNG(button_home_png);
             break;
         case buttonType::Home:
-            ButtonImgOn = nullptr;
-            ButtonImgOff = new Texture(home_button_png, home_button_png_size);
-            ButtonSelected = nullptr;
+            ButtonImgOff = Texture::CreateFromPNG(home_button_png);
             break;
         default:
-            ButtonImgOn = new Texture(button_on_png, button_on_png_size);
-            ButtonImgOff = new Texture(button_off_png, button_off_png_size);
-            ButtonSelected = new Texture(button_select_png, button_select_png_size);
+            ButtonImgOn = Texture::CreateFromPNG(button_on_png);
+            ButtonImgOff = Texture::CreateFromPNG(button_off_png);
+            ButtonSelected = Texture::CreateFromPNG(button_select_png);
     }
 
     Width = ButtonImgOff->GetWidth();
     Height = ButtonImgOff->GetHeight();
-}
-
-/**
- * Destructor for the Button class.
- */
-Button::~Button()
-{
-    delete ButtonImgOn;
-    delete ButtonImgOff;
-    delete ButtonSelected;
 }
 
 /**

@@ -8,23 +8,13 @@
  * Constructor for the Symbol class.
  */
 Symbol::Symbol() :
-    Object(),
-    Current(nullptr)
+    Object()
 {
-    ImgO = new Texture(o_png);
-    ImgX = new Texture(x_png);
+    ImgO = Texture::CreateFromPNG(o_png);
+    ImgX = Texture::CreateFromPNG(x_png);
 
     Width = 136;
     Height = 100;
-}
-
-/**
- * Destructor for the Symbol class.
- */
-Symbol::~Symbol()
-{
-    delete ImgO;
-    delete ImgX;
 }
 
 /**
@@ -32,9 +22,13 @@ Symbol::~Symbol()
  */
 void Symbol::Paint()
 {
-    if(Current != nullptr)
+    if(Frame == 0)
     {
-        Current->Draw(Left, Top, Angle, 1, 1, Color);
+        ImgX->Draw(Left, Top, Angle, 1, 1, Color);
+    }
+    else if(Frame == 1)
+    {
+        ImgO->Draw(Left, Top, Angle, 1, 1, Color);
     }
 }
 
@@ -46,15 +40,15 @@ void Symbol::SetPlayer(u8 APlayer)
 {
     if(APlayer == 'X' || APlayer == 'x')
     {
-        Current = ImgX;
+        Frame = 0;
     }
     else if(APlayer == 'O' || APlayer == 'o')
     {
-        Current = ImgO;
+        Frame = 1;
     }
     else
     {
-        Current = nullptr;
+        Frame = -1;
     }
 }
 

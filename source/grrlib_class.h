@@ -9,6 +9,7 @@
 
 #include <grrlib.h>
 #include <string>
+#include <memory>
 
 /**
  * Namespace containing all GRRLIB code.
@@ -62,6 +63,8 @@ public:
     [[nodiscard]] u32 GetColor();
     void SetAlpha(u8);
     [[nodiscard]] u8 GetAlpha();
+
+    [[nodiscard]] static std::unique_ptr<Texture> CreateFromPNG(const u8 *Buffer);
 private:
     void Assign(GRRLIB_texImg *other);
     u32 _Color;  /**< The color used to draw the texture. By default it is set to 0xFFFFFFFF. */
