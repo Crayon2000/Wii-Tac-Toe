@@ -28,8 +28,7 @@ public:
     void SetLocation(Point APoint);
 private:
     int Frame;
-    std::unique_ptr<Texture> ImgX;
-    std::unique_ptr<Texture> ImgO;
+    std::unique_ptr<Texture> Img;
 };
 //---------------------------------------------------------------------------
 #endif

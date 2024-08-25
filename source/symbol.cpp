@@ -1,8 +1,7 @@
 #include "symbol.h"
 
 // Fonts
-#include "x_png.h"
-#include "o_png.h"
+#include "symbols_png.h"
 
 /**
  * Constructor for the Symbol class.
@@ -10,11 +9,11 @@
 Symbol::Symbol() :
     Object()
 {
-    ImgO = Texture::CreateFromPNG(o_png);
-    ImgX = Texture::CreateFromPNG(x_png);
-
     Width = 136;
     Height = 100;
+
+    Img = Texture::CreateFromPNG(symbols_png);
+    GRRLIB_InitTileSet(reinterpret_cast<GRRLIB_texImg *>(Img.get()), Width, Height, 0);
 }
 
 /**
@@ -22,14 +21,11 @@ Symbol::Symbol() :
  */
 void Symbol::Paint()
 {
-    if(Frame == 0)
+    if(Frame < 0)
     {
-        ImgX->Draw(Left, Top, Angle, 1, 1, Color);
+        return;
     }
-    else if(Frame == 1)
-    {
-        ImgO->Draw(Left, Top, Angle, 1, 1, Color);
-    }
+    Img->DrawTile(Left, Top, Angle, 1, 1, Color, Frame);
 }
 
 /**
