@@ -13,7 +13,6 @@ find_library(FAT fat
 find_package(PkgConfig REQUIRED)
 
 pkg_check_modules(PNG REQUIRED libpng)
-pkg_check_modules(JPEG REQUIRED libjpeg)
 pkg_check_modules(FREETYPE REQUIRED freetype2)
 pkg_check_modules(MXML REQUIRED mxml)
 
@@ -82,7 +81,6 @@ target_link_libraries(Wii-Tac-Toe PRIVATE
   fmt::fmt
   grrmod
   ${PNG_LIBRARIES}
-  ${JPEG_LIBRARIES}
   ${FREETYPE_LIBRARIES}
   ${MXML_LIBRARIES}
   ${FAT}

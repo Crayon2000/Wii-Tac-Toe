@@ -8,6 +8,7 @@
 //---------------------------------------------------------------------------
 
 #include <string>
+#include <memory>
 #include "object.h"
 #include "grrlib_class.h"
 
@@ -29,7 +30,7 @@ class Button : public Object
 public:
     Button(buttonType = buttonType::StdMenu);
     Button(Button const&) = delete;
-    ~Button();
+    ~Button() = default;
     Button& operator=(Button const&) = delete;
     void Paint() override;
     void SetCaption(const std::string &NewCaption);
@@ -49,9 +50,9 @@ private:
     unsigned int TextLeft;
     u32 TextColor;
     buttonType Type;
-    Texture *ButtonImgOn;
-    Texture *ButtonImgOff;
-    Texture *ButtonSelected;
+    std::unique_ptr<Texture> ButtonImgOn;
+    std::unique_ptr<Texture> ButtonImgOff;
+    std::unique_ptr<Texture> ButtonSelected;
 };
 //---------------------------------------------------------------------------
 #endif

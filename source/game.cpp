@@ -113,13 +113,13 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight) :
     WTTPlayer[1].SetSign('O');
     WTTPlayer[1].SetName(Lang->String("PLAYER 2"));
 
-    GameImg = new Texture(backg_png, backg_png_size);
-    GameHoverImg = new Texture(backg_hover_png, backg_hover_png_size);
-    SplashImg = new Texture(splash_png, splash_png_size);
-    SplashArmImg = new Texture(splash_arm_png, splash_arm_png_size);
-    HoverImg = new Texture(hover_png, hover_png_size);
-    CopiedImg = new Texture(ScreenWidth, ScreenHeight);
-    GameText = new Texture(ScreenWidth, ScreenHeight);
+    GameImg = Texture::CreateFromPNG(backg_png);
+    GameHoverImg = Texture::CreateFromPNG(backg_hover_png);
+    SplashImg = Texture::CreateFromPNG(splash_png);
+    SplashArmImg = Texture::CreateFromPNG(splash_arm_png);
+    HoverImg = Texture::CreateFromPNG(hover_png);
+    CopiedImg = std::make_unique<Texture>(ScreenWidth, ScreenHeight);
+    GameText = std::make_unique<Texture>(ScreenWidth, ScreenHeight);
 
     // Player name with a shadow offset of -2, 2 (includes game background)
     // GameText should only be modified when player names changed.
@@ -156,13 +156,6 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight) :
  */
 Game::~Game()
 {
-    delete GameText;
-    delete GameImg;
-    delete GameHoverImg;
-    delete SplashImg;
-    delete SplashArmImg;
-    delete HoverImg;
-    delete CopiedImg;
     GRRLIB_FreeTTF(DefaultFont);
 
     delete GameGrid;
@@ -661,7 +654,7 @@ bool Game::ControllerManager()
                             Hand[0].Paint();
                             CopiedImg->CopyScreen();
                             WPAD_Rumble(WPAD_CHAN_ALL, 0); // Rumble off, just in case
-                            Draw_FadeOut(CopiedImg, 1, 1, 3);
+                            Draw_FadeOut(CopiedImg.get(), 1, 1, 3);
                             return true; // Exit to loader
                         default:
                             break;

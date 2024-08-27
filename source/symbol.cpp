@@ -1,30 +1,19 @@
 #include "symbol.h"
 
 // Fonts
-#include "x_png.h"
-#include "o_png.h"
+#include "symbols_png.h"
 
 /**
  * Constructor for the Symbol class.
  */
 Symbol::Symbol() :
-    Object(),
-    Current(nullptr)
+    Object()
 {
-    ImgO = new Texture(o_png);
-    ImgX = new Texture(x_png);
-
     Width = 136;
     Height = 100;
-}
 
-/**
- * Destructor for the Symbol class.
- */
-Symbol::~Symbol()
-{
-    delete ImgO;
-    delete ImgX;
+    Img = Texture::CreateFromPNG(symbols_png);
+    GRRLIB_InitTileSet(reinterpret_cast<GRRLIB_texImg *>(Img.get()), Width, Height, 0);
 }
 
 /**
@@ -32,10 +21,11 @@ Symbol::~Symbol()
  */
 void Symbol::Paint()
 {
-    if(Current != nullptr)
+    if(Frame < 0)
     {
-        Current->Draw(Left, Top, Angle, 1, 1, Color);
+        return;
     }
+    Img->DrawTile(Left, Top, Angle, 1, 1, Color, Frame);
 }
 
 /**
@@ -46,15 +36,15 @@ void Symbol::SetPlayer(u8 APlayer)
 {
     if(APlayer == 'X' || APlayer == 'x')
     {
-        Current = ImgX;
+        Frame = 0;
     }
     else if(APlayer == 'O' || APlayer == 'o')
     {
-        Current = ImgO;
+        Frame = 1;
     }
     else
     {
-        Current = nullptr;
+        Frame = -1;
     }
 }
 

@@ -7,6 +7,7 @@
 #define SymbolH
 //---------------------------------------------------------------------------
 
+#include <memory>
 #include "object.h"
 #include "types.h"
 #include "grrlib_class.h"
@@ -20,15 +21,14 @@ class Symbol : public Object
 public:
     Symbol();
     Symbol(Symbol const&) = delete;
-    ~Symbol();
+    ~Symbol() = default;
     Symbol& operator=(Symbol const&) = delete;
     void Paint() override;
     void SetPlayer(u8 APlayer);
     void SetLocation(Point APoint);
 private:
-    Texture *Current;
-    Texture *ImgX;
-    Texture *ImgO;
+    int Frame;
+    std::unique_ptr<Texture> Img;
 };
 //---------------------------------------------------------------------------
 #endif

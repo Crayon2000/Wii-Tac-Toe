@@ -132,6 +132,17 @@ void Texture::Load(const u8 *Buffer, const u32 Size)
 }
 
 /**
+ * Create a texture from a png file buffer.
+ * @param Buffer The buffer to load.
+ */
+std::unique_ptr<Texture> Texture::CreateFromPNG(const u8 *Buffer)
+{
+    auto texture = std::make_unique<Texture>();
+    texture->Assign(GRRLIB_LoadTexturePNG(Buffer));
+    return texture;
+}
+
+/**
  * Load a texture from a file.
  * @param filename The JPEG, PNG or Bitmap file to load.
  */
