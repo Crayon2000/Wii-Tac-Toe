@@ -8,13 +8,13 @@
 /**
  * Constructor for the Cursor class.
  */
-Cursor::Cursor() : Object()
+Cursor::Cursor() : Object(),
+    Cursors(Texture::CreateFromPNG(hands_png))
 {
     Width = 96;
     Height = 96;
 
     // Load textures
-    Cursors = Texture::CreateFromPNG(hands_png);
     GRRLIB_InitTileSet(reinterpret_cast<GRRLIB_texImg *>(Cursors.get()), Width, Height, 0);
 
     // Set hotspot

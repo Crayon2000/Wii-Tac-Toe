@@ -18,7 +18,7 @@ class Object
 public:
     Object();
     Object(Object const&) = delete;
-    virtual ~Object();
+    virtual ~Object() = default;
     Object& operator=(Object const&) = delete;
     float GetLeft();
     float GetTop();

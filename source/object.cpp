@@ -15,13 +15,6 @@ Object::Object() :
 }
 
 /**
- * Destructor for the Object class.
- */
-Object::~Object()
-{
-}
-
-/**
  * Get the left position of the object.
  * @see SetLeft()
  * @return Left position in pixel.

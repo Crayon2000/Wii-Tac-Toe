@@ -7,12 +7,12 @@
  * Constructor for the Symbol class.
  */
 Symbol::Symbol() :
-    Object()
+    Object(),
+    Img(Texture::CreateFromPNG(symbols_png))
 {
     Width = 136;
     Height = 100;
 
-    Img = Texture::CreateFromPNG(symbols_png);
     GRRLIB_InitTileSet(reinterpret_cast<GRRLIB_texImg *>(Img.get()), Width, Height, 0);
 }
 

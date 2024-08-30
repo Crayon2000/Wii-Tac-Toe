@@ -25,7 +25,7 @@ FetchContent_Declare(grrlib
   GIT_TAG        d93847e6a3e350bd1157d61cc1315d8bbff76968
 )
 FetchContent_Declare(grrmod
-  URL https://codeload.github.com/GRRLIB/GRRMOD/tar.gz/9a6e7d85329b813d633f4b10de31c704167c0054
+  URL https://codeload.github.com/GRRLIB/GRRMOD/tar.gz/1ea0e8bb54eb9c2b052fba87d34530dca0365b97
   SOURCE_SUBDIR "GRRMOD"
 )
 set(GRRMOD_USE_MP3 OFF CACHE BOOL "Don't use MP3" FORCE)
