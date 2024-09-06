@@ -22,7 +22,7 @@ void Player::SetName(const std::string &AName)
  * Return the player name.
  * @return The name of the player.
  */
-std::string Player::GetName()
+std::string Player::GetName() const
 {
     return Name;
 }
@@ -40,7 +40,7 @@ void Player::SetSign(u8 ASign)
  * Get the player sign.
  * @return Player sign.
  */
-u8 Player::GetSign()
+u8 Player::GetSign() const
 {
     return Sign;
 }
@@ -49,7 +49,7 @@ u8 Player::GetSign()
  * Get the player score.
  * @return Player score.
  */
-unsigned int Player::GetScore()
+unsigned int Player::GetScore() const
 {
     return Score;
 }
@@ -83,7 +83,7 @@ void Player::SetType(playerType AType)
  * Get the player type.
  * @return Player type.
  */
-playerType Player::GetType()
+playerType Player::GetType() const
 {
     return Type;
 }
