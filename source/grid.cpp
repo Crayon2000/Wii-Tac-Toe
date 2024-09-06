@@ -1,5 +1,7 @@
 #include <cstdlib>
 #include <cstring> // For memcpy
+#include <algorithm> // For std::fill, std::copy
+#include <array> // For std::array
 #include "grid.h"
 
 /**
@@ -9,7 +11,7 @@ Grid::Grid() :
     Generator(std::random_device{}()),
     Distribution(std::uniform_int_distribution<u8>(0, 2))
 {
-    std::memset(WinningBoard, false, sizeof(WinningBoard));
+    std::fill(&WinningBoard[0][0], &WinningBoard[0][0] + sizeof(WinningBoard), false);
     Clear();
 }
 
@@ -33,7 +35,7 @@ bool Grid::SetPlayer(u8 Player, u8 X, u8 Y)
         (Player == 'X' || Player == 'O'))
     {
         Board[X][Y] = Player;
-        std::memset(WinningBoard, false, sizeof(WinningBoard));
+        std::fill(&WinningBoard[0][0], &WinningBoard[0][0] + sizeof(WinningBoard), false);
         if(IsPlayerWinning(Player) == true)
         {
             Winner = Player;
@@ -51,38 +53,25 @@ void Grid::SetPlayerAI(u8 Player)
 {
     u8 TestBoard[3][3];
 
-    // Test win
-    for(u8 x = 0; x < 3; ++x)
-    {
-        for(u8 y = 0; y < 3; ++y)
-        {
-            std::memcpy(TestBoard, Board, sizeof(TestBoard));
-            if(TestBoard[x][y] == ' ')
-            {
-                TestBoard[x][y] = Player;
-                if(IsPlayerWinning(Player, TestBoard) == true)
-                {
-                    SetPlayer(Player, x, y);
-                    return;
-                }
-            }
-        }
-    }
-
-    // Test block
+    // Test win or block opponent's win
     const u8 Opponent = (Player == 'X') ? 'O' : 'X';
-    for(u8 x = 0; x < 3; ++x)
+    const std::array<u8, 2> checkPlayers = {Player, Opponent};
+
+    for (u8 checkPlayer : checkPlayers)
     {
-        for(u8 y = 0; y < 3; ++y)
+        for(u8 x = 0; x < 3; ++x)
         {
-            std::memcpy(TestBoard, Board, sizeof(TestBoard));
-            if(TestBoard[x][y] == ' ')
+            for(u8 y = 0; y < 3; ++y)
             {
-                TestBoard[x][y] = Opponent;
-                if(IsPlayerWinning(Opponent, TestBoard) == true)
+                std::copy(&Board[0][0], &Board[0][0] + 9, &TestBoard[0][0]);
+                if(TestBoard[x][y] == ' ')
                 {
-                    SetPlayer(Player, x, y);
-                    return;
+                    TestBoard[x][y] = checkPlayer;
+                    if(IsPlayerWinning(checkPlayer, TestBoard) == true)
+                    {
+                        SetPlayer(Player, x, y);
+                        return;
+                    }
                 }
             }
         }
