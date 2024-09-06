@@ -10,3 +10,12 @@
 
 # Windows thumbnail cache
 Thumbs.db
+
+# Miscellaneous temporary files
+#
+*.diff
+*.orig
+*.patch
+*.rej
+*~
+\#*#
