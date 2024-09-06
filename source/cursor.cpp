@@ -9,7 +9,7 @@
  * Constructor for the Cursor class.
  */
 Cursor::Cursor() : Object(),
-    Cursors(Texture::CreateFromPNG(hands_png))
+    Cursors(std::unique_ptr<Texture>(Texture::CreateFromPNG(hands_png)))
 {
     Width = 96;
     Height = 96;
@@ -30,7 +30,7 @@ Cursor::Cursor() : Object(),
  */
 void Cursor::Paint()
 {
-    if(Visible == true)
+    if(Visible)
     {
         // Draw the shadow
         Cursors->DrawTile(Left + 3, Top + 3, Angle, 1, 1, 0x00000000 | ((A(Color) == 0xFF) ? 0x44 : 0x11), Frame);
