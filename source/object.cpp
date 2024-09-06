@@ -19,7 +19,7 @@ Object::Object() :
  * @see SetLeft()
  * @return Left position in pixel.
  */
-float Object::GetLeft()
+float Object::GetLeft() const
 {
     return Left;
 }
@@ -39,7 +39,7 @@ void Object::SetLeft(float Left)
  * @see SetTop()
  * @return Top position in pixel.
  */
-float Object::GetTop()
+float Object::GetTop() const
 {
     return Top;
 }
@@ -72,7 +72,7 @@ void Object::SetLocation(float Left, float Top)
  * @see SetWidth()
  * @return Width of the object.
  */
-unsigned int Object::GetWidth()
+unsigned int Object::GetWidth() const
 {
     return Width;
 }
@@ -92,7 +92,7 @@ void Object::SetWidth(unsigned int Width)
  * @see SetHeight()
  * @return Height of the object.
  */
-unsigned int Object::GetHeight()
+unsigned int Object::GetHeight() const
 {
     return Height;
 }
@@ -125,7 +125,7 @@ void Object::SetSize(unsigned int Width, unsigned int Height)
  * @see SetVisible()
  * @return true if visible, false otherwise.
  */
-bool Object::IsVisible()
+bool Object::IsVisible() const
 {
     return Visible;
 }
@@ -146,20 +146,16 @@ void Object::SetVisible(bool Visible)
  * @param[in] y Y position in pixel.
  * @return Return true if a position is inside the object, false otherwise.
  */
-bool Object::IsInside(float x, float y)
+bool Object::IsInside(float x, float y) const
 {
-    if (x > Left && x < (Left + Width) && y > Top && y < (Top + Height))
-    {
-        return true;
-    }
-    return false;
+    return (x > Left && x < (Left + Width) && y > Top && y < (Top + Height));
 }
 
 /**
  * Get the angle of the object.
  * @return Angle in user unit.
  */
-float Object::GetAngle()
+float Object::GetAngle() const
 {
     return Angle;
 }
@@ -177,7 +173,7 @@ void Object::SetAngle(float Angle)
  * Get the alpha of the object.
  * @return Alpha color (0-255).
  */
-u8 Object::GetAlpha()
+u8 Object::GetAlpha() const
 {
     return (Color & 0xFF);
 }
@@ -195,7 +191,7 @@ void Object::SetAlpha(u8 Alpha)
  * Get the color of the object.
  * @return The color of the object (RGBA).
  */
-u32 Object::GetColor()
+u32 Object::GetColor() const
 {
     return Color;
 }

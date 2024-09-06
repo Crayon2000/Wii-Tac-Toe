@@ -20,14 +20,16 @@ public:
     Object(Object const&) = delete;
     virtual ~Object() = default;
     Object& operator=(Object const&) = delete;
-    float GetLeft();
-    float GetTop();
-    unsigned int GetWidth();
-    unsigned int GetHeight();
-    float GetAngle();
-    u8 GetAlpha();
-    u32 GetColor();
-    bool IsVisible();
+
+    float GetLeft() const;
+    float GetTop() const;
+    unsigned int GetWidth() const;
+    unsigned int GetHeight() const;
+    float GetAngle() const;
+    u8 GetAlpha() const;
+    u32 GetColor() const;
+    bool IsVisible() const;
+
     void SetLeft(float Left);
     void SetTop(float Top);
     void SetLocation(float Left, float Top);
@@ -38,7 +40,8 @@ public:
     void SetAlpha(u8 Alpha);
     void SetColor(u32 AColor);
     void SetVisible(bool Visible);
-    bool IsInside(float x, float y);
+    bool IsInside(float x, float y) const;
+
 protected:
     virtual void Paint() = 0; /**< Draw an image on screen. */
 
