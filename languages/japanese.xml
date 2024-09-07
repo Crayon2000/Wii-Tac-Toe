@@ -2,7 +2,7 @@
 <language type="english" translator="Crayon">
     <translation from="Programmer: {}" to="プログラマー: {}" />
     <translation from="Graphics: {}" to="グラフィック: {}" />
-    <translation from="Press The A Button" to="A配列のボタンを押します" />
+    <translation from="Press The A Button" to="Aボタンを押してください" />
 
     <translation from="Ver. {}" to="バージョン {}" />
     <translation from="2 Players (1 Wiimote)" to="2プレーヤー（1 Wiiリモコン）" />
@@ -12,7 +12,7 @@
     <translation from="HOME Menu" to="HOMEメニュー" />
     <translation from="Close" to="閉じる" />
     <translation from="Reset" to="リセット" />
-    <translation from="Return to Loader" to="ローダに戻ります" />
+    <translation from="Return to Loader" to="ローダーに戻ります" />
 
     <translation from="PLAYER 1" to="プレーヤー1" />
     <translation from="PLAYER 2" to="プレーヤー2" />
@@ -38,7 +38,7 @@
     </tie_game>
 
     <turn_over>
-        <message text="{}の、それはあなたの番です。" />
+        <message text="{}、あなたのターンです。" />
         <message text="{}のを待っています。" />
         <message text="{}がの次の動きで考えています。" />
         <message text="{}がWiiリモコン取ると果たすべきです。" />

@@ -40,7 +40,7 @@
     <turn_over>
         <message text="{}, it's your turn." />
         <message text="Waiting for {}." />
-        <message text="{} is thinking of is next move." />
+        <message text="{} is thinking of their next move." />
         <message text="{} should take the Wii Remote and play." />
         <message text="{}, let's play." />
         <message text="{} should play now." />

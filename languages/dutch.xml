@@ -2,12 +2,12 @@
 <language type="dutch" translator="Digdug">
     <translation from="Programmer: {}" to="Programmeur: {}" />
     <translation from="Graphics: {}" to="Graphics: {}" />
-    <translation from="Press The A Button" to="Druk op de A knop" />
+    <translation from="Press The A Button" to="Druk op de A-knop" />
 
     <translation from="Ver. {}" to="Ver. {}" />
     <translation from="2 Players (1 Wiimote)" to="2 Spelers (1 Wiimote)" />
     <translation from="2 Players (2 Wiimote)" to="2 Spelers (2 Wiimote)" />
-    <translation from="1 Player (Vs AI)" to="1 Speler (Vs Wii)" />
+    <translation from="1 Player (Vs AI)" to="1 Speler (tegen AI)" />
 
     <translation from="HOME Menu" to="HOME Menu" />
     <translation from="Close" to="Sluiten" />
@@ -31,7 +31,7 @@
     </winning_game>
 
     <tie_game>
-        <message text="Gelijk spel, dat zuigt." />
+        <message text="Gelijkspel, dat is jammer." />
         <message text="Beide hebben deze keer verloren." />
         <message text="Geen winnaar, geen verliezer." />
         <message text="Jullie hebben beide jullie tijd verspild, het is gelijk spel." />
