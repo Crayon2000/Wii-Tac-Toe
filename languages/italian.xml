@@ -26,8 +26,8 @@
         <message text="{0} domina." />
         <message text="Peccato per {1}." />
         <message text="Andra' meglio la prossima volta, {1}!" />
-        <message text="{1} stai andando malissimo." />
-        <message text="{1} dovresti fare piu' pratica." />
+        <message text="Non preoccuparti, {1}, andrà meglio la prossima volta!" />
+        <message text="Continua a provare, {1}, stai migliorando!" />
     </winning_game>
 
     <tie_game>

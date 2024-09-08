@@ -26,8 +26,8 @@
         <message text="{0} rules." />
         <message text="Jammer voor {1}." />
         <message text="Volgende keer beter, {1}!" />
-        <message text="{1} jij bent echt slecht." />
-        <message text="{1} je zou meer moeten oefenen." />
+        <message text="Maak je geen zorgen, {1}, je doet het de volgende keer beter!" />
+        <message text="Blijf proberen, {1}, je wordt steeds beter!" />
     </winning_game>
 
     <tie_game>

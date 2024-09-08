@@ -26,8 +26,8 @@
         <message text="{0}ルール。" />
         <message text="{1}のために残念。" />
         <message text="より良い運次回、{1}！" />
-        <message text="{1}は、あなたが本当に吸います。" />
-        <message text="{1}はもう少し練習してください。" />
+        <message text="{1}、心配しないで、次はうまくいくよ！" />
+        <message text="{1}、頑張って、どんどん上達してるよ！" />
     </winning_game>
 
     <tie_game>

@@ -26,8 +26,8 @@
         <message text="{0} a cassé {1}." />
         <message text="Dommage pour {1}." />
         <message text="Bonne chance la prochaine fois, {1}!" />
-        <message text="{1} a vraiment mal joué." />
-        <message text="{1} devrait pratiquer un peu plus." />
+        <message text="Ne t'inquiète pas, {1}, tu feras mieux la prochaine fois!" />
+        <message text="Continue d'essayer, {1}, tu t'améliores!" />
     </winning_game>
 
     <tie_game>

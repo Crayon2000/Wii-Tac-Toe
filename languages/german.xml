@@ -26,8 +26,8 @@
         <message text="{0} hat's drauf." />
         <message text="Wie schade {1}." />
         <message text="Viel Glück beim nächsten Mal, {1}!" />
-        <message text="{1}, du bist richtig schlecht." />
-        <message text="{1}, du solltest mehr üben." />
+        <message text="Keine Sorge, {1}, du wirst es beim nächsten Mal besser machen!" />
+        <message text="Weiter so, {1}, du wirst immer besser!" />
     </winning_game>
 
     <tie_game>

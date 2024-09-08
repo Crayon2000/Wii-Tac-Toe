@@ -26,8 +26,8 @@
         <message text="{0} rules." />
         <message text="Too bad for {1}." />
         <message text="Better luck next time, {1}!" />
-        <message text="{1} you really suck." />
-        <message text="{1} should practice a little more." />
+        <message text="Don't worry, {1}, you'll do better next time!" />
+        <message text="Keep trying, {1}, you're improving!" />
     </winning_game>
 
     <tie_game>

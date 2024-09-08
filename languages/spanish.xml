@@ -26,8 +26,8 @@
         <message text="{0} mola." />
         <message text="Demasiado malo para {1}." />
         <message text="Suerte para la siguiente vez, {1}!" />
-        <message text="{1} de verdad que apestas." />
-        <message text="{1} debería practicar un poco más." />
+        <message text="No te preocupes, {1}, lo harás mejor la próxima vez!" />
+        <message text="Sigue intentándolo, {1}, ¡estás mejorando!" />
     </winning_game>
 
     <tie_game>
