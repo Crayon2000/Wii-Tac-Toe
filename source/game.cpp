@@ -112,7 +112,7 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight) :
     MenuButton[2]->SetFont(DefaultFont);
     MenuButton[2]->SetLeft((ScreenWidth / 2) - (MenuButton[2]->GetWidth() / 2));
     MenuButton[2]->SetTop(192);
-    MenuButton[2]->SetCaption(Lang->String("2 Players (2 Wiimote)"));
+    MenuButton[2]->SetCaption(Lang->String("2 Players (2 Wiimotes)"));
 
     // Initialize players
     WTTPlayer[0].SetSign('X');
