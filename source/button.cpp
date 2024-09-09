@@ -27,15 +27,15 @@ Button::Button(buttonType NewType) : Object(),
     switch(Type)
     {
         case buttonType::HomeMenu:
-            ButtonImgOff = Texture::CreateFromPNG(button_home_png);
+            ButtonImgOff = std::unique_ptr<Texture>(Texture::CreateFromPNG(button_home_png));
             break;
         case buttonType::Home:
-            ButtonImgOff = Texture::CreateFromPNG(home_button_png);
+            ButtonImgOff = std::unique_ptr<Texture>(Texture::CreateFromPNG(home_button_png));
             break;
         default:
-            ButtonImgOn = Texture::CreateFromPNG(button_on_png);
-            ButtonImgOff = Texture::CreateFromPNG(button_off_png);
-            ButtonSelected = Texture::CreateFromPNG(button_select_png);
+            ButtonImgOn = std::unique_ptr<Texture>(Texture::CreateFromPNG(button_on_png));
+            ButtonImgOff = std::unique_ptr<Texture>(Texture::CreateFromPNG(button_off_png));
+            ButtonSelected = std::unique_ptr<Texture>(Texture::CreateFromPNG(button_select_png));
     }
 
     Width = ButtonImgOff->GetWidth();
@@ -53,15 +53,14 @@ void Button::Paint()
     }
     ButtonImgOff->Draw(Left, Top, 0, 1.0f, 1.0f, 0xFFFFFFFF);
     GRRLIB_PrintfTTF(TextLeft, TextTop, Font, Caption.c_str(), TextHeight, TextColor);
-    if(Focused == true && Type == buttonType::StdMenu)
-    {   // Hover color
-        ButtonImgOn->Draw(Left, Top, 0, 1.0f, 1.0f, 0xFFFFFFFF);
+
+    if(Focused)
+    {
+        u32 HoverColor = (Type == buttonType::HomeMenu) ? 0x0000FF33 : 0xFFFFFFFF;
+        ButtonImgOn->Draw(Left, Top, 0, 1.0f, 1.0f, HoverColor);
     }
-    else if(Focused == true && Type == buttonType::HomeMenu)
-    {   // Hover color
-        ButtonImgOff->Draw(Left, Top, 0, 1.0f, 1.0f, 0x0000FF33);
-    }
-    if(Selected == true && ButtonSelected != nullptr)
+
+    if(Selected && ButtonSelected)
     {   // Select button
         ButtonSelected->Draw(Left - 8.0f, Top - 6.0f);
     }

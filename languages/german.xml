@@ -5,9 +5,9 @@
     <translation from="Press The A Button" to="Drücke den A-Knopf" />
 
     <translation from="Ver. {}" to="Ver. {}" />
-    <translation from="2 Players (1 Wiimote)" to="2 Spieler (1 Wiimote)" />
-    <translation from="2 Players (2 Wiimote)" to="2 Spieler (2 Wiimote)" />
-    <translation from="1 Player (Vs AI)" to="1 Spieler (Vs KI)" />
+    <translation from="2 Players (1 Wiimote)" to="2 Spieler (1 Wii Remote)" />
+    <translation from="2 Players (2 Wiimotes)" to="2 Spieler (2 Wii Remotes)" />
+    <translation from="1 Player (Vs AI)" to="1 Spieler (gegen KI)" />
 
     <translation from="HOME Menu" to="HOME Menü" />
     <translation from="Close" to="Schließen" />
@@ -26,12 +26,12 @@
         <message text="{0} hat's drauf." />
         <message text="Wie schade {1}." />
         <message text="Viel Glück beim nächsten Mal, {1}!" />
-        <message text="{1}, du bist richtig schlecht." />
-        <message text="{1}, du solltest mehr üben." />
+        <message text="Keine Sorge, {1}, du wirst es beim nächsten Mal besser machen!" />
+        <message text="Weiter so, {1}, du wirst immer besser!" />
     </winning_game>
 
     <tie_game>
-        <message text="Unentschieden, so ein Mist." />
+        <message text="Unentschieden, wie schade." />
         <message text="Diesmal habt ihr beide verloren." />
         <message text="Kein Sieger, kein Verlierer." />
         <message text="Ihr habt beide eure Zeit verschwendet, unentschieden." />

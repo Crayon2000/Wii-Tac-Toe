@@ -41,7 +41,7 @@ private:
     enum class gameMode : u8 {
         VsAI,       /**< Play vs AI. */
         VsHuman1,   /**< Play vs a human with 1 Wii Remote. */
-        VsHuman2    /**< Play vs a human with 2 Wii Remote. */
+        VsHuman2    /**< Play vs a human with 2 Wii Remotes. */
     };
 
     /**
@@ -83,8 +83,21 @@ private:
 
     u16 TieGame;
     bool RoundFinished;
+
+    /* Initialize in the same order as in the constructor */
     u8 FPS;
     bool ShowFPS;
+
+    u16 ScreenWidth;
+    u16 ScreenHeight;
+
+    gameMode GameMode;
+
+    u8 SymbolAlpha;
+    bool AlphaDirection;
+
+    u8 AIThinkLoop;
+    bool Copied;
 
     std::array<Button *, 3> ExitButton;
     std::array<Button *, 3> MenuButton;
@@ -99,18 +112,7 @@ private:
     std::unique_ptr<Texture> SplashArmImg; /**< Arm texture for splash screen. */
     std::unique_ptr<Texture> HoverImg; /**< Texture to put over a symbol when selected. */
     std::unique_ptr<Texture> CopiedImg; /**< Texture to store a temporary copy of the screen. */
-    std::unique_ptr<Texture> GameText; /**< Game text that does not changed including background. */
-
-    bool Copied;
-
-    u16 ScreenWidth;
-    u16 ScreenHeight;
-
-    u8 AIThinkLoop;
-    gameMode GameMode;
-
-    u8 SymbolAlpha;
-    bool AlphaDirection;
+    std::unique_ptr<Texture> GameText; /**< Game text that does not change including background. */
 
     GRRLIB_Font *DefaultFont;
 };

@@ -21,11 +21,10 @@ Symbol::Symbol() :
  */
 void Symbol::Paint()
 {
-    if(Frame < 0)
+    if(Frame >= 0)
     {
-        return;
+        Img->DrawTile(Left, Top, Angle, 1, 1, Color, Frame);
     }
-    Img->DrawTile(Left, Top, Angle, 1, 1, Color, Frame);
 }
 
 /**

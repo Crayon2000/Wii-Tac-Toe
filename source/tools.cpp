@@ -45,25 +45,14 @@ void RUMBLE_Init()
  */
 void RUMBLE_Verify()
 {
-    if(Rumble_Info[WPAD_CHAN_0].rumbeling && ticks_to_millisecs(gettime()) > Rumble_Info[WPAD_CHAN_0].time2rumble)
+    const u64 currentTime = ticks_to_millisecs(gettime());
+    for (int i = 0; i < WPAD_MAX_WIIMOTES; ++i)
     {
-        WPAD_Rumble(WPAD_CHAN_0, 0); // Rumble off
-        Rumble_Info[WPAD_CHAN_0].rumbeling = false;
-    }
-    if(Rumble_Info[WPAD_CHAN_1].rumbeling && ticks_to_millisecs(gettime()) > Rumble_Info[WPAD_CHAN_1].time2rumble)
-    {
-        WPAD_Rumble(WPAD_CHAN_1, 0); // Rumble off
-        Rumble_Info[WPAD_CHAN_1].rumbeling = false;
-    }
-    if(Rumble_Info[WPAD_CHAN_2].rumbeling && ticks_to_millisecs(gettime()) > Rumble_Info[WPAD_CHAN_2].time2rumble)
-    {
-        WPAD_Rumble(WPAD_CHAN_2, 0); // Rumble off
-        Rumble_Info[WPAD_CHAN_2].rumbeling = false;
-    }
-    if(Rumble_Info[WPAD_CHAN_3].rumbeling && ticks_to_millisecs(gettime()) > Rumble_Info[WPAD_CHAN_3].time2rumble)
-    {
-        WPAD_Rumble(WPAD_CHAN_3, 0); // Rumble off
-        Rumble_Info[WPAD_CHAN_3].rumbeling = false;
+        if (Rumble_Info[i].rumbeling && currentTime > Rumble_Info[i].time2rumble)
+        {
+            WPAD_Rumble(i, 0); // Rumble off
+            Rumble_Info[i].rumbeling = false;
+        }
     }
 }
 
@@ -110,11 +99,7 @@ void Draw_FadeIn(Texture *tex, f32 scaleX, f32 scaleY, u16 speed)
 
     for(s16 alpha = 0; alpha < 255; alpha += speed)
     {
-        if(alpha > 255)
-        {
-            alpha = 255;
-        }
-        tex->Draw(xpos, ypos, 0, scaleX, scaleY, 0xFFFFFF00 | alpha);
+        tex->Draw(xpos, ypos, 0, scaleX, scaleY, 0xFFFFFF00 | (alpha > 255 ? 255 : alpha));
         GRRLIB_Render();
     }
 }
@@ -133,11 +118,7 @@ void Draw_FadeOut(Texture *tex, f32 scaleX, f32 scaleY, u16 speed)
 
     for(s16 alpha = 255; alpha > 0; alpha -= speed)
     {
-        if(alpha < 0)
-        {
-            alpha = 0;
-        }
-        tex->Draw(xpos, ypos, 0, scaleX, scaleY, 0xFFFFFF00 | alpha);
+        tex->Draw(xpos, ypos, 0, scaleX, scaleY, 0xFFFFFF00 | (alpha < 0 ? 0 : alpha));
         GRRLIB_Render();
     }
 }
@@ -154,15 +135,12 @@ void Draw_FadeOut(Texture *tex, f32 scaleX, f32 scaleY, u16 speed)
 bool PtInCircle(const int xo, const int yo, const int radius,
                 const int wpadx, const int wpady) {
     const int dx = std::abs(wpadx - xo);
-    if (dx >  radius) {
-        return false;
-    }
     const int dy = std::abs(wpady - yo);
-    if (dy >  radius) {
+
+    if (dx > radius || dy > radius)
+    {
         return false;
     }
-    if (dx+dy <= radius) {
-        return true;
-    }
-    return (dx*dx + dy*dy <= radius*radius);
+
+    return (dx + dy <= radius) || (dx * dx + dy * dy <= radius * radius);
 }

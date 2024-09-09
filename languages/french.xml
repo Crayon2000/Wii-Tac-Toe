@@ -6,12 +6,12 @@
 
     <translation from="Ver. {}" to="Ver. {}" />
     <translation from="2 Players (1 Wiimote)" to="2 joueurs (1 Wii Remote)" />
-    <translation from="2 Players (2 Wiimote)" to="2 joueurs (2 Wii Remote)" />
+    <translation from="2 Players (2 Wiimotes)" to="2 joueurs (2 Wii Remotes)" />
     <translation from="1 Player (Vs AI)" to="1 joueur (contre l'IA)" />
 
     <translation from="HOME Menu" to="Menu HOME" />
     <translation from="Close" to="Fermer" />
-    <translation from="Reset" to="Réinitialisation" />
+    <translation from="Reset" to="Réinitialiser" />
     <translation from="Return to Loader" to="Retourner au Loader" />
 
     <translation from="PLAYER 1" to="JOUEUR 1" />
@@ -24,10 +24,10 @@
         <message text="Est-ce que {0} est le meilleur?" />
         <message text="La partie est à toi, {0}." />
         <message text="{0} a cassé {1}." />
-        <message text="C'est triste pour {1}." />
-        <message text="Meilleure chance la prochaine fois, {1}!" />
-        <message text="{1} a vraiment mal joué." />
-        <message text="{1} devrait pratiquer un peu plus." />
+        <message text="Dommage pour {1}." />
+        <message text="Bonne chance la prochaine fois, {1}!" />
+        <message text="Ne t'inquiète pas, {1}, tu feras mieux la prochaine fois!" />
+        <message text="Continue d'essayer, {1}, tu t'améliores!" />
     </winning_game>
 
     <tie_game>

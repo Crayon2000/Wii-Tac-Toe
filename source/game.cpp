@@ -1,3 +1,4 @@
+#include <array>
 #include <cstdio>
 #include <cstdlib>
 #include <ctime>
@@ -49,15 +50,18 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight) :
     ScreenHeight(GameScreenHeight),
     GameMode(gameMode::VsHuman1),
     SymbolAlpha(5),
-    AlphaDirection(false)
+    AlphaDirection(false),
+    AIThinkLoop(0),
+    Copied(false)
 {
-    std::srand(std::time(nullptr));
+    std::srand(std::time(nullptr));  // Initialize random seed
 
     GameGrid = new Grid();
     Lang = new Language();
 
     DefaultFont = GRRLIB_LoadTTF(Swis721_Ex_BT, Swis721_Ex_BT_size);
 
+    // Initialize GridSigns using the Table positions
     for(u8 x = 0; x < 3; ++x)
     {
         for(u8 y = 0; y < 3; ++y)
@@ -66,11 +70,13 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight) :
         }
     }
 
-    Hand[0].SetVisible(false);
-    Hand[1].SetVisible(false);
-    Hand[2].SetVisible(false);
-    Hand[3].SetVisible(false);
+    // Hide hands initially
+    for(auto &hand : Hand)
+    {
+        hand.SetVisible(false);
+    }
 
+    // Initialize Exit and Menu buttons
     ExitButton[0] = new Button(buttonType::Home);
     ExitButton[0]->SetFont(DefaultFont);
     ExitButton[0]->SetLeft(430);
@@ -106,13 +112,15 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight) :
     MenuButton[2]->SetFont(DefaultFont);
     MenuButton[2]->SetLeft((ScreenWidth / 2) - (MenuButton[2]->GetWidth() / 2));
     MenuButton[2]->SetTop(192);
-    MenuButton[2]->SetCaption(Lang->String("2 Players (2 Wiimote)"));
+    MenuButton[2]->SetCaption(Lang->String("2 Players (2 Wiimotes)"));
 
+    // Initialize players
     WTTPlayer[0].SetSign('X');
     WTTPlayer[0].SetName(Lang->String("PLAYER 1"));
     WTTPlayer[1].SetSign('O');
     WTTPlayer[1].SetName(Lang->String("PLAYER 2"));
 
+    // Load textures
     GameImg = Texture::CreateFromPNG(backg_png);
     GameHoverImg = Texture::CreateFromPNG(backg_hover_png);
     SplashImg = Texture::CreateFromPNG(splash_png);
@@ -145,8 +153,8 @@ Game::Game(u16 GameScreenWidth, u16 GameScreenHeight) :
     // Set handle for arm rotation
     SplashArmImg->SetHandle(8, 70);
 
+    // Initialize Audio and Rumble
     GameAudio = new Audio();
-
     RUMBLE_Init();
     NewGame();
 }
@@ -161,14 +169,14 @@ Game::~Game()
     delete GameGrid;
     delete Lang;
 
-    for(u8 i = 0; i < ExitButton.size(); ++i)
+    // Clean up buttons
+    for(auto& button : ExitButton)
     {
-        delete ExitButton[i];
+        delete button;
     }
-
-    for(u8 i = 0; i < MenuButton.size(); ++i)
+    for(auto& button : MenuButton)
     {
-        delete MenuButton[i];
+        delete button;
     }
 
     delete GameAudio;
@@ -193,9 +201,9 @@ void Game::Paint()
         case gameScreen::Game:
             GameScreen(true);
             // AI
-            if(RoundFinished == false && WTTPlayer[CurrentPlayer].GetType() == playerType::CPU)
+            if(!RoundFinished && WTTPlayer[CurrentPlayer].GetType() == playerType::CPU)
             {   // AI
-                if(AIThinkLoop > (rand() % 10 + 20))
+                if(AIThinkLoop > (std::rand() % 10 + 20))
                 {
                     GameGrid->SetPlayerAI(WTTPlayer[CurrentPlayer].GetSign());
                     TurnIsOver();
@@ -218,18 +226,19 @@ void Game::Paint()
     }
     else
     {
-        Hand[3].Paint();
-        Hand[2].Paint();
-        Hand[1].Paint();
-        Hand[0].Paint();
+        for(auto& hand : Hand)
+        {
+            hand.Paint();
+        }
     }
-    if(ShowFPS == true)
+
+    if(ShowFPS)
     {
         CalculateFrameRate();
         const auto strFPS = fmt::format("FPS: {}", FPS);
+        GRRLIB_PrintfTTF(15, 445, DefaultFont, strFPS.c_str(), 17, 0x000000FF);
         GRRLIB_PrintfTTF(14, 444, DefaultFont, strFPS.c_str(), 17, 0xFFFFFFFF);
         GRRLIB_PrintfTTF(16, 446, DefaultFont, strFPS.c_str(), 17, 0x808080FF);
-        GRRLIB_PrintfTTF(15, 445, DefaultFont, strFPS.c_str(), 17, 0x000000FF);
     }
 }
 
@@ -274,36 +283,34 @@ void Game::GameScreen(bool CopyScreen)
     {   // Copy static element
         GameText->Draw(0, 0); // Background image with some text
 
-        // Draw score with a shadow offset of -2, 2
+        // Function to draw the score with a shadow
+        auto DrawScore = [&](int playerIndex, int yPos, u32 color)
         {
-            const auto ScoreText = fmt::format_int(WTTPlayer[0].GetScore());
+            const auto ScoreText = fmt::format_int(WTTPlayer[playerIndex].GetScore());
             const auto TextLeft = 104 - GRRLIB_WidthTTF(DefaultFont, ScoreText.c_str(), 35) / 2;
-            GRRLIB_PrintfTTF(TextLeft, 77, DefaultFont, ScoreText.c_str(), 35, 0x6BB6DEFF);
-            GRRLIB_PrintfTTF(TextLeft - 2, 75, DefaultFont, ScoreText.c_str(), 35, 0xFFFFFFFF);
-        }
-        {
-            const auto ScoreText = fmt::format_int(WTTPlayer[1].GetScore());
-            const auto TextLeft = 104 - GRRLIB_WidthTTF(DefaultFont, ScoreText.c_str(), 35) / 2;
-            GRRLIB_PrintfTTF(TextLeft, 177, DefaultFont, ScoreText.c_str(), 35, 0xE6313AFF);
-            GRRLIB_PrintfTTF(TextLeft - 2, 175, DefaultFont, ScoreText.c_str(), 35, 0xFFFFFFFF);
-        }
-        {
-            const auto ScoreText = fmt::format_int(TieGame);
-            const auto TextLeft = 104 - GRRLIB_WidthTTF(DefaultFont, ScoreText.c_str(), 35) / 2;
-            GRRLIB_PrintfTTF(TextLeft, 282, DefaultFont, ScoreText.c_str(), 35, 0x109642FF);
-            GRRLIB_PrintfTTF(TextLeft - 2, 280, DefaultFont, ScoreText.c_str(), 35, 0xFFFFFFFF);
-        }
+            GRRLIB_PrintfTTF(TextLeft, yPos + 2, DefaultFont, ScoreText.c_str(), 35, 0xFFFFFFFF);
+            GRRLIB_PrintfTTF(TextLeft - 2, yPos, DefaultFont, ScoreText.c_str(), 35, color);
+        };
+
+        DrawScore(0, 75, 0x6BB6DEFF); // Player 1
+        DrawScore(1, 175, 0xE6313AFF); // Player 2
+
+        // Draw tie score
+        const auto TieScoreText = fmt::format_int(TieGame);
+        const auto TieTextLeft = 104 - GRRLIB_WidthTTF(DefaultFont, TieScoreText.c_str(), 35) / 2;
+        GRRLIB_PrintfTTF(TieTextLeft, 282, DefaultFont, TieScoreText.c_str(), 35, 0x109642FF);
+        GRRLIB_PrintfTTF(TieTextLeft - 2, 280, DefaultFont, TieScoreText.c_str(), 35, 0xFFFFFFFF);
 
         // Draw text at the bottom with a shadow offset of 1, 1
         PrintWrapText(130, 420, 390, text, 15, 0x8C8A8CFF, 0x111111FF, 1, 1);
 
-        if(CopyScreen == true)
+        if(CopyScreen)
         {
             CopiedImg->CopyScreen();
             Copied = true;
         }
     }
-    if(CopyScreen == true)
+    if(CopyScreen)
     {
         CopiedImg->Draw(0, 0);
     }
@@ -311,25 +318,15 @@ void Game::GameScreen(bool CopyScreen)
     const u32 HoverColor = (WTTPlayer[CurrentPlayer].GetSign() == 'X') ? 0x0093DDFF : 0xDA251DFF;
 
     // Draw grid content
-    if(RoundFinished == true)
+    if(RoundFinished)
     {
-        if(AlphaDirection == true)
+        SymbolAlpha = (AlphaDirection) ? SymbolAlpha + 2 : SymbolAlpha - 2;
+        if(SymbolAlpha > 128 || SymbolAlpha < 5)
         {
-            SymbolAlpha += 2;
-            if(SymbolAlpha > 128)
-            {
-                AlphaDirection = !AlphaDirection;
-            }
-        }
-        else
-        {
-            SymbolAlpha -= 2;
-            if(SymbolAlpha < 5)
-            {
-                AlphaDirection = !AlphaDirection;
-            }
+            AlphaDirection = !AlphaDirection;
         }
     }
+
     for(u8 x = 0; x < 3; ++x)
     {
         for(u8 y = 0; y < 3; ++y)
@@ -337,7 +334,7 @@ void Game::GameScreen(bool CopyScreen)
             GridSign[x][y].SetPlayer(GameGrid->GetPlayerAtPos(x, y));
             GridSign[x][y].SetColor(0xFFFFFFFF);
             GridSign[x][y].Paint();
-            if(GameGrid->WinningBoard[x][y] == true)
+            if(GameGrid->WinningBoard[x][y])
             {
                 GridSign[x][y].SetColor(HoverColor);
                 GridSign[x][y].SetAlpha(SymbolAlpha);
@@ -346,26 +343,24 @@ void Game::GameScreen(bool CopyScreen)
         }
     }
 
-    if(SelectZone() == true)
+    if(SelectZone())
     {
         // Draw selection box
         if(GameGrid->GetPlayerAtPos(HandX, HandY) == ' ')
         {
-            HoverImg->Draw(Table[HandX][HandY].GetX(), Table[HandX][HandY].GetY(),
-                0, 1, 1, HoverColor);
+            HoverImg->Draw(Table[HandX][HandY].GetX(), Table[HandX][HandY].GetY(), 0, 1, 1, HoverColor);
         }
     }
     else
     {
-        // 40 = radius
-        // 52 = half of image size
-        if(PtInCircle(65, 409, 40, Hand[0].GetLeft(), Hand[0].GetTop()) == true)
+        // 40 = radius, 52 = half of image size
+        if(PtInCircle(65, 409, 40, Hand[0].GetLeft(), Hand[0].GetTop()))
         {
             GameHoverImg->Draw(65-52, 409.5-52, 0, 1, 1, 0xFFFFFFFF);
             ButtonOn(0);
             FocusedButton = 0;
         }
-        else if(PtInCircle(571, 409, 40, Hand[0].GetLeft(), Hand[0].GetTop()) == true)
+        else if(PtInCircle(571, 409, 40, Hand[0].GetLeft(), Hand[0].GetTop()))
         {
             GameHoverImg->Draw(571-52, 409.5-52, 0, 1, 1, 0xFFFFFFFF);
             ButtonOn(1);
@@ -399,9 +394,7 @@ void Game::ExitScreen()
         }
 
         Rectangle(0, 0, ScreenWidth, ScreenHeight, 0x000000CC, 1); // Draw a black rectangle over it
-
         Rectangle(0, 78, ScreenWidth, 2, 0x848284FF, 1);
-
         Rectangle(0, 383, ScreenWidth, 2, 0x848284FF, 1);
         Rectangle(0, 385, ScreenWidth, 95, 0x000000FF, 1);
 
@@ -413,7 +406,7 @@ void Game::ExitScreen()
         CopiedImg->Draw(0, 0);
     }
 
-    if(GRRLIB_PtInRect(0, 0, ScreenWidth, 78, Hand[0].GetLeft(), Hand[0].GetTop()) == true)
+    if(GRRLIB_PtInRect(0, 0, ScreenWidth, 78, Hand[0].GetLeft(), Hand[0].GetTop()))
     {
         Rectangle(0, 0, ScreenWidth, 78, 0x30B6EBFF, 1);
     }
@@ -427,19 +420,19 @@ void Game::ExitScreen()
     ExitButton[0]->SetFocused(false);
     ExitButton[1]->SetFocused(false);
     ExitButton[2]->SetFocused(false);
-    if(GRRLIB_PtInRect(0, 0, ScreenWidth, 78, Hand[0].GetLeft(), Hand[0].GetTop()) == true)
+    if(GRRLIB_PtInRect(0, 0, ScreenWidth, 78, Hand[0].GetLeft(), Hand[0].GetTop()))
     {
         ExitButton[0]->SetFocused(true);
         ButtonOn(0);
         FocusedButton = 0;
     }
-    else if(ExitButton[1]->IsInside(Hand[0].GetLeft(), Hand[0].GetTop()) == true)
+    else if(ExitButton[1]->IsInside(Hand[0].GetLeft(), Hand[0].GetTop()))
     {
         ExitButton[1]->SetFocused(true);
         ButtonOn(1);
         FocusedButton = 1;
     }
-    else if(ExitButton[2]->IsInside(Hand[0].GetLeft(), Hand[0].GetTop()) == true)
+    else if(ExitButton[2]->IsInside(Hand[0].GetLeft(), Hand[0].GetTop()))
     {
         ExitButton[2]->SetFocused(true);
         ButtonOn(2);
@@ -449,6 +442,7 @@ void Game::ExitScreen()
     {
         FocusedButton = -1;
     }
+
     ExitButton[0]->Paint();
     ExitButton[1]->Paint();
     ExitButton[2]->Paint();
@@ -460,25 +454,26 @@ void Game::ExitScreen()
  */
 void Game::MenuScreen(bool CopyScreen)
 {
-    if(Copied == false)
+    if(!Copied)
     {   // Copy static element
         FillScreen(0x000000FF); // Clear screen
-        for(int y = 0; y <= ScreenHeight; y+=8)
+        constexpr int spacing = 8;
+        constexpr int lineThickness = 2;
+        for(int y = 0; y <= ScreenHeight; y += spacing)
         {
-            Rectangle(0, y, ScreenWidth, 2, 0xB0B0B030, 1);
+            Rectangle(0, y, ScreenWidth, lineThickness, 0xB0B0B030, 1);
         }
 
         Rectangle(0, 0, ScreenWidth, 63, 0x000000FF, 1);
-        Rectangle(0, 63, ScreenWidth, 2, 0xFFFFFFFF, 1);
-
-        Rectangle(0, 383, ScreenWidth, 2, 0xFFFFFFFF, 1);
+        Rectangle(0, 63, ScreenWidth, lineThickness, 0xFFFFFFFF, 1);
+        Rectangle(0, 383, ScreenWidth, lineThickness, 0xFFFFFFFF, 1);
         Rectangle(0, 385, ScreenWidth, 95, 0x000000FF, 1);
 
         GRRLIB_PrintfTTF(500, 40, DefaultFont,
             fmt::format(fmt::runtime(Lang->String("Ver. {}")), "1.1.0").c_str(),
             12, 0xFFFFFFFF);
 
-        if(CopyScreen == true)
+        if(CopyScreen)
         {
             CopiedImg->CopyScreen();
             Copied = true;
@@ -489,34 +484,31 @@ void Game::MenuScreen(bool CopyScreen)
         CopiedImg->Draw(0, 0);
     }
 
-    MenuButton[0]->SetFocused(false);
-    MenuButton[1]->SetFocused(false);
-    MenuButton[2]->SetFocused(false);
-    if(MenuButton[0]->IsInside(Hand[0].GetLeft(), Hand[0].GetTop()) == true)
+    for(int i = 0; i < 3; ++i)
     {
-        MenuButton[0]->SetFocused(true);
-        ButtonOn(0);
-        FocusedButton = 0;
+        MenuButton[i]->SetFocused(false);
     }
-    else if(MenuButton[1]->IsInside(Hand[0].GetLeft(), Hand[0].GetTop()) == true)
+
+    for(int i = 0; i < 3; ++i)
     {
-        MenuButton[1]->SetFocused(true);
-        ButtonOn(1);
-        FocusedButton = 1;
+        if(MenuButton[i]->IsInside(Hand[0].GetLeft(), Hand[0].GetTop()))
+        {
+            MenuButton[i]->SetFocused(true);
+            ButtonOn(i);
+            FocusedButton = i;
+            break;
+        }
     }
-    else if(MenuButton[2]->IsInside(Hand[0].GetLeft(), Hand[0].GetTop()) == true)
-    {
-        MenuButton[2]->SetFocused(true);
-        ButtonOn(2);
-        FocusedButton = 2;
-    }
-    else
+
+    if(FocusedButton == -1)
     {
         FocusedButton = -1;
     }
-    MenuButton[0]->Paint();
-    MenuButton[1]->Paint();
-    MenuButton[2]->Paint();
+
+    for(int i = 0; i < 3; ++i)
+    {
+        MenuButton[i]->Paint();
+    }
 }
 
 /**
@@ -526,78 +518,47 @@ void Game::MenuScreen(bool CopyScreen)
 bool Game::ControllerManager()
 {
     RUMBLE_Verify();
-    WPADData *WPadData0 = WPAD_Data(WPAD_CHAN_0);
-    WPADData *WPadData1 = WPAD_Data(WPAD_CHAN_1);
-    WPADData *WPadData2 = WPAD_Data(WPAD_CHAN_2);
-    WPADData *WPadData3 = WPAD_Data(WPAD_CHAN_3);
-    const u32 Buttons0 = WPadData0->btns_d;
-    const u32 Buttons1 = WPadData1->btns_d;
-    const u32 Buttons2 = WPadData2->btns_d;
-    const u32 Buttons3 = WPadData3->btns_d;
+    WPADData *WPadData[4] = {
+        WPAD_Data(WPAD_CHAN_0),
+        WPAD_Data(WPAD_CHAN_1),
+        WPAD_Data(WPAD_CHAN_2),
+        WPAD_Data(WPAD_CHAN_3)
+    };
 
-    if(WPadData0->ir.valid)
+    const u32 Buttons[4] = {
+        WPadData[0]->btns_d,
+        WPadData[1]->btns_d,
+        WPadData[2]->btns_d,
+        WPadData[3]->btns_d
+    };
+
+    for(int i = 0; i < 4; ++i)
     {
-        // I don't understand this calculation but it works
-        Hand[0].SetLeft((WPadData0->ir.x / ScreenWidth * (ScreenWidth + Hand[0].GetWidth() * 2)) - Hand[0].GetWidth());
-        Hand[0].SetTop((WPadData0->ir.y / ScreenHeight * (ScreenHeight + Hand[0].GetHeight() * 2)) - Hand[0].GetHeight());
-        Hand[0].SetAngle(WPadData0->orient.roll);
-        Hand[0].SetVisible(true);
-    }
-    else
-    {   // Hide cursor
-        Hand[0].SetVisible(false);
-    }
-    if(WPadData1->ir.valid && (CurrentScreen == gameScreen::Home ||
-        CurrentScreen == gameScreen::Start || CurrentScreen == gameScreen::Menu ||
-        (CurrentScreen == gameScreen::Game && GameMode == gameMode::VsHuman2) ))
-    {
-        // I don't understand this calculation but it works
-        Hand[1].SetLeft((WPadData1->ir.x / ScreenWidth * (ScreenWidth + Hand[1].GetWidth() * 2)) - Hand[1].GetWidth());
-        Hand[1].SetTop((WPadData1->ir.y / ScreenHeight * (ScreenHeight + Hand[1].GetHeight() * 2)) - Hand[1].GetHeight());
-        Hand[1].SetAngle(WPadData1->orient.roll);
-        Hand[1].SetVisible(true);
-    }
-    else
-    {   // Hide cursor
-        Hand[1].SetVisible(false);
-    }
-    if(WPadData2->ir.valid && (CurrentScreen == gameScreen::Home))
-    {
-        // I don't understand this calculation but it works
-        Hand[2].SetLeft((WPadData2->ir.x / ScreenWidth * (ScreenWidth + Hand[2].GetWidth() * 2)) - Hand[2].GetWidth());
-        Hand[2].SetTop((WPadData2->ir.y / ScreenHeight * (ScreenHeight + Hand[2].GetHeight() * 2)) - Hand[2].GetHeight());
-        Hand[2].SetAngle(WPadData2->orient.roll);
-        Hand[2].SetVisible(true);
-    }
-    else
-    {   // Hide cursor
-        Hand[2].SetVisible(false);
-    }
-    if(WPadData3->ir.valid && (CurrentScreen == gameScreen::Home))
-    {
-        // I don't understand this calculation but it works
-        Hand[3].SetLeft((WPadData3->ir.x / ScreenWidth * (ScreenWidth + Hand[3].GetWidth() * 2)) - Hand[3].GetWidth());
-        Hand[3].SetTop((WPadData3->ir.y / ScreenHeight * (ScreenHeight + Hand[3].GetHeight() * 2)) - Hand[3].GetHeight());
-        Hand[3].SetAngle(WPadData3->orient.roll);
-        Hand[3].SetVisible(true);
-    }
-    else
-    {   // Hide cursor
-        Hand[3].SetVisible(false);
+        if(WPadData[i]->ir.valid)
+        {
+            Hand[i].SetLeft((WPadData[i]->ir.x / ScreenWidth * (ScreenWidth + Hand[i].GetWidth() * 2)) - Hand[i].GetWidth());
+            Hand[i].SetTop((WPadData[i]->ir.y / ScreenHeight * (ScreenHeight + Hand[i].GetHeight() * 2)) - Hand[i].GetHeight());
+            Hand[i].SetAngle(WPadData[i]->orient.roll);
+            Hand[i].SetVisible(true);
+        }
+        else
+        {
+            Hand[i].SetVisible(false);
+        }
     }
 
-    if(Buttons0 || Buttons1)
+    if(Buttons[0] || Buttons[1])
     {
         switch(CurrentScreen)
         {
             case gameScreen::Start:
-                if((Buttons0 & WPAD_BUTTON_A))
+                if(Buttons[0] & WPAD_BUTTON_A)
                 {
                     ChangeScreen(gameScreen::Menu);
                 }
                 break;
             case gameScreen::Menu:
-                if((Buttons0 & WPAD_BUTTON_A))
+                if(Buttons[0] & WPAD_BUTTON_A)
                 {
                     switch(FocusedButton)
                     {
@@ -616,26 +577,24 @@ bool Game::ControllerManager()
                             GameMode = gameMode::VsHuman2;
                             ChangeScreen(gameScreen::Game);
                             break;
-                        default:
-                            break;
                     }
                 }
-                else if((Buttons0 & WPAD_BUTTON_B))
+                else if(Buttons[0] & WPAD_BUTTON_B)
                 {
                     ChangeScreen(gameScreen::Start);
                 }
-                else if((Buttons0 & WPAD_BUTTON_HOME) || (Buttons1 & WPAD_BUTTON_HOME))
+                else if(Buttons[0] & WPAD_BUTTON_HOME || Buttons[1] & WPAD_BUTTON_HOME)
                 {
                     ChangeScreen(gameScreen::Home);
                 }
                 break;
             case gameScreen::Home:
-                if((Buttons0 & WPAD_BUTTON_HOME) || (Buttons1 & WPAD_BUTTON_HOME))
+                if(Buttons[0] & WPAD_BUTTON_HOME || Buttons[1] & WPAD_BUTTON_HOME)
                 {
                     GameAudio->PauseMusic(false);
                     ChangeScreen(LastScreen);
                 }
-                else if((Buttons0 & WPAD_BUTTON_A))
+                else if(Buttons[0] & WPAD_BUTTON_A)
                 {
                     switch(FocusedButton)
                     {
@@ -656,44 +615,28 @@ bool Game::ControllerManager()
                             WPAD_Rumble(WPAD_CHAN_ALL, 0); // Rumble off, just in case
                             Draw_FadeOut(CopiedImg.get(), 1, 1, 3);
                             return true; // Exit to loader
-                        default:
-                            break;
                     }
                 }
                 break;
             default:
-                if((Buttons0 & WPAD_BUTTON_HOME) || (Buttons1 & WPAD_BUTTON_HOME))
+                if(Buttons[0] & WPAD_BUTTON_HOME || Buttons[1] & WPAD_BUTTON_HOME)
                 {
                     ChangeScreen(gameScreen::Home);
                 }
 
-                if((Buttons0 & WPAD_BUTTON_A))
+                if(Buttons[0] & WPAD_BUTTON_A)
                 {
                     if(FocusedButton > -1)
                     {
                         ChangeScreen(gameScreen::Home);
                     }
-                    else if(RoundFinished == true)
+                    else if(RoundFinished)
                     {
                         Clear();
                     }
-                    else if(GameMode == gameMode::VsHuman2)
+                    else if(GameMode == gameMode::VsHuman2 && CurrentPlayer == 0)
                     {
-                        if(CurrentPlayer == 0)
-                        {
-                            if(GameGrid->SetPlayer(WTTPlayer[0].GetSign(), HandX, HandY) == true)
-                            {
-                                TurnIsOver();
-                            }
-                            else
-                            {   // Position is invalid
-                                RUMBLE_Wiimote(WPAD_CHAN_0, 200); // 200 ms
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if(GameGrid->SetPlayer(WTTPlayer[CurrentPlayer].GetSign(), HandX, HandY) == true)
+                        if(GameGrid->SetPlayer(WTTPlayer[0].GetSign(), HandX, HandY))
                         {
                             TurnIsOver();
                         }
@@ -702,33 +645,35 @@ bool Game::ControllerManager()
                             RUMBLE_Wiimote(WPAD_CHAN_0, 200); // 200 ms
                         }
                     }
+                    else if(GameGrid->SetPlayer(WTTPlayer[CurrentPlayer].GetSign(), HandX, HandY))
+                    {
+                        TurnIsOver();
+                    }
+                    else
+                    {
+                        RUMBLE_Wiimote(WPAD_CHAN_0, 200); // 200 ms
+                    }
                 }
 
-                if((Buttons1 & WPAD_BUTTON_A) && GameMode == gameMode::VsHuman2)
+                if(Buttons[1] & WPAD_BUTTON_A && GameMode == gameMode::VsHuman2 && !RoundFinished)
                 {
-                    if(RoundFinished == true)
+                    if(GameGrid->SetPlayer(WTTPlayer[1].GetSign(), HandX, HandY))
                     {
-                        Clear();
+                        TurnIsOver();
                     }
-                    else if(CurrentPlayer == 1)
-                    {
-                        if(GameGrid->SetPlayer(WTTPlayer[1].GetSign(), HandX, HandY) == true)
-                        {
-                            TurnIsOver();
-                        }
-                        else
-                        {   // Position is invalid
-                            RUMBLE_Wiimote(WPAD_CHAN_1, 200); // 200 ms
-                        }
+                    else
+                    {   // Position is invalid
+                        RUMBLE_Wiimote(WPAD_CHAN_1, 200); // 200 ms
                     }
                 }
                 break;
         }
     }
-    if(((WPadData0->btns_h & WPAD_BUTTON_1) && (WPadData0->btns_h & WPAD_BUTTON_2)) ||
-        ((WPadData1->btns_h & WPAD_BUTTON_1) && (WPadData1->btns_h & WPAD_BUTTON_2)) ||
-        ((WPadData2->btns_h & WPAD_BUTTON_1) && (WPadData2->btns_h & WPAD_BUTTON_2)) ||
-        ((WPadData3->btns_h & WPAD_BUTTON_1) && (WPadData3->btns_h & WPAD_BUTTON_2)))
+
+    if((WPadData[0]->btns_h & WPAD_BUTTON_1 && WPadData[0]->btns_h & WPAD_BUTTON_2) ||
+       (WPadData[1]->btns_h & WPAD_BUTTON_1 && WPadData[1]->btns_h & WPAD_BUTTON_2) ||
+       (WPadData[2]->btns_h & WPAD_BUTTON_1 && WPadData[2]->btns_h & WPAD_BUTTON_2) ||
+       (WPadData[3]->btns_h & WPAD_BUTTON_1 && WPadData[3]->btns_h & WPAD_BUTTON_2))
     {
         WPAD_Rumble(WPAD_CHAN_ALL, 1); // Rumble on
         WIILIGHT_TurnOn();
@@ -736,24 +681,19 @@ bool Game::ControllerManager()
         const std::time_t now = std::time(nullptr);
         const auto path = fmt::format("sd:/Screenshot {:%F %H%M%S}.png", fmt::localtime(now));
 
-        if(ScreenShot(path) == true)
-        {
-            text = "A screenshot was taken!!!";
-        }
-        else
-        {
-            text = "Screenshot did not work!!!";
-        }
+        text = (ScreenShot(path)) ? "A screenshot was taken!!!" : "Screenshot did not work!!!";
 
         WIILIGHT_TurnOff();
         WPAD_Rumble(WPAD_CHAN_ALL, 0); // Rumble off
         Copied = false;
     }
-    if((Buttons0 & WPAD_BUTTON_PLUS) || (Buttons1 & WPAD_BUTTON_PLUS) ||
-        (Buttons2 & WPAD_BUTTON_PLUS) || (Buttons3 & WPAD_BUTTON_PLUS))
+
+    if(Buttons[0] & WPAD_BUTTON_PLUS || Buttons[1] & WPAD_BUTTON_PLUS ||
+       Buttons[2] & WPAD_BUTTON_PLUS || Buttons[3] & WPAD_BUTTON_PLUS)
     {
         ShowFPS = !ShowFPS;
     }
+
     return false;
 }
 
@@ -844,7 +784,7 @@ void Game::PrintWrapText(u16 x, u16 y, u16 maxLineWidth,
     auto lastSpace = tmp.begin();
     int ypos = y;
     int z = 0;
-    const int stepSize = (fontSize * 1.2);
+    const int stepSize = static_cast<int>(fontSize * 1.2);
 
     for(auto i = tmp.begin(); i != tmp.end(); ++i)
     {
@@ -856,8 +796,8 @@ void Game::PrintWrapText(u16 x, u16 y, u16 maxLineWidth,
             if(z >= maxLineWidth)
             {
                 *lastSpace = 0;
-                const int textLeft = x + (maxLineWidth / 2.0) -
-                    (GRRLIB_WidthTTF(DefaultFont, &(*startIndex), fontSize) / 2.0);
+                const int textLeft = x + (maxLineWidth / 2) -
+                    (GRRLIB_WidthTTF(DefaultFont, &(*startIndex), fontSize) / 2);
                 GRRLIB_PrintfTTF(textLeft + OffsetX, ypos + OffsetY, DefaultFont, &(*startIndex),
                     fontSize, ShadowColor);
                 GRRLIB_PrintfTTF(textLeft, ypos, DefaultFont, &(*startIndex),
@@ -869,10 +809,11 @@ void Game::PrintWrapText(u16 x, u16 y, u16 maxLineWidth,
             lastSpace = i;
         }
     }
+
     if(z <= maxLineWidth)
     {
-        const int textLeft = x + (maxLineWidth / 2.0) -
-            (GRRLIB_WidthTTF(DefaultFont, &(*startIndex), fontSize) / 2.0);
+        const int textLeft = x + (maxLineWidth / 2) -
+            (GRRLIB_WidthTTF(DefaultFont, &(*startIndex), fontSize) / 2);
         GRRLIB_PrintfTTF(textLeft + OffsetX, ypos + OffsetY, DefaultFont, &(*startIndex),
             fontSize, ShadowColor);
         GRRLIB_PrintfTTF(textLeft, ypos, DefaultFont, &(*startIndex),
@@ -887,7 +828,7 @@ void Game::PrintWrapText(u16 x, u16 y, u16 maxLineWidth,
  */
 void Game::ChangeScreen(gameScreen NewScreen, bool PlaySound)
 {
-    if(PlaySound == true)
+    if(PlaySound)
     {
         GameAudio->PlaySoundScreenChange(100);
     }
@@ -919,21 +860,19 @@ void Game::ButtonOn(s8 NewFocusedButton)
  */
 bool Game::SelectZone()
 {
-    u8 HandID = 0;
-    if(GameMode == gameMode::VsHuman2 && CurrentPlayer == 1)
-    {
-        HandID = 1;
-    }
-    if(RoundFinished == false && AIThinkLoop == 0)
+    u8 HandID = (GameMode == gameMode::VsHuman2 && CurrentPlayer == 1) ? 1 : 0;
+
+    if(!RoundFinished && AIThinkLoop == 0)
     {
         for(s8 x = 0; x < 3; ++x)
         {
             for(s8 y = 0; y < 3; ++y)
             {
-                if (Hand[HandID].GetLeft() > Table[x][y].GetX() &&
-                    Hand[HandID].GetLeft() < (Table[x][y].GetX() + 136) &&
-                    Hand[HandID].GetTop() > Table[x][y].GetY() &&
-                    Hand[HandID].GetTop() < (Table[x][y].GetY() + 100))
+                const auto &cell = Table[x][y];
+                if (Hand[HandID].GetLeft() > cell.GetX() &&
+                    Hand[HandID].GetLeft() < (cell.GetX() + 136) &&
+                    Hand[HandID].GetTop() > cell.GetY() &&
+                    Hand[HandID].GetTop() < (cell.GetY() + 100))
                 {
                     if(HandX != x || HandY != y)
                     {
@@ -960,67 +899,55 @@ bool Game::SelectZone()
  */
 void Game::ChangeCursor()
 {
+    constexpr u8 fullAlpha = 0xFF;
+    constexpr u8 lowAlpha = 0x55;
+
     if(CurrentScreen == gameScreen::Home)
     {
         Hand[0].SetPlayer(cursorType::P1);
-        Hand[0].SetAlpha(0xFF);
+        Hand[0].SetAlpha(fullAlpha);
         Hand[1].SetPlayer(cursorType::P2);
-        Hand[1].SetAlpha(0x55);
+        Hand[1].SetAlpha(lowAlpha);
         Hand[2].SetPlayer(cursorType::P3);
-        Hand[2].SetAlpha(0x55);
+        Hand[2].SetAlpha(lowAlpha);
         Hand[3].SetPlayer(cursorType::P4);
-        Hand[3].SetAlpha(0x55);
+        Hand[3].SetAlpha(lowAlpha);
     }
     else if(CurrentScreen == gameScreen::Game)
     {
         if(GameMode == gameMode::VsHuman1)
         {
-            if(WTTPlayer[CurrentPlayer].GetSign() == 'O')
-            {
-                Hand[0].SetPlayer(cursorType::O);
-            }
-            else if(WTTPlayer[CurrentPlayer].GetSign() == 'X')
-            {
-                Hand[0].SetPlayer(cursorType::X);
-            }
-            Hand[0].SetAlpha(0xFF);
+            Hand[0].SetPlayer((WTTPlayer[CurrentPlayer].GetSign() == 'O') ? cursorType::O : cursorType::X);
+            Hand[0].SetAlpha(fullAlpha);
         }
         else if(GameMode == gameMode::VsHuman2)
         {
             Hand[0].SetPlayer(cursorType::X);
             Hand[1].SetPlayer(cursorType::O);
-            if(RoundFinished == true)
+            if (RoundFinished)
             {
-                Hand[0].SetAlpha(0xFF);
-                Hand[1].SetAlpha(0xFF);
+                Hand[0].SetAlpha(fullAlpha);
+                Hand[1].SetAlpha(fullAlpha);
             }
             else
             {
-                Hand[CurrentPlayer].SetAlpha(0xFF);
-                Hand[!CurrentPlayer].SetAlpha(0x55);
+                Hand[CurrentPlayer].SetAlpha(fullAlpha);
+                Hand[!CurrentPlayer].SetAlpha(lowAlpha);
             }
         }
         else
         {   // gameMode::VsAI
             Hand[0].SetPlayer(cursorType::X);
-            if(CurrentPlayer == 0 || RoundFinished == true)
-            {
-                Hand[0].SetAlpha(0xFF);
-                Hand[1].SetAlpha(0x55);
-            }
-            else
-            {
-                Hand[0].SetAlpha(0x55);
-                Hand[1].SetAlpha(0xFF);
-            }
+            Hand[0].SetAlpha((CurrentPlayer == 0 || RoundFinished) ? fullAlpha : lowAlpha);
+            Hand[1].SetAlpha((CurrentPlayer == 1 && !RoundFinished) ? fullAlpha : lowAlpha);
         }
     }
     else
     {   // START_SCREEN or MENU_SCREEN
         Hand[0].SetPlayer(cursorType::X);
-        Hand[0].SetAlpha(0xFF);
+        Hand[0].SetAlpha(fullAlpha);
         Hand[1].SetPlayer(cursorType::O);
-        Hand[1].SetAlpha(0x55);
+        Hand[1].SetAlpha(lowAlpha);
     }
 }
 
@@ -1030,11 +957,11 @@ void Game::ChangeCursor()
 void Game::CalculateFrameRate()
 {
     static u8 frameCount = 0;
-    static u32 lastTime;
-    const u32 currentTime = ticks_to_millisecs(gettime());
+    static u32 lastTime = ticks_to_millisecs(gettime());
 
     ++frameCount;
-    if(currentTime - lastTime > 1000)
+    const u32 currentTime = ticks_to_millisecs(gettime());
+    if (currentTime - lastTime > 1000)
     {
         lastTime = currentTime;
         FPS = frameCount;

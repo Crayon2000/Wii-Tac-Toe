@@ -6,7 +6,7 @@
 
     <translation from="Ver. {}" to="Ver. {}" />
     <translation from="2 Players (1 Wiimote)" to="2 Players (1 Wii Remote)" />
-    <translation from="2 Players (2 Wiimote)" to="2 Players (2 Wii Remote)" />
+    <translation from="2 Players (2 Wiimotes)" to="2 Players (2 Wii Remotes)" />
     <translation from="1 Player (Vs AI)" to="1 Player (Vs AI)" />
 
     <translation from="HOME Menu" to="HOME Menu" />
@@ -26,8 +26,8 @@
         <message text="{0} rules." />
         <message text="Too bad for {1}." />
         <message text="Better luck next time, {1}!" />
-        <message text="{1} you really suck." />
-        <message text="{1} should practice a little more." />
+        <message text="Don't worry, {1}, you'll do better next time!" />
+        <message text="Keep trying, {1}, you're improving!" />
     </winning_game>
 
     <tie_game>
@@ -40,7 +40,7 @@
     <turn_over>
         <message text="{}, it's your turn." />
         <message text="Waiting for {}." />
-        <message text="{} is thinking of is next move." />
+        <message text="{} is thinking of their next move." />
         <message text="{} should take the Wii Remote and play." />
         <message text="{}, let's play." />
         <message text="{} should play now." />

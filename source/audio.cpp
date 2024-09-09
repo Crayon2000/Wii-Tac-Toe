@@ -7,7 +7,7 @@
 // Audio files
 #include "button_rollover_raw.h"
 #include "screen_change_raw.h"
-#include "tic_tac_mod.h"
+#include "tic_tac_it.h"
 
 static constexpr Sound ChangeSound(VOICE_MONO16, std::span{screen_change_raw, screen_change_raw_size}, 44100.0f);
 static constexpr Sound RollOverSound(VOICE_MONO16, std::span{button_rollover_raw, button_rollover_raw_size}, 44100.0f);
@@ -22,7 +22,7 @@ Audio::Audio() :
     AESND_Pause(false);
 
     GRRMOD_Init(true);
-    GRRMOD_SetMOD(tic_tac_mod, tic_tac_mod_size);
+    GRRMOD_SetMOD(tic_tac_it, tic_tac_it_size);
 
     ScreenVoice = new Voice();
     ButtonVoice = new Voice();

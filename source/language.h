@@ -11,6 +11,7 @@
 #include <string_view>
 #include <vector>
 #include <gctypes.h>
+#include <random>  // Include for std::mt19937
 
 // Forward declarations
 struct _mxml_node_s;
@@ -36,6 +37,8 @@ private:
     std::vector<std::string> WinningMessage;
     std::vector<std::string> TieMessage;
     std::vector<std::string> TurnOverMessage;
+
+    std::mt19937 rng;  // Random number generator
 
     void SetLanguage(s32 Conf_Lang);
 };

@@ -1,5 +1,6 @@
 #include <mxml.h>
 #include <ogc/conf.h>
+#include <random>  // Add for random number generator
 #include "language.h"
 
 // Languages
@@ -14,7 +15,8 @@
 /**
  * Constructor for the Language class.
  */
-Language::Language()
+Language::Language() :
+    rng(std::random_device{}())  // Initialize random number generator once
 {
     SetLanguage(CONF_GetLanguage());
 
@@ -119,7 +121,7 @@ void Language::SetLanguage(s32 Conf_Lang)
 
 /**
  * Get a winning message.
- * @param[in] Index The index of the message the get.
+ * @param[in] Index The index of the message to get.
  *            If the value is under 0, a random message will be returned.
  * @return A winning message.
  */
@@ -128,7 +130,8 @@ std::string Language::GetWinningMessage(s32 Index)
     const s32 WinningCount = WinningMessage.size();
     if(Index < 0)
     {
-        Index = rand() % WinningCount;
+        std::uniform_int_distribution<s32> dist(0, WinningCount - 1);
+        Index = dist(rng);  // Use class-wide RNG
     }
     else if(Index >= WinningCount)
     {
@@ -136,9 +139,10 @@ std::string Language::GetWinningMessage(s32 Index)
     }
     return WinningMessage[Index];
 }
+
 /**
  * Get a tie message.
- * @param[in] Index The index of the message the get.
+ * @param[in] Index The index of the message to get.
  *            If the value is under 0, a random message will be returned.
  * @return A tie message.
  */
@@ -147,7 +151,8 @@ std::string Language::GetTieMessage(s32 Index)
     const s32 TieCount = TieMessage.size();
     if(Index < 0)
     {
-        Index = rand() % TieCount;
+        std::uniform_int_distribution<s32> dist(0, TieCount - 1);
+        Index = dist(rng);  // Use class-wide RNG
     }
     else if(Index >= TieCount)
     {
@@ -155,9 +160,10 @@ std::string Language::GetTieMessage(s32 Index)
     }
     return TieMessage[Index];
 }
+
 /**
  * Get a turn over message.
- * @param[in] Index The index of the message the get.
+ * @param[in] Index The index of the message to get.
  *            If the value is under 0, a random message will be returned.
  * @return A turn over message.
  */
@@ -166,7 +172,8 @@ std::string Language::GetTurnOverMessage(s32 Index)
     const s32 TurnOverCount = TurnOverMessage.size();
     if(Index < 0)
     {
-        Index = rand() % TurnOverCount;
+        std::uniform_int_distribution<s32> dist(0, TurnOverCount - 1);
+        Index = dist(rng);  // Use class-wide RNG
     }
     else if(Index >= TurnOverCount)
     {

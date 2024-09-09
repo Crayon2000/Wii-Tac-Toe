@@ -29,15 +29,21 @@ public:
     Player(Player const&) = delete;
     ~Player() = default;
     Player& operator=(Player const&) = delete;
+
     void SetName(const std::string &AName);
-    [[nodiscard]] std::string GetName();
+    [[nodiscard]] std::string GetName() const;
+
     void SetSign(u8 ASign);
-    [[nodiscard]] u8 GetSign();
-    [[nodiscard]] unsigned int GetScore();
+    [[nodiscard]] u8 GetSign() const;
+
+    [[nodiscard]] unsigned int GetScore() const;
+
     void IncScore();
     void ResetScore();
+
     void SetType(playerType AType);
-    [[nodiscard]] playerType GetType();
+    [[nodiscard]] playerType GetType() const;
+
 private:
     unsigned int Score;
     std::string Name;

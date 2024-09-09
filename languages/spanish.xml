@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language type="spanish" translator="Duhow">
     <translation from="Programmer: {}" to="Programador: {}" />
-    <translation from="Graphics: {}" to="Graficos: {}" />
-    <translation from="Press The A Button" to="Pulsa el boton A" />
+    <translation from="Graphics: {}" to="Gráficos: {}" />
+    <translation from="Press The A Button" to="Pulsa el botón A" />
 
     <translation from="Ver. {}" to="Ver. {}" />
     <translation from="2 Players (1 Wiimote)" to="2 Jugadores (1 Wii Remote)" />
-    <translation from="2 Players (2 Wiimote)" to="2 Jugadores (2 Wii Remote)" />
+    <translation from="2 Players (2 Wiimotes)" to="2 Jugadores (2 Wii Remotes)" />
     <translation from="1 Player (Vs AI)" to="1 Jugador (Vs IA)" />
 
     <translation from="HOME Menu" to="Menú HOME" />
@@ -26,12 +26,12 @@
         <message text="{0} mola." />
         <message text="Demasiado malo para {1}." />
         <message text="Suerte para la siguiente vez, {1}!" />
-        <message text="{1} de verdad que apestas." />
-        <message text="{1} debería practicar un poco más." />
+        <message text="No te preocupes, {1}, lo harás mejor la próxima vez!" />
+        <message text="Sigue intentándolo, {1}, ¡estás mejorando!" />
     </winning_game>
 
     <tie_game>
-        <message text="Juego empatado, eso mola." />
+        <message text="Juego empatado, es un empate." />
         <message text="Los dos perdéis esta partida." />
         <message text="Nadie gana, nadie pierde." />
         <message text="Los dos habéis gastado el tiempo, es un empate." />
