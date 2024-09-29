@@ -28,7 +28,6 @@ To compile:
 
 ```text
 pacman --sync --needed --noconfirm ppc-mxml ppc-libpng ppc-freetype
-mkdir --parents build && cd build
-/opt/devkitpro/portlibs/wii/bin/powerpc-eabi-cmake ..
-cmake --build .
+/opt/devkitpro/portlibs/wii/bin/powerpc-eabi-cmake -B build
+cmake --build build
 ```

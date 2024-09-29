@@ -25,8 +25,7 @@ FetchContent_Declare(grrlib
   GIT_TAG        d93847e6a3e350bd1157d61cc1315d8bbff76968
 )
 FetchContent_Declare(grrmod
-  URL https://codeload.github.com/GRRLIB/GRRMOD/tar.gz/1ea0e8bb54eb9c2b052fba87d34530dca0365b97
-  SOURCE_SUBDIR "GRRMOD"
+  URL https://codeload.github.com/GRRLIB/GRRMOD/tar.gz/afe20fa4c1d0245148dfa290fc916f14195e458d
 )
 set(GRRMOD_USE_MP3 OFF CACHE BOOL "Don't use MP3" FORCE)
 FetchContent_MakeAvailable(fmt grrlib grrmod)
@@ -67,7 +66,6 @@ target_include_directories(Wii-Tac-Toe PRIVATE
   "${grrlib_SOURCE_DIR}/GRRLIB/GRRLIB"
   "${grrlib_SOURCE_DIR}/GRRLIB/lib/pngu"
   ${PNG_INCLUDE_DIRS}
-  ${JPEG_INCLUDE_DIRS}
   ${FREETYPE_INCLUDE_DIRS}
   ${MXML_INCLUDE_DIRS}
 )

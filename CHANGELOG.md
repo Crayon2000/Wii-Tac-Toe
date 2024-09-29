@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 - Library update
-  - GRRMOD (1ea0e8bb54eb9c2b052fba87d34530dca0365b97)
+  - GRRMOD (afe20fa4c1d0245148dfa290fc916f14195e458d)
 
 ## 1.1.0
 
