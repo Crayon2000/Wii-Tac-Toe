@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 
 - Library update
   - GRRMOD (afe20fa4c1d0245148dfa290fc916f14195e458d)
+  - GRRLIB (35ddfba78a139e2e0a676fda38d6675e397f493a)
 
 ## 1.1.0
 

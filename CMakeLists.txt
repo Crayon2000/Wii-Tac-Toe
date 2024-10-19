@@ -22,7 +22,7 @@ FetchContent_Declare(fmt
 )
 FetchContent_Declare(grrlib
   GIT_REPOSITORY https://github.com/GRRLIB/GRRLIB.git
-  GIT_TAG        d93847e6a3e350bd1157d61cc1315d8bbff76968
+  GIT_TAG        35ddfba78a139e2e0a676fda38d6675e397f493a
 )
 FetchContent_Declare(grrmod
   URL https://codeload.github.com/GRRLIB/GRRMOD/tar.gz/afe20fa4c1d0245148dfa290fc916f14195e458d
@@ -32,10 +32,7 @@ FetchContent_MakeAvailable(fmt grrlib grrmod)
 
 file(GLOB_RECURSE SRC_FILES
   "${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp"
-  "${CMAKE_CURRENT_SOURCE_DIR}/source/*.c"
   "${CMAKE_CURRENT_SOURCE_DIR}/fonts/*.cpp"
-  "${grrlib_SOURCE_DIR}/GRRLIB/GRRLIB/*.c"
-  "${grrlib_SOURCE_DIR}/GRRLIB/lib/pngu/*.c"
 )
 
 file(GLOB_RECURSE BIN_FILES
@@ -63,10 +60,6 @@ target_sources(Wii-Tac-Toe PRIVATE
 
 target_include_directories(Wii-Tac-Toe PRIVATE
   "${CMAKE_CURRENT_SOURCE_DIR}/source"
-  "${grrlib_SOURCE_DIR}/GRRLIB/GRRLIB"
-  "${grrlib_SOURCE_DIR}/GRRLIB/lib/pngu"
-  ${PNG_INCLUDE_DIRS}
-  ${FREETYPE_INCLUDE_DIRS}
   ${MXML_INCLUDE_DIRS}
 )
 
@@ -77,6 +70,7 @@ dkp_add_embedded_binary_library(data
 target_link_libraries(Wii-Tac-Toe PRIVATE
   data
   fmt::fmt
+  grrlib
   grrmod
   ${PNG_LIBRARIES}
   ${FREETYPE_LIBRARIES}
