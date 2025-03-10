@@ -18,11 +18,11 @@ pkg_check_modules(MXML REQUIRED mxml)
 
 include(FetchContent)
 FetchContent_Declare(fmt
-  URL https://github.com/fmtlib/fmt/archive/refs/tags/11.1.2.tar.gz
+  URL https://github.com/fmtlib/fmt/archive/refs/tags/11.1.4.tar.gz
 )
 FetchContent_Declare(grrlib
   GIT_REPOSITORY https://github.com/GRRLIB/GRRLIB.git
-  GIT_TAG        0652beb6b707931d84723242b2e9ba1f91254737
+  GIT_TAG        b4b9b56f10c11c2e1838a1dd8a64ce6df1b0c258
 )
 FetchContent_Declare(grrmod
   URL https://codeload.github.com/GRRLIB/GRRMOD/tar.gz/afe20fa4c1d0245148dfa290fc916f14195e458d

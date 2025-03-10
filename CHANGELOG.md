@@ -5,9 +5,9 @@ All notable changes to this project will be documented in this file.
 ## Unreleased
 
 - Library update
-  - fmt 11.1.2
+  - fmt 11.1.4
   - GRRMOD (afe20fa4c1d0245148dfa290fc916f14195e458d)
-  - GRRLIB (0652beb6b707931d84723242b2e9ba1f91254737)
+  - GRRLIB (b4b9b56f10c11c2e1838a1dd8a64ce6df1b0c258)
 
 ## 1.1.0
 
