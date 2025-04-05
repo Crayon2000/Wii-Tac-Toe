@@ -17,6 +17,7 @@ pkg_check_modules(FREETYPE REQUIRED freetype2)
 pkg_check_modules(MXML REQUIRED mxml)
 
 include(FetchContent)
+set(FMT_INSTALL OFF CACHE BOOL "Don't install" FORCE)
 FetchContent_Declare(fmt
   URL https://github.com/fmtlib/fmt/archive/refs/tags/11.1.4.tar.gz
 )
