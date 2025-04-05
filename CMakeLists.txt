@@ -17,7 +17,6 @@ pkg_check_modules(FREETYPE REQUIRED freetype2)
 pkg_check_modules(MXML REQUIRED mxml)
 
 include(FetchContent)
-set(FMT_INSTALL OFF CACHE BOOL "Don't install" FORCE)
 FetchContent_Declare(fmt
   URL https://github.com/fmtlib/fmt/archive/refs/tags/11.1.4.tar.gz
 )
@@ -26,8 +25,10 @@ FetchContent_Declare(grrlib
   GIT_TAG        b4b9b56f10c11c2e1838a1dd8a64ce6df1b0c258
 )
 FetchContent_Declare(grrmod
-  URL https://codeload.github.com/GRRLIB/GRRMOD/tar.gz/afe20fa4c1d0245148dfa290fc916f14195e458d
+  URL https://codeload.github.com/GRRLIB/GRRMOD/tar.gz/670f84601a5086c4d3eeb03bd3041e3c0a7f0ace
 )
+set(FMT_INSTALL OFF CACHE BOOL "Don't install" FORCE)
+set(GRRMOD_INSTALL OFF CACHE BOOL "Don't install" FORCE)
 set(GRRMOD_USE_MP3 OFF CACHE BOOL "Don't use MP3" FORCE)
 FetchContent_MakeAvailable(fmt grrlib grrmod)
 
