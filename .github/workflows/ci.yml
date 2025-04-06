@@ -23,8 +23,7 @@ jobs:
 
     - name: Prepare artifact
       run: |
-        mkdir --parents --verbose /tmp/artifact/Wii-Tac-Toe
-        mv --verbose build/wii/Wii-Tac-Toe.dol /tmp/artifact/Wii-Tac-Toe/boot.dol
+        cmake --install build/wii --verbose --prefix /tmp/artifact/Wii-Tac-Toe
         cp --verbose Wii-Tac-Toe/* /tmp/artifact/Wii-Tac-Toe/
 
     - uses: actions/upload-artifact@v4

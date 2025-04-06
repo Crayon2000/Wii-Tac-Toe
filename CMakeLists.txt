@@ -83,3 +83,6 @@ target_link_libraries(Wii-Tac-Toe PRIVATE
 )
 
 ogc_create_dol(Wii-Tac-Toe)
+
+get_target_property(DOL_FILE Wii-Tac-Toe DKP_FILE)
+install(FILES "${DOL_FILE}" DESTINATION . RENAME "boot.dol")
