@@ -46,6 +46,16 @@
             "configurePreset": "gamecube"
         }
     ],
+    "packagePresets": [
+        {
+            "name": "wii",
+            "displayName": "Wii Package",
+            "configurePreset": "wii",
+            "generators": [
+                "ZIP"
+            ]
+        }
+    ],
     "workflowPresets": [
         {
             "name": "wiiu",

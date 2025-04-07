@@ -23,8 +23,7 @@ jobs:
 
     - name: Prepare artifact
       run: |
-        cmake --install build/wii --verbose --prefix /tmp/artifact/Wii-Tac-Toe
-        cp --verbose Wii-Tac-Toe/* /tmp/artifact/Wii-Tac-Toe/
+        cmake --install build/wii --verbose --prefix /tmp/artifact
 
     - uses: actions/upload-artifact@v4
       with:

@@ -85,4 +85,14 @@ target_link_libraries(Wii-Tac-Toe PRIVATE
 ogc_create_dol(Wii-Tac-Toe)
 
 get_target_property(DOL_FILE Wii-Tac-Toe DKP_FILE)
-install(FILES "${DOL_FILE}" DESTINATION . RENAME "boot.dol")
+install(FILES "${DOL_FILE}" DESTINATION "Wii-Tac-Toe" RENAME "boot.dol")
+install(FILES
+  "${CMAKE_CURRENT_SOURCE_DIR}/Wii-Tac-Toe/icon.png"
+  "${CMAKE_CURRENT_SOURCE_DIR}/Wii-Tac-Toe/meta.xml"
+  DESTINATION "Wii-Tac-Toe"
+)
+
+set(CPACK_PACKAGE_NAME "wii-tac-toe")
+set(CPACK_GENERATOR "ZIP")
+set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}")
+include(CPack)
