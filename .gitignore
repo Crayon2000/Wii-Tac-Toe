@@ -10,3 +10,6 @@
 
 # Windows thumbnail cache
 Thumbs.db
+
+# User file
+CMakeUserPresets.json

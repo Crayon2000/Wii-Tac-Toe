@@ -22,11 +22,14 @@ FetchContent_Declare(fmt
 )
 FetchContent_Declare(grrlib
   GIT_REPOSITORY https://github.com/GRRLIB/GRRLIB.git
-  GIT_TAG        b4b9b56f10c11c2e1838a1dd8a64ce6df1b0c258
+  GIT_TAG        aa61ecacc830deccf19ab91148ec9273a3d9f7a1
 )
 FetchContent_Declare(grrmod
-  URL https://codeload.github.com/GRRLIB/GRRMOD/tar.gz/afe20fa4c1d0245148dfa290fc916f14195e458d
+  URL https://codeload.github.com/GRRLIB/GRRMOD/tar.gz/670f84601a5086c4d3eeb03bd3041e3c0a7f0ace
 )
+set(FMT_INSTALL OFF CACHE BOOL "Don't install" FORCE)
+set(GRRLIB_INSTALL OFF CACHE BOOL "Don't install" FORCE)
+set(GRRMOD_INSTALL OFF CACHE BOOL "Don't install" FORCE)
 set(GRRMOD_USE_MP3 OFF CACHE BOOL "Don't use MP3" FORCE)
 FetchContent_MakeAvailable(fmt grrlib grrmod)
 
@@ -80,3 +83,16 @@ target_link_libraries(Wii-Tac-Toe PRIVATE
 )
 
 ogc_create_dol(Wii-Tac-Toe)
+
+get_target_property(DOL_FILE Wii-Tac-Toe DKP_FILE)
+install(FILES "${DOL_FILE}" DESTINATION "Wii-Tac-Toe" RENAME "boot.dol")
+install(FILES
+  "${CMAKE_CURRENT_SOURCE_DIR}/Wii-Tac-Toe/icon.png"
+  "${CMAKE_CURRENT_SOURCE_DIR}/Wii-Tac-Toe/meta.xml"
+  DESTINATION "Wii-Tac-Toe"
+)
+
+set(CPACK_PACKAGE_NAME "wii-tac-toe")
+set(CPACK_GENERATOR "ZIP")
+set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}")
+include(CPack)

@@ -18,14 +18,12 @@ jobs:
     - name: Build application
       run: |
         sh .devcontainer/post-create.sh
-        /opt/devkitpro/portlibs/wii/bin/powerpc-eabi-cmake -B $GITHUB_WORKSPACE/build -G Ninja
-        cmake --build $GITHUB_WORKSPACE/build --verbose
+        cmake --preset wii
+        cmake --build --preset wii --verbose
 
     - name: Prepare artifact
       run: |
-        mkdir --parents --verbose /tmp/artifact/Wii-Tac-Toe
-        mv --verbose build/Wii-Tac-Toe.dol /tmp/artifact/Wii-Tac-Toe/boot.dol
-        cp --verbose Wii-Tac-Toe/* /tmp/artifact/Wii-Tac-Toe/
+        cmake --install build/wii --verbose --prefix /tmp/artifact
 
     - uses: actions/upload-artifact@v4
       with:

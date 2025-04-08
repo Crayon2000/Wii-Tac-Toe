@@ -1,0 +1,103 @@
+{
+    "version": 10,
+    "configurePresets": [
+        {
+            "name": "base",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "hidden": true
+        },
+        {
+            "name": "wiiu",
+            "displayName": "Wii U Config",
+            "description": "Build using Wii U toolchain",
+            "toolchainFile": "$penv{DEVKITPRO}/cmake/WiiU.cmake",
+            "inherits": "base"
+        },
+        {
+            "name": "wii",
+            "displayName": "Wii Config",
+            "description": "Build using Wii toolchain",
+            "toolchainFile": "$penv{DEVKITPRO}/cmake/Wii.cmake",
+            "inherits": "base"
+        },
+        {
+            "name": "gamecube",
+            "displayName": "GameCube Config",
+            "description": "Build using GameCube toolchain",
+            "toolchainFile": "$penv{DEVKITPRO}/cmake/GameCube.cmake",
+            "inherits": "base"
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "wiiu",
+            "displayName": "Wii U Build",
+            "configurePreset": "wiiu"
+        },
+        {
+            "name": "wii",
+            "displayName": "Wii Build",
+            "configurePreset": "wii"
+        },
+        {
+            "name": "gamecube",
+            "displayName": "GameCube Build",
+            "configurePreset": "gamecube"
+        }
+    ],
+    "packagePresets": [
+        {
+            "name": "wii",
+            "displayName": "Wii Package",
+            "configurePreset": "wii",
+            "generators": [
+                "ZIP"
+            ]
+        }
+    ],
+    "workflowPresets": [
+        {
+            "name": "wiiu",
+            "displayName": "Wii U Workflow",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "wiiu"
+                },
+                {
+                    "type": "build",
+                    "name": "wiiu"
+                }
+            ]
+        },
+        {
+            "name": "wii",
+            "displayName": "Wii Workflow",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "wii"
+                },
+                {
+                    "type": "build",
+                    "name": "wii"
+                }
+            ]
+        },
+        {
+            "name": "gamecube",
+            "displayName": "GameCube Workflow",
+            "steps": [
+                {
+                    "type": "configure",
+                    "name": "gamecube"
+                },
+                {
+                    "type": "build",
+                    "name": "gamecube"
+                }
+            ]
+        }
+    ]
+}
