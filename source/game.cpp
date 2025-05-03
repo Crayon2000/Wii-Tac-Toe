@@ -734,7 +734,7 @@ bool Game::ControllerManager()
         WIILIGHT_TurnOn();
 
         const std::time_t now = std::time(nullptr);
-        const auto path = fmt::format("sd:/Screenshot {:%F %H%M%S}.png", fmt::localtime(now));
+        const auto path = fmt::format("sd:/Screenshot {:%F %H%M%S}.png", *std::localtime(&now));
 
         if(ScreenShot(path) == true)
         {

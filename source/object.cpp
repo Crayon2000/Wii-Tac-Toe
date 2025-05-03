@@ -148,11 +148,7 @@ void Object::SetVisible(bool Visible)
  */
 bool Object::IsInside(float x, float y)
 {
-    if (x > Left && x < (Left + Width) && y > Top && y < (Top + Height))
-    {
-        return true;
-    }
-    return false;
+    return (x > Left && x < (Left + Width) && y > Top && y < (Top + Height));
 }
 
 /**

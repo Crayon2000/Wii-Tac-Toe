@@ -5,7 +5,7 @@ set -ex
 apt-get purge cmake -y
 
 # Install required cmake version
-curl --location https://github.com/Kitware/CMake/releases/download/v4.0.0/cmake-4.0.0-linux-x86_64.sh --output /tmp/cmake.sh
+curl --location https://github.com/Kitware/CMake/releases/download/v4.0.1/cmake-4.0.1-linux-x86_64.sh --output /tmp/cmake.sh
 sh /tmp/cmake.sh --skip-license --prefix=/usr
 rm -rf /tmp/cmake.sh
 

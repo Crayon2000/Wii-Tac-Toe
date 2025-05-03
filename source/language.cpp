@@ -119,7 +119,7 @@ void Language::SetLanguage(s32 Conf_Lang)
 
 /**
  * Get a winning message.
- * @param[in] Index The index of the message the get.
+ * @param[in] Index The index of the message to get.
  *            If the value is under 0, a random message will be returned.
  * @return A winning message.
  */
@@ -136,9 +136,10 @@ std::string Language::GetWinningMessage(s32 Index)
     }
     return WinningMessage[Index];
 }
+
 /**
  * Get a tie message.
- * @param[in] Index The index of the message the get.
+ * @param[in] Index The index of the message to get.
  *            If the value is under 0, a random message will be returned.
  * @return A tie message.
  */
@@ -155,9 +156,10 @@ std::string Language::GetTieMessage(s32 Index)
     }
     return TieMessage[Index];
 }
+
 /**
  * Get a turn over message.
- * @param[in] Index The index of the message the get.
+ * @param[in] Index The index of the message to get.
  *            If the value is under 0, a random message will be returned.
  * @return A turn over message.
  */
